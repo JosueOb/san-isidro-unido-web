@@ -10681,3 +10681,87 @@ a.text-dark:focus {
   border-top: 2.5px solid #818EA3;
 }
 
+.form-control,
+.custom-select,
+.custom-file-label {
+  background-color: #ffffff;
+  border-color: #d2d8e1;
+}
+
+.form-control:focus,
+.custom-select:focus,
+.custom-file-label:focus {
+  border-color: #3D5170;
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+.form-group .control-label,
+.form-group > label {
+  font-weight: 600;
+  color: #232f34;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
+
+.custom-control {
+  line-height: 1.6rem;
+}
+
+.custom-radio .custom-control-input:checked ~ .custom-control-label::before,
+.custom-control-input:checked ~ .custom-control-label::before {
+  background-color: #344955 !important;
+}
+
+.custom-file-label {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.custom-file-label:after {
+  border-color: transparent;
+}
+
+.custom-file-label:focus,
+.custom-file-label:active {
+  box-shadow: none;
+  outline: none;
+}
+
+.custom-file-input:focus + .custom-file-label {
+  box-shadow: none;
+  border-color: #3D5170;
+}
+
+.custom-file-input:focus + .custom-file-label:after {
+  border-color: transparent;
+}
+
+.btn:focus,
+.btn:active,
+.btn:active:focus,
+.form-control:focus {
+  box-shadow: none !important;
+  outline: none;
+}
+
+a {
+  font-size: 12px;
+  color: #4a6572;
+  font-weight: 500;
+  transition: all 0.5s;
+  -webkit-transition: all 0.5s;
+  -o-transition: all 0.5s;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 700;
+}
+

@@ -1,0 +1,57 @@
+.form-control,
+.custom-select,
+.custom-file-label{
+    background-color: $white;
+    border-color: darken($light-gray, 5%);
+
+    &:focus{
+        border-color: $fiord-blue;
+    }
+}
+
+.form-group{
+    margin-bottom: 25px;
+    .control-label,
+    >label{
+        font-weight: 600;
+        color: $blue-800;
+        font-size: 12px;
+        letter-spacing: .5px;
+    }
+}
+
+.custom-control{
+    line-height: 1.6rem;
+}
+
+.custom-radio .custom-control-input:checked~.custom-control-label::before,
+.custom-control-input:checked~.custom-control-label::before {
+    background-color: $blue-700 !important;
+}
+
+
+.custom-file-label {
+    white-space: nowrap;
+    overflow: hidden;
+  
+    &:after {
+        border-color: transparent;
+    }
+
+    &:focus, &:active {
+        box-shadow: none;
+        outline: none;
+    }
+}
+
+.custom-file-input {
+    &:focus {
+        + .custom-file-label {
+            box-shadow: none;
+            border-color: $fiord-blue;
+            &:after {
+                border-color: transparent;
+            }
+        }
+    }
+}
