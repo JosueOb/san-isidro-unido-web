@@ -10797,3 +10797,15 @@ h6 {
   font-weight: 700;
 }
 
+.login {
+  background-color: #F5F6F8;
+  font-size: 14px;
+  font-weight: 400;
+  font-family: "Nunito", "Segoe UI", arial;
+}
+
+.login-brand {
+  margin: 20px 0;
+  margin-bottom: 40px;
+}
+

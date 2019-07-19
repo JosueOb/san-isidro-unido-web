@@ -19,7 +19,7 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
-<body>
+<body class="login">
     <section>
         <div class="container mt-5">
           <div class="row">
