@@ -16,5 +16,8 @@ Route::get('/', function () {
 });
 
 Auth::routes(['register'=>false]);
+Route::get('log', function(){
+    return view('auth.login-main');
+});
 
 Route::get('/home', 'HomeController@index')->name('home');
