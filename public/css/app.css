@@ -10805,7 +10805,14 @@ h6 {
 }
 
 .login-brand {
-  margin: 20px 0;
-  margin-bottom: 40px;
+  margin: 1rem 0;
+}
+
+.login-brand img {
+  display: block;
+  margin: 0 auto;
+  box-shadow: 0 0.25rem 0.53125rem rgba(90, 97, 105, 0.2);
+  width: 35%;
+  height: auto;
 }
 
