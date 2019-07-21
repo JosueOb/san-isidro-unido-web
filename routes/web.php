@@ -15,9 +15,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// RUTAS PÚBLICAS
 Auth::routes(['register'=>false]);
-Route::get('log', function(){
-    return view('auth.login-main');
+
+Route::get('logout', function () {
+    return abort(404);
 });
 
 Route::get('/home', 'HomeController@index')->name('home');

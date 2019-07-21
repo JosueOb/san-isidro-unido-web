@@ -13,6 +13,11 @@
         </div>
 
         <div class="card-body">
+          @if (session('info'))
+          <div class="alert alert-danger text-center" role="alert">
+            {{session('info')}}
+          </div>
+          @endif
           <form  method="POST" action="{{ route('login') }}">
             @csrf
             <div class="form-group">
@@ -48,7 +53,7 @@
             <div class="form-group">
               <div class="custom-control custom-checkbox">
                 <input type="checkbox" name="remember" class="custom-control-input" id="remember-me" {{ old('remember') ? 'checked' : '' }}>
-                <label class="custom-control-label" for="remember-me">Recuerdame</label>
+                <label class="custom-control-label" for="remember-me">Recuérdame</label>
               </div>
             </div>
 
