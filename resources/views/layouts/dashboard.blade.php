@@ -34,7 +34,7 @@
                         <a class="navbar-brand w-100 mr-0" href="#">
                             <div class="d-table m-auto">
                                 <img src="{{ asset('storage/img/logo.png') }}" class="brand-logo d-inline-block align-top mr-1">
-                                <span class="d-none d-md-inline ml-1 brand-name">San Isidro Unido</span>
+                                <span class="d-none d-md-inline d-lg-none d-xl-inline ml-1 brand-name">San Isidro Unido</span>
                             </div>
                         </a>
                         <a class="toggle-sidebar d-sm-inline d-md-none d-lg-none">
