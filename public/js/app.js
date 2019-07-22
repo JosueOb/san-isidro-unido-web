@@ -49360,6 +49360,8 @@ var app = new Vue({
   el: '#app'
 });
 
+__webpack_require__(/*! ./dropdown */ "./resources/js/dropdown.js");
+
 /***/ }),
 
 /***/ "./resources/js/bootstrap.js":
@@ -49486,6 +49488,44 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ExampleComponent_vue_vue_type_template_id_299e239e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
+
+/***/ }),
+
+/***/ "./resources/js/dropdown.js":
+/*!**********************************!*\
+  !*** ./resources/js/dropdown.js ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+$.extend($.easing, {
+  easeOutSine: function easeOutSine(x, t, b, c, d) {
+    return c * Math.sin(t / d * (Math.PI / 2)) + b;
+  }
+});
+$(document).ready(function () {
+  /**
+   * Dropdown adjustments
+   */
+  var slideConfig = {
+    duration: 270,
+    easing: 'easeOutSine'
+  }; // Add dropdown animations when toggled.
+
+  $(':not(.main-sidebar--icons-only) .dropdown').on('show.bs.dropdown', function () {
+    $(this).find('.dropdown-menu').first().stop(true, true).slideDown(slideConfig);
+  });
+  $(':not(.main-sidebar--icons-only) .dropdown').on('hide.bs.dropdown', function () {
+    $(this).find('.dropdown-menu').first().stop(true, true).slideUp(slideConfig);
+  });
+  /**
+   * Sidebar toggles
+   */
+
+  $('.toggle-sidebar').click(function (e) {
+    $('.main-sidebar').toggleClass('open');
+  });
+});
 
 /***/ }),
 
