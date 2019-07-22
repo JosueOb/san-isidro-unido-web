@@ -16969,6 +16969,34 @@ h6 {
   color: #3D5170;
 }
 
+.page-header .page-title {
+  font-size: 1.625rem;
+  font-weight: 500;
+  line-height: 1;
+  margin: 0;
+  padding: 0;
+  color: #3D5170;
+}
+
+@media (max-width: 767.98px) {
+  .page-header .page-title {
+    font-size: 2rem;
+  }
+}
+
+.page-header .page-subtitle {
+  letter-spacing: 0.125rem;
+  color: #232f34;
+  font-size: 0.625rem;
+}
+
+@media (max-width: 767.98px) {
+  .page-header .page-subtitle {
+    font-size: 0.8125rem;
+    font-weight: 400;
+  }
+}
+
 .login {
   background-color: #F5F6F8;
   font-size: 14px;
