@@ -17002,6 +17002,23 @@ h6 {
   background-color: #F5F6F8;
 }
 
+.main-footer {
+  height: 3.75rem;
+}
+
+.main-footer .copyright {
+  color: #232f34;
+}
+
+@media (max-width: 767.98px) {
+  .main-footer .copyright {
+    display: inline-block;
+    width: 100%;
+    padding: 1rem;
+    text-align: center;
+  }
+}
+
 .login {
   background-color: #F5F6F8;
   font-size: 14px;

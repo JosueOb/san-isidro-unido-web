@@ -136,10 +136,13 @@
                     <!--/Page header-->
 
                     <!--Content-->
-                    <div class="card card-primary">
-                        
-                        <div class="card-body">
-                            <p>Contenido ha presentar</p>
+                    <div class="row">
+                        <div class="col">
+                            <div class="card card-primary">
+                                <div class="card-body">
+                                    <p>Contenido ha presentar</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 <!--/Content-->
