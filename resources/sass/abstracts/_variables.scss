@@ -108,6 +108,9 @@ $main-sidebar-nav-link-active-background-color: $light-gray !default;
 $main-sidebar-nav-link-active-color: $fiord-blue !default;
 $main-sidebar-nav-link-active-icon-color: $fiord-blue !default;
 
+//Main content 
+$main-content-background-color: $body-bg-color;
+
 //Main content --> Page Header
 $page-title-font-size: 1.625rem !default;
 $page-title-sm-font-size: 2rem !default;
@@ -123,3 +126,7 @@ $page-subtitle-color: $blue-800 !default;
 $page-subtitle-font-size: 0.625rem !default;
 $page-subtitle-font-size-sm: 0.8125rem !default;
 $page-subtitle-font-weight-sm: 400 !default;
+
+//Main footer
+$main-footer-height: $main-navbar-height !default;
+$main-footer-copyright-color: $blue-800 !default;

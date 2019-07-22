@@ -16997,6 +16997,11 @@ h6 {
   }
 }
 
+.main-content > .main-content-container.container-fluid {
+  min-height: calc(100vh - 7.5rem);
+  background-color: #F5F6F8;
+}
+
 .login {
   background-color: #F5F6F8;
   font-size: 14px;
