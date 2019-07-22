@@ -33,7 +33,7 @@
                     <nav class="navbar align-items-stretch navbar-light flex-md-nowrap border-bottom p-0">
                         <a class="navbar-brand w-100 mr-0" href="#">
                             <div class="d-table m-auto">
-                                <img id='main-logo' src="{{ asset('storage/img/logo.png') }}" class="brand-logo d-inline-block align-top mr-1 w-25">
+                                <img src="{{ asset('storage/img/logo.png') }}" class="brand-logo d-inline-block align-top mr-1">
                                 <span class="d-none d-md-inline ml-1 brand-name">San Isidro Unido</span>
                             </div>
                         </a>
@@ -88,7 +88,7 @@
 
                             <li class="nav-item dropdown user-options m-0">
                                 <a href="#" class="nav-link dropdown-toggle px-3 text-nowrap" data-toggle="dropdown" id="dropdownMenuUser" role="button" aria-haspopup="true" aria-expanded="false">
-                                    <img src="{{ asset('storage/img/logo.png') }}" alt="user avatar" class="user-avatar rounded-circle mr-2"width='50px'>
+                                    <img src="{{ asset('storage/img/logo.png') }}" alt="user avatar" class="user-avatar rounded-circle mr-2">
                                     <span class="d-none d-lg-inline-block">Nombre del usuario</span>
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby='dropdownNotifications'>

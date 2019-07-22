@@ -16811,6 +16811,164 @@ h6 {
   box-shadow: 0 0.125rem 0.6825rem rgba(90, 97, 105, 0.3);
 }
 
+.main-sidebar {
+  position: fixed;
+  height: calc(100vh);
+  background: #ffffff;
+  z-index: 1070;
+  transition: transform 200ms ease-in-out;
+  box-shadow: 0 0.125rem 9.375rem rgba(90, 97, 105, 0.3);
+}
+
+@media (max-width: 767.98px) {
+  .main-sidebar {
+    transform: translateX(-100%);
+    box-shadow: none;
+  }
+}
+
+.main-sidebar.open {
+  transform: translateX(0);
+  box-shadow: 0 0.125rem 9.375rem rgba(90, 97, 105, 0.3);
+}
+
+.main-sidebar .toggle-sidebar {
+  position: absolute;
+  right: 0;
+  height: 100%;
+  padding: 1rem;
+  font-size: 1.25rem;
+  border-left: #e1e5eb solid 0.05px;
+}
+
+.main-sidebar .toggle-sidebar:hover {
+  cursor: pointer;
+}
+
+.main-sidebar .navbar-brand {
+  overflow: hidden;
+  white-space: normal;
+  text-align: center;
+  height: 3.75rem;
+  font-size: 1.1rem;
+  display: flex;
+  background-color: #ffffff;
+  color: #232f34;
+}
+
+.main-sidebar .navbar-brand .brand-logo {
+  max-width: 2.5rem;
+  border-radius: 50%;
+  box-shadow: 0 0.25rem 0.53125rem rgba(90, 97, 105, 0.25);
+}
+
+.main-sidebar .nav-wrapper {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: calc(100vh - 3.75rem - 1px);
+}
+
+.main-sidebar .nav .menu-header {
+  color: #ffffff;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.3px;
+  font-weight: 600;
+  padding: 0.5rem;
+  background-color: #818EA3;
+}
+
+.main-sidebar .nav .nav-item,
+.main-sidebar .nav .nav-link {
+  white-space: nowrap;
+  min-width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  transition: box-shadow 200ms ease, color 200ms ease, background-color 200ms ease;
+  font-size: 0.85rem;
+}
+
+.main-sidebar .nav .nav-item .nav-link {
+  border-bottom: #e1e5eb solid 0.05px;
+  font-weight: 400;
+  color: #5A6169;
+  padding: 0.9375rem 1.5625rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.main-sidebar .nav .nav-item .nav-link i {
+  min-width: 1.25rem;
+  font-size: 1.125rem;
+  color: #5A6169;
+  transition: color 200ms ease;
+  margin-right: 0.375rem;
+}
+
+.main-sidebar .nav .nav-item.active,
+.main-sidebar .nav .nav-item .nav-link.active,
+.main-sidebar .nav .nav-item:hover,
+.main-sidebar .nav .nav-item .nav-link:hover {
+  box-shadow: inset 0.1875rem 0 0 #3D5170;
+  background-color: #e1e5eb;
+  color: #3D5170;
+  border: none;
+}
+
+.main-sidebar .nav .nav-item.active i,
+.main-sidebar .nav .nav-item .nav-link.active i,
+.main-sidebar .nav .nav-item:hover i,
+.main-sidebar .nav .nav-item .nav-link:hover i {
+  color: #3D5170;
+}
+
+.main-sidebar .nav .nav-item .collapse,
+.main-sidebar .nav .nav-item .collapsing {
+  border-bottom: #e1e5eb solid 0.05px;
+  background-color: #ffffff;
+}
+
+.main-sidebar .nav .nav-item .collapse .collapse-inner,
+.main-sidebar .nav .nav-item .collapsing .collapse-inner {
+  font-size: 12px;
+}
+
+.main-sidebar .nav .nav-item .collapse .collapse-inner .collapse-item,
+.main-sidebar .nav .nav-item .collapsing .collapse-inner .collapse-item {
+  box-shadow: inset 0.1875rem 0 0 #3D5170;
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  font-weight: 400;
+  color: #5A6169;
+  padding: 0.9375rem 1.5625rem;
+}
+
+.main-sidebar .nav .nav-item .collapse .collapse-inner .collapse-item i,
+.main-sidebar .nav .nav-item .collapsing .collapse-inner .collapse-item i {
+  min-width: 1.25rem;
+  font-size: 1.125rem;
+  color: #5A6169;
+  transition: color 200ms ease;
+  margin-right: 0.375rem;
+}
+
+.main-sidebar .nav .nav-item .collapse .collapse-inner .collapse-item:hover,
+.main-sidebar .nav .nav-item .collapsing .collapse-inner .collapse-item:hover {
+  box-shadow: inset 0.1875rem 0 0 #3D5170;
+  background-color: #c2cad7;
+  color: #3D5170;
+}
+
+.main-sidebar .nav .nav-item .collapse .collapse-inner .collapse-item.active,
+.main-sidebar .nav .nav-item .collapsing .collapse-inner .collapse-item.active {
+  box-shadow: inset 0.1875rem 0 0 #3D5170;
+  background-color: #c2cad7;
+  color: #3D5170;
+}
+
 .login {
   background-color: #F5F6F8;
   font-size: 14px;
