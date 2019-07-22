@@ -1,0 +1,185 @@
+.main-navbar .navbar{
+    background-color:  $main-navbar-background-color;
+    height: $main-navbar-height;
+
+    .nav-link{
+        border-left: $main-navbar-nav-border-color;
+        min-width: $main-navbar-nav-link-min-width;
+    }
+
+    // Notificaciones
+    .notifications{
+
+        @media(max-width: 767.98px){
+            position: static;
+
+            .dropdown-menu {
+                min-width: 100% !important;
+            }
+        }
+
+        .badge{
+            position: static;
+            padding: $notifications-badge-padding-y $notifications-badge-padding-x;
+            font-size: $notifications-badge-font-size;
+        }
+        .dropdown-menu{
+            padding: 0;
+            margin: 0;
+            min-width: $notifications-dropdown-min-width-notification;
+            left: auto;
+
+            .dropdown-item{
+                white-space: normal;
+                display: flex;
+                flex-flow: row;
+                padding-top: $notifications-dropdown-item-padding-top;
+                padding-bottom: $notifications-dropdown-item-padding-bottom;
+                &:last-child{
+                    background-color: lighten($shuttle-gray,50%);
+                }
+            }
+
+            .notification{
+
+                &__icon-wrapper{
+                    display: flex;
+                    padding: 0 5px;
+                    margin: 0;
+                }
+
+                &__icon{
+                    box-shadow: $notifications-icon-box-shadow;
+                    width: $notifications-icon-width;
+                    height: $notifications-icon-height;
+                    margin: auto;
+                    border-radius: 50%;
+                    
+                    img{
+                        border-radius: 50%;
+                        width: 100%;
+                    }
+                }
+
+                &__content{
+                    padding: $notification-content-padding;
+                    
+                    p{
+                        margin: 0;
+                        padding: 0;
+                        line-height: 1.5;
+                        font-size: $notification-content-paragraph-font-size;
+                    }
+                }
+
+                &__category{
+                    font-size: $notification-category-font-size;
+                    color: $notification-category-color;
+                    letter-spacing: $notification-category-letter-spacing;
+                    display: inline-block;
+                    text-transform: uppercase;
+                    margin-bottom: 5px;
+                    font-weight: 500;
+                }
+
+                //Se aplica al link de visualizar todas las notificaciones
+                &__all{
+                    display: block;
+                    font-weight: 500;
+                    font-size: 11px;
+                    &:hover{
+                        border-bottom-left-radius: $border-radius;
+                        border-bottom-right-radius: $border-radius;
+                    }
+                    
+                } 
+            }
+        }
+    }
+
+    .user-options{
+
+        .user-avatar{
+            max-width: $user-avatar-max-width;
+        }
+        .dropdown-menu{
+            left: auto;
+            padding: 0;
+            margin: 0;
+            
+            min-width: $notifications-dropdown-min-width-option;
+            .dropdown-item{
+                white-space: normal;
+                display: flex;
+                flex-flow: row;
+                padding-top: $notifications-dropdown-item-padding-top;
+                padding-bottom: $notifications-dropdown-item-padding-bottom;
+            }
+
+            .option{
+                &__icon-wrapper{
+                    display: flex;
+                    padding: 0 5px;
+                    margin: 0;
+                }
+
+                &__icon{
+                    background-color:  $notifications-icon-background-color;
+                    box-shadow: $notifications-icon-box-shadow;
+                    width: $notifications-icon-width;
+                    height: $notifications-icon-height;
+                    line-height: 0;
+                    display: block;
+                    text-align: center;
+                    margin: auto;
+                    border-radius: 50%;
+
+                    i{
+                        color: $notifications-icon-color;
+                        line-height: $notifications-icon-line-height;
+                        font-size: $notifications-icon-font-size;
+                        margin: 0;
+                    }
+
+                }
+
+                &__content{
+                    padding: $notification-content-padding;
+                }
+
+                &__name{
+                    font-size: $notification-category-font-size;
+                    color: $notification-category-color;
+                    letter-spacing: $notification-category-letter-spacing;
+                    display: inline-block;
+                    text-transform: uppercase;
+                    margin-bottom: 5px;
+                    font-weight: 500;
+                }
+            }
+        }
+    }
+
+    //Navbar
+    .navbar-nav .dropdown-menu{
+        position: absolute;
+        right: 0;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+    }
+
+    .nav-link-icon i{
+        line-height: $main-navbar-nav-link-icon-line-height;
+        color: $blue-800;
+    }
+}
+
+//Main navbar shadow
+.main-content > .main-navbar,
+.main-content .header-navbar{
+    box-shadow: $main-navbar-box-shadow;
+}
+
+
+
+
