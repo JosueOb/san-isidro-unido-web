@@ -31,7 +31,7 @@
             <aside class="main-sidebar col-12 col-md-3 col-lg-2 px-0">
                 <div class="main-navbar">
                     <nav class="navbar align-items-stretch navbar-light flex-md-nowrap border-bottom p-0">
-                        <a class="navbar-brand w-100 mr-0" href="#">
+                        <a class="navbar-brand w-100 mr-0" href="{{ route('login')}}">
                             <div class="d-table m-auto">
                                 <img src="{{ asset('storage/img/logo.png') }}" class="brand-logo d-inline-block align-top mr-1">
                                 <span class="d-none d-md-inline d-lg-none d-xl-inline ml-1 brand-name">San Isidro Unido</span>
@@ -45,7 +45,7 @@
 
                 <div class="nav-wrapper">
                     <ul class="nav flex-column accordion" id="accordionSidebar">
-                        <li class="menu-header">Rol del usuario</li>
+                        <li class="menu-header">{{$user->roles[0]->name}}</li>
                         <li class="nav-item">
                             <a class="nav-link active" data-toggle="collapse" data-target="#collapseRol" aria-expanded="true" aria-controls="collapseRol">
                                 <i class="fas fa-id-card-alt"></i>
@@ -88,8 +88,8 @@
 
                             <li class="nav-item dropdown user-options m-0">
                                 <a href="#" class="nav-link dropdown-toggle px-3 text-nowrap" data-toggle="dropdown" id="dropdownMenuUser" role="button" aria-haspopup="true" aria-expanded="false">
-                                    <img src="{{ asset('storage/img/logo.png') }}" alt="user avatar" class="user-avatar rounded-circle mr-2">
-                                    <span class="d-none d-lg-inline-block">Nombre del usuario</span>
+                                    <img src="{{ $user->avatar}}" alt="user avatar" class="user-avatar rounded-circle mr-2">
+                                    <span class="d-none d-lg-inline-block">{{$user->first_name}} {{$user->last_name}}</span>
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby='dropdownNotifications'>
                                     <a href="profile.html" class="dropdown-item">
@@ -102,7 +102,8 @@
                                             <span class="option__name">Perfil</span>
                                         </div>
                                     </a>
-                                    <a href="login.html" class="dropdown-item">
+                                    <a href="{{ route('logout') }}" class="dropdown-item" onclick="event.preventDefault();
+                                    document.getElementById('logout-form').submit();">
                                         <div class="option__icon-wrapper">
                                             <div class="option__icon">
                                                 <i class="fas fa-sign-out-alt text-danger"></i>
@@ -110,6 +111,9 @@
                                         </div>
                                         <div class="option__content">
                                             <span class="option__name text-danger">Cerrar sesión</span>
+                                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                                @csrf
+                                            </form>
                                         </div>
                                     </a>
                                 </div>
@@ -129,22 +133,14 @@
                     <!--Page header-->
                     <div class="page-header row no-gutters py-4">
                         <div class="col-12 col-sm-4 text-center text-sm-left mb-0">
-                            <span class="text-uppercase page-subtitle">Título</span>
-                            <h3 class="page-title">Subtitulo</h3>
+                            <span class="text-uppercase page-subtitle">@yield('page-subtitle')</span>
+                            <h3 class="page-title">@yield('page-header')</h3>
                         </div>
                     </div>
                     <!--/Page header-->
 
                     <!--Content-->
-                    <div class="row">
-                        <div class="col">
-                            <div class="card card-primary">
-                                <div class="card-body">
-                                    <p>Contenido ha presentar</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @yield('content')
                 <!--/Content-->
                 </div>
 
