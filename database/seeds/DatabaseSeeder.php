@@ -36,5 +36,8 @@ class DatabaseSeeder extends Seeder
         ]);
         //Se le asigna el rol de aministrador al usuario
         $admin->roles()->attach($rol);
+
+        //LLamado al seeder PermissionsTableSeeder
+        $this->call(PermissionsTableSeeder::class);
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Caffeinated\Shinobi\Models\Permission;
 
 class PermissionsTableSeeder extends Seeder
 {
@@ -11,6 +12,26 @@ class PermissionsTableSeeder extends Seeder
      */
     public function run()
     {
-        //
+        //Permisos sobre el módulo de rol
+        Permission::create([
+            'name'=>'Listar Roles',
+            'slug'=>'roles.index',
+            'description'=>'Lista los roles registrados'
+        ]);
+        Permission::create([
+            'name'=>'Ver detalle de rol',
+            'slug'=>'roles.show',
+            'description'=>'Ver en detalle cada uno de los roles registrados'
+        ]);
+        Permission::create([
+            'name'=>'Editar roles',
+            'slug'=>'roles.edit',
+            'description'=>'Editar registros de roles'
+        ]);
+        Permission::create([
+            'name'=>'Eliminar roles',
+            'slug'=>'roles.destroy',
+            'description'=>'Eliminar registros de roles'
+        ]);
     }
 }
