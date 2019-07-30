@@ -45,34 +45,24 @@
 
                 <div class="nav-wrapper">
                     <ul class="nav flex-column accordion" id="accordionSidebar">
-                        <li class="menu-header">{{$user->roles[0]->name}}</li>
-                        <li class="nav-item">
-                            <a class="nav-link active" data-toggle="collapse" data-target="#collapseRol" aria-expanded="true" aria-controls="collapseRol">
+                        <li class="menu-header">{{Auth::user()->roles[0]->name}}</li>
+
+                        @can('roles.index')
+                        <li class="nav-item @yield('item-role')">
+                            <a class="nav-link" data-toggle="collapse" data-target="#collapseRol" aria-expanded="true" aria-controls="collapseRol">
                                 <i class="fas fa-id-card-alt"></i>
-                                <span>Opción 1</span>
+                                <span>Roles</span>
                             </a>
-                            <div id="collapseRol" class="collapse show" >
+                            <div id="collapseRol" class="collapse @yield('item-role-collapse')" >
                                 <div class="collapse-inner">
-                                    <a class="collapse-item active" href="#"><i class="fas fa-plus-circle"></i>Acción 1</a>
-                                    <a class="collapse-item" href="cards.html"><i class="fas fa-list"></i>Acción 2</a>
-                                    <a class="collapse-item" href="cards.html"><i class="fas fa-edit"></i>Acción 3</a>
+                                    <a class="collapse-item @yield('item-role-list')" href="{{route('roles.index')}}"><i class="fas fa-list"></i>Listar roles</a>
+                                    {{-- <a class="collapse-item" href="{{ route('roles.create')}}"><i class="fas fa-plus-circle"></i>Crear rol</a> --}}
+                                    {{-- <a class="collapse-item" href="cards.html"><i class="fas fa-edit"></i>Listar roles</a> --}}
                                 </div>
                             </div>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link " data-toggle="collapse" data-target="#collapseDirectiva" aria-expanded="true" aria-controls="collapseDirectiva">
-                                <!--<i class="material-icons">vertical_split</i>-->
-                                <i class="fas fa-users"></i>
-                                <span>Opción 2</span>
-                            </a>
-                            <div id="collapseDirectiva" class="collapse" >
-                                <div class="collapse-inner">
-                                    <a class="collapse-item" href="#"><i class="fas fa-plus-circle"></i>Acción 1</a>
-                                    <a class="collapse-item" href="#"><i class="fas fa-list"></i>Acción 2</a>
-                                    <a class="collapse-item" href="#"><i class="fas fa-edit"></i>Acción 3</a>
-                                </div>
-                            </div>
-                        </li>
+                        @endcan
+                        
                     </ul>
                 </div>
             </aside>
@@ -88,8 +78,8 @@
 
                             <li class="nav-item dropdown user-options m-0">
                                 <a href="#" class="nav-link dropdown-toggle px-3 text-nowrap" data-toggle="dropdown" id="dropdownMenuUser" role="button" aria-haspopup="true" aria-expanded="false">
-                                    <img src="{{ $user->avatar}}" alt="user avatar" class="user-avatar rounded-circle mr-2">
-                                    <span class="d-none d-lg-inline-block">{{$user->first_name}} {{$user->last_name}}</span>
+                                    <img src="{{ Auth::user()->avatar}}" alt="user avatar" class="user-avatar rounded-circle mr-2">
+                                    <span class="d-none d-lg-inline-block">{{ Auth::user()->first_name}} {{Auth::user()->last_name}}</span>
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby='dropdownNotifications'>
                                     <a href="profile.html" class="dropdown-item">

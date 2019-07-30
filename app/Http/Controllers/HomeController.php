@@ -23,11 +23,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        //Se obtiene el registro del usuario autenticado para enviarlo
-        //a la vista
-        $user = Auth::user();
-        return view('home',[
-            'user'=>$user,
-        ]);
+        //Se retorna a la vista principal
+        return view('home');
     }
 }

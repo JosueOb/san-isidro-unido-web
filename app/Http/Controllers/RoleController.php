@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Caffeinated\Shinobi\Models\Role;
 
 class RoleController extends Controller
 {
@@ -13,7 +14,11 @@ class RoleController extends Controller
      */
     public function index()
     {
-        //
+        //Se listan los roles registrados
+        $roles = Role::paginate();
+        return view('roles.index',[
+            'roles'=> $roles
+        ]);
     }
 
     /**
