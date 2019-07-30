@@ -56,7 +56,7 @@
                             <div id="collapseRol" class="collapse @yield('item-role-collapse')" >
                                 <div class="collapse-inner">
                                     <a class="collapse-item @yield('item-role-list')" href="{{route('roles.index')}}"><i class="fas fa-list"></i>Listar roles</a>
-                                    {{-- <a class="collapse-item" href="{{ route('roles.create')}}"><i class="fas fa-plus-circle"></i>Crear rol</a> --}}
+                                    <a class="collapse-item @yield('item-role-create')" href="{{ route('roles.create')}}"><i class="fas fa-plus-circle"></i>Crear rol</a>
                                     {{-- <a class="collapse-item" href="cards.html"><i class="fas fa-edit"></i>Listar roles</a> --}}
                                 </div>
                             </div>

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Caffeinated\Shinobi\Models\Role;
+use Caffeinated\Shinobi\Models\{Role, Permission};
 
 class RoleController extends Controller
 {
@@ -29,6 +29,11 @@ class RoleController extends Controller
     public function create()
     {
         //
+        $permissions = Permission::all();
+        //Se retorna el formulario de registro de un rol
+        return view('roles.create',[
+            'permissions'=> $permissions,
+        ]);
     }
 
     /**
