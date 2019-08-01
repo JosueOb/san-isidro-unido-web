@@ -50,7 +50,7 @@
                                         <a href="{{route('roles.show',$role->id)}}" class="btn btn-info">Ver</a>
                                     </td>
                                     <td width='10px'>
-                                        <a href="#" class="btn btn-secondary"> Editar</a>
+                                        <a href="{{route('roles.edit',$role->id)}}" class="btn btn-secondary"> Editar</a>
                                         </td>
                                     <td width='10px'>
                                         <a href="#" class="btn btn-danger">Eliminar</a>
