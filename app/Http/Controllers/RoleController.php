@@ -46,7 +46,25 @@ class RoleController extends Controller
     public function store(CreateRoleRequest $request)
     {
         $validated = $request->validated();
-        dd($request->all());
+        // dd($validated);
+        $selectedSpecialPermission = $request['special'];
+        // dd($selectedSpecialPermission);
+        $role = new Role();
+        $role->name = $validated['name'];
+        $role->slug = $validated['slug'];
+        $role->description = $validated['description'];
+        $role->special = $selectedSpecialPermission;
+
+        if($selectedSpecialPermission){
+            $role->special = $selectedSpecialPermission;
+            $role->save();
+        }else{
+            $role->save();
+            $role->permissions()->sync($validated['permissions']);
+        }
+
+        // dd('Se registro el rol exitosamente');
+        return redirect()->route('roles.index')->with('info','Rol creado exitosamente');
     }
 
     /**

@@ -26,8 +26,8 @@ class CreateRoleRequest extends FormRequest
     {
         return [
             //
-            'name'=> 'required|regex:/^[[:alpha:][:space:]]+$/|min:3|max:25',
-            'slug'=> 'required|regex:/^[[:lower:]]+$/|min:3|max:15',
+            'name'=> 'required|regex:/^[[:alpha:][:space:]]+$/|min:3|max:25|unique:roles,name',
+            'slug'=> 'required|regex:/^[[:lower:]]+$/|min:3|max:15|unique:roles,slug',
             'description'=> 'required|regex:/^[[:alpha:][:space:](,;.áéíóúÁÉÍÓÚ)]+$/|min:10|max:255',
             'permissions'=>'required_unless:special,all-access,no-access',
         ];
@@ -45,11 +45,13 @@ class CreateRoleRequest extends FormRequest
             'name.min'=>'El :attribute debe ser mayor a 3 caracteres',
             'name.max'=>'El :attribute no debe ser mayor a 25 caracteres',
             'name.regex'=>'El :attribute debe estar conformado por caracteres alfabéticos, no se admiten signos de puntuación ni caracteres especiales',
-
+            'name.unique'=>'El :attribute ingresado ya existe',
+            
             'slug.required'=>'El campo :attribute es obligatorio',
             'slug.min'=>'El :attribute debe ser mayor a 3 caracteres',
             'slug.max'=>'El :attribute no debe ser mayor a 15 caracteres',
             'slug.regex'=>'El :attribute debe ser una cadena de caracteres alfabéticos en minúsculas sin espacios, no se adminen signos de puntuación ni caracteres especiales',
+            'slug.unique'=>'El :attribute ingresado ya existe',
             
             'description.required'=>'El campo :attribute es obligatorio',
             'description.min'=>'La :attribute debe ser mayor a 5 caracteres',

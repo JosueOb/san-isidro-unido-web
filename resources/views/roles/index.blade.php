@@ -17,6 +17,11 @@
 @section('content')
 <div class="row">
     <div class="col">
+        @if (session('info'))
+        <div class="alert alert-success" role="alert">
+                {{ session('info') }}
+            </div>
+        @endif
         <div class="card card-primary">
             <div class="card-header">
                 <h4 class="d-inline">Lista de roles</h4>
