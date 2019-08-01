@@ -1,0 +1,44 @@
+@extends('layouts.dashboard')
+@section('page-subtitle')
+    Módulo Roles
+@endsection
+@section('page-header')
+    Detalle Rol
+@endsection
+@section('item-role')
+    active
+@endsection
+@section('item-role-collapse')
+    show
+@endsection
+@section('item-role-list')
+    active
+@endsection
+@section('content')
+<div class="row">
+    <div class="col">
+        <div class="card card-primary">
+            <div class="card-header">
+                    <h4 class="d-inline">{{$role->name}}</h4>
+                    <a href="#" class="btn btn-primary float-right">Editar rol</a>
+            </div>
+            <div class="card-body">
+                <p><strong>Slug:</strong> {{$role->slug}}</p>
+                <p><strong>Descripción:</strong> {{$role->description}}</p>
+                <p><strong>Permiso especial:</strong> {{$role->special ?: 'Ninguno'}}</p>
+                {{-- <p class="d-inline"><strong>Estado: </strong><div class="badge badge-success">Activo</div></p> --}}
+                @if (count($permissions)>0)
+                    <h4>Permisos asignados</h4>
+                    @foreach ($permissions as $permission)
+                    <ul class="list-unstyled">
+                        <li>
+                            {{$permission->name}}
+                        </li>
+                    </ul>
+                    @endforeach
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+@endsection

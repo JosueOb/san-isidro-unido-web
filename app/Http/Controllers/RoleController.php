@@ -46,9 +46,9 @@ class RoleController extends Controller
     public function store(CreateRoleRequest $request)
     {
         $validated = $request->validated();
-        // dd($validated);
+
         $selectedSpecialPermission = $request['special'];
-        // dd($selectedSpecialPermission);
+
         $role = new Role();
         $role->name = $validated['name'];
         $role->slug = $validated['slug'];
@@ -63,7 +63,6 @@ class RoleController extends Controller
             $role->permissions()->sync($validated['permissions']);
         }
 
-        // dd('Se registro el rol exitosamente');
         return redirect()->route('roles.index')->with('info','Rol creado exitosamente');
     }
 
@@ -73,9 +72,15 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Role $role)
     {
-        //
+        $permissions = $role->permissions()->get();
+        
+        return view('roles.show', [
+            'role'=> $role,
+            'permissions'=>$permissions,
+        ]);
+
     }
 
     /**

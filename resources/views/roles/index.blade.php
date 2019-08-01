@@ -47,7 +47,7 @@
                                     <td>{{$role->slug}}</td>
                                     <td>{{$role->description}}</td>
                                     <td width='10px'>
-                                        <a href="#" class="btn btn-info">Ver</a>
+                                        <a href="{{route('roles.show',$role->id)}}" class="btn btn-info">Ver</a>
                                     </td>
                                     <td width='10px'>
                                         <a href="#" class="btn btn-secondary"> Editar</a>
