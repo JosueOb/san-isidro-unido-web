@@ -23,53 +23,78 @@
             </div> --}}
             <div class="card-body">
                 <form action="{{route('roles.store')}}" method="POST">
+                    @csrf
                     <div class="row">
                         <div class="form-group col-12 col-md-6">
                             <label for="name">Nombre</label>
-                            <input id="name" type="text" class="form-control" name="name">
+                            <input id="name" type="text" class="form-control  @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" autofocus>
+                            @error('name')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                         </div>
                         <div class="form-group col-12 col-md-6">
                             <label for="slug">Slug</label>
-                            <input id="slug" type="text" class="form-control" name="slug">
+                            <input id="slug" type="text" class="form-control @error('slug') is-invalid @enderror" name="slug" value="{{ old('slug')}}">
+                            @error('slug')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="description">Descripción</label>
-                        <input id="description" type="email" class="form-control" name="description">
+                        <input id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" value="{{old('description')}}">
+                        @error('description')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
                     </div>
                     <hr>
                     <div class="form-group">
                         <h3>Permiso especial</h3>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name='special' value="all-access" id="access">
-                            <label class="form-check-label" for="access">
-                                Acceso total
-                            </label>
+
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" id="all-access" name="special" value="all-access" class="custom-control-input @error('special') is-invalid @enderror " {{old('special')=='all-access'? 'checked':''}}>
+                            <label class="custom-control-label" for="all-access">Acceso total</label>
                         </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name='special' value="no-access" id="no-access">
-                            <label class="form-check-label" for="no-access">
-                                Ningún acceso
-                            </label>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" id="no-access" name="special" value="no-access" class="custom-control-input @error('special') is-invalid @enderror" {{old('special')=='no-access'? 'checked':''}}>
+                            <label class="custom-control-label" for="no-access">Ningún acceso</label>
                         </div>
+                        @error('special')
+                        <div class="invalid-feedback d-block">
+                            <strong>{{ $message }}</strong>
+                        </div>
+                        @enderror
                     </div>
                     <hr>
                     <h3>Asignar permisos</h3>
-                    <h4 class="text-center">Módulo roles</h4>
                     <div class="form-group">
                         <ul class="list-unstyled">
-                           @foreach ($permissions as $permission)
-                               <li>
-                                   <div class="custom-control custom-checkbox">
-                                       <input type="checkbox" name="permissions[]" class="custom-control-input" id="{{$permission->name}}" value="{{$permission->id}}">
-                                       <label class="custom-control-label" for="{{$permission->name}}">
-                                        {{$permission->name}}
-                                        <em>({{$permission->description ?: 'Sin descripción'}})</em>
-                                        </label>
-                                   </div>
-                               </li>
-                           @endforeach 
+                            @foreach ($permissions as $permission)
+                                <li>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" name="permissions[]" class="custom-control-input @error('permissions') is-invalid @enderror" id="{{$permission->name}}" value="{{$permission->id}}" 
+                                        @if (is_array(old('permissions')) && in_array($permission->id, old('permissions')))
+                                            checked
+                                        @endif>
+                                        <label class="custom-control-label" for="{{$permission->name}}">
+                                            {{$permission->name}}
+                                            <em>({{$permission->description ?: 'Sin descripción'}})</em>
+                                            </label>
+                                    </div>
+                                </li>
+                            @endforeach
                         </ul>
+                        @error('permissions')
+                        <div class="invalid-feedback d-block">
+                            <strong>{{ $message }}</strong>
+                        </div>
+                        @enderror
                     </div>
     
                     <div class="form-group col-4 offset-4">

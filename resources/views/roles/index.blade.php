@@ -20,7 +20,7 @@
         <div class="card card-primary">
             <div class="card-header">
                 <h4 class="d-inline">Lista de roles</h4>
-                <a href="#" class="btn btn-primary float-right">Crear rol</a>
+                <a href="{{route('roles.create')}}" class="btn btn-primary float-right">Crear rol</a>
             </div>
             <div class="card-body">
                 <div class="table table-light table-responsive table-hover">
