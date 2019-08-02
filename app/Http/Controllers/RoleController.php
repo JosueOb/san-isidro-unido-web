@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Caffeinated\Shinobi\Models\{Role, Permission};
-use App\Http\Requests\CreateRoleRequest;
+use App\Http\Requests\{CreateRoleRequest, UpdateRoleRequest};
 
 class RoleController extends Controller
 {
@@ -108,9 +108,12 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateRoleRequest $request, Role $role)
     {
         //
+        // dd($role->name);
+        $validated = $request->validated('hola');
+        dd($request->all());
     }
 
     /**
