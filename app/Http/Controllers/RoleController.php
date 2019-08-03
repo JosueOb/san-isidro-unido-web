@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Caffeinated\Shinobi\Models\{Role, Permission};
 use App\Http\Requests\{CreateRoleRequest, UpdateRoleRequest};
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Validator;
 
 class RoleController extends Controller
 {
@@ -111,8 +113,15 @@ class RoleController extends Controller
     public function update(UpdateRoleRequest $request, Role $role)
     {
         //
-        // dd($role->name);
-        $validated = $request->validated('hola');
+        $validated = $request->validated();
+        $filter = Validator::make($validated,[
+            'name'=>'unique:roles,name,'.$role->id,
+            'slug'=>'unique:roles,slug,'.$role->id,
+        ],[
+            'name.unique'=>'El nombre ingresado ya existe',
+            'slug.unique'=>'El slug ingresado ya existe',
+        ])->validate();
+
         dd($request->all());
     }
 
