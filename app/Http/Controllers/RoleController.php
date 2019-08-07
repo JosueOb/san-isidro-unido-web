@@ -65,7 +65,7 @@ class RoleController extends Controller
             $role->permissions()->sync($validated['permissions']);
         }
 
-        return redirect()->route('roles.index')->with('info','Rol creado exitosamente');
+        return redirect()->route('roles.index')->with('success','Rol creado exitosamente');
     }
 
     /**
@@ -139,7 +139,7 @@ class RoleController extends Controller
             $role->permissions()->sync($validated['permissions']);
         }
 
-        return redirect()->route('roles.index')->with('info','Rol actualizado exitosamente');
+        return redirect()->route('roles.index')->with('success','Rol actualizado exitosamente');
     }
 
     /**
@@ -148,8 +148,18 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Role $role)
     {
         //
+        $hasUsers = $role->users()->get();
+
+        if( count($hasUsers) > 0){
+            return redirect()->route('roles.index')->with('danger','El rol '.strtolower($role->name).' no se puede eliminar ya que esta siendo utilizado' );
+            // dd('El rol '.$role->name.' esta siendo utilizado');
+        }else{
+            $role->delete();
+            return redirect()->route('roles.index')->with('success','El rol '.strtolower($role->name).' a sido eliminado exitosamente' );
+            // dd('Usted va a eliminar el rol '.$role->name);
+        }
     }
 }
