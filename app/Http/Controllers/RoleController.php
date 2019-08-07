@@ -122,7 +122,24 @@ class RoleController extends Controller
             'slug.unique'=>'El slug ingresado ya existe',
         ])->validate();
 
-        dd($request->all());
+
+        $selectedSpecialPermission = $request['special'];
+
+        $role->name = $validated['name'];
+        $role->slug = $validated['slug'];
+        $role->description = $validated['description'];
+        $role->special = $selectedSpecialPermission;
+
+        if($selectedSpecialPermission){
+            $role->special = $selectedSpecialPermission;
+            $role->save();
+            $role->permissions()->detach();
+        }else{
+            $role->save();
+            $role->permissions()->sync($validated['permissions']);
+        }
+
+        return redirect()->route('roles.index')->with('info','Rol actualizado exitosamente');
     }
 
     /**

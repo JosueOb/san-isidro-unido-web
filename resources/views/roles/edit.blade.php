@@ -34,7 +34,7 @@
                         </div>
                         <div class="form-group col-12 col-md-6">
                             <label for="slug">URL amigable</label>
-                            <input id="slug" type="text" class="form-control @error('slug') is-invalid @enderror" name="slug" value="{{old('slug') ?: $role->slug}}">
+                            <input id="slug" type="text" class="form-control @error('slug') is-invalid @enderror" name="slug" value="{{old('slug') ?: $role->slug}}" required>
                             @error('slug')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -44,7 +44,7 @@
                     </div>
                     <div class="form-group">
                         <label for="description">Descripción</label>
-                        <textarea id="description" class="form-control @error('description') is-invalid @enderror" name="description" rows="5">{{ old('description') ?: $role->description }}</textarea>
+                        <textarea id="description" class="form-control @error('description') is-invalid @enderror" name="description" rows="5" required>{{ old('description') ?: $role->description }}</textarea>
                         {{-- <input id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" value="{{ old('description') ?: $role->description }}"> --}}
                         @error('description')
                         <span class="invalid-feedback" role="alert">
