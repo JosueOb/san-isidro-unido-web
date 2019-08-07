@@ -51,7 +51,7 @@ class UpdateRoleRequest extends FormRequest
             'slug.regex'=>'El :attribute debe ser una cadena de caracteres alfabéticos en minúsculas sin espacios, no se adminen signos de puntuación ni caracteres especiales',
             
             'description.required'=>'El campo :attribute es obligatorio',
-            'description.min'=>'La :attribute debe ser mayor a 5 caracteres',
+            'description.min'=>'La :attribute debe ser mayor a 10 caracteres',
             'description.max'=>'La :attribute no debe ser mayor a 255 caracteres',
             'description.regex'=>'La :attribute  debe estar conformado por caracteres alfabéticos, no se admiten caracteres especiales',
 

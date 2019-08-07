@@ -54,7 +54,7 @@ class CreateRoleRequest extends FormRequest
             'slug.unique'=>'El :attribute ingresado ya existe',
             
             'description.required'=>'El campo :attribute es obligatorio',
-            'description.min'=>'La :attribute debe ser mayor a 5 caracteres',
+            'description.min'=>'La :attribute debe ser mayor a 10 caracteres',
             'description.max'=>'La :attribute no debe ser mayor a 255 caracteres',
             'description.regex'=>'La :attribute  debe estar conformado por caracteres alfabéticos, no se admiten caracteres especiales',
 

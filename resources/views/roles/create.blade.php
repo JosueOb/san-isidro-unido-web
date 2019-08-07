@@ -27,7 +27,7 @@
                     <div class="row">
                         <div class="form-group col-12 col-md-6">
                             <label for="name">Nombre</label>
-                            <input id="name" type="text" class="form-control  @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" autofocus>
+                            <input id="name" type="text" class="form-control  @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" autofocus required>
                             @error('name')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -36,7 +36,7 @@
                         </div>
                         <div class="form-group col-12 col-md-6">
                             <label for="slug">Slug</label>
-                            <input id="slug" type="text" class="form-control @error('slug') is-invalid @enderror" name="slug" value="{{ old('slug')}}">
+                            <input id="slug" type="text" class="form-control @error('slug') is-invalid @enderror" name="slug" value="{{ old('slug')}}" required>
                             @error('slug')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -46,7 +46,8 @@
                     </div>
                     <div class="form-group">
                         <label for="description">Descripción</label>
-                        <input id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" value="{{old('description')}}">
+                        <textarea id="description" class="form-control @error('description') is-invalid @enderror" name="description" rows="5" required>{{ old('description')}}</textarea>
+                        {{-- <input id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" value="{{old('description')}}" required> --}}
                         @error('description')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
