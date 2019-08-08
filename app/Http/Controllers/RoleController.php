@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Caffeinated\Shinobi\Models\{Role, Permission};
 use App\Http\Requests\{CreateRoleRequest, UpdateRoleRequest};
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 
 class RoleController extends Controller
