@@ -38,4 +38,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    
+    public function getRol(){
+        return $this->roles()->whereNotIn('name',['Invitado'])->first();
+    }
 }

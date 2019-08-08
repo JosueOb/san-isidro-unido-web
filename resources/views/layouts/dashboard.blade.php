@@ -45,7 +45,7 @@
 
                 <div class="nav-wrapper">
                     <ul class="nav flex-column accordion" id="accordionSidebar">
-                        {{-- <li class="menu-header">{{Auth::user()->roles[0]->name ?: 'Sin rol'}}</li> --}}
+                        <li class="menu-header">{{Auth::user()->getRol()->name  ?: 'Sin rol'}}</li>
 
                         @can('roles.index')
                         <li class="nav-item @yield('item-role')">

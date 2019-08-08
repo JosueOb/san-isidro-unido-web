@@ -18,7 +18,7 @@
                 <h3 class="text-center"> Bienvenido</h3>
                 <p class="text-center"><span class="font-weight-bold">Usuario</span>
                     : {{Auth::user()->first_name}} {{Auth::user()->last_name}}</p>
-                <p class="text-center"><span class="font-weight-bold">Rol</span>: {{Auth::user()->roles[0]->name ?: 'Sin Rol'}}</p>
+                <p class="text-center"><span class="font-weight-bold">Rol</span>: {{Auth::user()->getRol()->name ?: 'Sin Rol'}}</p>
                 <img src="{{Auth::user()->avatar}}" alt="user name" class="rounded-circle d-block mr-auto ml-auto">
                 
             </div>
