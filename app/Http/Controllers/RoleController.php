@@ -6,9 +6,14 @@ use Illuminate\Http\Request;
 use Caffeinated\Shinobi\Models\{Role, Permission};
 use App\Http\Requests\{CreateRoleRequest, UpdateRoleRequest};
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
+
 
 class RoleController extends Controller
 {
+    // public function __construct(){
+    //     // $this->middleware(CheckAdmin::class)->only('edit');
+    // }
     /**
      * Display a listing of the resource.
      *
@@ -92,6 +97,7 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
+        $this->denyChangesToTheSameRol($role->name);
         $permissions = Permission::all();
         $rolePermissions = $role->permissions()->get();
 
@@ -112,6 +118,7 @@ class RoleController extends Controller
     public function update(UpdateRoleRequest $request, Role $role)
     {
         //
+        $this->denyChangesToTheSameRol($role->name);
         $validated = $request->validated();
         $filter = Validator::make($validated,[
             'name'=>'unique:roles,name,'.$role->id,
@@ -150,6 +157,7 @@ class RoleController extends Controller
     public function destroy(Role $role)
     {
         //
+        $this->denyChangesToTheSameRol($role->name);
         $hasUsers = $role->users()->get();
 
         if( count($hasUsers) > 0){
@@ -159,6 +167,21 @@ class RoleController extends Controller
             $role->delete();
             return redirect()->route('roles.index')->with('success','El rol '.strtolower($role->name).' a sido eliminado exitosamente' );
             // dd('Usted va a eliminar el rol '.$role->name);
+        }
+    }
+    public function chechTheRolesUser($roleName){
+        $userRoles = Auth::user()->roles()->get();
+        $hasAnyRole = false;
+        foreach($userRoles as $userRole){
+            if($userRole->name === $roleName){
+                $hasAnyRole = true;
+            }
+        }
+        return $hasAnyRole;
+    }
+    public function denyChangesToTheSameRol($roleName){
+        if($this->chechTheRolesUser($roleName)){
+            return abort(403, 'Acción no autorizada');
         }
     }
 }
