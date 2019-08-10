@@ -88,10 +88,12 @@ class RoleController extends Controller
     public function show(Role $role)
     {
         $permissions = $role->permissions()->get();
-        
+        $hasTheSameRole = $this->chechTheRolesUser($role->name);
+
         return view('roles.show', [
             'role'=> $role,
             'permissions'=>$permissions,
+            'hasTheSameRole'=>$hasTheSameRole,
         ]);
 
     }
