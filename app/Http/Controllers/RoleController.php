@@ -7,13 +7,11 @@ use Caffeinated\Shinobi\Models\{Role, Permission};
 use App\Http\Requests\{CreateRoleRequest, UpdateRoleRequest};
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Arr;
 
 
 class RoleController extends Controller
 {
-    // public function __construct(){
-    //     // $this->middleware(CheckAdmin::class)->only('edit');
-    // }
     /**
      * Display a listing of the resource.
      *
@@ -21,10 +19,19 @@ class RoleController extends Controller
      */
     public function index()
     {
-        //Se listan los roles registrados
-        $roles = Role::paginate();
+        //Se obtienen los roles pertenecientes al administrador
+        $rolesUser = Auth::user()->roles()->get();
+        $rolesNameUser = [];
+        //se recorren los roles obtenidos para almacenarlos en un arreglo
+        foreach($rolesUser as $roleUser){
+            array_push($rolesNameUser, $roleUser->name);
+        }
+        //Se obtienen todos los roles registrados excepto los del administrador
+        $roles = Role::whereNotIn('name',$rolesNameUser)->paginate(5); 
+
         return view('roles.index',[
-            'roles'=> $roles
+            'rolesUser'=>$rolesUser,
+            'roles'=> $roles,
         ]);
     }
 
