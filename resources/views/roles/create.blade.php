@@ -66,6 +66,8 @@
                             <input type="radio" id="no-access" name="special" value="no-access" class="custom-control-input @error('special') is-invalid @enderror" {{old('special')=='no-access'? 'checked':''}}>
                             <label class="custom-control-label" for="no-access">Ningún acceso</label>
                         </div>
+                        <button type="button" class="btn btn-outline-dark btn-sm" id="unselect" onclick="event.preventDefault();
+                        document.querySelectorAll('[name=special]').forEach((x) => x.checked=false);">Desseleccionar</button>
                         @error('special')
                         <div class="invalid-feedback d-block">
                             <strong>{{ $message }}</strong>

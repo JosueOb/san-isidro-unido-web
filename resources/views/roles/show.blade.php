@@ -22,7 +22,7 @@
                     <h4 class="d-inline">{{$role->name}}</h4>
                     @if (!$hasTheSameRole)
                         @can('roles.edit')
-                            <a href="{{route('roles.edit',$role->id)}}" class="btn btn-primary float-right">Editar rol</a>
+                            <a href="{{route('roles.edit',$role->id)}}" class="btn btn-primary float-right">Editar</a>
                         @endcan
                     @endif
             </div>
