@@ -62,13 +62,18 @@ class LoginController extends Controller
 
         //Se verifica si existe un usuario con el correo ingresado y que su estado sea activo
         if($verifyUserEmail && $verifyUserEmail->state){
-            //Se verifica que las credenciales ingresadas concuerden con el registro de la BDD,
-            //el segundo atributo $remember permitirá recordar el token de la sesión en caso de
-            //que sea true
-            if(Auth::attempt($validData, $remember)){
-                return redirect('home')->with('status', 'Ingreso exitosamente');
+            //Se impide el ingreso del usuario que tengan el rol de invitado
+            if($verifyUserEmail->getRol() && $verifyUserEmail->getRol()->name != 'Invitado'){
+                //Se verifica que las credenciales ingresadas concuerden con el registro de la BDD,
+                //el segundo atributo $remember permitirá recordar el token de la sesión en caso de
+                //que sea true
+                if(Auth::attempt($validData, $remember)){
+                    return redirect('home')->with('status', 'Ingreso exitosamente');
+                }else{
+                    return redirect('login')->with('info', 'Las credenciales no son las correctas');
+                }
             }else{
-                return redirect('login')->with('info', 'Las credenciales no son las correctas');
+                return redirect('login')->with('info', 'Usuario no registrado');
             }
         }else{
             return redirect('login')->with('info', 'Usuario no registrado');
