@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Auth\Events\Verified;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,11 +16,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// RUTAS PÚBLICAS
-Route::get('/home', 'HomeController@index')->name('home');
-
 //rutas de autenticación
-Auth::routes(['register'=>false]);
+Auth::routes(['register'=>false,'verify'=>true]);
+// RUTAS PÚBLICAS
+
+Route::get('/home', 'HomeController@index')->name('home')->middleware('verified');
+
 
 Route::get('logout', function () {
     return abort(404);
@@ -27,7 +29,7 @@ Route::get('logout', function () {
 
 //RUTAS PRIVADAS
 //Se debe autenticar el usuario para ingresar a las siguientes rutas
-Route::middleware(['auth'])->group(function(){
+Route::middleware(['auth','verified'])->group(function(){
     //ROLES
     Route::get('roles', 'RoleController@index')->name('roles.index')->middleware('can:roles.index');
     Route::get('roles/create', 'RoleController@create')->name('roles.create')->middleware('can:roles.create');
