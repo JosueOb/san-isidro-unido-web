@@ -38,6 +38,8 @@ class ResetPasswordController extends Controller
     {
         $this->middleware('guest');
     }
+    //Se obrescribe el método validationErrorMessage para traducir los mensajes de errores
+    //de validación del request
     protected function validationErrorMessages()
     {
         return [
@@ -52,6 +54,8 @@ class ResetPasswordController extends Controller
             'password.confirmed'=>'Las contraseñas ingresadas no coinciden',
         ];
     }
+    //Se sobrescribe el método sendResetFailResponse para obtener la respuesta en caso de que 
+    //se prensente un incoveniente, traducir su mensaje de error y presentarlo al usuario
     protected function sendResetFailedResponse(Request $request, $response)
     {
         $message = '';
@@ -72,6 +76,7 @@ class ResetPasswordController extends Controller
             ->withErrors(['email' => $message]);
         
     }
+    //Se sobrescribe el método sendResetResponse para traducir el mensaje de éxito al usuario
     protected function sendResetResponse(Request $request, $response)
     {
         return redirect($this->redirectPath())

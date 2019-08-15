@@ -32,7 +32,12 @@ class ForgotPasswordController extends Controller
         $this->middleware('guest');
     }
 
+    //Se sobrescribe el método sendResetLinkEmail con la finalidad de verificar que el usuario 
+    // se encuentre activo y con un rol diferente a invitado para el envío del enlace de restablecimiento
+    // de contraseña
     public function sendResetLinkEmail(Request $request){
+
+        //Se valida el campo email
         $validData = $request->validate([
             'email'=>'required|email|exists:users,email',
         ],[
@@ -40,9 +45,9 @@ class ForgotPasswordController extends Controller
             'email.email' => 'Ingrese un correo electrónico válido',
             'email.exists' => 'No se encuentra ningún usuario registrado con el correo electrónico ingresado'
         ]);
-
+        //Se obtiene al usuario perteneciente al correo electrónico ingresado
         $user = User::where('email', $validData['email'])->first();
-        
+        //Se envía el enlace si el usuario está activo y con un rol diferente de invitado
         if($user->state && $user->getRol()){
 
             $this->broker()->sendResetLink(
