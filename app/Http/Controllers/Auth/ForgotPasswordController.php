@@ -40,20 +40,18 @@ class ForgotPasswordController extends Controller
             'email.email' => 'Ingrese un correo electrónico válido',
             'email.exists' => 'No se encuentra ningún usuario registrado con el correo electrónico ingresado'
         ]);
+
         $user = User::where('email', $validData['email'])->first();
+        
         if($user->state && $user->getRol()){
-            // dd('Usuario activo con el rol de '.$user->getRol()->name);
-            // try {
-                //code...
-                $this->broker()->sendResetLink(
-                    $this->credentials($request)
-                );
-                return back()->with('status', 'Enlace para restablecer su contraseña a sido enviado correctamente');
-            //} catch (\Exception  $e) {
-                return abort(500);
-            //}
+
+            $this->broker()->sendResetLink(
+                $this->credentials($request)
+            );
+            return back()->with('status', 'Se ha enviado un enlace a tu correo para restablecer la contraseña');
+
         }else{
-            return back()->with('status', 'Usuario no registrado en el sistema');
+            return back()->with('alert', 'Usuario no registrado');
         }
     }
 }
