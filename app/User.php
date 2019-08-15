@@ -7,7 +7,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 use Caffeinated\Shinobi\Concerns\HasRolesAndPermissions;
-use App\Notifications\UserResetPassword;
+use App\Notifications\{UserResetPassword, UserVerifyEmail};
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -43,9 +43,16 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getRol(){
         return $this->roles()->whereNotIn('name',['Invitado'])->first();
     }
-
+    //Se sobrescribe el método sendPasswordNotificatión para cambiar a un nuevo objeto 
+    //de la clase UserResetNotification con el contenido de la notificación traducida
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new UserResetPassword($token));
     }
+    //Se sobrescribe el método sendEmailVerificationNotification para cambiar a un nuevo objeto 
+    //de la clase UserResetNotification con el contenido de la notificación traducida
+    public function sendEmailVerificationNotification(){
+        $this->notify(new UserVerifyEmail);
+    }
+
 }
