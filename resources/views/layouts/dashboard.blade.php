@@ -57,11 +57,24 @@
                                 <div class="collapse-inner">
                                     <a class="collapse-item @yield('item-role-list')" href="{{route('roles.index')}}"><i class="fas fa-list"></i>Listar roles</a>    
                                     <a class="collapse-item @yield('item-role-create')" href="{{ route('roles.create')}}"><i class="fas fa-plus-circle"></i>Crear rol</a>    
-                                    {{-- <a class="collapse-item" href="cards.html"><i class="fas fa-edit"></i>Listar roles</a> --}}
                                 </div>
                             </div>
                         </li>
                         @endcan
+
+                        <li class="nav-item @yield('item-directive')">
+                            <a class="nav-link" data-toggle="collapse" data-target="#collapseDirective" aria-expanded="true" aria-controls="collapseDirective">
+                                <i class="fas fa-users"></i>
+                                <span>Directiva</span>
+                            </a>
+                            <div id="collapseDirective" class="collapse @yield('item-directive-collapse')" >
+                                <div class="collapse-inner">
+                                    <a class="collapse-item @yield('item-directive-list')" href="#"><i class="fas fa-list"></i>Listar miembros</a>
+                                    <a class="collapse-item @yield('item-directive-create')" href="#"><i class="fas fa-plus-circle"></i>Agregar miembro</a>
+                                </div>
+                            </div>
+                        </li>
+
                         
                     </ul>
                 </div>
