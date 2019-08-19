@@ -69,7 +69,7 @@
                             </a>
                             <div id="collapseDirective" class="collapse @yield('item-directive-collapse')" >
                                 <div class="collapse-inner">
-                                    <a class="collapse-item @yield('item-directive-list')" href="#"><i class="fas fa-list"></i>Listar miembros</a>
+                                    <a class="collapse-item @yield('item-directive-list')" href="{{ route('members.index') }}"><i class="fas fa-list"></i>Listar miembros</a>
                                     <a class="collapse-item @yield('item-directive-create')" href="#"><i class="fas fa-plus-circle"></i>Agregar miembro</a>
                                 </div>
                             </div>

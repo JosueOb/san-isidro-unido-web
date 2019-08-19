@@ -38,5 +38,31 @@ class PermissionsTableSeeder extends Seeder
             'slug'=>'roles.destroy',
             'description'=>'Eliminar registros de roles'
         ]);
+        //Permisos sobre el módulo de directiva
+        Permission::create([
+            'name'=>'Listar miembros de la directiva',
+            'slug'=>'members.index',
+            'description'=>'Lista los miembros de la directiva registrados'
+        ]);
+        Permission::create([
+            'name'=>'Crear miembro de la directiva',
+            'slug'=>'members.create',
+            'description'=>'Registrar a los miembros de la directiva'
+        ]);
+        Permission::create([
+            'name'=>'Ver detalle de miembros de la directiva',
+            'slug'=>'members.show',
+            'description'=>'Ver en detalle cada uno de los miembros de la directiva registrados'
+        ]);
+        Permission::create([
+            'name'=>'Editar miembros de la directiva',
+            'slug'=>'members.edit',
+            'description'=>'Editar registros de miembros de la directiva'
+        ]);
+        Permission::create([
+            'name'=>'Eliminar miembros de la directiva',
+            'slug'=>'members.destroy',
+            'description'=>'Eliminar registros de los miembros de la directiva'
+        ]);
     }
 }
