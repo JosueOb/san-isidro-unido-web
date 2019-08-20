@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Middleware\DirectiveRoleExists;
+use App\Position;
 use App\User;
 use Caffeinated\Shinobi\Models\Role;
 use Illuminate\Http\Request;
@@ -25,9 +26,13 @@ class DirectiveController extends Controller
         $members = User::whereHas('roles',function(Builder $query){
             $query->whereIn('name',['Directivo', 'Directiva']);
         })->paginate();
+        
+        $positions = Position::paginate(5);
+        // dd(count($positions));
 
         return view('directive.index',[
-            'members'=>$members
+            'members'=>$members,
+            'positions'=>$positions,
         ]);
     }
 
