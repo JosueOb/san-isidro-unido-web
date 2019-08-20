@@ -8,18 +8,13 @@
 @section('content')
 <div class="row">
     <div class="col">
+            @include('layouts.alerts')
+    </div>
+</div>
+<div class="row">
+    <div class="col">
         <div class="card card-primary">
             <div class="card-body">
-                @if (session('status'))
-                <div class="alert alert-success" role="alert">
-                        {{ session('status') }}
-                    </div>
-                @endif
-                @if (session('danger'))
-                <div class="alert alert-danger" role="alert">
-                        {{ session('danger') }}
-                    </div>
-                @endif
                 <h3 class="text-center"> Bienvenido</h3>
                 <p class="text-center"><span class="font-weight-bold">Usuario</span>
                     : {{Auth::user()->first_name}} {{Auth::user()->last_name}}</p>

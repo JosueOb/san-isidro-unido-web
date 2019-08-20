@@ -17,7 +17,7 @@
 @section('content')
 <div class="row">
     <div class="col">
-        @include('roles.alerts')
+        @include('layouts.alerts')
     </div>
 </div>
 <div class="row">

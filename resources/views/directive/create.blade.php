@@ -3,7 +3,7 @@
     Módulo Directiva
 @endsection
 @section('page-header')
-    Listado de miembros
+    Registrar nuevo directivo
 @endsection
 @section('item-directive')
     active
@@ -11,7 +11,7 @@
 @section('item-directive-collapse')
     show
 @endsection
-@section('item-directive-list')
+@section('item-directive-create')
     active
 @endsection
 @section('content')
