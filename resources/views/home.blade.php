@@ -15,6 +15,11 @@
                         {{ session('status') }}
                     </div>
                 @endif
+                @if (session('danger'))
+                <div class="alert alert-danger" role="alert">
+                        {{ session('danger') }}
+                    </div>
+                @endif
                 <h3 class="text-center"> Bienvenido</h3>
                 <p class="text-center"><span class="font-weight-bold">Usuario</span>
                     : {{Auth::user()->first_name}} {{Auth::user()->last_name}}</p>

@@ -17,6 +17,11 @@
 @section('content')
 <div class="row">
     <div class="col">
+        @include('roles.alerts')
+    </div>
+</div>
+<div class="row">
+    <div class="col">
         <div class="card card-primary">
             <div class="card-header">
                     <h4 class="d-inline">{{$role->name}}</h4>

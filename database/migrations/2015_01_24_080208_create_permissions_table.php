@@ -18,6 +18,7 @@ class CreatePermissionsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('slug')->unique();
+            $table->boolean('private');
             $table->text('description')->nullable();
             $table->timestamps();
         });

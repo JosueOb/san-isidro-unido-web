@@ -16,53 +16,63 @@ class PermissionsTableSeeder extends Seeder
         Permission::create([
             'name'=>'Listar roles',
             'slug'=>'roles.index',
-            'description'=>'Lista los roles registrados'
+            'description'=>'Lista los roles registrados',
+            'private'=>true,
         ]);
         Permission::create([
             'name'=>'Crear roles',
             'slug'=>'roles.create',
-            'description'=>'Crear los roles del sistema'
+            'description'=>'Crear los roles del sistema',
+            'private'=>true,
         ]);
         Permission::create([
             'name'=>'Ver detalle de rol',
             'slug'=>'roles.show',
-            'description'=>'Ver en detalle cada uno de los roles registrados'
+            'description'=>'Ver en detalle cada uno de los roles registrados',
+            'private'=>true,
         ]);
         Permission::create([
             'name'=>'Editar roles',
             'slug'=>'roles.edit',
-            'description'=>'Editar registros de roles'
+            'description'=>'Editar registros de roles',
+            'private'=>true,
         ]);
         Permission::create([
             'name'=>'Eliminar roles',
             'slug'=>'roles.destroy',
-            'description'=>'Eliminar registros de roles'
+            'description'=>'Eliminar registros de roles',
+            'private'=>true,
         ]);
         //Permisos sobre el módulo de directiva
         Permission::create([
             'name'=>'Listar miembros de la directiva',
             'slug'=>'members.index',
-            'description'=>'Lista los miembros de la directiva registrados'
+            'description'=>'Lista los miembros de la directiva registrados',
+            'private'=>false,
         ]);
         Permission::create([
             'name'=>'Crear miembro de la directiva',
             'slug'=>'members.create',
-            'description'=>'Registrar a los miembros de la directiva'
+            'description'=>'Registrar a los miembros de la directiva',
+            'private'=>false,
         ]);
         Permission::create([
             'name'=>'Ver detalle de miembros de la directiva',
             'slug'=>'members.show',
-            'description'=>'Ver en detalle cada uno de los miembros de la directiva registrados'
+            'description'=>'Ver en detalle cada uno de los miembros de la directiva registrados',
+            'private'=>false,
         ]);
         Permission::create([
             'name'=>'Editar miembros de la directiva',
             'slug'=>'members.edit',
-            'description'=>'Editar registros de miembros de la directiva'
+            'description'=>'Editar registros de miembros de la directiva',
+            'private'=>false,
         ]);
         Permission::create([
             'name'=>'Eliminar miembros de la directiva',
             'slug'=>'members.destroy',
-            'description'=>'Eliminar registros de los miembros de la directiva'
+            'description'=>'Eliminar registros de los miembros de la directiva',
+            'private'=>false,
         ]);
     }
 }
