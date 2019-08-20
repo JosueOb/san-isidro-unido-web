@@ -21,7 +21,7 @@
     </div>
 </div>
 <div class="row">
-    <div class="col">
+    <div class="col-md-12 col-xl-7">
         <div class="card card-primary">
             <div class="card-header">
                 <h4 class="d-inline">Miembros de la directiva registrados</h4>
@@ -38,6 +38,27 @@
                 <p class="text-muted m-0 float-right">Total: {{$members->total()}}</p>
                 <nav>
                     {{$members->links()}}
+                </nav>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-xl-5">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h4 class="p-1">Cargos</h4>
+            </div>
+            <div class="card-body">
+                @if (count($positions)>0)
+                
+                @else
+                    <p class="text-center">Nigún miembros de la directiva registrado</p>
+                @endif
+            </div>
+            <div class="card-footer text-right">
+                <p class="text-muted m-0">Total: {{$positions->count()}}</p>
+                {{-- <p class="text-muted m-0 float-right">Total: {{$members->total()}}</p> --}}
+                <nav>
+                    {{$positions->links()}}
                 </nav>
             </div>
         </div>

@@ -54,5 +54,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function sendEmailVerificationNotification(){
         $this->notify(new UserVerifyEmail);
     }
+    /*
+    *Se obtiene la posición a la que pertenece el usuario
+    */
+    public function position(){
+        return $this->belongsTo(Position::class);
+    }
 
 }
