@@ -39,6 +39,7 @@ class DirectiveController extends Controller
     public function create()
     {
         //
+        return view('directive.create');
     }
 
     /**
