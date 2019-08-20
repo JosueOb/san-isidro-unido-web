@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Middleware\DirectiveRoleExists;
-use App\User;
+use App\Position;
 use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\Builder;
 
-class DirectiveController extends Controller
+class PositionController extends Controller
 {
     public function __construct()
     {
@@ -20,13 +19,10 @@ class DirectiveController extends Controller
      */
     public function index()
     {
-        //Se buscan a todos los usuarios con el rol directivo/a para listarlos
-        $members = User::whereHas('roles',function(Builder $query){
-            $query->whereIn('name',['Directivo', 'Directiva']);
-        })->paginate();
+        $positions = Position::paginate();
 
-        return view('directive.index',[
-            'members'=>$members,
+        return view('positions.index',[
+            'positions'=>$positions,
         ]);
     }
 
@@ -38,7 +34,6 @@ class DirectiveController extends Controller
     public function create()
     {
         //
-        return view('directive.create');
     }
 
     /**

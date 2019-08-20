@@ -71,6 +71,8 @@
                                 <div class="collapse-inner">
                                     <a class="collapse-item @yield('item-directive-list')" href="{{ route('members.index') }}"><i class="fas fa-list"></i>Listar miembros</a>
                                     <a class="collapse-item @yield('item-directive-create')" href="{{route('members.create')}}"><i class="fas fa-plus-circle"></i>Agregar miembro</a>
+                                    <a class="collapse-item @yield('item-positions-list')" href="{{route('positions.index')}}"><i class="fas fa-list"></i>Listar cargos</a>
+                                    <a class="collapse-item @yield('item-positions-create')" href="{{route('positions.create')}}"><i class="fas fa-plus-circle"></i>Agregar cargo</a>
                                 </div>
                             </div>
                         </li>

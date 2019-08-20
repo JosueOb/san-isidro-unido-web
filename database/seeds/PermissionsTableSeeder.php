@@ -74,5 +74,36 @@ class PermissionsTableSeeder extends Seeder
             'description'=>'Eliminar registros de los miembros de la directiva',
             'private'=>false,
         ]);
+        //Permisos sobre el módulo de directiva referente a los cargos
+        Permission::create([
+            'name'=>'Listar cargos de la directiva',
+            'slug'=>'positions.index',
+            'description'=>'Lista los cargos de los miembros de la directiva',
+            'private'=>false,
+        ]);
+        Permission::create([
+            'name'=>'Crear cargo',
+            'slug'=>'positions.create',
+            'description'=>'Registrar los cargos de la directiva',
+            'private'=>false,
+        ]);
+        Permission::create([
+            'name'=>'Ver detalle de los cragos de la directiva',
+            'slug'=>'positions.show',
+            'description'=>'Ver en detalle cada uno de los cargos de la directiva',
+            'private'=>false,
+        ]);
+        Permission::create([
+            'name'=>'Editar cargos de la directiva',
+            'slug'=>'positions.edit',
+            'description'=>'Editar registros de cargos de la directiva',
+            'private'=>false,
+        ]);
+        Permission::create([
+            'name'=>'Eliminar cargos de la directiva',
+            'slug'=>'positions.destroy',
+            'description'=>'Eliminar registros de los cargos de la directiva',
+            'private'=>false,
+        ]);
     }
 }
