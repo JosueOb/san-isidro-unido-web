@@ -106,8 +106,9 @@ class PositionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Position $position)
     {
-        //
+        $position->delete();
+        return redirect()->route('positions.index')->with('success','Cargo eliminado exitosamente');
     }
 }

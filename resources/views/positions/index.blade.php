@@ -81,7 +81,7 @@
                     </tbody>
                 </table>
                 @else
-                    <p class="text-center">Nigún miembros de la directiva registrado</p>
+                    <p class="text-center">Nigún cargo registrado</p>
                 @endif
             </div>
             <div class="card-footer">
