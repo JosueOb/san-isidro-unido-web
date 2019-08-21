@@ -17,7 +17,7 @@ class Position extends Model
     *
     * @var array
     */
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'description'];
 
     /**
     * Se  obtiene a los usuarios de una posición

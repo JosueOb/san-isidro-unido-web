@@ -24,7 +24,7 @@ class PositionRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'=>'required|regex:/^[[:alpha:][:space:]]+$/|min:3|max:25|unique:positions,name',
+            'name'=>'required|regex:/^[[:alpha:][:space:]]+$/|min:3|max:25',
             'description'=> 'nullable|regex:/^[[:alpha:][:space:](,;.áéíóúÁÉÍÓÚ)]+$/|max:255',
         ];
     }
@@ -39,7 +39,7 @@ class PositionRequest extends FormRequest
             'name.min'=>'El :attribute debe ser mayor a 3 caracteres',
             'name.max'=>'El :attribute no debe ser mayor a 25 caracteres',
             'name.regex'=>'El :attribute debe estar conformado por caracteres alfabéticos, no se admiten signos de puntuación ni caracteres especiales',
-            'name.unique'=>'El :attribute ingresado ya existe',
+            
             
             'description.max'=>'La :attribute no debe ser mayor a 255 caracteres',
             'description.regex'=>'La :attribute  debe estar conformado por caracteres alfabéticos, no se admiten caracteres especiales',

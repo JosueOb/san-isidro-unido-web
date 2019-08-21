@@ -50,9 +50,9 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::get('positions', 'PositionController@index')->name('positions.index')->middleware('can:positions.index');
     Route::get('positions/create', 'PositionController@create')->name('positions.create')->middleware('can:positions.create');
     Route::post('positions/store', 'PositionController@store')->name('positions.store')->middleware('can:positions.create');
-    Route::get('positions/{member}/edit', 'PositionController@edit')->name('positions.edit')->middleware('can:positions.edit');
-    Route::put('positions/{member}', 'PositionController@update')->name('positions.update')->middleware('can:positions.edit');
-    Route::delete('positions/{member}', 'PositionController@destroy')->name('positions.destroy')->middleware('can:positions.destroy');
+    Route::get('positions/{position}/edit', 'PositionController@edit')->name('positions.edit')->middleware('can:positions.edit');
+    Route::put('positions/{position}', 'PositionController@update')->name('positions.update')->middleware('can:positions.edit');
+    Route::delete('positions/{position}', 'PositionController@destroy')->name('positions.destroy')->middleware('can:positions.destroy');
     
     // Route::get('positions/{member}', 'PositionController@show')->name('positions.show')->middleware('can:positions.show');
     Route::get('positions/{member}', function () {

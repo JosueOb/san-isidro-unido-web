@@ -7,7 +7,7 @@ use Caffeinated\Shinobi\Models\{Role, Permission};
 use App\Http\Requests\{CreateRoleRequest, UpdateRoleRequest};
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Arr;
+
 
 
 class RoleController extends Controller
@@ -26,9 +26,10 @@ class RoleController extends Controller
         foreach($rolesUser as $roleUser){
             array_push($rolesNameUser, $roleUser->name);
         }
+        // dd($rolesNameUser);
         //Se obtienen todos los roles registrados excepto los del administrador
-        $roles = Role::whereNotIn('name',$rolesNameUser)->paginate(5); 
-
+        $roles = Role::whereNotIn('name',$rolesNameUser)->orderBy('id', 'asc')->paginate(5); 
+        // dd($roles);
         return view('roles.index',[
             'rolesUser'=>$rolesUser,
             'roles'=> $roles,

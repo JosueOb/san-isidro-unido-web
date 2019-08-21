@@ -32,7 +32,7 @@
                 <table class="table table-light table-responsive table-hover">
                     <thead>
                         <tr>
-                            <th width='10px'>#</th>
+                            <th width='10px'>Id</th>
                             <th>Nombre</th>
                             <th>Slug</th>
                             <th>Descripción</th>
@@ -42,7 +42,8 @@
                     <tbody>
                         @foreach ($roles as $role)
                             <tr>
-                                <td>{{$loop->iteration}}</td>
+                                
+                                <td>{{ $role->id}}</td>
                                 <td>{{$role->name}}</td>
                                 <td>{{$role->slug}}</td>
                                 <td>{{$role->description}}</td>
@@ -105,7 +106,7 @@
                     <table class="table table-light table-responsive table-hover">
                         <thead>
                             <tr>
-                                <th width='10px'>#</th>
+                                <th width='10px'>Id</th>
                                 <th>Nombre</th>
                                 <th>Descripción</th>
                                 <th>Opción</th>
