@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Middleware\DirectiveRoleExists;
+use App\Http\Requests\PositionRequest;
 use App\Position;
 use Illuminate\Http\Request;
 
@@ -34,6 +35,7 @@ class PositionController extends Controller
     public function create()
     {
         //
+        return view('positions.create');
     }
 
     /**
@@ -42,9 +44,16 @@ class PositionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PositionRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        $position = new Position();
+        $position->name = $validated['name'];
+        $position->description = $validated['description'];
+        $position->save();
+
+        return redirect()->route('positions.index')->with('success','Cargo registrado exitosamente');
     }
 
     /**
@@ -53,10 +62,10 @@ class PositionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
-    }
+    // public function show($id)
+    // {
+    //     //
+    // }
 
     /**
      * Show the form for editing the specified resource.

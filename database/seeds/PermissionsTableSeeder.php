@@ -87,12 +87,12 @@ class PermissionsTableSeeder extends Seeder
             'description'=>'Registrar los cargos de la directiva',
             'private'=>false,
         ]);
-        Permission::create([
-            'name'=>'Ver detalle de los cragos de la directiva',
-            'slug'=>'positions.show',
-            'description'=>'Ver en detalle cada uno de los cargos de la directiva',
-            'private'=>false,
-        ]);
+        // Permission::create([
+        //     'name'=>'Ver detalle de los cragos de la directiva',
+        //     'slug'=>'positions.show',
+        //     'description'=>'Ver en detalle cada uno de los cargos de la directiva',
+        //     'private'=>false,
+        // ]);
         Permission::create([
             'name'=>'Editar cargos de la directiva',
             'slug'=>'positions.edit',
