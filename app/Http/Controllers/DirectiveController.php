@@ -90,9 +90,11 @@ class DirectiveController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(User $member)
     {
-        //
+        return view('directive.show',[
+            'member'=>$member,
+        ]);
     }
 
     /**
