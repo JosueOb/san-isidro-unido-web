@@ -62,7 +62,7 @@ class DirectiveController extends Controller
     public function store(DirectiveRequest $request)
     {
         $validated = $request->validated();
-        $avatar =  $avatar = 'https://ui-avatars.com/api/?name='.
+        $avatar  = 'https://ui-avatars.com/api/?name='.
         substr($validated['first_name'],0,1).'+'.substr($validated['last_name'],0,1).
         '&size=255';
         $password = Str::random(8);
@@ -179,6 +179,40 @@ class DirectiveController extends Controller
         }
         $member->save();
 
-        return redirect()->route('members.index')->with('success','Miembro de la directiva '.$message);
+        return redirect()->back()->with('success','Miembro de la directiva '.$message);
+    }
+    /**
+     * filtros para listar usuarios activo, inactivo y todos.
+     *
+     * @param  int  $option
+     * @return App\User;
+     */
+    public function filters($option){
+
+        $members = null;
+
+        switch ($option) {
+            case 1:
+                $members = User::whereHas('roles',function(Builder $query){
+                    $query->whereIn('name',['Directivo', 'Directiva']);
+                })->paginate();
+                break;
+            case 2:
+                $members = User::whereHas('roles',function(Builder $query){
+                    $query->whereIn('name',['Directivo', 'Directiva']);
+                })->where('state',true)->paginate();
+                break;
+            case 3:
+                $members = User::whereHas('roles',function(Builder $query){
+                    $query->whereIn('name',['Directivo', 'Directiva']);
+                })->where('state',false)->paginate();
+                break;
+            default:
+                return abort(404);
+                break;
+        }
+        return view('directive.index',[
+            'members'=>$members,
+        ]);
     }
 }

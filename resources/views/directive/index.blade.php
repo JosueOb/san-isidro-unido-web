@@ -60,9 +60,9 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col">
-                        <a href="#" class="btn btn-outline-dark btn-sm"><i class="fas fa-filter"></i> Todos</a>
-                        <a href="#" class="btn btn-outline-dark btn-sm"><i class="fas fa-filter"></i> Activos</a>
-                        <a href="#" class="btn btn-outline-dark btn-sm"><i class="fas fa-filter"></i> Inactivos</a>
+                        <a href="{{route('members.filters', 1)}}" class="btn btn-outline-dark btn-sm"><i class="fas fa-filter"></i> Todos</a>
+                        <a href="{{route('members.filters', 2)}}" class="btn btn-outline-dark btn-sm"><i class="fas fa-filter"></i> Activos</a>
+                        <a href="{{route('members.filters', 3)}}" class="btn btn-outline-dark btn-sm"><i class="fas fa-filter"></i> Inactivos</a>
                     </div>
                 </div>
                 <div class="row">
@@ -158,7 +158,7 @@
                                 </tbody>
                             </table>
                         @else
-                            <p class="text-center">Nigún miembros de la directiva registrado</p>
+                            <p class="text-center">Nigún registro</p>
                         @endif
                     </div>
                 </div>
