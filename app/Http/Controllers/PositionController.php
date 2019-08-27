@@ -108,7 +108,13 @@ class PositionController extends Controller
      */
     public function destroy(Position $position)
     {
-        $position->delete();
-        return redirect()->route('positions.index')->with('success','Cargo eliminado exitosamente');
+        //Se verifica si el cargo esta siendo utilizado por algún usuario
+        $positionUsed = $position->users()->get();
+        if(count($positionUsed)>0){
+            return redirect()->route('positions.index')->with('danger','El cargo '.strtolower($position->name).' no se puede eliminar debido a que esta siendo utilizado');
+        }else{
+            $position->delete();
+            return redirect()->route('positions.index')->with('success','Cargo eliminado exitosamente');
+        }
     }
 }
