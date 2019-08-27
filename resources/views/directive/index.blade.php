@@ -91,9 +91,11 @@
                                             <td width='10px'>
                                                 <a href="{{route('members.show',$member->id)}}" class="btn btn-info">Ver</a>
                                             </td>
+                                            @if ($member->state)
                                             <td width='10px'>
                                                 <a href="{{route('members.edit',$member->id)}}" class="btn btn-secondary"> Editar</a>
                                             </td>
+                                            @endif
                                             <td width='10px'>
                                                 <a href="#" class="btn btn-danger"  data-toggle="modal" data-target="#deleteMember{{$member->id}}">Eliminar</a>
                                                 <!--Modal-->

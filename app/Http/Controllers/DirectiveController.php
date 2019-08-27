@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Middleware\DirectiveRoleExists;
+use App\Http\Middleware\UserIsActive;
 use App\Http\Requests\DirectiveRequest;
 use App\Notifications\UserCreated;
 use App\Position;
@@ -11,12 +12,14 @@ use Caffeinated\Shinobi\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
 
 class DirectiveController extends Controller
 {
     public function __construct()
     {
         $this->middleware(DirectiveRoleExists::class);
+        $this->middleware(UserIsActive::class)->only('edit','update');
     }
     /**
      * Display a listing of the resource.
@@ -103,9 +106,14 @@ class DirectiveController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $member)
     {
-        //
+        $positions = Position::all();
+
+        return view('directive.edit',[
+            'member'=> $member,
+            'positions'=>$positions
+        ]);
     }
 
     /**
@@ -115,9 +123,41 @@ class DirectiveController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $member)
     {
-        //
+        //Se validan el campo email y positision
+        $filter = Validator::make($request->only(['email', 'position']),[
+            'email'=>'required|email|unique:users,email,'.$member->id,
+            'position'=>'required|exists:positions,id',
+        ],[
+            'email.required'=>'El campo correo electrónico es obligatorio',
+            'email.email'=>'Fortamo del correo electrónico ingresado es incorrecto',
+            'email.unique'=>'El correo electrónico ingresado ya existe',
+
+            'position.required'=>'El campo cargo es obligatorio',
+            'position.exists'=>'El cargo seleccionado no existe',
+
+        ])->validate();
+        //Se obtiene el correo del objeto usuario y del formulario
+        $oldEmail = $member->email;
+        $newEmail = $filter['email'];
+        //Se actualiza el campo email y position del usuario
+        $member->email = $filter['email'];
+        $member->position_id = $filter['position'];
+        //Se verifica si el correo del formulario con el del usuario no iguales
+        if($oldEmail != $newEmail){
+            //Se procede a generar una contraseña
+            $password = Str::random(8);
+            //Se cambia la contraseña del usuario
+            $member->password = password_hash($password, PASSWORD_DEFAULT);
+            //Se envía una notificación
+            $member->notify(new UserCreated($password));
+        }
+
+        $member->save();
+
+        return redirect()->route('members.index')->with('success','Miembro de la directiva actualizado exitosamente');
+        
     }
 
     /**

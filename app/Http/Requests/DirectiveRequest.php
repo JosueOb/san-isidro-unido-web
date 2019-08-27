@@ -37,10 +37,22 @@ class DirectiveRequest extends FormRequest
     */
     public function messages(){
         return [
-            'first_name'=>'',
-            'last_name'=>'',
-            'email'=>'',
-            'position'=>''
+            'first_name.required'=>'El campo :attribute es obligatorio',
+            'first_name.regex'=>'El :attribute debe estar conformado por caracteres alfabéticos, no se admiten signos de puntuación ni caracteres especiales',
+            'first_name.min'=>'El :attribute debe ser mayor a 5 caracteres',
+            'first_name.max'=>'El :attribute no debe ser mayor a 100 caracteres',
+
+            'last_name.required'=>'Los :attribute son obligatorios',
+            'last_name.regex'=>'Los :attribute deben estar conformado por caracteres alfabéticos, no se admiten signos de puntuación ni caracteres especiales',
+            'last_name.min'=>'Los :attribute deben ser mayor a 5 caracteres',
+            'last_name.max'=>'Los :attribute no deben ser mayor a 100 caracteres',
+
+            'email.required'=>'El campo :attribute es obligatorio',
+            'email.email'=>'Fortamo del :attribute ingresado es incorrecto',
+            'email.unique'=>'El :attribute ingresado ya existe',
+
+            'position.required'=>'El campo :attribute es obligatorio',
+            'position.exists'=>'El :attribute seleccionado no existe',
         ];
     }
     /**
