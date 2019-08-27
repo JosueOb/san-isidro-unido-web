@@ -82,7 +82,6 @@
                                 <tbody>
                                     @foreach ($members as $member)
                                         <tr>
-                                            
                                             <td>{{ $member->id}}</td>
                                             <td>{{$member->first_name}}</td>
                                             <td>{{$member->last_name}}</td>
@@ -97,7 +96,13 @@
                                             </td>
                                             @endif
                                             <td width='10px'>
-                                                <a href="#" class="btn btn-danger"  data-toggle="modal" data-target="#deleteMember{{$member->id}}">Eliminar</a>
+                                                @if ($member->state)
+                                                    <a href="#" class="btn btn-danger"  data-toggle="modal" data-target="#deleteMember{{$member->id}}">Eliminar</a>
+                                                    
+                                                @else
+                                                    <a href="#" class="btn btn-success"  data-toggle="modal" data-target="#activeMember{{$member->id}}">Activar</a>
+                                                @endif
+
                                                 <!--Modal-->
                                                 <div class="modal fade" id="deleteMember{{$member->id}}" tabindex="-1" role="dialog" aria-labelledby="eliminarMiembro" aria-hidden="true">
                                                     <div class="modal-dialog" role="document">
@@ -109,7 +114,7 @@
                                                         </button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            ¿Está seguro de eliminar al miembro de {{ $member->first_name }}?
+                                                            ¿Está seguro de eliminar al usuario {{ $member->first_name }}?
                                                         </div>
                                                         <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -119,6 +124,30 @@
                                                             @method('delete')
                                                             <button type="submit" class="btn btn-danger">Eliminar</button>
                                                         </form>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal fade" id="activeMember{{$member->id}}" tabindex="-1" role="dialog" aria-labelledby="activarMiembro" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Confirmar activación</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            ¿Está seguro de activar al usuario {{ $member->first_name }}?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                                            {{-- <button type="button" class="btn btn-primary">Eliminar</button> --}}
+                                                            <form action="{{ route('members.destroy', $member->id) }}" method="POST">
+                                                                @csrf
+                                                                @method('delete')
+                                                                <button type="submit" class="btn btn-success">Activar</button>
+                                                            </form>
                                                         </div>
                                                     </div>
                                                     </div>

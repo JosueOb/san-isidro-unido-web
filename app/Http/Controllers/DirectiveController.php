@@ -166,8 +166,19 @@ class DirectiveController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $member)
     {
-        //
+        $mesage = '';
+        //Se verifica si el usuario esta activo para desactivarlo y viceversa
+        if($member->state){
+            $message= 'desactivado';
+            $member->state = false;
+        }else{
+            $message= 'activado';
+            $member->state = true;
+        }
+        $member->save();
+
+        return redirect()->route('members.index')->with('success','Miembro de la directiva '.$message);
     }
 }
