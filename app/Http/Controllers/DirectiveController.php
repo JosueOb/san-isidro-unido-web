@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Middleware\DirectiveRoleExists;
+use App\Http\Middleware\ProtectedAdminUsers;
 use App\Http\Middleware\UserIsActive;
 use App\Http\Requests\DirectiveRequest;
 use App\Notifications\UserCreated;
@@ -20,6 +21,7 @@ class DirectiveController extends Controller
     {
         $this->middleware(DirectiveRoleExists::class);
         $this->middleware(UserIsActive::class)->only('edit','update');
+        $this->middleware(ProtectedAdminUsers::class)->only('show','edit','update','destroy');
     }
     /**
      * Display a listing of the resource.
@@ -45,7 +47,6 @@ class DirectiveController extends Controller
      */
     public function create()
     {
-        //
         $positions = Position::all();
 
         return view('directive.create',[

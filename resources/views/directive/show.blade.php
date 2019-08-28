@@ -33,7 +33,7 @@
                         <p><strong>Nombre:</strong> {{$member->first_name}}</p>
                         <p><strong>Apellidos:</strong> {{$member->last_name}}</p>
                         <p><strong>Corre electrónico:</strong> {{$member->email}}</p>
-                        <p><strong>Cargo:</strong> {{$member->position->name}}</p>
+                        <p><strong>Cargo:</strong> {{$member->position ? $member->position->name : 'Sin cargo'}}</p>
                         <p><strong>Estado:</strong> {{$member->state ? 'Activo' : 'Inactivo'}}</p>
                         <p><strong>Número telefónico:</strong> {{$member->number_phone ?: 'No registrado'}}</p>
                         <p><strong>Corre verificado:</strong> {{$member->email_verified_at ?: 'No verificado'}}</p>
