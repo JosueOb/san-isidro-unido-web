@@ -34,12 +34,12 @@ class UsersTableSeeder extends Seeder
         
         $roleDirective = Role::whereIn('name',['Directivo', 'Directiva'])->first();
         $positions = Position::all();
-        $members = factory(User::class,20)->create();
+        $members = factory(User::class,5)->create();
         $members->each(function(User $user)use($roleDirective, $roleGuest,$positions){
             $user->avatar = 'https://ui-avatars.com/api/?name='.
             substr($user->first_name,0,1).'+'.substr($user->last_name,0,1).
             '&size=255';
-            $user->position_id = $positions->random(1)->first()->id;
+            $user->position_id = $positions->random(1,5)->first()->id;
             $user->save();
             $user->roles()->attach([$roleDirective->id, $roleGuest->id]);
         });

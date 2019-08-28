@@ -17,6 +17,7 @@ class CreatePositionsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name')->unique();
             $table->string('description')->nullable();
+            $table->enum('allocation', ['one-person', 'several-people']);
             $table->timestamps();
         });
     }

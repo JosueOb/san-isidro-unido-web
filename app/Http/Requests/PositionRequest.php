@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class PositionRequest extends FormRequest
 {
@@ -25,6 +26,7 @@ class PositionRequest extends FormRequest
     {
         return [
             'name'=>'required|regex:/^[[:alpha:][:space:]]+$/|min:3|max:25',
+            'allocation'=>'required|'.Rule::in(['one-person', 'several-people']),
             'description'=> 'nullable|regex:/^[[:alpha:][:space:](,;.áéíóúÁÉÍÓÚ)]+$/|max:255',
         ];
     }
@@ -40,6 +42,8 @@ class PositionRequest extends FormRequest
             'name.max'=>'El :attribute no debe ser mayor a 25 caracteres',
             'name.regex'=>'El :attribute debe estar conformado por caracteres alfabéticos, no se admiten signos de puntuación ni caracteres especiales',
             
+            'allocation.required'=>'El campo :attribute es obligatorio',
+            'allocation.in'=>'Lo opción seleccionada es inválida',
             
             'description.max'=>'La :attribute no debe ser mayor a 255 caracteres',
             'description.regex'=>'La :attribute  debe estar conformado por caracteres alfabéticos, no se admiten caracteres especiales',
@@ -53,8 +57,8 @@ class PositionRequest extends FormRequest
     public function attributes()
     {
         return [
-            //
             'name' => 'nombre',
+            'allocation' => 'asignación',
             'description' => 'descripción',
         ];
     }

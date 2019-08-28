@@ -48,6 +48,7 @@ class PositionController extends Controller
     public function store(PositionRequest $request)
     {
         $validated = $request->validated();
+        
         $filter = Validator::make($validated,[
             'name'=>'unique:positions,name',
         ],[
@@ -56,6 +57,7 @@ class PositionController extends Controller
 
         $position = new Position();
         $position->name = $validated['name'];
+        $position->allocation = $validated['allocation'];
         $position->description = $validated['description'];
         $position->save();
 
@@ -85,8 +87,9 @@ class PositionController extends Controller
      */
     public function update(PositionRequest $request, Position $position)
     {
-        //
+        
         $validated = $request->validated();
+
         $filter = Validator::make($validated,[
             'name'=>'unique:positions,name,'.$position->id,
         ],[
@@ -94,6 +97,7 @@ class PositionController extends Controller
         ])->validate();
         
         $position->name = $validated['name'];
+        $position->allocation = $validated['allocation'];
         $position->description = $validated['description'];
         $position->save();
 

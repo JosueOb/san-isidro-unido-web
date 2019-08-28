@@ -35,6 +35,7 @@
                             <th width='10px'>Id</th>
                             <th>Nombre</th>
                             <th>Descripción</th>
+                            <th>Asignación</th>
                             <th colspan="2">Opciones</th>
                         </tr>
                     </thead>
@@ -44,6 +45,7 @@
                                 <td>{{$position->id}}</td>
                                 <td>{{$position->name}}</td>
                                 <td>{{$position->description ?? 'Sin descripción'}}</td>
+                                <td>{{$position->allocation}}</td>
     
                                 <td width='10px'>
                                     <a href="{{route('positions.edit',$position->id)}}" class="btn btn-secondary"> Editar</a>
