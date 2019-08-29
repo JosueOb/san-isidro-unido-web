@@ -141,25 +141,15 @@ class DirectiveController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $member)
+    public function update(DirectiveRequest $request, User $member)
     {
-        //Se validan el campo email y positision
-        $filter = Validator::make($request->only(['email', 'position']),[
-            'email'=>'required|email|unique:users,email,'.$member->id,
-            'position'=>'required|exists:positions,id',
-        ],[
-            'email.required'=>'El campo correo electrónico es obligatorio',
-            'email.email'=>'Fortamo del correo electrónico ingresado es incorrecto',
-            'email.unique'=>'El correo electrónico ingresado ya existe',
-
-            'position.required'=>'El campo cargo es obligatorio',
-            'position.exists'=>'El cargo seleccionado no existe',
-        ])->validate();
+        //Se validan el campo email y position
+        $validated = $request->validated();
 
         //Se obtiene el cargo que fue seleccionado
-        $getPosition = Position::find($filter['position']);
+        $getPosition = Position::find($validated['position']);
             //Se verifica si la asignación del cargo es de one-person y el cargo del directivo cambió
-        if($getPosition->allocation === 'one-person' && $member->position->id != $filter['position']){
+        if($getPosition->allocation === 'one-person' && $member->position->id != $validated['position']){
             //Se verifica si el cargo con asignación de one-person tiene algún usuario activo
             $existsActiveUser = $getPosition->users()->where('state',true)->exists();
             //En caso de que el cargo selecionado tiene algún usuario activo, se retorna al formulario de registro con los valores 
@@ -175,10 +165,10 @@ class DirectiveController extends Controller
 
         //Se obtiene el correo del objeto usuario y del formulario
         $oldEmail = $member->email;
-        $newEmail = $filter['email'];
+        $newEmail = $validated['email'];
         //Se actualiza el campo email y position del usuario
-        $member->email = $filter['email'];
-        $member->position_id = $filter['position'];
+        $member->email = $validated['email'];
+        $member->position_id = $validated['position'];
         //Se verifica si el correo del formulario con el del usuario no iguales
         if($oldEmail != $newEmail){
             //Se procede a generar una contraseña
