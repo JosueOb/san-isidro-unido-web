@@ -32,7 +32,7 @@
                     <div class="row">
                         <div class="form-group col-12 col-md-6">
                             <label for="name">Nombre</label>
-                            <input id="name" type="text" class="form-control  @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" autofocus required>
+                            <input id="name" type="text" class="form-control  @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autofocus>
                             @error('name')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>

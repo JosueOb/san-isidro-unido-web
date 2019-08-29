@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Caffeinated\Shinobi\Models\{Role, Permission};
-use App\Http\Requests\{CreateRoleRequest, UpdateRoleRequest};
+use App\Http\Requests\RoleRequest;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 
@@ -55,7 +55,7 @@ class RoleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CreateRoleRequest $request)
+    public function store(RoleRequest $request)
     {
         $validated = $request->validated();
 
@@ -116,19 +116,12 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateRoleRequest $request, Role $role)
+    public function update(RoleRequest $request, Role $role)
     {
 
         $this->denyChangesToTheSameRol($role->name);
-        $validated = $request->validated();
-        $filter = Validator::make($validated,[
-            'name'=>'unique:roles,name,'.$role->id,
-            'slug'=>'unique:roles,slug,'.$role->id,
-        ],[
-            'name.unique'=>'El nombre ingresado ya existe',
-            'slug.unique'=>'El slug ingresado ya existe',
-        ])->validate();
 
+        $validated = $request->validated();
 
         $role->name = $validated['name'];
         $role->slug = $validated['slug'];
@@ -148,7 +141,6 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
-        //
         $this->denyChangesToTheSameRol($role->name);
         $hasUsers = $role->users()->get();
 
