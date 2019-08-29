@@ -24,8 +24,17 @@ class PositionRequest extends FormRequest
      */
     public function rules()
     {
+        $uniqueName = null;
+
+        if($this->method() === 'POST'){
+            $uniqueName = 'unique:positions,name';
+        }
+        if($this->method() === 'PUT'){
+            $uniqueName = 'unique:positions,name,'.$this->route('position')->id;
+        }
+        
         return [
-            'name'=>'required|regex:/^[[:alpha:][:space:]]+$/|min:3|max:25',
+            'name'=>'required|regex:/^[[:alpha:][:space:]]+$/|min:3|max:25|'.$uniqueName,
             'allocation'=>'required|'.Rule::in(['one-person', 'several-people']),
             'description'=> 'nullable|regex:/^[[:alpha:][:space:](,;.áéíóúÁÉÍÓÚ)]+$/|max:255',
         ];
@@ -41,6 +50,7 @@ class PositionRequest extends FormRequest
             'name.min'=>'El :attribute debe ser mayor a 3 caracteres',
             'name.max'=>'El :attribute no debe ser mayor a 25 caracteres',
             'name.regex'=>'El :attribute debe estar conformado por caracteres alfabéticos, no se admiten signos de puntuación ni caracteres especiales',
+            'name.unique'=>'El nombre ingresado ya existe',
             
             'allocation.required'=>'El campo :attribute es obligatorio',
             'allocation.in'=>'Lo opción seleccionada es inválida',

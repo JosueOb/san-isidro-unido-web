@@ -30,7 +30,7 @@
                         <div class="col-12 col-md-6">
                             <div class="form-group">
                                 <label for="name">Nombre</label>
-                                <input id="name" type="text" class="form-control  @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" autofocus>
+                                <input id="name" type="text" class="form-control  @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autofocus>
                                 @error('name')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -41,7 +41,7 @@
                             <div class="form-group">
                                 <label for="allocation">Asignación </label>
                                 {{-- <input id="allocation" type="text" class="form-control @error('allocation') is-invalid @enderror" name="allocation" value="{{ old('allocation')}}" required> --}}
-                                <select class="form-control @error('allocation') is-invalid @enderror" id="allocation" name="allocation">
+                                <select class="form-control @error('allocation') is-invalid @enderror" id="allocation" name="allocation" required>
                                     <option value="">Seleccione una opción</option>
                                     <option value="one-person" {{old('allocation')=='one-person' ? 'selected':''}}>Para una persona</option>
                                     <option value="several-people"  {{old('allocation')=='several-people' ? 'selected':''}}>Para varias personas</option>

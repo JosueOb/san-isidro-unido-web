@@ -48,12 +48,6 @@ class PositionController extends Controller
     public function store(PositionRequest $request)
     {
         $validated = $request->validated();
-        
-        $filter = Validator::make($validated,[
-            'name'=>'unique:positions,name',
-        ],[
-            'name.unique'=>'El nombre ingresado ya existe',
-        ])->validate();
 
         $position = new Position();
         $position->name = $validated['name'];
@@ -89,12 +83,6 @@ class PositionController extends Controller
     {
         
         $validated = $request->validated();
-
-        $filter = Validator::make($validated,[
-            'name'=>'unique:positions,name,'.$position->id,
-        ],[
-            'name.unique'=>'El nombre ingresado ya existe',
-        ])->validate();
         
         $position->name = $validated['name'];
         $position->allocation = $validated['allocation'];
