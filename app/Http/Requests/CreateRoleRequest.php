@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-// use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rule;
 
 class CreateRoleRequest extends FormRequest
 {
@@ -28,8 +28,8 @@ class CreateRoleRequest extends FormRequest
             //
             'name'=> 'required|regex:/^[[:alpha:][:space:]]+$/|min:3|max:25|unique:roles,name',
             'slug'=> 'required|regex:/^[[:lower:]]+$/|min:3|max:15|unique:roles,slug',
-            'description'=> 'required|regex:/^[[:alpha:][:space:](,;.áéíóúÁÉÍÓÚ)]+$/|min:10|max:255',
-            'permissions'=>'required_unless:special,all-access,no-access',
+            'description'=> 'nullable|regex:/^[[:alpha:][:space:](,;.áéíóúÁÉÍÓÚ)]+$/|max:255',
+            'permissions'=>'required|'.Rule::exists('permissions','id')->where('private',false),
         ];
     }
     /**
@@ -53,12 +53,11 @@ class CreateRoleRequest extends FormRequest
             'slug.regex'=>'El :attribute debe ser una cadena de caracteres alfabéticos en minúsculas sin espacios, no se adminen signos de puntuación ni caracteres especiales',
             'slug.unique'=>'El :attribute ingresado ya existe',
             
-            'description.required'=>'El campo :attribute es obligatorio',
-            'description.min'=>'La :attribute debe ser mayor a 10 caracteres',
             'description.max'=>'La :attribute no debe ser mayor a 255 caracteres',
             'description.regex'=>'La :attribute  debe estar conformado por caracteres alfabéticos, no se admiten caracteres especiales',
 
-            'permissions.required_unless'=>'Debe seleccionar al menos un permiso',
+            'permissions.required'=>'Debe seleccionar al menos un permiso',
+            'permissions.exists'=>'El permiso seleccionado inválido',
         ];
     }
     /**

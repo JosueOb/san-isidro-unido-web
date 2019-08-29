@@ -48,33 +48,14 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="description">Descripción</label>
-                        <textarea id="description" class="form-control @error('description') is-invalid @enderror" name="description" rows="5" required>{{ old('description') ?: $role->description }}</textarea>
+                    <div class="form-group">
+                        <label for="description">Descripción <span class="text-muted">(opcional)</span></label>
+                        <textarea id="description" class="form-control @error('description') is-invalid @enderror" name="description" rows="5">{{ old('description') ?: $role->description }}</textarea>
                         {{-- <input id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" value="{{ old('description') ?: $role->description }}"> --}}
                         @error('description')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
-                        @enderror
-                    </div>
-                    <hr>
-                    <div class="form-group">
-                        <h3>Permiso especial</h3>
-    
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="all-access" name="special" value="all-access" class="custom-control-input @error('special') is-invalid @enderror"  {{ $role->special == 'all-access' ? 'checked' : ''}}>
-                            <label class="custom-control-label" for="all-access">Acceso total</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="no-access" name="special" value="no-access" class="custom-control-input @error('special') is-invalid @enderror" {{ $role->special == 'no-access' ? 'checked' : ''}}>
-                            <label class="custom-control-label" for="no-access">Ningún acceso</label>
-                        </div>
-                        <button type="button" class="btn btn-outline-dark btn-sm" id="unselect" onclick="event.preventDefault();
-                        document.querySelectorAll('[name=special]').forEach((x) => x.checked=false);">Desseleccionar</button>
-                        @error('special')
-                        <div class="invalid-feedback d-block">
-                            <strong>{{ $message }}</strong>
-                        </div>
                         @enderror
                     </div>
                     <hr>

@@ -46,7 +46,7 @@
                                 <td>{{ $role->id}}</td>
                                 <td>{{$role->name}}</td>
                                 <td>{{$role->slug}}</td>
-                                <td>{{$role->description}}</td>
+                                <td>{{$role->description ?: 'Sin descripción'}}</td>
                                 <td width='10px'>
                                     <a href="{{route('roles.show',$role->id)}}" class="btn btn-info">Ver</a>
                                 </td>
@@ -117,7 +117,7 @@
                             <tr>
                                 <td>{{$roleUser->id}}</td>
                                 <td>{{$roleUser->name}}</td>
-                                <td>{{$roleUser->description}}</td>
+                                <td>{{$roleUser->description ?: 'Sin descripción'}}</td>
                                 <td>
                                     <a href="{{route('roles.show',$roleUser->id)}}" class="btn btn-info float-right">Ver</a>
                                 </td>

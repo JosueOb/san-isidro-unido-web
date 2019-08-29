@@ -26,10 +26,8 @@ class RoleController extends Controller
         foreach($rolesUser as $roleUser){
             array_push($rolesNameUser, $roleUser->name);
         }
-        // dd($rolesNameUser);
         //Se obtienen todos los roles registrados excepto los del administrador
         $roles = Role::whereNotIn('name',$rolesNameUser)->orderBy('id', 'asc')->paginate(5); 
-        // dd($roles);
         return view('roles.index',[
             'rolesUser'=>$rolesUser,
             'roles'=> $roles,
@@ -43,8 +41,8 @@ class RoleController extends Controller
      */
     public function create()
     {
-        //Se obtienen todos los permisos registrados
-        $permissions = Permission::all();
+        //Se obtienen todos los permisos registrados que no sean privados
+        $permissions = Permission::where('private',false)->get();
         //Se retorna el formulario de registro de un rol
         return view('roles.create',[
             'permissions'=> $permissions,
@@ -61,21 +59,13 @@ class RoleController extends Controller
     {
         $validated = $request->validated();
 
-        $selectedSpecialPermission = $request['special'];
-
         $role = new Role();
         $role->name = $validated['name'];
         $role->slug = $validated['slug'];
         $role->description = $validated['description'];
-        $role->special = $selectedSpecialPermission;
+        $role->save();
 
-        if($selectedSpecialPermission){
-            $role->special = $selectedSpecialPermission;
-            $role->save();
-        }else{
-            $role->save();
-            $role->permissions()->sync($validated['permissions']);
-        }
+        $role->permissions()->sync($validated['permissions']);
 
         return redirect()->route('roles.index')->with('success','Rol creado exitosamente');
     }
@@ -89,6 +79,7 @@ class RoleController extends Controller
     public function show(Role $role)
     {
         $permissions = $role->permissions()->get();
+        //Se envía esta variable para impedir que aparezca el botón de editar en la vista
         $hasTheSameRole = $this->chechTheRolesUser($role->name);
 
         return view('roles.show', [
@@ -96,7 +87,6 @@ class RoleController extends Controller
             'permissions'=>$permissions,
             'hasTheSameRole'=>$hasTheSameRole,
         ]);
-
     }
 
     /**
@@ -108,7 +98,8 @@ class RoleController extends Controller
     public function edit(Role $role)
     {
         $this->denyChangesToTheSameRol($role->name);
-        $permissions = Permission::all();
+
+        $permissions = Permission::where('private',false)->get();
         $rolePermissions = $role->permissions()->get();
 
         return view('roles.edit', [
@@ -127,7 +118,7 @@ class RoleController extends Controller
      */
     public function update(UpdateRoleRequest $request, Role $role)
     {
-        //
+
         $this->denyChangesToTheSameRol($role->name);
         $validated = $request->validated();
         $filter = Validator::make($validated,[
@@ -139,21 +130,12 @@ class RoleController extends Controller
         ])->validate();
 
 
-        $selectedSpecialPermission = $request['special'];
-
         $role->name = $validated['name'];
         $role->slug = $validated['slug'];
         $role->description = $validated['description'];
-        $role->special = $selectedSpecialPermission;
+        $role->save();
 
-        if($selectedSpecialPermission){
-            $role->special = $selectedSpecialPermission;
-            $role->save();
-            $role->permissions()->detach();
-        }else{
-            $role->save();
-            $role->permissions()->sync($validated['permissions']);
-        }
+        $role->permissions()->sync($validated['permissions']);
 
         return redirect()->route('roles.index')->with('success','Rol actualizado exitosamente');
     }
@@ -172,13 +154,12 @@ class RoleController extends Controller
 
         if( count($hasUsers) > 0){
             return redirect()->route('roles.index')->with('danger','El rol '.strtolower($role->name).' no se puede eliminar ya que esta siendo utilizado' );
-            // dd('El rol '.$role->name.' esta siendo utilizado');
         }else{
             $role->delete();
             return redirect()->route('roles.index')->with('success','El rol '.strtolower($role->name).' a sido eliminado exitosamente' );
-            // dd('Usted va a eliminar el rol '.$role->name);
         }
     }
+
     public function chechTheRolesUser($roleName){
         $userRoles = Auth::user()->roles()->get();
         $hasAnyRole = false;
@@ -189,6 +170,7 @@ class RoleController extends Controller
         }
         return $hasAnyRole;
     }
+    
     public function denyChangesToTheSameRol($roleName){
         if($this->chechTheRolesUser($roleName)){
             return abort(403, 'Acción no autorizada');

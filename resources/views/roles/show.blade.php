@@ -33,17 +33,19 @@
             </div>
             <div class="card-body">
                 <p><strong>Slug:</strong> {{$role->slug}}</p>
-                <p><strong>Descripción:</strong> {{$role->description}}</p>
+                <p><strong>Descripción:</strong> {{$role->description ?: 'Sin descripción'}}</p>
                 <p><strong>Permiso especial:</strong> {{$role->special ?: 'Ninguno'}}</p>
+                <h4>Permisos asignados</h4>
                 @if (count($permissions)>0)
-                    <h4>Permisos asignados</h4>
                     @foreach ($permissions as $permission)
                     <ul class="list-unstyled">
                         <li>
-                            {{$permission->name}}
+                            {{$permission->name}} <em>({{$permission->description ?: 'Sin descripción'}})</em>
                         </li>
                     </ul>
                     @endforeach
+                @else
+                    <p>Ningún permiso asignado</p>
                 @endif
             </div>
         </div>
