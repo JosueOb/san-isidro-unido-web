@@ -46,8 +46,8 @@
                 <div class="nav-wrapper">
                     <ul class="nav flex-column accordion" id="accordionSidebar">
                         <li class="menu-header">{{Auth::user()->getRol() ? Auth::user()->getRol()->name : 'Sin rol'}}</li>
-
-                        @can('roles.index')
+                        
+                        @canany(['roles.index', 'roles.create'])
                         <li class="nav-item @yield('item-role')">
                             <a class="nav-link" data-toggle="collapse" data-target="#collapseRol" aria-expanded="true" aria-controls="collapseRol">
                                 <i class="fas fa-id-card-alt"></i>
@@ -55,13 +55,18 @@
                             </a>
                             <div id="collapseRol" class="collapse @yield('item-role-collapse')" >
                                 <div class="collapse-inner">
-                                    <a class="collapse-item @yield('item-role-list')" href="{{route('roles.index')}}"><i class="fas fa-list"></i>Listar roles</a>    
-                                    <a class="collapse-item @yield('item-role-create')" href="{{ route('roles.create')}}"><i class="fas fa-plus-circle"></i>Crear rol</a>    
+                                    @can('roles.index')
+                                        <a class="collapse-item @yield('item-role-list')" href="{{route('roles.index')}}"><i class="fas fa-list"></i>Listar roles</a>
+                                    @endcan
+                                    @can('roles.create')
+                                        <a class="collapse-item @yield('item-role-create')" href="{{ route('roles.create')}}"><i class="fas fa-plus-circle"></i>Crear rol</a>
+                                    @endcan
                                 </div>
                             </div>
                         </li>
-                        @endcan
+                        @endcanany
 
+                        @canany(['members.index', 'members.create','positions.index','positions.create'])
                         <li class="nav-item @yield('item-directive')">
                             <a class="nav-link" data-toggle="collapse" data-target="#collapseDirective" aria-expanded="true" aria-controls="collapseDirective">
                                 <i class="fas fa-users"></i>
@@ -69,13 +74,22 @@
                             </a>
                             <div id="collapseDirective" class="collapse @yield('item-directive-collapse')" >
                                 <div class="collapse-inner">
-                                    <a class="collapse-item @yield('item-directive-list')" href="{{ route('members.index') }}"><i class="fas fa-list"></i>Listar miembros</a>
-                                    <a class="collapse-item @yield('item-directive-create')" href="{{route('members.create')}}"><i class="fas fa-plus-circle"></i>Agregar miembro</a>
-                                    <a class="collapse-item @yield('item-positions-list')" href="{{route('positions.index')}}"><i class="fas fa-list"></i>Listar cargos</a>
-                                    <a class="collapse-item @yield('item-positions-create')" href="{{route('positions.create')}}"><i class="fas fa-plus-circle"></i>Agregar cargo</a>
+                                    @can('members.index')
+                                        <a class="collapse-item @yield('item-directive-list')" href="{{ route('members.index') }}"><i class="fas fa-list"></i>Listar miembros</a>
+                                    @endcan
+                                    @can('members.create')
+                                        <a class="collapse-item @yield('item-directive-create')" href="{{route('members.create')}}"><i class="fas fa-plus-circle"></i>Agregar miembro</a>
+                                    @endcan
+                                    @can('positions.index')
+                                        <a class="collapse-item @yield('item-positions-list')" href="{{route('positions.index')}}"><i class="fas fa-list"></i>Listar cargos</a>
+                                    @endcan
+                                    @can('positions.create')
+                                        <a class="collapse-item @yield('item-positions-create')" href="{{route('positions.create')}}"><i class="fas fa-plus-circle"></i>Agregar cargo</a>
+                                    @endcan
                                 </div>
                             </div>
                         </li>
+                        @endcanany
 
                         
                     </ul>

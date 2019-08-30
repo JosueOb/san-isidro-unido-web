@@ -19,8 +19,11 @@
                 <p class="text-center"><span class="font-weight-bold">Usuario</span>
                     : {{Auth::user()->first_name}} {{Auth::user()->last_name}}</p>
                 <p class="text-center"><span class="font-weight-bold">Rol</span>: {{Auth::user()->getRol() ? Auth::user()->getRol()->name : 'Sin rol'}}</p>
+                @if (Auth::user()->position)
+                    <p class="text-center"><span class="font-weight-bold">Cargo</span>
+                        : {{Auth::user()->position->name}}</p>
+                @endif
                 <img src="{{Auth::user()->avatar}}" alt="user name" class="rounded-circle d-block mr-auto ml-auto">
-                
             </div>
         </div>
     </div>

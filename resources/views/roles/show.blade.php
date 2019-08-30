@@ -25,11 +25,11 @@
         <div class="card card-primary">
             <div class="card-header">
                     <h4 class="d-inline">{{$role->name}}</h4>
-                    @if (!$hasTheSameRole)
-                        @can('roles.edit')
+                    @can('roles.edit')
+                        @if (!$hasTheSameRole)
                             <a href="{{route('roles.edit',$role->id)}}" class="btn btn-primary float-right">Editar</a>
-                        @endcan
-                    @endif
+                        @endif
+                    @endcan
             </div>
             <div class="card-body">
                 <p><strong>Slug:</strong> {{$role->slug}}</p>
