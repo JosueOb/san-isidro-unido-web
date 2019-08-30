@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Middleware\DirectiveRoleExists;
+use App\Http\Middleware\PreventMakingChangesToYourself;
 use App\Http\Middleware\ProtectedAdminUsers;
 use App\Http\Middleware\UserIsActive;
 use App\Http\Requests\DirectiveRequest;
@@ -22,6 +23,7 @@ class DirectiveController extends Controller
         $this->middleware(DirectiveRoleExists::class);
         $this->middleware(UserIsActive::class)->only('edit','update');
         $this->middleware(ProtectedAdminUsers::class)->only('show','edit','update','destroy');
+        $this->middleware(PreventMakingChangesToYourself::class)->only('edit','update','destroy');
     }
     /**
      * Display a listing of the resource.

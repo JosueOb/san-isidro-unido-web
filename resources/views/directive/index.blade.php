@@ -103,21 +103,28 @@
                                         @endcan
 
                                         @can('members.edit')
-                                            @if ($member->state)
-                                            <td width='10px'>
-                                                <a href="{{route('members.edit',$member->id)}}" class="btn btn-secondary"> Editar</a>
-                                            </td>
+                                        
+                                            @if (Auth::user()->id != $member->id)
+                                                @if ($member->state)
+                                                <td width='10px'>
+                                                    <a href="{{route('members.edit',$member->id)}}" class="btn btn-secondary"> Editar</a>
+                                                </td>
+                                                @endif
+                                            
                                             @endif
                                         @endcan
 
                                         @can('members.destroy')
                                         <td width='10px'>
-                                            @if ($member->state)
-                                                <a href="#" class="btn btn-danger"  data-toggle="modal" data-target="#deleteMember{{$member->id}}">Eliminar</a>
-                                                
-                                            @else
-                                                <a href="#" class="btn btn-success"  data-toggle="modal" data-target="#activeMember{{$member->id}}">Activar</a>
+                                            @if (Auth::user()->id != $member->id)
+                                                @if ($member->state)
+                                                    <a href="#" class="btn btn-danger"  data-toggle="modal" data-target="#deleteMember{{$member->id}}">Eliminar</a>
+                                                    
+                                                @else
+                                                    <a href="#" class="btn btn-success"  data-toggle="modal" data-target="#activeMember{{$member->id}}">Activar</a>
+                                                @endif
                                             @endif
+                                           
 
                                             <!--Modal-->
                                             <div class="modal fade" id="deleteMember{{$member->id}}" tabindex="-1" role="dialog" aria-labelledby="eliminarMiembro" aria-hidden="true">

@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class ProtectedAdminUsers
+class PreventMakingChangesToYourself
 {
     /**
      * Handle an incoming request.
@@ -15,11 +15,12 @@ class ProtectedAdminUsers
      */
     public function handle($request, Closure $next)
     {
-        $getUserRole = $request->route('member')->getRol()->name;
-
-        if($getUserRole == 'Administrador'){
+        // Se impide que el usuario directivo autenticado se modifique o elimine 
+        //a si mismo en el listado de los directivos
+        if($request->user()->id === $request->route('member')->id){
             return abort(403,'Acción no autorizada');
         }
+        
         return $next($request);
     }
 }
