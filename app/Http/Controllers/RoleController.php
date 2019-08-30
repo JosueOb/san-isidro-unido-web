@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\ProtectPrivateRoles;
 use Illuminate\Http\Request;
 use Caffeinated\Shinobi\Models\{Role, Permission};
 use App\Http\Requests\RoleRequest;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Auth;
 
 
 
 class RoleController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(ProtectPrivateRoles::class)->only('edit', 'update','destroy');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -19,18 +22,14 @@ class RoleController extends Controller
      */
     public function index()
     {
-        //Se obtienen los roles pertenecientes al administrador
-        $rolesUser = Auth::user()->roles()->get();
-        $rolesNameUser = [];
-        //se recorren los roles obtenidos para almacenarlos en un arreglo
-        foreach($rolesUser as $roleUser){
-            array_push($rolesNameUser, $roleUser->name);
-        }
-        //Se obtienen todos los roles registrados excepto los del administrador
-        $roles = Role::whereNotIn('name',$rolesNameUser)->orderBy('id', 'asc')->paginate(5); 
+        //Se obtienen los roles privados (del sistema)
+        $privateRoles = Role::where('private', true)->get();
+        //Se obtienen los roles publicos
+        $publicRoles = Role::where('private', false)->paginate(5);
+
         return view('roles.index',[
-            'rolesUser'=>$rolesUser,
-            'roles'=> $roles,
+            'privateRoles'=>$privateRoles,
+            'publicRoles'=> $publicRoles,
         ]);
     }
 
@@ -63,6 +62,7 @@ class RoleController extends Controller
         $role->name = $validated['name'];
         $role->slug = $validated['slug'];
         $role->description = $validated['description'];
+        $role->private = false;
         $role->save();
 
         $role->permissions()->sync($validated['permissions']);
@@ -79,13 +79,10 @@ class RoleController extends Controller
     public function show(Role $role)
     {
         $permissions = $role->permissions()->get();
-        //Se envía esta variable para impedir que aparezca el botón de editar en la vista
-        $hasTheSameRole = $this->chechTheRolesUser($role->name);
-
+    
         return view('roles.show', [
             'role'=> $role,
             'permissions'=>$permissions,
-            'hasTheSameRole'=>$hasTheSameRole,
         ]);
     }
 
@@ -97,7 +94,6 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        $this->denyChangesToTheSameRol($role->name);
 
         $permissions = Permission::where('private',false)->get();
         $rolePermissions = $role->permissions()->get();
@@ -119,8 +115,6 @@ class RoleController extends Controller
     public function update(RoleRequest $request, Role $role)
     {
 
-        $this->denyChangesToTheSameRol($role->name);
-
         $validated = $request->validated();
 
         $role->name = $validated['name'];
@@ -141,7 +135,7 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
-        $this->denyChangesToTheSameRol($role->name);
+
         $hasUsers = $role->users()->get();
 
         if( count($hasUsers) > 0){
@@ -149,23 +143,6 @@ class RoleController extends Controller
         }else{
             $role->delete();
             return redirect()->route('roles.index')->with('success','El rol '.strtolower($role->name).' a sido eliminado exitosamente' );
-        }
-    }
-
-    public function chechTheRolesUser($roleName){
-        $userRoles = Auth::user()->roles()->get();
-        $hasAnyRole = false;
-        foreach($userRoles as $userRole){
-            if($userRole->name === $roleName){
-                $hasAnyRole = true;
-            }
-        }
-        return $hasAnyRole;
-    }
-    
-    public function denyChangesToTheSameRol($roleName){
-        if($this->chechTheRolesUser($roleName)){
-            return abort(403, 'Acción no autorizada');
         }
     }
 }

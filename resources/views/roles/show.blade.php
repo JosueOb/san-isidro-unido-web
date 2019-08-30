@@ -26,7 +26,7 @@
             <div class="card-header">
                     <h4 class="d-inline">{{$role->name}}</h4>
                     @can('roles.edit')
-                        @if (!$hasTheSameRole)
+                        @if (!$role->private)
                             <a href="{{route('roles.edit',$role->id)}}" class="btn btn-primary float-right">Editar</a>
                         @endif
                     @endcan

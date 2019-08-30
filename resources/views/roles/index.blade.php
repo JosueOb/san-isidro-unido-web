@@ -32,7 +32,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col table-responsive">
-                        @if (count($roles)>0)
+                        @if (count($publicRoles)>0)
                         <table class="table table-light table-hover table-sm">
                             <thead>
                                 <tr>
@@ -46,28 +46,28 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($roles as $role)
+                                @foreach ($publicRoles as $publicRole)
                                     <tr>
                                         
-                                        <td>{{ $role->id}}</td>
-                                        <td>{{$role->name}}</td>
-                                        <td>{{$role->slug}}</td>
-                                        <td>{{$role->description ?: 'Sin descripción'}}</td>
+                                        <td>{{ $publicRole->id }}</td>
+                                        <td>{{ $publicRole->name }}</td>
+                                        <td>{{ $publicRole->slug }}</td>
+                                        <td>{{ $publicRole->description ?: 'Sin descripción'}}</td>
                                         @can('roles.show')
                                             <td width='10px'>
-                                                <a href="{{route('roles.show',$role->id)}}" class="btn btn-info">Ver</a>
+                                                <a href="{{route('roles.show',$publicRole->id)}}" class="btn btn-info">Ver</a>
                                             </td>
                                         @endcan
                                         @can('roles.edit')
                                             <td width='10px'>
-                                                <a href="{{route('roles.edit',$role->id)}}" class="btn btn-secondary"> Editar</a>
+                                                <a href="{{route('roles.edit',$publicRole->id)}}" class="btn btn-secondary"> Editar</a>
                                             </td>
                                         @endcan
                                         @can('roles.destroy')
                                         <td width='10px'>
-                                            <a href="#" class="btn btn-danger"  data-toggle="modal" data-target="#deleteRole{{$role->id}}">Eliminar</a>
+                                            <a href="#" class="btn btn-danger"  data-toggle="modal" data-target="#deleteRole{{$publicRole->id}}">Eliminar</a>
                                             <!--Modal-->
-                                            <div class="modal fade" id="deleteRole{{$role->id}}" tabindex="-1" role="dialog" aria-labelledby="eliminarRol" aria-hidden="true">
+                                            <div class="modal fade" id="deleteRole{{$publicRole->id}}" tabindex="-1" role="dialog" aria-labelledby="eliminarRol" aria-hidden="true">
                                                 <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -77,12 +77,12 @@
                                                     </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        ¿Está seguro de eliminar el rol de {{ strtolower($role->name) }}?
+                                                        ¿Está seguro de eliminar el rol de {{ strtolower($publicRole->name) }}?
                                                     </div>
                                                     <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                                                     {{-- <button type="button" class="btn btn-primary">Eliminar</button> --}}
-                                                    <form action="{{ route('roles.destroy', $role->id) }}" method="POST">
+                                                    <form action="{{ route('roles.destroy', $publicRole->id) }}" method="POST">
                                                         @csrf
                                                         @method('delete')
                                                         <button type="submit" class="btn btn-danger">Eliminar</button>
@@ -104,9 +104,9 @@
                 </div>
             </div>
             <div class="card-footer">
-                <p class="text-muted m-0 float-right">Total: {{$roles->total()}}</p>
+                <p class="text-muted m-0 float-right">Total: {{$publicRoles->total()}}</p>
                 <nav>
-                    {{$roles->links()}}
+                    {{$publicRoles->links()}}
                 </nav>
             </div>
         </div>
@@ -131,13 +131,13 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($rolesUser as $roleUser)
+                                @foreach ($privateRoles as $privateRole)
                                 <tr>
-                                    <td>{{$roleUser->id}}</td>
-                                    <td>{{$roleUser->name}}</td>
-                                    <td>{{$roleUser->description ?: 'Sin descripción'}}</td>
+                                    <td>{{$privateRole->id}}</td>
+                                    <td>{{$privateRole->name}}</td>
+                                    <td>{{$privateRole->description ?: 'Sin descripción'}}</td>
                                     <td>
-                                        <a href="{{route('roles.show',$roleUser->id)}}" class="btn btn-info float-right">Ver</a>
+                                        <a href="{{route('roles.show',$privateRole->id)}}" class="btn btn-info float-right">Ver</a>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -147,7 +147,7 @@
                 </div>
             </div>
             <div class="card-footer text-right">
-                <p class="text-muted m-0">Total: {{$rolesUser->count()}}</p>
+                <p class="text-muted m-0">Total: {{$privateRoles->count()}}</p>
             </div>
         </div>
     </div>
