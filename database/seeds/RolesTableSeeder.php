@@ -12,21 +12,26 @@ class RolesTableSeeder extends Seeder
      */
     public function run()
     {
-        Role::create([
+        $adminRole = Role::create([
             'name'=>'Administrador',
             'slug'=>'admin',
             'description'=> 'Rol administrativo del sistema',
-            'special'=> 'all-access'
         ]);
+        $adminRole->save();
+        $adminRole->permissions()->attach([1,2,3,4,5,6,7,8,9,10,11,12,13,14]);
+        
         Role::create([
             'name'=>'Invitado',
             'slug'=>'invitado',
             'description'=> 'Rol para los moradores del barrio',
         ]);
-        Role::create([
+
+        $directiveRole = Role::create([
             'name'=>'Directivo',
             'slug'=>'directivo',
             'description'=> 'Rol para los directivos del barrio',
         ]);
+        $directiveRole->save();
+        $directiveRole->permissions()->attach([6,7,8,9,10,11,12,13,14]);
     }
 }
