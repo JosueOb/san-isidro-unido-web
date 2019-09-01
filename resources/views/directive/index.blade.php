@@ -28,7 +28,7 @@
  
                     <div class="input-group">
                         <div class="input-group-prepend">
-                            <select class="custom-select @error('searchOption') is-invalid @enderror" name="searchOption">
+                            <select class="custom-select @error('searchOption') is-invalid @enderror" name="searchOption" required>
                                 <option value="">Buscar</option>
                                 <option value="1"
                                 @if (old('searchOption')== 1 || request('searchOption')== 1)
@@ -48,7 +48,7 @@
                             </select>
                             
                         </div>
-                        <input type="text" class="form-control @error('searchValue') is-invalid @enderror"  name="searchValue" value="{{old('searchValue') ?: request('searchValue')}}">
+                        <input type="text" class="form-control @error('searchValue') is-invalid @enderror"  name="searchValue" value="{{old('searchValue') ?: request('searchValue')}}" required>
                         
                         <div class="input-group-prepend">
                             <button type="submit" class="btn btn-dark">
@@ -56,12 +56,12 @@
                             </button>
                         </div>
                         @error('searchOption')
-                            <span class="invalid-feedback" role="alert">
+                            <span class="invalid-feedback d-inline" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
                         @enderror
                         @error('searchValue')
-                            <span class="invalid-feedback" role="alert">
+                            <span class="invalid-feedback d-inline" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
                         @enderror
