@@ -24,22 +24,47 @@
     <div class="col">
         <div class="card card-primary">
             <div class="card-body">
-                <form action="">
+                <form action="{{route('search')}}" method="GET">
+ 
                     <div class="input-group">
                         <div class="input-group-prepend">
-                            <select class="custom-select" required name="optionSearch">
+                            <select class="custom-select @error('searchOption') is-invalid @enderror" name="searchOption">
                                 <option value="">Buscar</option>
-                                <option value="1">Nombre</option>
-                                <option value="2">Apellido</option>
-                                <option value="3">Cargo</option>
+                                <option value="1"
+                                @if (old('searchOption')== 1 || request('searchOption')== 1)
+                                    {{'selected'}}
+                                @endif
+                                >Nombre</option>
+                                <option value="2" 
+                                @if (old('searchOption')== 2 || request('searchOption')== 2)
+                                    {{'selected'}}
+                                @endif
+                                >Apellido</option>
+                                <option value="3" 
+                                @if (old('searchOption')== 3 || request('searchOption')== 3)
+                                    {{'selected'}}
+                                @endif
+                                >Cargo</option>
                             </select>
+                            
                         </div>
-                        <input type="text" class="form-control" id="inputSearch" name="search" required>
+                        <input type="text" class="form-control @error('searchValue') is-invalid @enderror"  name="searchValue" value="{{old('searchValue') ?: request('searchValue')}}">
+                        
                         <div class="input-group-prepend">
                             <button type="submit" class="btn btn-dark">
                                     <i class="fas fa-search"></i>
                             </button>
                         </div>
+                        @error('searchOption')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                        @error('searchValue')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
                     </div>
                 </form>
             </div>
@@ -93,7 +118,7 @@
                                         <td>{{ $member->id}}</td>
                                         <td>{{$member->first_name}}</td>
                                         <td>{{$member->last_name}}</td>
-                                        <td>{{$member->position->name}}</td>
+                                        <td>{{$member->position ? $member->position->name : 'Sin cargo' }}</td>
                                         <td><span class="badge badge-pill {{$member->state ? 'badge-success': 'badge-danger'}}">{{$member->state ? 'Activo': 'Inactivo'}}</span></td>
                                         
                                         @can('members.show')

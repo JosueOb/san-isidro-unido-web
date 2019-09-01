@@ -1,5 +1,6 @@
 <?php
 use Illuminate\Auth\Events\Verified;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,6 +48,8 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::get('members/{member}/edit', 'DirectiveController@edit')->name('members.edit')->middleware('can:members.edit');
     Route::put('members/{member}', 'DirectiveController@update')->name('members.update')->middleware('can:members.edit');
     Route::delete('members/{member}', 'DirectiveController@destroy')->name('members.destroy')->middleware('can:members.destroy');
+    Route::get('search','SearchController@search')->name('search')->middleware('can:members.index');
+
     //CARGOS
     Route::get('positions', 'PositionController@index')->name('positions.index')->middleware('can:positions.index');
     Route::get('positions/create', 'PositionController@create')->name('positions.create')->middleware('can:positions.create');
