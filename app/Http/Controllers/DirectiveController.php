@@ -234,19 +234,13 @@ class DirectiveController extends Controller
     public function filters($option){
 
         $members = null;
-
         switch ($option) {
             case 1:
                 $members = User::whereHas('roles',function(Builder $query){
                     $query->whereIn('name',['Directivo', 'Directiva']);
-                })->paginate();
-                break;
-            case 2:
-                $members = User::whereHas('roles',function(Builder $query){
-                    $query->whereIn('name',['Directivo', 'Directiva']);
                 })->where('state',true)->paginate();
                 break;
-            case 3:
+            case 2:
                 $members = User::whereHas('roles',function(Builder $query){
                     $query->whereIn('name',['Directivo', 'Directiva']);
                 })->where('state',false)->paginate();
