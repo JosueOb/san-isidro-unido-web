@@ -32,3 +32,4 @@ const app = new Vue({
 });
 
 require('./dropdown');
+require('./imagename');

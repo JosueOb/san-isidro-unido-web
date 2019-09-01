@@ -23,7 +23,7 @@
                     <p class="text-center"><span class="font-weight-bold">Cargo</span>
                         : {{Auth::user()->position->name}}</p>
                 @endif
-                <img src="{{Auth::user()->avatar}}" alt="user name" class="rounded-circle d-block mr-auto ml-auto">
+                <img src="{{Auth::user()->getAvatar()}}" alt="user name" class="rounded-circle d-block mr-auto ml-auto w-25">
             </div>
         </div>
     </div>

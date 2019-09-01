@@ -49,7 +49,6 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::put('members/{member}', 'DirectiveController@update')->name('members.update')->middleware('can:members.edit');
     Route::delete('members/{member}', 'DirectiveController@destroy')->name('members.destroy')->middleware('can:members.destroy');
     Route::get('search','SearchController@search')->name('search')->middleware('can:members.index');
-
     //CARGOS
     Route::get('positions', 'PositionController@index')->name('positions.index')->middleware('can:positions.index');
     Route::get('positions/create', 'PositionController@create')->name('positions.create')->middleware('can:positions.create');
@@ -57,9 +56,12 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::get('positions/{position}/edit', 'PositionController@edit')->name('positions.edit')->middleware('can:positions.edit');
     Route::put('positions/{position}', 'PositionController@update')->name('positions.update')->middleware('can:positions.edit');
     Route::delete('positions/{position}', 'PositionController@destroy')->name('positions.destroy')->middleware('can:positions.destroy');
-    
     // Route::get('positions/{member}', 'PositionController@show')->name('positions.show')->middleware('can:positions.show');
     Route::get('positions/{member}', function () {
         return abort(404);
     });
+    //PROFILE
+    Route::get('profile','ProfileController@index')->name('profile');
+    Route::put('profile/avatar','ProfileController@changeAvatar')->name('profile.avatar');
+
 });

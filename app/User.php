@@ -61,4 +61,18 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo(Position::class);
     }
 
+    // public function getAvatarAttribute($image){
+    //     if(!$image || \starts_with($image,'http')){
+    //         return $image;
+    //     }
+    //     return \Storage::disk('public')->url($image);
+    // }
+    public function getAvatar(){
+        $avatar = $this->avatar;
+        if(!$avatar || \starts_with($avatar,'http')){
+            return $avatar;
+        }
+        return \Storage::disk('public')->url($avatar);
+        
+    }
 }

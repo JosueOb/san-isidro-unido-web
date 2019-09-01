@@ -107,11 +107,11 @@
 
                             <li class="nav-item dropdown user-options m-0">
                                 <a href="#" class="nav-link dropdown-toggle px-3 text-nowrap" data-toggle="dropdown" id="dropdownMenuUser" role="button" aria-haspopup="true" aria-expanded="false">
-                                    <img src="{{ Auth::user()->avatar}}" alt="user avatar" class="user-avatar rounded-circle mr-2">
+                                    <img src="{{ Auth::user()->getAvatar()}}" alt="user avatar" class="user-avatar rounded-circle mr-2">
                                     <span class="d-none d-lg-inline-block">{{ Auth::user()->first_name}} {{Auth::user()->last_name}}</span>
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby='dropdownNotifications'>
-                                    <a href="profile.html" class="dropdown-item">
+                                    <a href="{{route('profile')}}" class="dropdown-item">
                                         <div class="option__icon-wrapper">
                                             <div class="option__icon">
                                                 <i class="fas fa-user-circle icon"></i>

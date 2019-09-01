@@ -49362,6 +49362,8 @@ var app = new Vue({
 
 __webpack_require__(/*! ./dropdown */ "./resources/js/dropdown.js");
 
+__webpack_require__(/*! ./imagename */ "./resources/js/imagename.js");
+
 /***/ }),
 
 /***/ "./resources/js/bootstrap.js":
@@ -49524,6 +49526,23 @@ $(document).ready(function () {
 
   $('.toggle-sidebar').click(function (e) {
     $('.main-sidebar').toggleClass('open');
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/imagename.js":
+/*!***********************************!*\
+  !*** ./resources/js/imagename.js ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// Add the following code if you want the name of the file appear on select
+$(document).ready(function () {
+  $(".custom-file-input").on("change", function () {
+    var fileName = $(this).val().split("\\").pop();
+    $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
   });
 });
 
