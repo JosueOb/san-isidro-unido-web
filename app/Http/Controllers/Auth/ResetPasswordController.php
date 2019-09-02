@@ -38,6 +38,20 @@ class ResetPasswordController extends Controller
     {
         $this->middleware('guest');
     }
+    /**
+     * Get the password reset validation rules.
+     *
+     * @return array
+     */
+    protected function rules()
+    {
+        return [
+            'token' => 'required',
+            'email' => 'required|email',
+            'password'=>'required|min:8|max:100|same:password_confirmation|regex:/^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,100}$/',
+            'password_confirmation'=>'required',
+        ];
+    }
     //Se obrescribe el método validationErrorMessage para traducir los mensajes de errores
     //de validación del request
     protected function validationErrorMessages()
@@ -45,13 +59,17 @@ class ResetPasswordController extends Controller
         return [
             'toke.required'=>'El :attribute es obligatorio',
 
-            'email.required' => 'El campo :attribute es obligatorio',
-            'email.email' => 'El correo ingresado no es válido',
+            'email.required' => 'El campo correo electrónico es obligatorio',
+            'email.email' => 'El correo electrónico ingresado no es válido',
 
 
-            'password.required'=>'El campo :attribute es obligatorio',
-            'password.min'=>'La contraseña debe tener al menos 8 caracteres',
-            'password.confirmed'=>'Las contraseñas ingresadas no coinciden',
+            'password.required'=>'El campo contraseña es obligatorio',
+            'password.same'=>'Las contraseñas ingresadas no coinciden',
+            'password.min'=>'La contraseña debe contener al menos a 5 caracteres',
+            'password.max'=>'La contraseña no debe ser mayor a 100 caracteres',
+            'password.regex'=>'La contraseña ingresada no es segura',
+
+            'password_confirmation'=>'El campo confirmación de contraseña es obligatorio',
         ];
     }
     //Se sobrescribe el método sendResetFailResponse para obtener la respuesta en caso de que 

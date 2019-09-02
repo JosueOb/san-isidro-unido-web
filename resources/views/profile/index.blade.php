@@ -64,7 +64,7 @@
                         <div class="row">
                             <div class="form-group col-12 col-md-6 col-lg-12 col-xl-6">
                                 <label for="password" class="d-block">Contraseña</label>
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required>
+                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
                                 @error('password')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -76,7 +76,7 @@
                             </div>
                             <div class="form-group col-12 col-md-6 col-lg-12 col-xl-6">
                                 <label for="passwordConfirmation" class="d-block">Confirme contraseña</label>
-                                <input id="passwordConfirmation" type="password" class="form-control @error('passwordConfirmation') is-invalid @enderror" name="passwordConfirmation" required>
+                                <input id="passwordConfirmation" type="password" class="form-control @error('passwordConfirmation') is-invalid @enderror" name="passwordConfirmation" required autocomplete="new-password">
                                 @error('passwordConfirmation')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>

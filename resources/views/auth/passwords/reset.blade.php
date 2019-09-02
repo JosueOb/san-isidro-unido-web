@@ -22,7 +22,7 @@
                         <div class="form-group">
                             <label for="email" >Correo electrónico</label>
 
-                            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ $email ?? old('email') }}" required autocomplete="email" autofocus>
+                            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ $email ?? old('email') }}" autocomplete="email" required autofocus>
 
                             @error('email')
                                 <span class="invalid-feedback" role="alert">
@@ -34,7 +34,7 @@
                         <div class="form-group">
                             <label for="password">Nueva contraseña</label>
 
-                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" autocomplete="new-password" required>
 
                             @error('password')
                                 <span class="invalid-feedback" role="alert">
@@ -46,7 +46,12 @@
                         <div class="form-group">
                             <label for="password-confirm">Confirma contraseña</label>
 
-                            <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+                            <input id="password-confirm" type="password" class="form-control @error('password_confirmation') is-invalid @enderror" name="password_confirmation" autocomplete="new-password" required>
+                            @error('password_confirmation')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                         </div>
 
                         <div class="form-group">

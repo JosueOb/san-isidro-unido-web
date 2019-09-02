@@ -24,7 +24,7 @@ class PasswordUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'password'=>'required|min:8|max:100||same:passwordConfirmation|regex:/^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,100}$/',
+            'password'=>'required|min:8|max:100|same:passwordConfirmation|regex:/^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,100}$/',
             'passwordConfirmation'=>'required',
         ];
     }
