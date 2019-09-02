@@ -18,11 +18,10 @@
                 <div class="card-header">
                     <h4>Avatar</h4>
                 </div>
-
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12 col-md-6 col-lg-12 col-xl-5">
-                            <img src="{{Auth::user()->getAvatar()}}" alt="avatar" class="w-75 rounded-circle">
+                            <img src="{{Auth::user()->getAvatar()}}" alt="avatar" class="rounded-circle d-block mr-auto ml-auto w-50">
                         </div>
                         <div class="col-12 col-md-6 col-lg-12 col-xl-7 pl-0">
                         
@@ -58,21 +57,31 @@
                 <div class="card-header">
                     <h4>Cambiar contraseña</h4>
                 </div>
-
                 <div class="card-body">
-                    <form method="POST">
+                    <form action="{{route('profile.password')}}" method="POST">
+                        @csrf
+                        @method('put')
                         <div class="row">
                             <div class="form-group col-12 col-md-6 col-lg-12 col-xl-6">
                                 <label for="password" class="d-block">Contraseña</label>
-                                <input id="password" type="password" class="form-control pwstrength" data-indicator="pwindicator" name="password">
-                                <div id="pwindicator" class="pwindicator">
-                                    <div class="bar"></div>
-                                    <div class="label"></div>
-                                </div>
+                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required>
+                                @error('password')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                                <small id="passwordHelp" class="form-text text-muted">
+                                    La contraseña debe tener como mínimo 8 caracteres, al menos un dígito, una minúscula y una mayúscula
+                                </small>
                             </div>
-                            <div class="form-group col-12  col-md-6 col-lg-12 col-xl-6">
-                                <label for="password2" class="d-block">Confirme contraseña</label>
-                                <input id="password2" type="password" class="form-control" name="password-confirm">
+                            <div class="form-group col-12 col-md-6 col-lg-12 col-xl-6">
+                                <label for="passwordConfirmation" class="d-block">Confirme contraseña</label>
+                                <input id="passwordConfirmation" type="password" class="form-control @error('passwordConfirmation') is-invalid @enderror" name="passwordConfirmation" required>
+                                @error('passwordConfirmation')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                         </div>
 
@@ -85,34 +94,56 @@
                 </div>
             </div>
         </div>
+
         <div class="col-12 col-sm-12 col-md-12 col-lg-7">
             <div class="card card-primary profile">
                 <div class="card-header">
-                    <h4>Datos</h4>
+                    <h4>Datos Personales</h4>
                 </div>
-
                 <div class="card-body">
-                    <form method="POST">
+                    <form action="{{route('profile.data')}}" method="POST">
+                        @csrf
+                        @method('put')
                         <div class="row">
                             <div class="form-group col-12 col-md-6">
-                                <label for="frist_name">Nombre</label>
-                                <input id="frist_name" type="text" class="form-control" name="frist_name">
+                                <label for="first_name">Nombre</label>
+                                <input id="first_name" type="text" class="form-control @error('first_name') is-invalid @enderror" name="first_name" value="{{ old('first_name') ?: Auth::user()->first_name }}" required>
+                                @error('first_name')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                             <div class="form-group col-12 col-md-6">
                                 <label for="last_name">Apellidos</label>
-                                <input id="last_name" type="text" class="form-control" name="last_name">
+                                <input id="last_name" type="text" class="form-control @error('last_name') is-invalid @enderror" name="last_name" value="{{ old('last_name') ?: Auth::user()->last_name}}" required>
+                                @error('last_name')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="email">Correo electrónico</label>
-                            <input id="email" type="email" class="form-control" name="email">
-                            <div class="invalid-feedback">
-                                Ingrese un correo electrónico
-                            </div>
+                            <label for="email">Email</label>
+                            <input id="email" type="text" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ Auth::user()->email}}" readonly>
+                            {{-- @error('email')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror --}}
                         </div>
                         <div class="form-group">
-                            <label>Teléfono</label>
-                            <input type="text" class="form-control">
+                            <label for="number_phone">Celular <span class="text-muted">(opcional)</span></label>
+                            <input type="text" class="form-control @error('number_phone') is-invalid @enderror" id='number_phone' name="number_phone" value="{{old('number_phone') ?: Auth::user()->number_phone}}">
+                            <small id="number_phoneHelp" class="form-text text-muted">
+                                Recuerda anteponer el código 08 o 09 al ingresar tu número telefónico
+                            </small>
+                            @error('number_phone')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                         </div>
 
                         <div class="form-group ">

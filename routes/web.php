@@ -63,5 +63,15 @@ Route::middleware(['auth','verified'])->group(function(){
     //PROFILE
     Route::get('profile','ProfileController@index')->name('profile');
     Route::put('profile/avatar','ProfileController@changeAvatar')->name('profile.avatar');
-
+    Route::get('profile/avatar', function () {
+        return abort(404);
+    });
+    Route::put('profile/data','ProfileController@changePersonalData')->name('profile.data');
+    Route::get('profile/data', function () {
+        return abort(404);
+    });
+    Route::put('profile/password','ProfileController@changePassword')->name('profile.password');
+    Route::get('profile/password', function () {
+        return abort(404);
+    });
 });
