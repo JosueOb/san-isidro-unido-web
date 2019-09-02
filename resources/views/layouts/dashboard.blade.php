@@ -78,13 +78,32 @@
                                         <a class="collapse-item @yield('item-directive-list')" href="{{ route('members.index') }}"><i class="fas fa-list"></i>Listar miembros</a>
                                     @endcan
                                     @can('members.create')
-                                        <a class="collapse-item @yield('item-directive-create')" href="{{route('members.create')}}"><i class="fas fa-plus-circle"></i>Agregar miembro</a>
+                                        <a class="collapse-item @yield('item-directive-create')" href="{{route('members.create')}}"><i class="fas fa-user-plus"></i>Registrar miembro</a>
                                     @endcan
                                     @can('positions.index')
                                         <a class="collapse-item @yield('item-positions-list')" href="{{route('positions.index')}}"><i class="fas fa-list"></i>Listar cargos</a>
                                     @endcan
                                     @can('positions.create')
                                         <a class="collapse-item @yield('item-positions-create')" href="{{route('positions.create')}}"><i class="fas fa-plus-circle"></i>Agregar cargo</a>
+                                    @endcan
+                                </div>
+                            </div>
+                        </li>
+                        @endcanany
+
+                        @canany(['neighbors.index', 'neighbors.create'])
+                        <li class="nav-item @yield('item-neighbor')">
+                            <a class="nav-link" data-toggle="collapse" data-target="#collapseNeighbor" aria-expanded="true" aria-controls="collapseNeighbor">
+                                <i class="fas fa-user"></i>
+                                <span>Vecinos</span>
+                            </a>
+                            <div id="collapseNeighbor" class="collapse @yield('item-neighbor-collapse')" >
+                                <div class="collapse-inner">
+                                    @can('neighbors.index')
+                                        <a class="collapse-item @yield('item-neighbor-list')" href="{{route('neighbors.index')}}"><i class="fas fa-list"></i>Listar vecinos</a>
+                                    @endcan
+                                    @can('neighbors.index')
+                                        <a class="collapse-item @yield('item-neighbor-create')" href="{{ route('neighbors.create')}}"><i class="fas fa-user-plus"></i>Registrar vecino</a>
                                     @endcan
                                 </div>
                             </div>

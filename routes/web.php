@@ -74,4 +74,12 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::get('profile/password', function () {
         return abort(404);
     });
+    //VECINOS-MORADORES
+    Route::get('neighbors', 'NeighborController@index')->name('neighbors.index')->middleware('can:neighbors.index');
+    Route::get('neighbors/create', 'NeighborController@create')->name('neighbors.create')->middleware('can:neighbors.create');
+    Route::post('neighbors/store', 'NeighborController@store')->name('neighbors.store')->middleware('can:neighbors.create');
+    Route::get('neighbors/{neighbor}', 'NeighborController@show')->name('neighbors.show')->middleware('can:neighbors.show');
+    Route::get('neighbors/{neighbor}/edit', 'NeighborController@edit')->name('neighbors.edit')->middleware('can:neighbors.edit');
+    Route::put('neighbors/{neighbor}', 'NeighborController@update')->name('neighbors.update')->middleware('can:neighbors.edit');
+    Route::delete('neighbors/{neighbor}', 'NeighborController@destroy')->name('neighbors.destroy')->middleware('can:neighbors.destroy');
 });

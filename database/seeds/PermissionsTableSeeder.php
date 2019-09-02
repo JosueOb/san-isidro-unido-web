@@ -105,5 +105,36 @@ class PermissionsTableSeeder extends Seeder
             'description'=>'Eliminar registros de los cargos de la directiva',
             'private'=>false,
         ]);
+        //Permisos sobre el módulo de morador - vecino
+        Permission::create([
+            'name'=>'Listar a los vecinos del barrio',
+            'slug'=>'neighbors.index',
+            'description'=>'Lista a los vecinos registrados',
+            'private'=>false,
+        ]);
+        Permission::create([
+            'name'=>'Crear vecino del barrio',
+            'slug'=>'neighbors.create',
+            'description'=>'Registrar a los vecinos del barrio',
+            'private'=>false,
+        ]);
+        Permission::create([
+            'name'=>'Ver detalle de los vecinos del barrio',
+            'slug'=>'neighbors.show',
+            'description'=>'Ver en detalle cada uno de vecinos del barrio registrados',
+            'private'=>false,
+        ]);
+        Permission::create([
+            'name'=>'Editar vecinos del barrio',
+            'slug'=>'neighbors.edit',
+            'description'=>'Editar registros de los vecinos del barrio',
+            'private'=>false,
+        ]);
+        Permission::create([
+            'name'=>'Eliminar vecinos del barrio',
+            'slug'=>'neighbors.destroy',
+            'description'=>'Eliminar registros de los vecinos del barrio',
+            'private'=>false,
+        ]);
     }
 }
