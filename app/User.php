@@ -75,4 +75,14 @@ class User extends Authenticatable implements MustVerifyEmail
 
         return "$first_name[0] $last_name[0]"; 
     }
+
+    /**
+     * Users can have many roles.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function roles()
+    {
+        return $this->belongsToMany(config('shinobi.models.role'))->withPivot('state')->withTimestamps();
+    }
 }

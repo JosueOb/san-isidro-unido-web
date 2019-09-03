@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class NeighborController extends Controller
 {
@@ -15,9 +16,15 @@ class NeighborController extends Controller
      */
     public function index()
     {
+        // Inicializa @rownum
+        DB::statement(DB::raw('SET @rownum = 0'));
+        //Se realiza la consulta, se buscan los usuario que poseean el rol de morador pero no el del administrador
         $neighbors = User::whereHas('roles', function(Builder $query){
             $query->where('name', 'Morador');
-        })->paginate();
+        })->whereDoesntHave('roles', function (Builder $query) {
+            $query->where('name', 'Administrador');
+        })->select('*',DB::raw('@rownum := @rownum + 1 as rownum'))->paginate();
+        // dd($neighbors);
 
         return view('neighbors.index',[
             'neighbors'=>$neighbors,

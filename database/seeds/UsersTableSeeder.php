@@ -30,7 +30,7 @@ class UsersTableSeeder extends Seeder
         $roleAdmin = Role::where('name', 'Administrador')->first();
         $roleGuest = Role::where('name', 'Morador')->first();
         //Se le asigna el rol de aministrador al usuario
-        $userAdmin->roles()->attach([$roleAdmin->id, $roleGuest->id]);
+        $userAdmin->roles()->attach([$roleAdmin->id, $roleGuest->id],['state'=>true]);
         
         $roleDirective = Role::where('name','Directivo')->first();
         $positions = Position::all();
@@ -42,7 +42,7 @@ class UsersTableSeeder extends Seeder
             //se resta uno, debido a que el primer usurio administardor tiene el id = 1
             $user->position_id = $positions->where('id', $user->id-1)->first()->id;
             $user->save();
-            $user->roles()->attach([$roleDirective->id, $roleGuest->id]);
+            $user->roles()->attach([$roleDirective->id, $roleGuest->id],['state'=>true]);
         });
     }
 }

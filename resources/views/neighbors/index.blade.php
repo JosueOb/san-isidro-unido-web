@@ -105,8 +105,7 @@
                                     <th>Id</th>
                                     <th>Nombre</th>
                                     <th>Apellido</th>
-                                    <th>Rol</th>
-                                    <th>Cargo</th>
+                                    <th>Correo</th>
                                     <th>Estado</th>
                                     @canany(['neighbors.show', 'neighbors.edit','neighbors.destroy'])
                                     <th>Opciones</th>
@@ -116,16 +115,20 @@
                             <tbody>
                                 @foreach ($neighbors as $neighbor)
                                     <tr>
-                                        <td>{{ $neighbor->id }}</td>
+                                        <td>{{ $neighbor->rownum }}</td>
                                         <td>{{ $neighbor->first_name }}</td>
                                         <td>{{ $neighbor->last_name }}</td>
-                                        <td>
-                                            @foreach ($neighbor->roles as $role)
-                                                {{$role->name}}<br>
-                                            @endforeach
-                                        </td>
-                                        <td>{{ $neighbor->position ? $neighbor->position->name : 'Sin cargo' }}</td>
-                                        <td><span class="badge badge-pill {{$neighbor->state ? 'badge-success': 'badge-danger'}}">{{ $neighbor->state ? 'Activo': 'Inactivo'}}</span></td>
+                                        <td>{{ $neighbor->email }}</td>
+                                        {{-- <td> --}}
+                                            {{-- {{ $neighbor->roles[0]->pivot->state }} --}}
+                                        @foreach ($neighbor->roles as $role)
+                                            @if ($role->name === 'Morador')
+                                                <td><span class="badge badge-pill {{$role->pivot->state ? 'badge-success': 'badge-danger'}}">{{ $role->pivot->state ? 'Activo': 'Inactivo'}}</span></td>
+                                            @endif
+                                        @endforeach
+                                        {{-- </td> --}}
+                                        {{-- <td>{{ $neighbor->position ? $neighbor->position->name : 'Sin cargo' }}</td> --}}
+                                        {{-- <td><span class="badge badge-pill {{$neighbor->state ? 'badge-success': 'badge-danger'}}">{{ $neighbor->state ? 'Activo': 'Inactivo'}}</span></td> --}}
                                         
                                         @can('neighbors.show')
                                         <td width='10px'>
@@ -134,9 +137,13 @@
                                         @endcan
 
                                         @can('neighbors.edit')
-                                            <td width='10px'>
-                                                <a href="{{route('neighbors.edit',$neighbor->id)}}" class="btn btn-secondary"> Editar</a>
-                                            </td>
+                                        {{-- Si el usuario tiene más de un rol no se presenta la opción de editar --}}
+                                            @if (count($neighbor->roles)==1)
+                                                <td width='10px'>
+                                                    <a href="{{route('neighbors.edit',$neighbor->id)}}" class="btn btn-secondary"> Editar</a>
+                                                </td>
+                                                
+                                            @endif
                                         @endcan
 
                                         @can('members.destroy')
