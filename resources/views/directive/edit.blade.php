@@ -50,7 +50,7 @@
                     <div class="row">
                         <div class="form-group col-12 col-md-6">
                             <label for="email">Email</label>
-                            <input id="email" type="text" class="form-control @error('email') is-invalid @enderror" name="email" value="{{old('email') ?: $member->email}}" required>
+                            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{old('email') ?: $member->email}}" required>
                             @error('email')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>

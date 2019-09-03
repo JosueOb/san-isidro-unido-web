@@ -14,7 +14,6 @@ use Caffeinated\Shinobi\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Validator;
 
 class DirectiveController extends Controller
 {
@@ -87,7 +86,7 @@ class DirectiveController extends Controller
         substr($validated['first_name'],0,1).'+'.substr($validated['last_name'],0,1).
         '&size=255';
         $password = Str::random(8);
-        $roleGuest = Role::where('name', 'Invitado')->first();
+        $roleNeighbor = Role::where('name', 'Morador')->first();
         $roleDirective = Role::whereIn('name',['Directivo', 'Directiva'])->first();
 
         $directiveMember = new User();
@@ -100,7 +99,7 @@ class DirectiveController extends Controller
         $directiveMember->position_id = $validated['position'];
         $directiveMember->save();
 
-        $directiveMember->roles()->attach([$roleGuest->id, $roleDirective->id]);
+        $directiveMember->roles()->attach([$roleNeighbor->id, $roleDirective->id],['state'=>true]);
 
         $directiveMember->notify(new UserCreated($password));
 

@@ -149,7 +149,7 @@
                                         @can('members.destroy')
                                         <td width='10px'>
                                             @if ($neighbor->state)
-                                                <a href="#" class="btn btn-danger"  data-toggle="modal" data-target="#deleteNeighbor{{$neighbor->id}}">Eliminar</a>
+                                                <a href="#" class="btn btn-danger"  data-toggle="modal" data-target="#deleteNeighbor{{$neighbor->id}}">Desactivar</a>
                                             @else
                                                 <a href="#" class="btn btn-success"  data-toggle="modal" data-target="#activeNeighbor{{$neighbor->id}}">Activar</a>
                                             @endif

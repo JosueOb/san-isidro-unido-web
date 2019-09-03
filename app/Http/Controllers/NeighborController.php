@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\NeighborRequest;
+use App\Notifications\NeighborCreated;
 use App\User;
+use Caffeinated\Shinobi\Models\Role;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class NeighborController extends Controller
 {
@@ -38,7 +42,7 @@ class NeighborController extends Controller
      */
     public function create()
     {
-        //
+        return view('neighbors.create');
     }
 
     /**
@@ -47,9 +51,27 @@ class NeighborController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(NeighborRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        $password = Str::random(8);
+        $roleNeighbord = Role::where('name', 'Morador')->first();
+
+        $neighbor = new User();
+        $neighbor->first_name = $validated['first_name'];
+        $neighbor->last_name = $validated['last_name'];
+        $neighbor->email = $validated['email'];
+        $neighbor->password = \password_hash($password, PASSWORD_DEFAULT);
+        $neighbor->number_phone = $validated['number_phone'];
+        $neighbor->state = true;
+        $neighbor->save();
+
+        $neighbor->roles()->attach($roleNeighbord->id, ['state'=>true]);
+
+        $neighbor->notify(new NeighborCreated($password));
+
+        return redirect()->route('neighbors.index')->with('success', 'Morador registrado con éxito');
     }
 
     /**

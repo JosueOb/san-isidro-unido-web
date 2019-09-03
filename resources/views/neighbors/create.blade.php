@@ -1,17 +1,17 @@
 @extends('layouts.dashboard')
 @section('page-subtitle')
-    Módulo Directiva
+    Módulo Vecinos
 @endsection
 @section('page-header')
-    Registrar nuevo directivo
+    Registrar nuevo morador
 @endsection
-@section('item-directive')
+@section('item-neighbor')
     active
 @endsection
-@section('item-directive-collapse')
+@section('item-neighbor-collapse')
     show
 @endsection
-@section('item-directive-create')
+@section('item-neighbor-create')
     active
 @endsection
 @section('content')
@@ -24,7 +24,7 @@
     <div class="col">
         <div class="card card-primary">
             <div class="card-body">
-                <form action="{{route('members.store')}}" method="POST">
+                <form action="{{route('neighbors.store')}}" method="POST">
                     @csrf
                     <div class="row">
                         <div class="form-group col-12 col-md-6">
@@ -57,27 +57,16 @@
                             @enderror
                         </div>
                         <div class="form-group col-12 col-md-6">
-                            <label for="last_name">Cargo</label>
-
-                            @if (count($positions)>0)
-                                <select class="form-control @error('position') is-invalid @enderror" id="position" name="position" required>
-                                    <option value="">Seleccione un cargo</option>
-                                    @foreach ($positions as $position)
-                                        <option value="{{$position->id}}" {{old('position')==$position->id ? 'selected':''}}>{{$position->name}}</option>
-                                    @endforeach
-                                </select>
-                                @error('position')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                                @enderror 
-                            @else
-                                <p class="text-danger">No existen registros de cargos
-                                    <a href="{{route('positions.create')}}" class="btn btn-primary float-right">Crear</a>
-                                </p>
-                                
-                            @endif
-
+                            <label for="number_phone">Celular <span class="text-muted">(opcional)</span></label>
+                            <input id="number_phone" type="text" class="form-control @error('number_phone') is-invalid @enderror" name="number_phone" value="{{old('number_phone')}}">
+                            <small id="number_phoneHelp" class="form-text text-muted">
+                                Recuerda anteponer el código 08 o 09 al ingresar tu número telefónico
+                            </small>
+                            @error('number_phone')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                         </div>
                     </div>
             
