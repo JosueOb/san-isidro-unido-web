@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class NeighborController extends Controller
@@ -13,7 +15,13 @@ class NeighborController extends Controller
      */
     public function index()
     {
-        //
+        $neighbors = User::whereHas('roles', function(Builder $query){
+            $query->where('name', 'Morador');
+        })->paginate();
+
+        return view('neighbors.index',[
+            'neighbors'=>$neighbors,
+        ]);
     }
 
     /**

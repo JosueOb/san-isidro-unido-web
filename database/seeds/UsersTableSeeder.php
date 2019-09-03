@@ -28,7 +28,7 @@ class UsersTableSeeder extends Seeder
             'email_verified_at'=> now(),
         ]);
         $roleAdmin = Role::where('name', 'Administrador')->first();
-        $roleGuest = Role::where('name', 'Invitado')->first();
+        $roleGuest = Role::where('name', 'Morador')->first();
         //Se le asigna el rol de aministrador al usuario
         $userAdmin->roles()->attach([$roleAdmin->id, $roleGuest->id]);
         

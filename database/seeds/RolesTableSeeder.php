@@ -22,8 +22,8 @@ class RolesTableSeeder extends Seeder
         $adminRole->permissions()->attach([1,2,3,4,5,6,7,8,9,10,11,12,13,14]);
         
         Role::create([
-            'name'=>'Invitado',
-            'slug'=>'invitado',
+            'name'=>'Morador',
+            'slug'=>'morador',
             'description'=> 'Rol para los moradores del barrio',
             'private'=>true,
         ]);
