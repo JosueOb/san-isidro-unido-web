@@ -17,7 +17,7 @@ class DirectiveRoleExists
     public function handle($request, Closure $next)
     {
         //Se determina si el rol Directivo/a se encuentra registrado
-        $directiveRoleExists= Role::whereIn('name', ['Directivo', 'Directiva'])->exists();
+        $directiveRoleExists= Role::where('slug', 'directivo')->exists();
         //En caso de que no se encuentre registrado se redirecciona al usuario para que registre el respectivo rol
         if(!$directiveRoleExists){
             return redirect()->route('roles.index')

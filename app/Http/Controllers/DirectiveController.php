@@ -19,7 +19,7 @@ class DirectiveController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(DirectiveRoleExists::class);
+        // $this->middleware(DirectiveRoleExists::class);
         $this->middleware(UserIsActive::class)->only('edit','update');
         $this->middleware(ProtectedAdminUsers::class)->only('show','edit','update','destroy');
         $this->middleware(PreventMakingChangesToYourself::class)->only('edit','update','destroy');
@@ -33,7 +33,7 @@ class DirectiveController extends Controller
     {
         //Se buscan a todos los usuarios con el rol directivo/a para listarlos
         $members = User::whereHas('roles',function(Builder $query){
-            $query->whereIn('name',['Directivo', 'Directiva']);
+            $query->where('slug','directivo');
         })->paginate();
 
         return view('directive.index',[
@@ -86,8 +86,8 @@ class DirectiveController extends Controller
         substr($validated['first_name'],0,1).'+'.substr($validated['last_name'],0,1).
         '&size=255';
         $password = Str::random(8);
-        $roleNeighbor = Role::where('name', 'Morador')->first();
-        $roleDirective = Role::whereIn('name',['Directivo', 'Directiva'])->first();
+        $roleNeighbor = Role::where('slug', 'morador')->first();
+        $roleDirective = Role::where('slug','directivo')->first();
 
         $directiveMember = new User();
         $directiveMember->first_name = $validated['first_name'];
@@ -99,7 +99,7 @@ class DirectiveController extends Controller
         $directiveMember->position_id = $validated['position'];
         $directiveMember->save();
 
-        $directiveMember->roles()->attach([$roleNeighbor->id, $roleDirective->id],['state'=>true]);
+        $directiveMember->roles()->attach([$roleDirective->id,$roleNeighbor->id],['state'=>true]);
 
         $directiveMember->notify(new UserCreated($password));
 
@@ -194,8 +194,7 @@ class DirectiveController extends Controller
      */
     public function destroy(User $member)
     {
-        $mesage = '';
-
+        $message = null;
         //Se verifica si el usuario esta activo para desactivarlo y viceversa
         if($member->state){
             $message= 'desactivado';
@@ -236,12 +235,12 @@ class DirectiveController extends Controller
         switch ($option) {
             case 1:
                 $members = User::whereHas('roles',function(Builder $query){
-                    $query->whereIn('name',['Directivo', 'Directiva']);
+                    $query->where('slug','directivo');
                 })->where('state',true)->paginate();
                 break;
             case 2:
                 $members = User::whereHas('roles',function(Builder $query){
-                    $query->whereIn('name',['Directivo', 'Directiva']);
+                    $query->where('slug','directivo');
                 })->where('state',false)->paginate();
                 break;
             default:
