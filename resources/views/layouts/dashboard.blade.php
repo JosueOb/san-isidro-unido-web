@@ -45,7 +45,7 @@
 
                 <div class="nav-wrapper">
                     <ul class="nav flex-column accordion" id="accordionSidebar">
-                        <li class="menu-header">{{Auth::user()->getRol() ? Auth::user()->getRol()->name : 'Sin rol'}}</li>
+                        <li class="menu-header">{{Auth::user()->getWebSystemRoles() ? Auth::user()->getWebSystemRoles()->name : 'Sin rol'}}</li>
                         
                         @canany(['roles.index', 'roles.create'])
                         <li class="nav-item @yield('item-role')">
@@ -58,9 +58,9 @@
                                     @can('roles.index')
                                         <a class="collapse-item @yield('item-role-list')" href="{{route('roles.index')}}"><i class="fas fa-list"></i>Listar roles</a>
                                     @endcan
-                                    @can('roles.create')
+                                    {{-- @can('roles.create')
                                         <a class="collapse-item @yield('item-role-create')" href="{{ route('roles.create')}}"><i class="fas fa-plus-circle"></i>Crear rol</a>
-                                    @endcan
+                                    @endcan --}}
                                 </div>
                             </div>
                         </li>

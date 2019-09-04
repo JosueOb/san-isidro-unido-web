@@ -33,12 +33,12 @@ Route::get('logout', function () {
 Route::middleware(['auth','verified'])->group(function(){
     //ROLES
     Route::get('roles', 'RoleController@index')->name('roles.index')->middleware('can:roles.index');
-    Route::get('roles/create', 'RoleController@create')->name('roles.create')->middleware('can:roles.create');
-    Route::post('roles/store', 'RoleController@store')->name('roles.store')->middleware('can:roles.create');
+    // Route::get('roles/create', 'RoleController@create')->name('roles.create')->middleware('can:roles.create');
+    // Route::post('roles/store', 'RoleController@store')->name('roles.store')->middleware('can:roles.create');
     Route::get('roles/{role}', 'RoleController@show')->name('roles.show')->middleware('can:roles.show');
     Route::get('roles/{role}/edit', 'RoleController@edit')->name('roles.edit')->middleware('can:roles.edit');
     Route::put('roles/{role}', 'RoleController@update')->name('roles.update')->middleware('can:roles.edit');
-    Route::delete('roles/{role}', 'RoleController@destroy')->name('roles.destroy')->middleware('can:roles.destroy');
+    // Route::delete('roles/{role}', 'RoleController@destroy')->name('roles.destroy')->middleware('can:roles.destroy');
     //DIRECTIVA
     Route::get('members', 'DirectiveController@index')->name('members.index')->middleware('can:members.index');
     Route::get('members/filters/{option}', 'DirectiveController@filters')->name('members.filters')->middleware('can:members.index');

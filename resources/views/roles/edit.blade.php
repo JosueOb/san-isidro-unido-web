@@ -30,7 +30,8 @@
                     <div class="row">
                         <div class="form-group col-12 col-md-6">
                             <label for="name">Nombre</label>
-                            <input id="name" type="text" class="form-control  @error('name') is-invalid @enderror" name="name" value="{{old('name') ?: $role->name}}" autofocus required>
+                            {{-- <input id="name" type="text" class="form-control  @error('name') is-invalid @enderror" name="name" value="{{old('name') ?: $role->name}}" required> --}}
+                            <input id="name" type="text" class="form-control  @error('name') is-invalid @enderror" name="name" value="{{old('name') ?: $role->name}}" readonly>
                             @error('name')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -39,7 +40,8 @@
                         </div>
                         <div class="form-group col-12 col-md-6">
                             <label for="slug">URL amigable</label>
-                            <input id="slug" type="text" class="form-control @error('slug') is-invalid @enderror" name="slug" value="{{old('slug') ?: $role->slug}}" required>
+                            {{-- <input id="slug" type="text" class="form-control @error('slug') is-invalid @enderror" name="slug" value="{{old('slug') ?: $role->slug}}" required> --}}
+                            <input id="slug" type="text" class="form-control @error('slug') is-invalid @enderror" name="slug" value="{{old('slug') ?: $role->slug}}" readonly>
                             @error('slug')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -50,8 +52,8 @@
                     <div class="form-group">
                     <div class="form-group">
                         <label for="description">Descripción <span class="text-muted">(opcional)</span></label>
-                        <textarea id="description" class="form-control @error('description') is-invalid @enderror" name="description" rows="5">{{ old('description') ?: $role->description }}</textarea>
-                        {{-- <input id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" value="{{ old('description') ?: $role->description }}"> --}}
+                        <textarea id="description" class="form-control @error('description') is-invalid @enderror" name="description" rows="5" autofocus>{{ old('description') ?: $role->description }}</textarea>
+                        {{-- <textarea id="description" class="form-control @error('description') is-invalid @enderror" name="description" rows="5">{{ old('description') ?: $role->description }}</textarea> --}}
                         @error('description')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>

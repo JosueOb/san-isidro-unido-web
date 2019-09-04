@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class ProtectPrivateRoles
+class ProtectedAppRoles
 {
     /**
      * Handle an incoming request.
@@ -15,8 +15,7 @@ class ProtectPrivateRoles
      */
     public function handle($request, Closure $next)
     {
-        //Se verifica si el rol es privado para evitar editarlo o eliminarlo
-        if($request->route('role')->private){
+        if($request->route('role')->mobile_app){
             return abort(403, 'Acción no autorizada');
         }
         return $next($request);

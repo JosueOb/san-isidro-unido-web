@@ -40,8 +40,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
     
-    public function getRol(){
-        return $this->roles()->whereNotIn('name',['Morador'])->first();
+    public function getWebSystemRoles(){
+        //Se retorna los roles del usuario que pueden acceder al sistema
+        // return $this->roles()->whereNotIn('name',['Morador','Invitado','Policia'])->first();
+        return $this->roles()->where('mobile_app',false)->first();
     }
     //Se sobrescribe el método sendPasswordNotificatión para cambiar a un nuevo objeto 
     //de la clase UserResetNotification con el contenido de la notificación traducida

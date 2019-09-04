@@ -17,8 +17,8 @@
             <div class="card-body">
                 <h3 class="text-center"> Bienvenido</h3>
                 <p class="text-center"><span class="font-weight-bold">Usuario</span>
-                    : {{Auth::user()->first_name}} {{Auth::user()->last_name}}</p>
-                <p class="text-center"><span class="font-weight-bold">Rol</span>: {{Auth::user()->getRol() ? Auth::user()->getRol()->name : 'Sin rol'}}</p>
+                    : {{Auth::user()->getFullName()}}</p>
+                <p class="text-center"><span class="font-weight-bold">Rol</span>: {{Auth::user()->getWebSystemRoles() ? Auth::user()->getWebSystemRoles()->name : 'Sin rol'}}</p>
                 @if (Auth::user()->position)
                     <p class="text-center"><span class="font-weight-bold">Cargo</span>
                         : {{Auth::user()->position->name}}</p>

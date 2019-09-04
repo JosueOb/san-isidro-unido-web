@@ -19,12 +19,12 @@ class PermissionsTableSeeder extends Seeder
             'description'=>'Lista los roles registrados',
             'private'=>true,
         ]);
-        Permission::create([
-            'name'=>'Crear roles',
-            'slug'=>'roles.create',
-            'description'=>'Crear los roles del sistema',
-            'private'=>true,
-        ]);
+        // Permission::create([
+        //     'name'=>'Crear roles',
+        //     'slug'=>'roles.create',
+        //     'description'=>'Crear los roles del sistema',
+        //     'private'=>true,
+        // ]);
         Permission::create([
             'name'=>'Ver detalle de rol',
             'slug'=>'roles.show',
@@ -37,12 +37,12 @@ class PermissionsTableSeeder extends Seeder
             'description'=>'Editar registros de roles',
             'private'=>true,
         ]);
-        Permission::create([
-            'name'=>'Eliminar roles',
-            'slug'=>'roles.destroy',
-            'description'=>'Eliminar registros de roles',
-            'private'=>true,
-        ]);
+        // Permission::create([
+        //     'name'=>'Eliminar roles',
+        //     'slug'=>'roles.destroy',
+        //     'description'=>'Eliminar registros de roles',
+        //     'private'=>true,
+        // ]);
         //Permisos sobre el módulo de directiva
         Permission::create([
             'name'=>'Listar miembros de la directiva',
