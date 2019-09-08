@@ -119,7 +119,7 @@
                                         <td>{{$member->first_name}}</td>
                                         <td>{{$member->last_name}}</td>
                                         <td>{{$member->position ? $member->position->name : 'Sin cargo' }}</td>
-                                        <td><span class="badge badge-pill {{$member->state ? 'badge-success': 'badge-danger'}}">{{$member->state ? 'Activo': 'Inactivo'}}</span></td>
+                                        <td><span class="badge badge-pill {{$member->getASpecificRole('Directivo')->pivot->state ? 'badge-success': 'badge-danger'}}">{{$member->getASpecificRole('Directivo')->pivot->state ? 'Activo': 'Inactivo'}}</span></td>
                                         
                                         @can('members.show')
                                         <td width='10px'>
@@ -130,7 +130,7 @@
                                         @can('members.edit')
                                         
                                             @if (Auth::user()->id != $member->id)
-                                                @if ($member->state)
+                                                @if ($member->getASpecificRole('Directivo')->pivot->state)
                                                 <td width='10px'>
                                                     <a href="{{route('members.edit',$member->id)}}" class="btn btn-secondary"> Editar</a>
                                                 </td>
@@ -142,7 +142,7 @@
                                         @can('members.destroy')
                                         <td width='10px'>
                                             @if (Auth::user()->id != $member->id)
-                                                @if ($member->state)
+                                                @if ($member->getWebSystemRoles()->pivot->state)
                                                     <a href="#" class="btn btn-danger"  data-toggle="modal" data-target="#deleteMember{{$member->id}}">Eliminar</a>
                                                     
                                                 @else

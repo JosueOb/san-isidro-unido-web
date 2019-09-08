@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Middleware\DirectiveRoleExists;
+use App\Http\Middleware\MemberIsActive;
 use App\Http\Middleware\PreventMakingChangesToYourself;
 use App\Http\Middleware\ProtectedAdminUsers;
-use App\Http\Middleware\UserIsActive;
 use App\Http\Requests\DirectiveRequest;
 use App\Notifications\UserCreated;
 use App\Position;
@@ -13,15 +12,16 @@ use App\User;
 use Caffeinated\Shinobi\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Str;
 
 class DirectiveController extends Controller
 {
     public function __construct()
     {
-        // $this->middleware(DirectiveRoleExists::class);
-        $this->middleware(UserIsActive::class)->only('edit','update');
         $this->middleware(ProtectedAdminUsers::class)->only('show','edit','update','destroy');
+        $this->middleware(MemberIsActive::class)->only('edit','update');
         $this->middleware(PreventMakingChangesToYourself::class)->only('edit','update','destroy');
     }
     /**
@@ -65,19 +65,19 @@ class DirectiveController extends Controller
     {
         $validated = $request->validated();
 
-        //Se obtiene el cargo que fue seleccionado
+        //Se obtiene el cargo que fue seleccionado para el registro
         $getPosition = Position::find($validated['position']);
         //Se verifica si la asignación del cargo es de one-person (solo para una persona)
         if($getPosition->allocation === 'one-person'){
-            //Se verifica si el cargo con asignación de one-person tiene algún usuario activo
-            $existsActiveUser = $getPosition->users()->where('state',true)->exists();
-            //En caso de que el cargo selecionado tiene algún usuario activo, se retorna al formulario de registro con los valores 
-            //de sus inputs y una alerta, impidiendo el registro del usuario debido a la asignación del cargo
-            if($existsActiveUser){
+            //Se procede a verificar por cada usuario con el cargo seleccionado, si se encuentra activo como directivo
+            if($this->checkMemberPosition($getPosition)){
+                //En caso de encuentrar un miembro de la directiva activo con el cargo seleccionado se retorna
+                //a la misma devuelve a la vista en la que se encontraba el usuario con los datos del formulario y un mensaje de error
                 return back()->withInput()->with('observations',[
-                    'La directiva ya consta con un usuario activo con el cargo de '.strtolower($getPosition->name),
+                    'La directiva ya cuenta con un usuario activo con el cargo de '.strtolower($getPosition->name),
                     'Se recomienda:',
-                    '* Desactivar al directivo registrado con el cargo de '.strtolower($getPosition->name).' para proceder con el registro de un nuevo directivo con dicho cargo',
+                    '* Desactivar al usuario registrado con el cargo de '.strtolower($getPosition->name).
+                    ' para proceder con el registro del nuevo miembro de la directiva',
                 ]);
             }
         }
@@ -147,19 +147,20 @@ class DirectiveController extends Controller
         //Se validan el campo email y position
         $validated = $request->validated();
 
-        //Se obtiene el cargo que fue seleccionado
+        //Se obtiene el cargo que fue seleccionado para el registro
         $getPosition = Position::find($validated['position']);
-            //Se verifica si la asignación del cargo es de one-person y el cargo del directivo cambió
+        //Se verifica si la asignación del cargo es de one-person (solo para una persona) y se haya seleccionado otro cargo 
+        //diferente al del miembro de la directiva
         if($getPosition->allocation === 'one-person' && $member->position->id != $validated['position']){
-            //Se verifica si el cargo con asignación de one-person tiene algún usuario activo
-            $existsActiveUser = $getPosition->users()->where('state',true)->exists();
-            //En caso de que el cargo selecionado tiene algún usuario activo, se retorna al formulario de registro con los valores 
-            //de sus inputs y una alerta, impidiendo el registro del usuario debido a la asignación del cargo
-            if($existsActiveUser){
+            //Se procede a verificar por cada usuario con el cargo seleccionado, si se encuentra activo como directivo
+            if($this->checkMemberPosition($getPosition)){
+                //En caso de encuentrar un miembro de la directiva activo con el cargo seleccionado se retorna
+                //a la misma devuelve a la vista en la que se encontraba el usuario con los datos del formulario y un mensaje de error
                 return back()->withInput()->with('observations',[
-                    'La directiva ya consta con un usuario activo con el cargo de '.strtolower($getPosition->name),
+                    'La directiva ya cuenta con un usuario activo con el cargo de '.strtolower($getPosition->name),
                     'Se recomienda:',
-                    '* Desactivar al directivo registrado con el cargo de '.strtolower($getPosition->name).' para proceder con la actualización del presente directivo',
+                    '* Desactivar al usuario registrado con el cargo de '.strtolower($getPosition->name).
+                    ' para proceder con la actualización del presente directivo',
                 ]);
             }
         }
@@ -183,7 +184,6 @@ class DirectiveController extends Controller
         $member->save();
 
         return redirect()->route('members.index')->with('success','Miembro de la directiva actualizado exitosamente');
-        
     }
 
     /**
@@ -195,32 +195,34 @@ class DirectiveController extends Controller
     public function destroy(User $member)
     {
         $message = null;
-        //Se verifica si el usuario esta activo para desactivarlo y viceversa
-        if($member->state){
+        //Se obtiene el rol del miembro de la directiva
+        $roleUser = $member->getWebSystemRoles();
+        //Se verifica si el rol de directivo se encuentra activo
+        if($roleUser->pivot->state){
             $message= 'desactivado';
-            $member->state = false;
+            //Se actualiza el estado de la relacion user_role en el campo state
+            $member->roles()->updateExistingPivot($roleUser->id,['state'=> false]);
         }else{
-            //Se obtiene el cargo que fue seleccionado
-            $getPosition = Position::find($member->position->id);
+            //Se obtiene el cargo que fue seleccionado para el registro
+            $getPosition = Position::find($member->position_id);
             //Se verifica si la asignación del cargo es de one-person (solo para una persona)
             if($getPosition->allocation === 'one-person'){
-                //Se verifica si el cargo con asignación de one-person tiene algún usuario activo
-                    $existsActiveUser = $getPosition->users()->where('state',true)->exists();
-                    //En caso de que el cargo selecionado tiene algún usuario activo, se retorna al formulario de registro con los valores 
-                    //de sus inputs y una alerta, impidiendo el registro del usuario debido a la asignación del cargo
-                    if($existsActiveUser){
-                        return back()->with('observations',[
-                            'La directiva ya consta con un usuario activo con el cargo de '.strtolower($getPosition->name),
-                            'Se recomienda:',
-                            '* Desactivar al directivo registrado con el cargo de '.strtolower($getPosition->name).' para proceder con la activación del directivo',
-                        ]);
-                    }
+                //Se procede a verificar por cada usuario con el cargo seleccionado, si se encuentra activo como directivo
+                if($this->checkMemberPosition($getPosition)){
+                    //En caso de encuentrar un miembro de la directiva activo con el cargo seleccionado se retorna
+                    //a la misma devuelve a la vista en la que se encontraba el usuario con los datos del formulario y un mensaje de error
+                    return back()->with('observations',[
+                        'La directiva ya cuenta con un usuario activo con el cargo de '.strtolower($getPosition->name),
+                        'Se recomienda:',
+                        '* Desactivar al usuario registrado con el cargo de '.strtolower($getPosition->name).
+                        ' para proceder con la activación del directivo selecionado',
+                    ]);
                 }
-            $message= 'activado';
-            $member->state = true;
+            }
+            $message= 'activo';
+            //Se actualiza el estado de la relacion user_role en el campo state
+            $member->roles()->updateExistingPivot($roleUser->id,['state'=> true]);
         }
-        $member->save();
-
         return redirect()->back()->with('success','Miembro de la directiva '.$message);
     }
     /**
@@ -230,25 +232,59 @@ class DirectiveController extends Controller
      * @return App\User;
      */
     public function filters($option){
+        //Se obtienen a todos los usuarios con el rol de directivo
+        $members = User::whereHas('roles', function(Builder $query){
+            $query->where('slug', 'directivo');
+        })->get();
 
-        $members = null;
         switch ($option) {
             case 1:
-                $members = User::whereHas('roles',function(Builder $query){
-                    $query->where('slug','directivo');
-                })->where('state',true)->paginate();
+            //Se filtran a los directivos activos
+                $members = $members->filter(function(User $value){
+                    return $value->getRelationshipStateRolesUsers('directivo');
+                });
                 break;
             case 2:
-                $members = User::whereHas('roles',function(Builder $query){
-                    $query->where('slug','directivo');
-                })->where('state',false)->paginate();
+            //Se filtran a los directivos inactivos
+                $members = $members->filter(function(User $value){
+                    return !$value->getRelationshipStateRolesUsers('directivo');
+                });
                 break;
             default:
                 return abort(404);
                 break;
         }
+
+        //Se crear un paginador manualmente
+        $total = count($members);
+        $pageName = 'page';
+        $perPage = 15;
+
+        $members = new LengthAwarePaginator($members->forPage(Paginator::resolveCurrentPage(), $perPage), $total, $perPage, Paginator::resolveCurrentPage(), [
+            'path' => Paginator::resolveCurrentPath(),
+            'pageName' => $pageName,
+        ]);
+
         return view('directive.index',[
             'members'=>$members,
         ]);
+    }
+
+    //Permite verificar si algún usuario con el cargo de asignación de one-person, se encuentra activo
+    //como directivo para impedir el registro de un nuevo miembros con dicho cargo. Solo se permitirá el 
+    //registro de un nuevo usuario con el cargo de asignación de one-person si los anteriores miembros
+    //se encuentren inactivos
+    public function checkMemberPosition($position){
+        //Se obtienen a los usuarios con el cargo enviado como parámetro
+        $users = $position->users()->get();
+        //Permite conocer si existe algún usuario con el cargo seleccionado se ecuentra activo como directivo
+        $state = false;
+        //Se recoren a los usuario con el cargo seleccionado
+        foreach($users as $user){
+            if($user->getRelationshipStateRolesUsers('directivo')){
+                $state = true;
+            }
+        }
+        return $state;
     }
 }

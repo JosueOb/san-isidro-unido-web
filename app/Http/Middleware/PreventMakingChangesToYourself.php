@@ -20,7 +20,6 @@ class PreventMakingChangesToYourself
         if($request->user()->id === $request->route('member')->id){
             return abort(403,'Acción no autorizada');
         }
-        
         return $next($request);
     }
 }

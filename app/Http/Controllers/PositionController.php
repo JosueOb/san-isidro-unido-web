@@ -2,17 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Middleware\DirectiveRoleExists;
 use App\Http\Requests\PositionRequest;
 use App\Position;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class PositionController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(DirectiveRoleExists::class);
+
     }
     /**
      * Display a listing of the resource.

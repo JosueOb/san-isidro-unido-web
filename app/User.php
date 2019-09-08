@@ -45,6 +45,20 @@ class User extends Authenticatable implements MustVerifyEmail
         // return $this->roles()->whereNotIn('name',['Morador','Invitado','Policia'])->first();
         return $this->roles()->where('mobile_app',false)->first();
     }
+
+    //Se obtiene un específico rol del usuario
+    public function getASpecificRole($roleSlug){
+        return $this->roles()->where('slug', $roleSlug)->first();
+    }
+
+    //Obtener el estado de la realción entre roles y usuarios
+    //Se obtiene el valor de la columna state de la tabla pivote entre roles y usuarios
+    public function getRelationshipStateRolesUsers($roleSlug){
+        $role = $this->roles()->where('slug', $roleSlug)->first();
+        $state = $role->pivot->state;
+        return $state;
+    }
+    
     //Se sobrescribe el método sendPasswordNotificatión para cambiar a un nuevo objeto 
     //de la clase UserResetNotification con el contenido de la notificación traducida
     public function sendPasswordResetNotification($token)

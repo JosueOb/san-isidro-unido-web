@@ -60,10 +60,12 @@ class LoginController extends Controller
         //Se obtiene al usuario con el correo eléctronico ingresado
         $verifyUserEmail = User::where('email', $validData['email'])->first();
 
-        //Se verifica si existe un usuario con el correo ingresado y que su estado sea activo
-        if($verifyUserEmail && $verifyUserEmail->state){
-            //Se impide el ingreso del usuario que tengan el rol de invitado
-            if($verifyUserEmail->getRol() && $verifyUserEmail->getRol()->name != 'Invitado'){
+        // dd($verifyUserEmail->getWebSystemRoles()->mobile_app);
+
+        //Se verifica si existe un usuario con el correo ingresado y posea un rol del sistema web
+        if($verifyUserEmail && $verifyUserEmail->getWebSystemRoles()){
+            //Se verifica que rol con el cual esté ingresando se encuentre activo
+            if($verifyUserEmail->getWebSystemRoles()->pivot->state){
                 //Se verifica que las credenciales ingresadas concuerden con el registro de la BDD,
                 //el segundo atributo $remember permitirá recordar el token de la sesión en caso de
                 //que sea true
@@ -73,7 +75,7 @@ class LoginController extends Controller
                     return redirect('login')->with('info', 'Las credenciales no son las correctas');
                 }
             }else{
-                return redirect('login')->with('info', 'Usuario no registrado');
+                return redirect('login')->with('info', 'Usuario no registrado / desactivado');
             }
         }else{
             return redirect('login')->with('info', 'Usuario no registrado');

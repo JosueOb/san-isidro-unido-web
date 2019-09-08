@@ -15,9 +15,10 @@ class ProtectedAdminUsers
      */
     public function handle($request, Closure $next)
     {
-        $getUserRole = $request->route('member')->getWebSystemRoles()->slug;
+        $getUserRole = $request->route('member')->getASpecificRole('admin');
+        // dd($getUserRole);
 
-        if($getUserRole == 'admin'){
+        if($getUserRole){
             return abort(403,'Acción no autorizada');
         }
         return $next($request);
