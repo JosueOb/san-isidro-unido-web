@@ -120,8 +120,8 @@
                                         <td>{{$member->last_name}}</td>
                                         <td>{{$member->position ? $member->position->name : 'Sin cargo' }}</td>
                                         <td>
-                                            <span class="badge badge-pill {{$member->getASpecificRole('directivo')->pivot->state ? 'badge-success': 'badge-danger'}}">
-                                                {{$member->getASpecificRole('Directivo')->pivot->state ? 'Activo': 'Inactivo'}}
+                                            <span class="badge badge-pill {{$member->getRelationshipStateRolesUsers('directivo') ? 'badge-success': 'badge-danger'}}">
+                                                {{$member->getRelationshipStateRolesUsers('directivo') ? 'Activo': 'Inactivo'}}
                                             </span>
                                         </td>
                                         

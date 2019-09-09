@@ -34,14 +34,12 @@
                         <p><strong>Apellidos:</strong> {{$member->last_name}}</p>
                         <p><strong>Corre electrónico:</strong> {{$member->email}}</p>
                         <p><strong>Cargo:</strong> {{$member->position ? $member->position->name : 'Sin cargo'}}</p>
-                        <p><strong>Estado:</strong> {{$member->state ? 'Activo' : 'Inactivo'}}</p>
+                        <p><strong>Estado:</strong> {{$member->getRelationshipStateRolesUsers('directivo') ? 'Activo': 'Inactivo'}}</p>
                         <p><strong>Número telefónico:</strong> {{$member->number_phone ?: 'No registrado'}}</p>
                         <p><strong>Corre verificado:</strong> {{$member->email_verified_at ?: 'No verificado'}}</p>
-
-
                     </div>
                     <div class="col text-center">
-                        <img class="rounded-circle dark w-25" src="{{$member->avatar}}" alt="">
+                        <img class="rounded-circle dark w-25" src="{{$member->getAvatar()}}" alt="">
                     </div>
                 </div>
             </div>

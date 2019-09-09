@@ -5,13 +5,13 @@
 @section('page-header')
     Listado de moradores
 @endsection
-@section('item-neigbor')
+@section('item-neighbor')
     active
 @endsection
 @section('item-neighbor-collapse')
     show
 @endsection
-@section('item-neigbhor-list')
+@section('item-neighbor-list')
     active
 @endsection
 @section('content')
@@ -120,8 +120,8 @@
                                         <td>{{ $neighbor->last_name }}</td>
                                         <td>{{ $neighbor->email }}</td>
                                         <td>
-                                            <span class="badge badge-pill {{$neighbor->getASpecificRole('morador')->pivot->state ? 'badge-success': 'badge-danger'}}">
-                                                {{$neighbor->getASpecificRole('morador')->pivot->state ? 'Activo': 'Inactivo'}}
+                                            <span class="badge badge-pill {{$neighbor->getRelationshipStateRolesUsers('morador') ? 'badge-success': 'badge-danger'}}">
+                                                {{$neighbor->getRelationshipStateRolesUsers('morador') ? 'Activo': 'Inactivo'}}
                                             </span>
                                         </td>
                                         

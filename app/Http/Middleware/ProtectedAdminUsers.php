@@ -15,7 +15,7 @@ class ProtectedAdminUsers
      */
     public function handle($request, Closure $next)
     {
-        $getUserRole = $request->route('member')->getASpecificRole('admin');
+        $getUserRole = $request->route('user')->getASpecificRole('admin');
         // dd($getUserRole);
 
         if($getUserRole){

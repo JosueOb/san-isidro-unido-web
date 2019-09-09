@@ -34,7 +34,7 @@ class DirectiveRequest extends FormRequest
         }
         if($this->method() === 'PUT'){
            $rules = [
-                'email'=>'required|email|unique:users,email,'.$this->route('member')->id,
+                'email'=>'required|email|unique:users,email,'.$this->route('user')->id,
                 'position'=>'required|exists:positions,id',
            ];
         }

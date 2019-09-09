@@ -44,10 +44,10 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::get('members/filters/{option}', 'DirectiveController@filters')->name('members.filters')->middleware('can:members.index');
     Route::get('members/create', 'DirectiveController@create')->name('members.create')->middleware('can:members.create');
     Route::post('members/store', 'DirectiveController@store')->name('members.store')->middleware('can:members.create');
-    Route::get('members/{member}', 'DirectiveController@show')->name('members.show')->middleware('can:members.show');
-    Route::get('members/{member}/edit', 'DirectiveController@edit')->name('members.edit')->middleware('can:members.edit');
-    Route::put('members/{member}', 'DirectiveController@update')->name('members.update')->middleware('can:members.edit');
-    Route::delete('members/{member}', 'DirectiveController@destroy')->name('members.destroy')->middleware('can:members.destroy');
+    Route::get('members/{user}', 'DirectiveController@show')->name('members.show')->middleware('can:members.show');
+    Route::get('members/{user}/edit', 'DirectiveController@edit')->name('members.edit')->middleware('can:members.edit');
+    Route::put('members/{user}', 'DirectiveController@update')->name('members.update')->middleware('can:members.edit');
+    Route::delete('members/{user}', 'DirectiveController@destroy')->name('members.destroy')->middleware('can:members.destroy');
     Route::get('search','SearchController@search')->name('search')->middleware('can:members.index');
     //CARGOS
     Route::get('positions', 'PositionController@index')->name('positions.index')->middleware('can:positions.index');
@@ -78,8 +78,8 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::get('neighbors', 'NeighborController@index')->name('neighbors.index')->middleware('can:neighbors.index');
     Route::get('neighbors/create', 'NeighborController@create')->name('neighbors.create')->middleware('can:neighbors.create');
     Route::post('neighbors/store', 'NeighborController@store')->name('neighbors.store')->middleware('can:neighbors.create');
-    Route::get('neighbors/{neighbor}', 'NeighborController@show')->name('neighbors.show')->middleware('can:neighbors.show');
-    Route::get('neighbors/{neighbor}/edit', 'NeighborController@edit')->name('neighbors.edit')->middleware('can:neighbors.edit');
-    Route::put('neighbors/{neighbor}', 'NeighborController@update')->name('neighbors.update')->middleware('can:neighbors.edit');
-    Route::delete('neighbors/{neighbor}', 'NeighborController@destroy')->name('neighbors.destroy')->middleware('can:neighbors.destroy');
+    Route::get('neighbors/{user}', 'NeighborController@show')->name('neighbors.show')->middleware('can:neighbors.show');
+    Route::get('neighbors/{user}/edit', 'NeighborController@edit')->name('neighbors.edit')->middleware('can:neighbors.edit');
+    Route::put('neighbors/{user}', 'NeighborController@update')->name('neighbors.update')->middleware('can:neighbors.edit');
+    Route::delete('neighbors/{user}', 'NeighborController@destroy')->name('neighbors.destroy')->middleware('can:neighbors.destroy');
 });

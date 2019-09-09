@@ -117,10 +117,10 @@ class DirectiveController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(User $member)
+    public function show(User $user)
     {
         return view('directive.show',[
-            'member'=>$member,
+            'member'=>$user,
         ]);
     }
 
@@ -130,12 +130,12 @@ class DirectiveController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $member)
+    public function edit(User $user)
     {
         $positions = Position::all();
 
         return view('directive.edit',[
-            'member'=> $member,
+            'member'=> $user,
             'positions'=>$positions
         ]);
     }
@@ -147,7 +147,7 @@ class DirectiveController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(DirectiveRequest $request, User $member)
+    public function update(DirectiveRequest $request, User $user)
     {
         //Se validan el campo email y position
         $validated = $request->validated();
@@ -156,7 +156,7 @@ class DirectiveController extends Controller
         $getPosition = Position::find($validated['position']);
         //Se verifica si la asignación del cargo es de one-person (solo para una persona) y se haya seleccionado otro cargo 
         //diferente al del miembro de la directiva
-        if($getPosition->allocation === 'one-person' && $member->position->id != $validated['position']){
+        if($getPosition->allocation === 'one-person' && $user->position->id != $validated['position']){
             //Se procede a verificar por cada usuario con el cargo seleccionado, si se encuentra activo como directivo
             if($this->checkMemberPosition($getPosition)){
                 //En caso de encuentrar un miembro de la directiva activo con el cargo seleccionado se retorna
@@ -171,22 +171,22 @@ class DirectiveController extends Controller
         }
 
         //Se obtiene el correo del objeto usuario y del formulario
-        $oldEmail = $member->email;
+        $oldEmail = $user->email;
         $newEmail = $validated['email'];
         //Se actualiza el campo email y position del usuario
-        $member->email = $validated['email'];
-        $member->position_id = $validated['position'];
+        $user->email = $validated['email'];
+        $user->position_id = $validated['position'];
         //Se verifica si el correo del formulario con el del usuario no iguales
         if($oldEmail != $newEmail){
             //Se procede a generar una contraseña
             $password = Str::random(8);
             //Se cambia la contraseña del usuario
-            $member->password = password_hash($password, PASSWORD_DEFAULT);
+            $user->password = password_hash($password, PASSWORD_DEFAULT);
             //Se envía una notificación
-            $member->notify(new UserCreated($password, 'directivo'));
+            $user->notify(new UserCreated($password, 'directivo'));
         }
 
-        $member->save();
+        $user->save();
 
         return redirect()->route('members.index')->with('success','Miembro de la directiva actualizado exitosamente');
     }
@@ -197,19 +197,19 @@ class DirectiveController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $member)
+    public function destroy(User $user)
     {
         $message = null;
         //Se obtiene el rol del miembro de la directiva
-        $roleUser = $member->getASpecificRole('directivo');
+        $roleUser = $user->getASpecificRole('directivo');
         //Se verifica si el rol de directivo se encuentra activo
         if($roleUser->pivot->state){
             $message= 'desactivado';
             //Se actualiza el estado de la relacion user_role en el campo state
-            $member->roles()->updateExistingPivot($roleUser->id,['state'=> false]);
+            $user->roles()->updateExistingPivot($roleUser->id,['state'=> false]);
         }else{
             //Se obtiene el cargo que fue seleccionado para el registro
-            $getPosition = Position::find($member->position_id);
+            $getPosition = Position::find($user->position_id);
             //Se verifica si la asignación del cargo es de one-person (solo para una persona)
             if($getPosition->allocation === 'one-person'){
                 //Se procede a verificar por cada usuario con el cargo seleccionado, si se encuentra activo como directivo
@@ -226,7 +226,7 @@ class DirectiveController extends Controller
             }
             $message= 'activo';
             //Se actualiza el estado de la relacion user_role en el campo state
-            $member->roles()->updateExistingPivot($roleUser->id,['state'=> true]);
+            $user->roles()->updateExistingPivot($roleUser->id,['state'=> true]);
         }
         return redirect()->back()->with('success','Miembro de la directiva '.$message);
     }
@@ -243,7 +243,6 @@ class DirectiveController extends Controller
         $members = User::whereHas('roles', function(Builder $query){
             $query->where('slug', 'directivo');
         })->get();
-
 
         switch ($option) {
             case 1:

@@ -18,7 +18,7 @@ class MemberIsActive
         ////Se retorna una excepción HTTP 403, en caso de que el usuario esté
         //inactivo con respecto al rol que cumple, evitando enviar el formulario de actualización
         //Se obtiene al miembro de la directiva
-        $getUser = $request->route('member');
+        $getUser = $request->route('user');
         //Se obtiene el estado de su relación entre roles y usuarios
         $getStatusUserRole = $getUser->getASpecificRole('directivo')->pivot->state;
 
