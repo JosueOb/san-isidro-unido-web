@@ -56,7 +56,7 @@ class NeighborController extends Controller
         $validated = $request->validated();
 
         $password = Str::random(8);
-        $roleNeighbord = Role::where('name', 'Morador')->first();
+        $roleNeighbord = Role::where('slug', 'morador')->first();
 
         $neighbor = new User();
         $neighbor->first_name = $validated['first_name'];

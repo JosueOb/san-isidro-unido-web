@@ -119,16 +119,11 @@
                                         <td>{{ $neighbor->first_name }}</td>
                                         <td>{{ $neighbor->last_name }}</td>
                                         <td>{{ $neighbor->email }}</td>
-                                        {{-- <td> --}}
-                                            {{-- {{ $neighbor->roles[0]->pivot->state }} --}}
-                                        @foreach ($neighbor->roles as $role)
-                                            @if ($role->name === 'Morador')
-                                                <td><span class="badge badge-pill {{$role->pivot->state ? 'badge-success': 'badge-danger'}}">{{ $role->pivot->state ? 'Activo': 'Inactivo'}}</span></td>
-                                            @endif
-                                        @endforeach
-                                        {{-- </td> --}}
-                                        {{-- <td>{{ $neighbor->position ? $neighbor->position->name : 'Sin cargo' }}</td> --}}
-                                        {{-- <td><span class="badge badge-pill {{$neighbor->state ? 'badge-success': 'badge-danger'}}">{{ $neighbor->state ? 'Activo': 'Inactivo'}}</span></td> --}}
+                                        <td>
+                                            <span class="badge badge-pill {{$neighbor->getASpecificRole('morador')->pivot->state ? 'badge-success': 'badge-danger'}}">
+                                                {{$neighbor->getASpecificRole('morador')->pivot->state ? 'Activo': 'Inactivo'}}
+                                            </span>
+                                        </td>
                                         
                                         @can('neighbors.show')
                                         <td width='10px'>

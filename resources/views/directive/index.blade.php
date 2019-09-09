@@ -119,7 +119,11 @@
                                         <td>{{$member->first_name}}</td>
                                         <td>{{$member->last_name}}</td>
                                         <td>{{$member->position ? $member->position->name : 'Sin cargo' }}</td>
-                                        <td><span class="badge badge-pill {{$member->getASpecificRole('Directivo')->pivot->state ? 'badge-success': 'badge-danger'}}">{{$member->getASpecificRole('Directivo')->pivot->state ? 'Activo': 'Inactivo'}}</span></td>
+                                        <td>
+                                            <span class="badge badge-pill {{$member->getASpecificRole('directivo')->pivot->state ? 'badge-success': 'badge-danger'}}">
+                                                {{$member->getASpecificRole('Directivo')->pivot->state ? 'Activo': 'Inactivo'}}
+                                            </span>
+                                        </td>
                                         
                                         @can('members.show')
                                         <td width='10px'>

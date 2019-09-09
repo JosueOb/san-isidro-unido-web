@@ -183,7 +183,7 @@ class DirectiveController extends Controller
             //Se cambia la contraseña del usuario
             $member->password = password_hash($password, PASSWORD_DEFAULT);
             //Se envía una notificación
-            $member->notify(new UserCreated($password));
+            $member->notify(new UserCreated($password, 'directivo'));
         }
 
         $member->save();
