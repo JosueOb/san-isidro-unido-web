@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\NeighborIsActive;
 use App\Http\Middleware\ProtectedAdminUsers;
+use App\Http\Middleware\ProtectedDirectiveUsers;
 use App\Http\Requests\NeighborRequest;
 use App\Notifications\NeighborCreated;
 use App\User;
@@ -17,6 +19,8 @@ class NeighborController extends Controller
     public function __construct()
     {
         $this->middleware(ProtectedAdminUsers::class)->only('show','edit','update','destroy');
+        $this->middleware(ProtectedDirectiveUsers::class)->only('edit','update','destroy');
+        $this->middleware(NeighborIsActive::class)->only('edit','update');
     }
     /**
      * Display a listing of the resource.
@@ -61,12 +65,16 @@ class NeighborController extends Controller
         $validated = $request->validated();
 
         $password = Str::random(8);
+        $avatar  = 'https://ui-avatars.com/api/?name='.
+        substr($validated['first_name'],0,1).'+'.substr($validated['last_name'],0,1).
+        '&size=255';
         $roleNeighbord = Role::where('slug', 'morador')->first();
 
         $neighbor = new User();
         $neighbor->first_name = $validated['first_name'];
         $neighbor->last_name = $validated['last_name'];
         $neighbor->email = $validated['email'];
+        $neighbor->avatar = $avatar;
         $neighbor->password = \password_hash($password, PASSWORD_DEFAULT);
         $neighbor->number_phone = $validated['number_phone'];
         $neighbor->state = true;
@@ -98,9 +106,11 @@ class NeighborController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        //
+        return view('neighbors.edit', [
+            'neighbor'=> $user,
+        ]);
     }
 
     /**
@@ -110,9 +120,29 @@ class NeighborController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(NeighborRequest $request, User $user)
     {
-        //
+        $validated = $request->validated();
+
+        //Se obtiene el correo del objeto usuario y del formulario
+        $oldEmail = $user->email;
+        $newEmail = $validated['email'];
+        //Se actualiza el campo email y position del usuario
+        $user->email = $validated['email'];
+        $user->number_phone = $validated['number_phone'];
+        //Se verifica si el correo del formulario con el del usuario no iguales
+        if($oldEmail != $newEmail){
+            //Se procede a generar una contraseña
+            $password = Str::random(8);
+            //Se cambia la contraseña del usuario
+            $user->password = password_hash($password, PASSWORD_DEFAULT);
+            //Se envía una notificación
+            $user->notify(new NeighborCreated($password));
+        }
+
+        $user->save();
+
+        return redirect()->route('neighbors.index')->with('success','Morador actualizado exitosamente');
     }
 
     /**
@@ -121,8 +151,19 @@ class NeighborController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        //
+        $message = null;
+        $roleUser = $user->getASpecificRole('morador');
+
+        if($roleUser->pivot->state){
+            $message='desactivado';
+            $user->roles()->updateExistingPivot($roleUser->id, ['state'=>false]);
+        }else{
+            $message='activo';
+            $user->roles()->updateExistingPivot($roleUser->id, ['state'=>true]);
+        }
+
+        return redirect()->back()->with('success', 'Morador '.$message.' con éxito');
     }
 }

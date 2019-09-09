@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class ProtectedAdminUsers
+class ProtectedDirectiveUsers
 {
     /**
      * Handle an incoming request.
@@ -15,7 +15,7 @@ class ProtectedAdminUsers
      */
     public function handle($request, Closure $next)
     {
-        $getUserRole = $request->route('user')->getASpecificRole('admin');
+        $getUserRole = $request->route('user')->getASpecificRole('directivo');
 
         if($getUserRole){
             return abort(403,'Acción no autorizada');

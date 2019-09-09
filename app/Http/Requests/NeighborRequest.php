@@ -23,12 +23,23 @@ class NeighborRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'first_name'=>'required|regex:/^[[:alpha:][:space:](áéíóúÁÉÍÓÚ)]+$/|min:5|max:100',
-            'last_name'=>'required|regex:/^[[:alpha:][:space:](áéíóúÁÉÍÓÚ)]+$/|min:5|max:100',
-            'email'=>'required|email|unique:users,email',
-            'number_phone'=>'nullable|numeric|digits:10',
-        ];
+        $rules = [];
+        if($this->method() === 'POST'){
+            $rules = [
+                'first_name'=>'required|regex:/^[[:alpha:][:space:](áéíóúÁÉÍÓÚ)]+$/|min:5|max:100',
+                'last_name'=>'required|regex:/^[[:alpha:][:space:](áéíóúÁÉÍÓÚ)]+$/|min:5|max:100',
+                'email'=>'required|email|unique:users,email',
+                'number_phone'=>'nullable|numeric|digits:10',
+            ];
+        }
+        if($this->method() === 'PUT'){
+           $rules = [
+                'email'=>'required|email|unique:users,email,'.$this->route('user')->id,
+                'number_phone'=>'nullable|numeric|digits:10',
+           ];
+        }
+
+        return $rules;
     }
     /**
     * Get the error messages for the defined validation rules.

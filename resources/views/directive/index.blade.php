@@ -146,7 +146,7 @@
                                         @can('members.destroy')
                                         <td width='10px'>
                                             @if (Auth::user()->id != $member->id)
-                                                @if ($member->getASpecificRole('directivo')->pivot->state)
+                                                @if ($member->getRelationshipStateRolesUsers('directivo'))
                                                     <a href="#" class="btn btn-danger"  data-toggle="modal" data-target="#deleteMember{{$member->id}}">Eliminar</a>
                                                     
                                                 @else

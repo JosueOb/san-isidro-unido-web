@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class MemberIsActive
+class NeighborIsActive
 {
     /**
      * Handle an incoming request.
@@ -20,7 +20,7 @@ class MemberIsActive
         //Se obtiene al miembro de la directiva
         $getUser = $request->route('user');
         //Se obtiene el estado de su relación entre roles y usuarios
-        $getStatusUserRole = $getUser->getRelationshipStateRolesUsers('directivo');
+        $getStatusUserRole = $getUser->getRelationshipStateRolesUsers('morador');
 
         if(!$getStatusUserRole){
             return abort(403, 'Acción no autorizada');

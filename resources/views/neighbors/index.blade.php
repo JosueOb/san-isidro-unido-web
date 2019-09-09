@@ -124,7 +124,7 @@
                                                 {{$neighbor->getRelationshipStateRolesUsers('morador') ? 'Activo': 'Inactivo'}}
                                             </span>
                                         </td>
-                                        
+
                                         @can('neighbors.show')
                                         <td width='10px'>
                                             <a href="{{route('neighbors.show',$neighbor->id)}}" class="btn btn-info">Ver</a>
@@ -132,8 +132,8 @@
                                         @endcan
 
                                         @can('neighbors.edit')
-                                        {{-- Si el usuario tiene más de un rol no se presenta la opción de editar --}}
-                                            @if (count($neighbor->roles)==1)
+                                        {{-- Si el usuario tiene al menos un rol del sistema web no se presenta la opción de editar --}}
+                                            @if ($neighbor->getWebSystemRoles()->isEmpty() && $neighbor->getRelationshipStateRolesUsers('morador'))
                                                 <td width='10px'>
                                                     <a href="{{route('neighbors.edit',$neighbor->id)}}" class="btn btn-secondary"> Editar</a>
                                                 </td>
@@ -143,7 +143,7 @@
 
                                         @can('members.destroy')
                                         <td width='10px'>
-                                            @if ($neighbor->state)
+                                            @if ($neighbor->getRelationshipStateRolesUsers('morador'))
                                                 <a href="#" class="btn btn-danger"  data-toggle="modal" data-target="#deleteNeighbor{{$neighbor->id}}">Desactivar</a>
                                             @else
                                                 <a href="#" class="btn btn-success"  data-toggle="modal" data-target="#activeNeighbor{{$neighbor->id}}">Activar</a>
@@ -189,7 +189,7 @@
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                                                         {{-- <button type="button" class="btn btn-primary">Eliminar</button> --}}
-                                                        <form action="{{ route('members.destroy', $neighbor->id) }}" method="POST">
+                                                        <form action="{{ route('neighbors.destroy', $neighbor->id) }}" method="POST">
                                                             @csrf
                                                             @method('delete')
                                                             <button type="submit" class="btn btn-success">Activar</button>
