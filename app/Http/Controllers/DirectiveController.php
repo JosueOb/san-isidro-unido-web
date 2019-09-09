@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class DirectiveController extends Controller
@@ -31,10 +32,12 @@ class DirectiveController extends Controller
      */
     public function index()
     {
+         // Inicializa @rownum
+         DB::statement(DB::raw('SET @rownum = 0'));
         //Se buscan a todos los usuarios con el rol directivo/a para listarlos
         $members = User::whereHas('roles',function(Builder $query){
             $query->where('slug','directivo');
-        })->paginate();
+        })->select('*',DB::raw('@rownum := @rownum + 1 as rownum'))->paginate();
 
         return view('directive.index',[
             'members'=>$members,
@@ -67,10 +70,12 @@ class DirectiveController extends Controller
 
         //Se obtiene el cargo que fue seleccionado para el registro
         $getPosition = Position::find($validated['position']);
+        // dd($getPosition->name);
         //Se verifica si la asignación del cargo es de one-person (solo para una persona)
         if($getPosition->allocation === 'one-person'){
             //Se procede a verificar por cada usuario con el cargo seleccionado, si se encuentra activo como directivo
             if($this->checkMemberPosition($getPosition)){
+                // dd($getPosition->name);
                 //En caso de encuentrar un miembro de la directiva activo con el cargo seleccionado se retorna
                 //a la misma devuelve a la vista en la que se encontraba el usuario con los datos del formulario y un mensaje de error
                 return back()->withInput()->with('observations',[
@@ -101,7 +106,7 @@ class DirectiveController extends Controller
 
         $directiveMember->roles()->attach([$roleDirective->id,$roleNeighbor->id],['state'=>true]);
 
-        $directiveMember->notify(new UserCreated($password));
+        $directiveMember->notify(new UserCreated($password, $roleDirective->name));
 
         return redirect()->route('members.index')->with('success', 'Miembro registrado exitosamente');
     }
@@ -196,7 +201,7 @@ class DirectiveController extends Controller
     {
         $message = null;
         //Se obtiene el rol del miembro de la directiva
-        $roleUser = $member->getWebSystemRoles();
+        $roleUser = $member->getASpecificRole('directivo');
         //Se verifica si el rol de directivo se encuentra activo
         if($roleUser->pivot->state){
             $message= 'desactivado';
@@ -232,23 +237,26 @@ class DirectiveController extends Controller
      * @return App\User;
      */
     public function filters($option){
+        // Inicializa @rownum
+        DB::statement(DB::raw('SET @rownum = 0'));
         //Se obtienen a todos los usuarios con el rol de directivo
         $members = User::whereHas('roles', function(Builder $query){
             $query->where('slug', 'directivo');
         })->get();
+
 
         switch ($option) {
             case 1:
             //Se filtran a los directivos activos
                 $members = $members->filter(function(User $value){
                     return $value->getRelationshipStateRolesUsers('directivo');
-                });
+                })->values();
                 break;
             case 2:
             //Se filtran a los directivos inactivos
                 $members = $members->filter(function(User $value){
                     return !$value->getRelationshipStateRolesUsers('directivo');
-                });
+                })->values();
                 break;
             default:
                 return abort(404);
@@ -259,6 +267,11 @@ class DirectiveController extends Controller
         $total = count($members);
         $pageName = 'page';
         $perPage = 15;
+
+        //Se agrega un campo al usuario indicando su posición en el arreglo
+        $members->each(function($user, $key){
+            data_fill($user,'rownum',  $key = $key + 1);
+        });
 
         $members = new LengthAwarePaginator($members->forPage(Paginator::resolveCurrentPage(), $perPage), $total, $perPage, Paginator::resolveCurrentPage(), [
             'path' => Paginator::resolveCurrentPath(),
@@ -274,9 +287,10 @@ class DirectiveController extends Controller
     //como directivo para impedir el registro de un nuevo miembros con dicho cargo. Solo se permitirá el 
     //registro de un nuevo usuario con el cargo de asignación de one-person si los anteriores miembros
     //se encuentren inactivos
-    public function checkMemberPosition($position){
+    public function checkMemberPosition(Position $position){
         //Se obtienen a los usuarios con el cargo enviado como parámetro
-        $users = $position->users()->get();
+        $users = $position->users;
+        // dd($users);
         //Permite conocer si existe algún usuario con el cargo seleccionado se ecuentra activo como directivo
         $state = false;
         //Se recoren a los usuario con el cargo seleccionado

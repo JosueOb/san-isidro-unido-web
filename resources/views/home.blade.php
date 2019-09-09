@@ -18,7 +18,10 @@
                 <h3 class="text-center"> Bienvenido</h3>
                 <p class="text-center"><span class="font-weight-bold">Usuario</span>
                     : {{Auth::user()->getFullName()}}</p>
-                <p class="text-center"><span class="font-weight-bold">Rol</span>: {{Auth::user()->getWebSystemRoles() ? Auth::user()->getWebSystemRoles()->name : 'Sin rol'}}</p>
+                <p class="text-center"><span class="font-weight-bold">Roles</span>:
+                    @foreach (Auth::user()->getWebSystemRoles() as $role)
+                        {{$role->name}}<br>
+                    @endforeach
                 @if (Auth::user()->position)
                     <p class="text-center"><span class="font-weight-bold">Cargo</span>
                         : {{Auth::user()->position->name}}</p>

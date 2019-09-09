@@ -45,7 +45,11 @@
 
                 <div class="nav-wrapper">
                     <ul class="nav flex-column accordion" id="accordionSidebar">
-                        <li class="menu-header">{{Auth::user()->getWebSystemRoles() ? Auth::user()->getWebSystemRoles()->name : 'Sin rol'}}</li>
+                        <li class="menu-header">
+                            @foreach (Auth::user()->getWebSystemRoles() as $role)
+                                {{$role->name}}<br>
+                            @endforeach
+                        </li>
                         
                         @canany(['roles.index', 'roles.create'])
                         <li class="nav-item @yield('item-role')">

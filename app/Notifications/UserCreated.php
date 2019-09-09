@@ -18,9 +18,10 @@ class UserCreated extends VerifyEmailBase
      *
      * @return void
      */
-    public function __construct($passwordRecieved)
+    public function __construct($passwordRecieved, $roleNameRecieved)
     {
         $this->password = $passwordRecieved;
+        $this->roleName = $roleNameRecieved;
     }
 
     /**
@@ -51,7 +52,7 @@ class UserCreated extends VerifyEmailBase
         return (new MailMessage)
                     ->subject('Bienvanida a '.env('APP_NAME'))
                     ->greeting('Hola, '.$notifiable->getFullName())
-                    ->line('Has sido/a registrado en nuestro sistema como '.$notifiable->getWebSystemRoles()->name.' y esta es la información para acceder:')
+                    ->line('Has sido/a registrado en nuestro sistema como '.strtolower($this->roleName).' y esta es la información para acceder:')
                     ->line('Correo: '.$notifiable->email)
                     ->line('Contraseña: '.$this->password)
                     ->action('Ingresar', $verificationUrl)

@@ -6,6 +6,7 @@ use App\Http\Requests\SearchRequest;
 use App\Position;
 use App\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 
 class SearchController extends Controller
 {
@@ -16,6 +17,8 @@ class SearchController extends Controller
         $option = $validated['searchOption'];
         $search = $validated['searchValue'];
 
+        // Inicializa @rownum
+        DB::statement(DB::raw('SET @rownum = 0'));
         $members = User::whereHas('roles', function (Builder $query) {
             $query->whereIn('name', ['Directivo', 'Directiva']);
         });
@@ -25,17 +28,17 @@ class SearchController extends Controller
         switch ($option) {
             case 1:
                 //Se busca acorde al nombre ingresado
-                $membersFound = $members->where('first_name','LIKE', "%$search%")->paginate();
+                $membersFound = $members->where('first_name','LIKE', "%$search%")->select('*',DB::raw('@rownum := @rownum + 1 as rownum'))->paginate();
                 break;
             case 2:
                 //Se busca acorde al apellido ingresado
-                $membersFound = $members->where('last_name','LIKE', "%$search%")->paginate();
+                $membersFound = $members->where('last_name','LIKE', "%$search%")->select('*',DB::raw('@rownum := @rownum + 1 as rownum'))->paginate();
                 break;
             case 3:
                 //Se busca acorde al cargo ingresado
                 $membersFound = $members->whereHas('position', function (Builder $query) use($search) {
                     $query->where('name', 'LIKE', "$search%");
-                })->paginate();
+                })->select('*',DB::raw('@rownum := @rownum + 1 as rownum'))->paginate();
                 break;
             
             default:

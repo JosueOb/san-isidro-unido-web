@@ -43,7 +43,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getWebSystemRoles(){
         //Se retorna los roles del usuario que pueden acceder al sistema
         // return $this->roles()->whereNotIn('name',['Morador','Invitado','Policia'])->first();
-        return $this->roles()->where('mobile_app',false)->first();
+        return $this->roles()->where('mobile_app',false)->get();
     }
 
     //Se obtiene un específico rol del usuario
@@ -57,6 +57,18 @@ class User extends Authenticatable implements MustVerifyEmail
         $role = $this->roles()->where('slug', $roleSlug)->first();
         $state = $role->pivot->state;
         return $state;
+    }
+
+    //Se verifica que algún rol del sistema web asignados al usuario se encuentre activo
+    public function hasSomeActiveWebSystemRole(){
+        $hasSomeActiveRol = false;
+        $userRoles = $this->getWebSystemRoles();
+        foreach($userRoles as $role){
+            if($this->getRelationshipStateRolesUsers($role->slug)){
+                $hasSomeActiveRol = true;
+            }
+        }
+        return $hasSomeActiveRol;
     }
     
     //Se sobrescribe el método sendPasswordNotificatión para cambiar a un nuevo objeto 

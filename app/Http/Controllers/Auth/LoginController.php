@@ -60,12 +60,10 @@ class LoginController extends Controller
         //Se obtiene al usuario con el correo eléctronico ingresado
         $verifyUserEmail = User::where('email', $validData['email'])->first();
 
-        // dd($verifyUserEmail->getWebSystemRoles()->mobile_app);
-
-        //Se verifica si existe un usuario con el correo ingresado y posea un rol del sistema web
-        if($verifyUserEmail && $verifyUserEmail->getWebSystemRoles()){
-            //Se verifica que rol con el cual esté ingresando se encuentre activo
-            if($verifyUserEmail->getWebSystemRoles()->pivot->state){
+        //Se verifica si existe un usuario con el correo ingresado
+        if($verifyUserEmail){
+            //Se verifican que los roles del usuario sean para el sistema web y que se encuentren activos
+            if($verifyUserEmail->hasSomeActiveWebSystemRole()){
                 //Se verifica que las credenciales ingresadas concuerden con el registro de la BDD,
                 //el segundo atributo $remember permitirá recordar el token de la sesión en caso de
                 //que sea true

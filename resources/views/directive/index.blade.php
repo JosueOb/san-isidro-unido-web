@@ -102,7 +102,7 @@
                         <table class="table table-light table-hover table-sm">
                             <thead>
                                 <tr>
-                                    <th>Id</th>
+                                    <th>#</th>
                                     <th>Nombre</th>
                                     <th>Apellido</th>
                                     <th>Cargo</th>
@@ -115,7 +115,7 @@
                             <tbody>
                                 @foreach ($members as $member)
                                     <tr>
-                                        <td>{{ $member->id}}</td>
+                                        <td>{{ $member->rownum}}</td>
                                         <td>{{$member->first_name}}</td>
                                         <td>{{$member->last_name}}</td>
                                         <td>{{$member->position ? $member->position->name : 'Sin cargo' }}</td>
@@ -130,7 +130,7 @@
                                         @can('members.edit')
                                         
                                             @if (Auth::user()->id != $member->id)
-                                                @if ($member->getASpecificRole('Directivo')->pivot->state)
+                                                @if ($member->getASpecificRole('directivo')->pivot->state)
                                                 <td width='10px'>
                                                     <a href="{{route('members.edit',$member->id)}}" class="btn btn-secondary"> Editar</a>
                                                 </td>
@@ -142,7 +142,7 @@
                                         @can('members.destroy')
                                         <td width='10px'>
                                             @if (Auth::user()->id != $member->id)
-                                                @if ($member->getWebSystemRoles()->pivot->state)
+                                                @if ($member->getASpecificRole('directivo')->pivot->state)
                                                     <a href="#" class="btn btn-danger"  data-toggle="modal" data-target="#deleteMember{{$member->id}}">Eliminar</a>
                                                     
                                                 @else
