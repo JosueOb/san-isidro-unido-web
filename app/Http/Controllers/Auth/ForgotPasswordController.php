@@ -47,8 +47,9 @@ class ForgotPasswordController extends Controller
         ]);
         //Se obtiene al usuario perteneciente al correo electrónico ingresado
         $user = User::where('email', $validData['email'])->first();
-        //Se envía el enlace si el usuario está activo y con un rol diferente de invitado
-        if($user->state && $user->getRol()){
+
+        //Se envía el enlace si el usuario tiene algún rol del sistema web activo
+        if($user->hasSomeActiveWebSystemRole()){
 
             $this->broker()->sendResetLink(
                 $this->credentials($request)
