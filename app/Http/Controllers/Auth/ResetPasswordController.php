@@ -65,7 +65,7 @@ class ResetPasswordController extends Controller
 
             'password.required'=>'El campo contraseña es obligatorio',
             'password.same'=>'Las contraseñas ingresadas no coinciden',
-            'password.min'=>'La contraseña debe contener al menos a 5 caracteres',
+            'password.min'=>'La contraseña debe contener al menos a 8 caracteres',
             'password.max'=>'La contraseña no debe ser mayor a 100 caracteres',
             'password.regex'=>'La contraseña ingresada no es segura',
 

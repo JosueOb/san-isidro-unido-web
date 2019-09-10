@@ -73,7 +73,7 @@ class LoginController extends Controller
                     return redirect('login')->with('info', 'Las credenciales no son las correctas');
                 }
             }else{
-                return redirect('login')->with('info', 'Usuario no registrado / desactivado');
+                return redirect('login')->with('info', 'Usuario no registrado');
             }
         }else{
             return redirect('login')->with('info', 'Usuario no registrado');

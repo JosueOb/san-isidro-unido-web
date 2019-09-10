@@ -52,6 +52,9 @@
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
+                            <small id="passwordHelp" class="form-text text-muted">
+                                La contraseña debe tener como mínimo 8 caracteres, al menos un dígito, una minúscula y una mayúscula
+                            </small>
                         </div>
 
                         <div class="form-group">

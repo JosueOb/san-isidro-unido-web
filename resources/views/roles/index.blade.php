@@ -25,7 +25,7 @@
         <div class="card card-primary">
             <div class="card-header">
                 {{-- <h4 class="d-inline">Roles del sistema web</h4> --}}
-                <h4 class="p-1">Roles del la aplicación móvil</h4>
+                <h4 class="p-1">Roles del sistema web</h4>
                 {{-- @can('roles.create')
                 <a href="{{route('roles.create')}}" class="btn btn-primary float-right">Nuevo</a>
                 @endcan --}}

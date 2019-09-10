@@ -143,10 +143,12 @@
 
                                         @can('members.destroy')
                                         <td width='10px'>
-                                            @if ($neighbor->getRelationshipStateRolesUsers('morador'))
-                                                <a href="#" class="btn btn-danger"  data-toggle="modal" data-target="#deleteNeighbor{{$neighbor->id}}">Desactivar</a>
-                                            @else
-                                                <a href="#" class="btn btn-success"  data-toggle="modal" data-target="#activeNeighbor{{$neighbor->id}}">Activar</a>
+                                            @if (Auth::user()->id != $neighbor->id)
+                                                @if ($neighbor->getRelationshipStateRolesUsers('morador'))
+                                                    <a href="#" class="btn btn-danger"  data-toggle="modal" data-target="#deleteNeighbor{{$neighbor->id}}">Desactivar</a>
+                                                @else
+                                                    <a href="#" class="btn btn-success"  data-toggle="modal" data-target="#activeNeighbor{{$neighbor->id}}">Activar</a>
+                                                @endif
                                             @endif
                                            
 

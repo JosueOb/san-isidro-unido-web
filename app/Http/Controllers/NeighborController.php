@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Middleware\NeighborIsActive;
+use App\Http\Middleware\PreventMakingChangesToYourself;
 use App\Http\Middleware\ProtectedAdminUsers;
 use App\Http\Middleware\ProtectedDirectiveUsers;
 use App\Http\Requests\NeighborRequest;
@@ -19,8 +20,9 @@ class NeighborController extends Controller
     public function __construct()
     {
         $this->middleware(ProtectedAdminUsers::class)->only('show','edit','update','destroy');
-        $this->middleware(ProtectedDirectiveUsers::class)->only('edit','update','destroy');
+        $this->middleware(ProtectedDirectiveUsers::class)->only('edit','update');
         $this->middleware(NeighborIsActive::class)->only('edit','update');
+        $this->middleware(PreventMakingChangesToYourself::class)->only('destroy');
     }
     /**
      * Display a listing of the resource.

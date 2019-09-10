@@ -16,7 +16,7 @@ class ProtectedDirectiveUsers
     public function handle($request, Closure $next)
     {
         $getUserRole = $request->route('user')->getASpecificRole('directivo');
-
+        
         if($getUserRole){
             return abort(403,'Acción no autorizada');
         }
