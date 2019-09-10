@@ -20,11 +20,11 @@
         @include('layouts.alerts')
     </div>
 </div>
-{{-- <div class="row">
+<div class="row">
     <div class="col">
         <div class="card card-primary">
             <div class="card-body">
-                <form action="{{route('search')}}" method="GET">
+                <form action="{{route('search.neighbors')}}" method="GET">
  
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -40,11 +40,6 @@
                                     {{'selected'}}
                                 @endif
                                 >Apellido</option>
-                                <option value="3" 
-                                @if (old('searchOption')== 3 || request('searchOption')== 3)
-                                    {{'selected'}}
-                                @endif
-                                >Cargo</option>
                             </select>
                             
                         </div>
@@ -70,7 +65,7 @@
             </div>
         </div>
     </div>
-</div> --}}
+</div>
 <div class="row">
     <div class="col">
         <div class="card card-primary">

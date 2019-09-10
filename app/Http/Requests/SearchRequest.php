@@ -24,8 +24,8 @@ class SearchRequest extends FormRequest
     public function rules()
     {
         return [
-            'searchOption'=>'required|integer|regex:/^[1-3]/',
-            'searchValue'=>'required|alpha',
+            'searchOption'=>'required|integer|numeric',
+            'searchValue'=>'required|regex:/^[[:alpha:][:space:](,;.áéíóúÁÉÍÓÚ)]+$/|max:100',
         ];
     }
         /**
@@ -40,7 +40,8 @@ class SearchRequest extends FormRequest
             'searchOption.regex'=>'Opción seleccionada inválida',
             
             'searchValue.required'=>'El campo :attribute es obligatorio',
-            'searchValue.alpha'=>'La :attribute debe estar conformado por caracteres alfabéticos',
+            'searchValue.regex'=>'La :attribute  debe estar conformado por caracteres alfabéticos, no se admiten caracteres especiales ni numéricos',
+            'searchValue.max'=>'La :attribute no debe ser mayor a 100 caracteres',
         ];
     }
     /**

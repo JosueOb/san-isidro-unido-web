@@ -24,7 +24,7 @@
     <div class="col">
         <div class="card card-primary">
             <div class="card-body">
-                <form action="{{route('search')}}" method="GET">
+                <form action="{{route('search.members')}}" method="GET">
  
                     <div class="input-group">
                         <div class="input-group-prepend">
