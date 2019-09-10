@@ -14,6 +14,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 
 class NeighborController extends Controller
 {
@@ -35,9 +37,9 @@ class NeighborController extends Controller
         DB::statement(DB::raw('SET @rownum = 0'));
         //Se realiza la consulta, se buscan los usuario que poseean el rol de morador pero no el del administrador
         $neighbors = User::whereHas('roles', function(Builder $query){
-            $query->where('name', 'Morador');
+            $query->where('slug', 'morador');
         })->whereDoesntHave('roles', function (Builder $query) {
-            $query->where('name', 'Administrador');
+            $query->where('slug', 'admin');
         })->select('*',DB::raw('@rownum := @rownum + 1 as rownum'))->paginate();
         // dd($neighbors);
 
@@ -167,5 +169,57 @@ class NeighborController extends Controller
         }
 
         return redirect()->back()->with('success', 'Morador '.$message.' con éxito');
+    }
+    /**
+     * filtros para listar usuarios activo, inactivo y todos.
+     *
+     * @param  int  $option
+     * @return App\User;
+     */
+    public function filters($option){
+
+        //Se obtienen a todos los usuarios con el rol de morador excepto al administrador
+        $neighbors = User::whereHas('roles', function(Builder $query){
+            $query->where('slug', 'morador');
+        })->whereDoesntHave('roles', function (Builder $query) {
+            $query->where('slug', 'admin');
+        })->get();
+
+        switch ($option) {
+            case 1:
+            //Se filtran a los moradores activos
+                $neighbors = $neighbors->filter(function(User $value){
+                    return $value->getRelationshipStateRolesUsers('morador');
+                })->values();
+                break;
+            case 2:
+            //Se filtran a los moradores inactivos
+                $neighbors = $neighbors->filter(function(User $value){
+                    return !$value->getRelationshipStateRolesUsers('morador');
+                })->values();
+                break;
+            default:
+                return abort(404);
+                break;
+        }
+
+        //Se crear un paginador manualmente
+        $total = count($neighbors);
+        $pageName = 'page';
+        $perPage = 15;
+
+        //Se agrega un campo al usuario indicando su posición en el arreglo
+        $neighbors->each(function($user, $key){
+            data_fill($user,'rownum',  $key = $key + 1);
+        });
+
+        $neighbors = new LengthAwarePaginator($neighbors->forPage(Paginator::resolveCurrentPage(), $perPage), $total, $perPage, Paginator::resolveCurrentPage(), [
+            'path' => Paginator::resolveCurrentPath(),
+            'pageName' => $pageName,
+        ]);
+
+        return view('neighbors.index',[
+            'neighbors'=>$neighbors,
+        ]);
     }
 }

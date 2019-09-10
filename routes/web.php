@@ -33,21 +33,18 @@ Route::get('logout', function () {
 Route::middleware(['auth','verified'])->group(function(){
     //ROLES
     Route::get('roles', 'RoleController@index')->name('roles.index')->middleware('can:roles.index');
-    // Route::get('roles/create', 'RoleController@create')->name('roles.create')->middleware('can:roles.create');
-    // Route::post('roles/store', 'RoleController@store')->name('roles.store')->middleware('can:roles.create');
     Route::get('roles/{role}', 'RoleController@show')->name('roles.show')->middleware('can:roles.show');
     Route::get('roles/{role}/edit', 'RoleController@edit')->name('roles.edit')->middleware('can:roles.edit');
     Route::put('roles/{role}', 'RoleController@update')->name('roles.update')->middleware('can:roles.edit');
-    // Route::delete('roles/{role}', 'RoleController@destroy')->name('roles.destroy')->middleware('can:roles.destroy');
     //DIRECTIVA
     Route::get('members', 'DirectiveController@index')->name('members.index')->middleware('can:members.index');
-    Route::get('members/filters/{option}', 'DirectiveController@filters')->name('members.filters')->middleware('can:members.index');
     Route::get('members/create', 'DirectiveController@create')->name('members.create')->middleware('can:members.create');
     Route::post('members/store', 'DirectiveController@store')->name('members.store')->middleware('can:members.create');
     Route::get('members/{user}', 'DirectiveController@show')->name('members.show')->middleware('can:members.show');
     Route::get('members/{user}/edit', 'DirectiveController@edit')->name('members.edit')->middleware('can:members.edit');
     Route::put('members/{user}', 'DirectiveController@update')->name('members.update')->middleware('can:members.edit');
     Route::delete('members/{user}', 'DirectiveController@destroy')->name('members.destroy')->middleware('can:members.destroy');
+    Route::get('members/filters/{option}', 'DirectiveController@filters')->name('members.filters')->middleware('can:members.index');
     Route::get('search','SearchController@search')->name('search')->middleware('can:members.index');
     //CARGOS
     Route::get('positions', 'PositionController@index')->name('positions.index')->middleware('can:positions.index');
@@ -56,7 +53,6 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::get('positions/{position}/edit', 'PositionController@edit')->name('positions.edit')->middleware('can:positions.edit');
     Route::put('positions/{position}', 'PositionController@update')->name('positions.update')->middleware('can:positions.edit');
     Route::delete('positions/{position}', 'PositionController@destroy')->name('positions.destroy')->middleware('can:positions.destroy');
-    // Route::get('positions/{member}', 'PositionController@show')->name('positions.show')->middleware('can:positions.show');
     Route::get('positions/{member}', function () {
         return abort(404);
     });
@@ -82,4 +78,5 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::get('neighbors/{user}/edit', 'NeighborController@edit')->name('neighbors.edit')->middleware('can:neighbors.edit');
     Route::put('neighbors/{user}', 'NeighborController@update')->name('neighbors.update')->middleware('can:neighbors.edit');
     Route::delete('neighbors/{user}', 'NeighborController@destroy')->name('neighbors.destroy')->middleware('can:neighbors.destroy');
+    Route::get('neighbors/filters/{option}', 'NeighborController@filters')->name('neighbors.filters')->middleware('can:neighbors.index');
 });
