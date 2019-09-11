@@ -26,8 +26,8 @@ class DirectiveRequest extends FormRequest
         $rules = [];
         if($this->method() === 'POST'){
             $rules = [
-                'first_name'=>'required|regex:/^[[:alpha:][:space:](áéíóúÁÉÍÓÚ)]+$/|min:3|max:100',
-                'last_name'=>'required|regex:/^[[:alpha:][:space:](áéíóúÁÉÍÓÚ)]+$/|min:5|max:100',
+                'first_name'=>'required|regex:/^[[:alpha:][:space:](áéíóúÁÉÍÓÚ)]+$/|min:3|max:25',
+                'last_name'=>'required|regex:/^[[:alpha:][:space:](áéíóúÁÉÍÓÚ)]+$/|min:5|max:25',
                 'email'=>'required|email|unique:users,email',
                 'position'=>'required|exists:positions,id'
             ];
@@ -51,12 +51,12 @@ class DirectiveRequest extends FormRequest
             'first_name.required'=>'El campo :attribute es obligatorio',
             'first_name.regex'=>'El :attribute debe estar conformado por caracteres alfabéticos, no se admiten signos de puntuación ni caracteres especiales',
             'first_name.min'=>'El :attribute debe ser mayor a 3 caracteres',
-            'first_name.max'=>'El :attribute no debe ser mayor a 100 caracteres',
+            'first_name.max'=>'El :attribute no debe ser mayor a 25 caracteres',
 
             'last_name.required'=>'Los :attribute son obligatorios',
             'last_name.regex'=>'Los :attribute deben estar conformado por caracteres alfabéticos, no se admiten signos de puntuación ni caracteres especiales',
             'last_name.min'=>'Los :attribute deben ser mayor a 5 caracteres',
-            'last_name.max'=>'Los :attribute no deben ser mayor a 100 caracteres',
+            'last_name.max'=>'Los :attribute no deben ser mayor a 25 caracteres',
 
             'email.required'=>'El campo :attribute es obligatorio',
             'email.email'=>'Fortamo del :attribute ingresado es incorrecto',

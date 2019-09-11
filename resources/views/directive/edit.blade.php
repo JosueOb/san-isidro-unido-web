@@ -31,20 +31,10 @@
                         <div class="form-group col-12 col-md-6">
                             <label for="first_name">Nombre</label>
                             <input id="first_name" type="text" class="form-control" name="first_name" value="{{ old('first_name') ?: $member->first_name }}" readonly>
-                            {{-- @error('first_name')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror --}}
                         </div>
                         <div class="form-group col-12 col-md-6">
                             <label for="last_name">Apellidos</label>
                             <input id="last_name" type="text" class="form-control" name="last_name" value="{{ old('last_name') ?: $member->last_name}}" readonly>
-                            {{-- @error('last_name')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror --}}
                         </div>
                     </div>
                     <div class="row">

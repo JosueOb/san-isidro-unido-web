@@ -43,7 +43,7 @@
                             </select>
                             
                         </div>
-                        <input type="text" class="form-control @error('searchValue') is-invalid @enderror"  name="searchValue" value="{{old('searchValue') ?: request('searchValue')}}" required>
+                        <input type="text" class="form-control @error('searchValue') is-invalid @enderror"  name="searchValue" value="{{old('searchValue') ?: request('searchValue')}}" maxlength="50" required>
                         
                         <div class="input-group-prepend">
                             <button type="submit" class="btn btn-dark">
@@ -74,7 +74,7 @@
                     <div class="col">
                         <h4 class="d-inline">Miembros de la directiva registrados</h4>
 
-                        @can('members.create')
+                        @can('neighbors.create')
                         <a href="{{route('neighbors.create')}}" class="btn btn-primary float-right">Agregar</a>
                         @endcan
 
@@ -84,7 +84,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col text-center">
-                        @can('members.index')
+                        @can('neighbors.index')
                         <a href="{{route('neighbors.index')}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Todos</a>
                         <a href="{{route('neighbors.filters', 1)}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Activos</a>
                         <a href="{{route('neighbors.filters', 2)}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Inactivos</a>
@@ -136,7 +136,7 @@
                                             @endif
                                         @endcan
 
-                                        @can('members.destroy')
+                                        @can('neighbors.destroy')
                                         <td width='10px'>
                                             @if (Auth::user()->id != $neighbor->id)
                                                 @if ($neighbor->getRelationshipStateRolesUsers('morador'))

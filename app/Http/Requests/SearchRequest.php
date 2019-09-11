@@ -25,7 +25,7 @@ class SearchRequest extends FormRequest
     {
         return [
             'searchOption'=>'required|integer|numeric',
-            'searchValue'=>'required|regex:/^[[:alpha:][:space:](,;.áéíóúÁÉÍÓÚ)]+$/|max:100',
+            'searchValue'=>'required|regex:/^[[:alpha:][:space:](,;.áéíóúÁÉÍÓÚ)]+$/|max:50',
         ];
     }
         /**
@@ -41,7 +41,7 @@ class SearchRequest extends FormRequest
             
             'searchValue.required'=>'El campo :attribute es obligatorio',
             'searchValue.regex'=>'La :attribute  debe estar conformado por caracteres alfabéticos, no se admiten caracteres especiales ni numéricos',
-            'searchValue.max'=>'La :attribute no debe ser mayor a 100 caracteres',
+            'searchValue.max'=>'La :attribute no debe ser mayor a 50 caracteres',
         ];
     }
     /**

@@ -64,7 +64,7 @@
                         <div class="row">
                             <div class="form-group col-12 col-md-6 col-lg-12 col-xl-6">
                                 <label for="password" class="d-block">Contraseña</label>
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" maxlength="100" required autocomplete="new-password">
                                 @error('password')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -76,7 +76,7 @@
                             </div>
                             <div class="form-group col-12 col-md-6 col-lg-12 col-xl-6">
                                 <label for="passwordConfirmation" class="d-block">Confirme contraseña</label>
-                                <input id="passwordConfirmation" type="password" class="form-control @error('passwordConfirmation') is-invalid @enderror" name="passwordConfirmation" required autocomplete="new-password">
+                                <input id="passwordConfirmation" type="password" class="form-control @error('passwordConfirmation') is-invalid @enderror" name="passwordConfirmation"  maxlength="100" required autocomplete="new-password">
                                 @error('passwordConfirmation')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -107,7 +107,7 @@
                         <div class="row">
                             <div class="form-group col-12 col-md-6">
                                 <label for="first_name">Nombre</label>
-                                <input id="first_name" type="text" class="form-control @error('first_name') is-invalid @enderror" name="first_name" value="{{ old('first_name') ?: Auth::user()->first_name }}" required>
+                                <input id="first_name" type="text" class="form-control @error('first_name') is-invalid @enderror" name="first_name" value="{{ old('first_name') ?: Auth::user()->first_name }}" maxlength="25" required>
                                 @error('first_name')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -116,7 +116,7 @@
                             </div>
                             <div class="form-group col-12 col-md-6">
                                 <label for="last_name">Apellidos</label>
-                                <input id="last_name" type="text" class="form-control @error('last_name') is-invalid @enderror" name="last_name" value="{{ old('last_name') ?: Auth::user()->last_name}}" required>
+                                <input id="last_name" type="text" class="form-control @error('last_name') is-invalid @enderror" name="last_name" value="{{ old('last_name') ?: Auth::user()->last_name}}" maxlength="25" required>
                                 @error('last_name')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -127,17 +127,12 @@
                         <div class="form-group">
                             <label for="email">Email</label>
                             <input id="email" type="text" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ Auth::user()->email}}" readonly>
-                            {{-- @error('email')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror --}}
                         </div>
                         <div class="form-group">
                             <label for="number_phone">Celular <span class="text-muted">(opcional)</span></label>
-                            <input type="text" class="form-control @error('number_phone') is-invalid @enderror" id='number_phone' name="number_phone" value="{{old('number_phone') ?: Auth::user()->number_phone}}">
+                            <input type="tel" class="form-control @error('number_phone') is-invalid @enderror" id='number_phone' name="number_phone" value="{{old('number_phone') ?: Auth::user()->number_phone}}" maxlength="10" pattern="(09)[0-9]{8}" title="Recuerda que se admiten solo 10 dígitos y anteponer el código 09 al ingresar tu número telefónico">
                             <small id="number_phoneHelp" class="form-text text-muted">
-                                Recuerda anteponer el código 08 o 09 al ingresar tu número telefónico
+                                Recuerda anteponer el código 09 al ingresar tu número telefónico
                             </small>
                             @error('number_phone')
                                 <span class="invalid-feedback" role="alert">

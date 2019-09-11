@@ -29,7 +29,7 @@
                     <div class="row">
                         <div class="form-group col-12 col-md-6">
                             <label for="first_name">Nombre</label>
-                            <input id="first_name" type="text" class="form-control  @error('first_name') is-invalid @enderror" name="first_name" value="{{ old('first_name') }}"  required autofocus>
+                            <input id="first_name" type="text" class="form-control  @error('first_name') is-invalid @enderror" name="first_name" value="{{ old('first_name') }}" maxlength="25" required autofocus>
                             @error('first_name')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -38,7 +38,7 @@
                         </div>
                         <div class="form-group col-12 col-md-6">
                             <label for="last_name">Apellidos</label>
-                            <input id="last_name" type="text" class="form-control @error('last_name') is-invalid @enderror" name="last_name" value="{{ old('last_name')}}" required>
+                            <input id="last_name" type="text" class="form-control @error('last_name') is-invalid @enderror" name="last_name" value="{{ old('last_name')}}" maxlength="25" required>
                             @error('last_name')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -58,9 +58,9 @@
                         </div>
                         <div class="form-group col-12 col-md-6">
                             <label for="number_phone">Celular <span class="text-muted">(opcional)</span></label>
-                            <input id="number_phone" type="text" class="form-control @error('number_phone') is-invalid @enderror" name="number_phone" value="{{old('number_phone')}}">
+                            <input id="number_phone" type="text" class="form-control @error('number_phone') is-invalid @enderror" name="number_phone" value="{{old('number_phone')}}" maxlength="10" pattern="(09)[0-9]{8}" title="Recuerda que se admiten solo 10 dígitos y anteponer el código 09 al ingresar tu número telefónico">
                             <small id="number_phoneHelp" class="form-text text-muted">
-                                Recuerda anteponer el código 08 o 09 al ingresar tu número telefónico
+                                Recuerda anteponer el 09 al ingresar tu número telefónico
                             </small>
                             @error('number_phone')
                             <span class="invalid-feedback" role="alert">

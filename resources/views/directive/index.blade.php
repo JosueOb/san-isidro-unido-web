@@ -48,7 +48,7 @@
                             </select>
                             
                         </div>
-                        <input type="text" class="form-control @error('searchValue') is-invalid @enderror"  name="searchValue" value="{{old('searchValue') ?: request('searchValue')}}" required>
+                        <input type="text" class="form-control @error('searchValue') is-invalid @enderror"  name="searchValue" value="{{old('searchValue') ?: request('searchValue')}}" maxlength="50" required>
                         
                         <div class="input-group-prepend">
                             <button type="submit" class="btn btn-dark">

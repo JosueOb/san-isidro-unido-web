@@ -15,7 +15,7 @@ class CreatePositionsTable extends Migration
     {
         Schema::create('positions', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name')->unique();
+            $table->string('name',25)->unique();
             $table->string('description')->nullable();
             $table->enum('allocation', ['one-person', 'several-people']);
             $table->timestamps();

@@ -33,7 +33,7 @@
                     </div>
                     <div class="form-group">
                         <label for="description">Descripción <span class="text-muted">(opcional)</span></label>
-                        <textarea id="description" class="form-control @error('description') is-invalid @enderror" name="description" rows="5" autofocus>{{ old('description') ?: $role->description }}</textarea>
+                        <textarea id="description" class="form-control @error('description') is-invalid @enderror" name="description" rows="5" maxlength="255" autofocus>{{ old('description') ?: $role->description }}</textarea>
                         @error('description')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
