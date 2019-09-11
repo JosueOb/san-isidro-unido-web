@@ -32,20 +32,32 @@
                     @endcan
             </div>
             <div class="card-body">
-                <p><strong>Slug:</strong> {{$role->slug}}</p>
                 <p><strong>Descripción:</strong> {{$role->description ?: 'Sin descripción'}}</p>
                 <p><strong>Permiso especial:</strong> {{$role->special ?: 'Ninguno'}}</p>
                 <h4>Permisos asignados</h4>
-                @if (count($permissions)>0)
-                    @foreach ($permissions as $permission)
-                    <ul class="list-unstyled">
-                        <li>
-                            {{$permission->name}} <em>({{$permission->description ?: 'Sin descripción'}})</em>
-                        </li>
-                    </ul>
+
+                @if ($permissionGroup->count() > 0)
+                <div class="list-group list-group-flush accordion">
+                    @foreach ($permissionGroup as $key => $permissions)
+                        <a class="list-group-item list-group-item-action" data-toggle="collapse" data-target="#{{$key}}" aria-expanded="true" aria-controls="collapse">
+                            {{$key}}
+                            <span class="badge badge-dark badge-pill ml-1">{{$permissions->count()}}</span>
+                            <i class="fas fa-caret-down float-right"></i>
+                        </a>
+                        <div id="{{$key}}" class="collapse">
+                            <ul class="list-group list-group-flush list-unstyled">
+                                @foreach ($permissions as $permission)
+                                <li class="list-group-item">
+                                    {{$permission->name}}
+                                    <em>({{$permission->description ?: 'Sin descripción'}})</em>
+                                </li>
+                                @endforeach
+                            </ul>
+                        </div>
                     @endforeach
+                </div>
                 @else
-                    <p>Ningún permiso asignado</p>
+                <p>Ningún permiso asignado</p>
                 @endif
             </div>
         </div>

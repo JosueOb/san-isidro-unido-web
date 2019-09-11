@@ -81,10 +81,12 @@ class RoleController extends Controller
     public function show(Role $role)
     {
         $permissions = $role->permissions()->get();
+        //Se agrupan a los permisos acorde al grupo que pertenece
+        $permissionGroup = $permissions->groupBy('group');
     
         return view('roles.show', [
             'role'=> $role,
-            'permissions'=>$permissions,
+            'permissionGroup'=>$permissionGroup,
         ]);
     }
 
@@ -98,13 +100,17 @@ class RoleController extends Controller
     {
         //Se obtienen los permisos que son públicos
         $permissions = Permission::where('private',false)->get();
+
+        //Se agrupan a los permisos acorde al grupo que pertenece
+        $permissionGroup = $permissions->groupBy('group');
+
         //Se obtienen los permisos del rol
         $rolePermissions = $role->permissions()->get();
 
         return view('roles.edit', [
             'role'=>$role,
-            'permissions'=>$permissions,
-            'rolePermissions'=> $rolePermissions
+            'rolePermissions'=> $rolePermissions,
+            'permissionGroup'=> $permissionGroup,
         ]);
     }
 

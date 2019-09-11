@@ -27,33 +27,13 @@
                 <form action="{{route('roles.update', $role->id)}}" method="POST" class="needs-validation">
                     @csrf
                     @method('put')
-                    <div class="row">
-                        <div class="form-group col-12 col-md-6">
-                            <label for="name">Nombre</label>
-                            {{-- <input id="name" type="text" class="form-control  @error('name') is-invalid @enderror" name="name" value="{{old('name') ?: $role->name}}" required> --}}
-                            <input id="name" type="text" class="form-control  @error('name') is-invalid @enderror" name="name" value="{{old('name') ?: $role->name}}" readonly>
-                            @error('name')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-                        <div class="form-group col-12 col-md-6">
-                            <label for="slug">URL amigable</label>
-                            {{-- <input id="slug" type="text" class="form-control @error('slug') is-invalid @enderror" name="slug" value="{{old('slug') ?: $role->slug}}" required> --}}
-                            <input id="slug" type="text" class="form-control @error('slug') is-invalid @enderror" name="slug" value="{{old('slug') ?: $role->slug}}" readonly>
-                            @error('slug')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-                    </div>
                     <div class="form-group">
+                        <label for="name">Nombre</label>
+                        <input id="name" type="text" class="form-control  @error('name') is-invalid @enderror" name="name" value="{{old('name') ?: $role->name}}" readonly>
+                    </div>
                     <div class="form-group">
                         <label for="description">Descripción <span class="text-muted">(opcional)</span></label>
                         <textarea id="description" class="form-control @error('description') is-invalid @enderror" name="description" rows="5" autofocus>{{ old('description') ?: $role->description }}</textarea>
-                        {{-- <textarea id="description" class="form-control @error('description') is-invalid @enderror" name="description" rows="5">{{ old('description') ?: $role->description }}</textarea> --}}
                         @error('description')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -63,29 +43,40 @@
                     <hr>
                     <h3>Asignar permisos</h3>
                     <div class="form-group">
-                        <ul class="list-unstyled">
-                            @foreach ($permissions as $permission)
-                                <li>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" name="permissions[]" class="custom-control-input @error('permissions') is-invalid @enderror" id="{{$permission->name}}" value="{{$permission->id}}" 
-                                        @foreach ($rolePermissions as $rolPermission)
-                                            @if ($rolPermission->id == $permission->id)
-                                                {{'checked'}}
-                                            @endif
-                                        @endforeach>
-                                        <label class="custom-control-label" for="{{$permission->name}}">
-                                            {{$permission->name}}
-                                            <em>({{$permission->description ?: 'Sin descripción'}})</em>
-                                            </label>
+                        <div class="list-group list-group-flush accordion">
+                            @foreach ($permissionGroup as $key => $permissions)
+                                <a class="list-group-item list-group-item-action" data-toggle="collapse" data-target="#{{$key}}" aria-expanded="true" aria-controls="collapse">
+                                    {{$key}}
+                                    <span class="badge badge-dark badge-pill ml-1">{{$permissions->count()}}</span>
+                                    <i class="fas fa-caret-down float-right"></i>
+                                </a>
+                                <div id="{{$key}}" class="collapse">
+                                    <ul class="list-group list-group-flush list-unstyled">
+                                        @foreach ($permissions as $permission)
+                                        <li class="list-group-item">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" name="permissions[]" class="custom-control-input @error('permissions') is-invalid @enderror" id="{{$permission->name}}" value="{{$permission->id}}" 
+                                                @foreach ($rolePermissions as $rolPermission)
+                                                    @if ($rolPermission->id == $permission->id)
+                                                        {{'checked'}}
+                                                    @endif
+                                                @endforeach>
+                                                <label class="custom-control-label" for="{{$permission->name}}">
+                                                    {{$permission->name}}
+                                                    <em>({{$permission->description ?: 'Sin descripción'}})</em>
+                                                </label>
+                                            </div>
+                                        </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                                @endforeach
+                                @error('permissions')
+                                    <div class="invalid-feedback d-block">
+                                        <strong>{{ $message }}</strong>
                                     </div>
-                                </li>
-                            @endforeach
-                        </ul>
-                        @error('permissions')
-                        <div class="invalid-feedback d-block">
-                            <strong>{{ $message }}</strong>
+                                @enderror
                         </div>
-                        @enderror
                     </div>
     
                     <div class="form-group col-4 offset-4">
