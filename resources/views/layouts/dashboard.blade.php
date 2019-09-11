@@ -113,7 +113,34 @@
                             </div>
                         </li>
                         @endcanany
+                        
+                        <li class="nav-item @yield('item-neighbor')">
+                            <a class="nav-link" data-toggle="collapse" data-target="#collapseReport" aria-expanded="true" aria-controls="collapseReport">
+                                <i class="fas fa-book"></i>
+                                <span>Informes</span>
+                            </a>
+                            <div id="collapseReport" class="collapse @yield('item-report-collapse')" >
+                                <div class="collapse-inner">
+                                        <a class="collapse-item @yield('item-report-list')" href="#"><i class="fas fa-list"></i>Listar informes</a>
+                                        <a class="collapse-item @yield('item-report-create')" href="#"><i class="fas fa-book-open"></i>Registrar informe</a>
+                                        <a class="collapse-item @yield('item-report-category')" href="#"><i class="fas fa-plus-circle"></i></i>Categorías de informes</a>
+                                </div>
+                            </div>
+                        </li>
 
+                        <li class="nav-item @yield('item-events')">
+                            <a class="nav-link" data-toggle="collapse" data-target="#collapseEvent" aria-expanded="true" aria-controls="collapseEvent">
+                                <i class="fas fa-calendar-week"></i>
+                                <span>Eventos</span>
+                            </a>
+                            <div id="collapseEvent" class="collapse @yield('item-event-collapse')" >
+                                <div class="collapse-inner">
+                                        <a class="collapse-item @yield('item-event-list')" href="#"><i class="fas fa-list"></i>Listar eventos</a>
+                                        <a class="collapse-item @yield('item-event-create')" href="#"><i class="fas fa-calendar-plus"></i></i>Registrar evento</a>
+                                        <a class="collapse-item @yield('item-event-category')" href="#"><i class="fas fa-plus-circle"></i></i></i>Categorías de eventos</a>
+                                </div>
+                            </div>
+                        </li>
                         
                     </ul>
                 </div>
