@@ -21,7 +21,7 @@
     </div>
 </div>
 
-    <form class="row" action="#" method="POST">
+    <form class="row" action="{{ route('reports.store') }}" method="POST"  enctype="multipart/form-data">
         @csrf
         <div class="col-12 col-sm-7 col-md-7 col-lg-8">
             <div class="card card-primary">

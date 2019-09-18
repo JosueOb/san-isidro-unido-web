@@ -82,4 +82,5 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::get('search/neighbors','SearchController@searchNeighbors')->name('search.neighbors')->middleware('can:neighbors.index');
     //INFORMES
     Route::get('reports/create','ReportController@create')->name('reports.create');
+    Route::post('reports/store', 'ReportController@store')->name('reports.store');
 });

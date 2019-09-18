@@ -13,6 +13,12 @@ class Image extends Model
      */
     protected $table = 'images';
     /**
+    * The attributes that are mass assignable.
+    *
+    * @var array
+    */
+    protected $fillable = ['url', 'post_id'];
+    /**
     * An image belongs to a post
     */
     public function post(){
