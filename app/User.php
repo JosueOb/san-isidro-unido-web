@@ -113,4 +113,10 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsToMany(config('shinobi.models.role'))->withPivot('state')->withTimestamps();
     }
+    /**
+     * A user can have many posts
+     */
+    public function posts(){
+        return $this->hasMany(Post::class);
+    }
 }
