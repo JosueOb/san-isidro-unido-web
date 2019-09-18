@@ -32,7 +32,7 @@
                                 <div class="form-group">
                                     <label for="avatar">Imagen</label>
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input @error('avatar') is-invalid @enderror" id="avatar" name="avatar" required>
+                                        <input type="file" class="custom-file-input @error('avatar') is-invalid @enderror" id="image" name="avatar" required>
                                         <label class="custom-file-label" for="avatar" data-browse="Cambiar"></label>
                                         @error('avatar')
                                         <span class="invalid-feedback" role="alert">

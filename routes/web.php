@@ -80,4 +80,6 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::delete('neighbors/{user}', 'NeighborController@destroy')->name('neighbors.destroy')->middleware('can:neighbors.destroy');
     Route::get('neighbors/filters/{option}', 'NeighborController@filters')->name('neighbors.filters')->middleware('can:neighbors.index');
     Route::get('search/neighbors','SearchController@searchNeighbors')->name('search.neighbors')->middleware('can:neighbors.index');
+    //INFORMES
+    Route::get('reports/create','ReportController@create')->name('reports.create');
 });
