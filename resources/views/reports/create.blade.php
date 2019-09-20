@@ -21,7 +21,9 @@
     </div>
 </div>
 
-    <form class="row" action="{{ route('reports.store') }}" method="POST"  enctype="multipart/form-data">
+    {{-- <form class="row" action="{{ route('reports.store') }}" method="POST"  enctype="multipart/form-data"> --}}
+    {{-- <form class="row" id="post" enctype="multipart/form-data" action="{{route('reports.store')}}" method="POST"> --}}
+    <form class="row" id="report" enctype="multipart/form-data">
         @csrf
         <div class="col-12 col-sm-7 col-md-7 col-lg-8">
             <div class="card card-primary">
@@ -65,7 +67,7 @@
                     <div class="form-group">
                         <label for="images">Imágenes <span class="text-muted">(opcional)</span></label>
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input @error('images') is-invalid @enderror" id="images" name="images[]" accept="image/jpeg,image/png" onchange="previewImages()" multiple>
+                            <input type="file" class="custom-file-input @error('images') is-invalid @enderror" id="images" name="images[]" accept="image/jpeg,image/png"  multiple>
                             <label class="custom-file-label" id='imagesLabel' for="images" data-browse="Agregar"></label>
                         </div>
                         <small id="imagesHelp" class="form-text text-muted">
@@ -85,50 +87,5 @@
             </div>
         </div>
     </form>
-
-@endsection
-@section('scripts')
-<script>
-    function previewImages(){
-    //Presentación de los files que obtiene el input
-    var images = document.querySelector('#images').files;
-    //console.log(images);
-    var fileNames = [];
-    //Se eliminan las imagenes seleccionadas anteriormente
-    $('div.gallery-item').remove();
-
-    function readAndPreview(file, no){
-        if ( /\.(jpe?g|png|gif)$/i.test(file.name) ) {
-            var reader = new FileReader();
-
-            reader.addEventListener("load", function () {
-            
-            var gallery_item = '<div class="gallery-item item-'+no+'">'+
-                                    '<div class="image-cancel" data-no="'+no+'">'+
-                                        '<i class="fas fa-trash-alt"></i>'+
-                                    '</div>'+
-                                    '<img src="'+ this.result+'">'+
-                                '</div>';
-            $('#gallery').append(gallery_item);
-            }, false);
-
-            reader.readAsDataURL(file);
-        }
-    }
-    if (images.length > 0) {
-        console.log(fileNames);
-        for(let i = 0; i <images.length; i++){
-            readAndPreview(images[i],i);
-            fileNames.push(images[i].name);
-        }
-        // $('#images').siblings(".custom-file-label").addClass("selected").html(fileNames.join('; '));
-        $("#imagesLabel").addClass("selected").html(fileNames.join('; '));
-        console.log($('#images').siblings());
-    }else{
-        // $('#images').siblings(".custom-file-label").addClass("selected").html('Seleccionar archivos');
-        $("#imagesLabel").addClass("selected").html('Seleccionar archivos');
-    }
-}
-</script>
 
 @endsection

@@ -37,6 +37,7 @@ class ReportController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         
         //Se obtiene la fecha y hora del sistema
         $dateTime = now();
