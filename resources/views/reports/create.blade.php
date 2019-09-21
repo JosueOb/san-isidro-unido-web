@@ -42,7 +42,7 @@
                     </div>
                     <div class="form-group">
                         <label for="description">Descripción</label>
-                        <textarea id="description" class="form-control @error('description') is-invalid @enderror" name="description" rows="12" maxlength="255" required>{{ old('description') }}</textarea>
+                        <textarea id="description" class="form-control" name="description" rows="12" maxlength="255" required>{{ old('description') }}</textarea>
                         <span class="invalid-feedback" role="alert">
                             
                         </span>
@@ -72,15 +72,18 @@
                         <div class="custom-file">
                             <input type="file" class="custom-file-input @error('images') is-invalid @enderror" id="images" name="images[]" accept="image/jpeg,image/png"  multiple>
                             <label class="custom-file-label" id='imagesLabel' for="images" data-browse="Agregar"></label>
+                            <span class="invalid-feedback" role="alert">
+    
+                            </span>
                         </div>
                         <small id="imagesHelp" class="form-text text-muted">
-                                Puedes subir hasta 5 imágenes de 5MB cada una
+                                Puedes subir hasta 5 imágenes de 1MB cada una
                         </small>
-                        @error('images')
+                        {{-- @error('images')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
-                        @enderror
+                        @enderror --}}
                         <div class="gallery" id="gallery">
                             {{-- Se presentan las imágenes seleccionadas por el usuario --}}
                         </div>

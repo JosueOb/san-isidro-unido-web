@@ -52214,40 +52214,73 @@ $(document).ready(function () {
 
   var previewImages = function previewImages(images) {
     var imageItem = '';
-    var numberOfImages = 0;
+    var counter = 0; // let numberOfImages = 5;
+    // if(images.length <= numberOfImages){
+
     images.forEach(function (image, indice) {
-      imageItem += "\n            <div class=\"gallery-item item-1\">\n                <div class=\"image-cancel\" data-no=\"".concat(indice, "\"><i class=\"fas fa-trash-alt\"></i></div>\n                <img src=").concat(image, " alt='image_").concat(indice, "'>\n            </div>\n            ");
-      numberOfImages++;
+      imageItem += "\n                <div class=\"gallery-item item-1\">\n                    <div class=\"image-cancel\" data-no=\"".concat(indice, "\"><i class=\"fas fa-trash-alt\"></i></div>\n                    <img src=").concat(image, " alt='image_").concat(indice, "'>\n                </div>\n                ");
+      counter++;
     });
-    document.getElementById('gallery').innerHTML = imageItem;
-    var message = images.length > 0 ? 'Imágenes seleccionadas: ' + numberOfImages : 'Seleccione alguna imagen';
+    document.getElementById('gallery').innerHTML = imageItem; // }else{
+    //     Swal.fire({
+    //         type: 'error',
+    //         title: 'Fuera del límite',
+    //         text: 'Recuerda que solo puedes seleccionar hasta 5 imágenes',
+    //         // footer: '<a href>Why do I have this issue?</a>'
+    //     })
+    // }
+
+    var message = images.length > 0 ? 'Imágenes seleccionadas: ' + counter : 'Seleccione alguna imagen';
     $('#images').siblings('.custom-file-label').addClass('selected').html(message);
   }; //Al seleccionar el input file
 
 
   $('#images').on('change', function (event) {
-    //Se obtiene las imagenes del input
-    var files = event.target.files; //se verifica que se haya seleccionado alguna imágen
+    $('#images').removeClass('is-invalid'); //Se obtiene las imagenes del input
+
+    var files = event.target.files;
+    var numberOfImages = 5;
+    var size = 1048576; //equivale a 1MB
+    //se verifica que se haya seleccionado alguna imágen
 
     if (files) {
-      console.log('Seleccionó una imagen'); //se recorre cada archivo para verificar que sea una imágen
-
+      //se recorre cada archivo para verificar que sea una imágen
       [].forEach.call(files, function (file, index) {
-        if (/\.(jpe?g|png)$/i.test(file.name)) {
-          images.push(file);
-          var reader = new FileReader();
+        if (images.length < numberOfImages) {
+          console.log('Seleccionó una imagen');
 
-          reader.onload = function (event) {
-            renderImages.push(event.target.result);
-            previewImages(renderImages);
-          };
+          if (/\.(jpe?g|png)$/i.test(file.name)) {
+            //Si la imagen es menor a 1MB
+            if (file.size < size) {
+              images.push(file);
+              var reader = new FileReader();
 
-          reader.readAsDataURL(files.item(index));
+              reader.onload = function (event) {
+                renderImages.push(event.target.result);
+                previewImages(renderImages);
+              };
+
+              reader.readAsDataURL(files.item(index));
+            } else {
+              Swal.fire({
+                type: 'error',
+                title: 'Fuera del límite de 1MB',
+                text: 'La imagen ' + file.name + ' pesa ' + (file.size / size).toFixed(2) + 'MB'
+              });
+            }
+          } else {
+            console.log('Archivo no permitido');
+            $('#images').addClass('is-invalid');
+            $('#images').siblings('.invalid-feedback').html('<strong> Archivo no permitido </strong>');
+          }
         } else {
-          console.log('Archivo no permitido');
+          Swal.fire({
+            type: 'error',
+            title: 'Fuera del límite de imágenes seleccionadas',
+            text: 'Recuerda que solo puedes seleccionar hasta 5 imágenes'
+          });
         }
-      });
-      previewImages(renderImages);
+      }); //previewImages(renderImages);
     }
   });
   $('.gallery').on('click', '.image-cancel', function () {

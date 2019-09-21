@@ -24,8 +24,8 @@ class ReportRequest extends FormRequest
     public function rules()
     {
         return [
-            'title'=>'required|regex:/^[[:alpha:][:space:]]+$/|min:3|max:45|',
-            'description'=> 'required|regex:/^[[:alpha:][:space:](,;.áéíóúÁÉÍÓÚ)]+$/|max:255',
+            'title'=>'required|regex:/^[[:alpha:][:space:](0-9)(,;.áéíóúÁÉÍÓÚ)]+$/|min:3|max:45',
+            'description'=> 'required|regex:/^[[:alpha:][:space:](0-9)(,;.áéíóúÁÉÍÓÚ)]+$/|max:255',
         ];
     }
      /**
@@ -38,7 +38,7 @@ class ReportRequest extends FormRequest
             'title.required'=>'El campo :attribute es obligatorio',
             'title.min'=>'El :attribute debe ser mayor a 3 caracteres',
             'title.max'=>'El :attribute no debe ser mayor a 45 caracteres',
-            'title.regex'=>'El :attribute debe estar conformado por caracteres alfabéticos, no se admiten signos de puntuación ni caracteres especiales',
+            'title.regex'=>'El :attribute debe estar conformado por caracteres alfabéticos, no se admiten caracteres especiales',
             
             'description.required'=>'El campo :attribute es obligatorio',
             'description.max'=>'La :attribute no debe ser mayor a 255 caracteres',
