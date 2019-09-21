@@ -33,21 +33,24 @@
                 <div class="card-body">
                     <div class="form-group">
                         <label for="title">Título</label>
-                        <input id="title" type="text" class="form-control  @error('title') is-invalid @enderror" name="title" value="{{ old('title') }}" maxlength="45" required autofocus>
-                        @error('title')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                        {{-- <input id="title" type="text" class="form-control  @error('title') is-invalid @enderror" name="title" value="{{ old('title') }}" maxlength="45" required autofocus> --}}
+                        <input id="title" type="text" class="form-control" name="title" value="{{ old('title') }}" maxlength="45" required autofocus>
+                        <span class="invalid-feedback" role="alert">
+
+                        </span>
+
                     </div>
                     <div class="form-group">
                         <label for="description">Descripción</label>
                         <textarea id="description" class="form-control @error('description') is-invalid @enderror" name="description" rows="12" maxlength="255" required>{{ old('description') }}</textarea>
-                        @error('description')
+                        <span class="invalid-feedback" role="alert">
+                            
+                        </span>
+                        {{-- @error('description')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
-                        @enderror
+                        @enderror --}}
                     </div>
                     <div class="form-group col-6 offset-3">
                         <button type="submit" class="btn btn-primary btn-block">

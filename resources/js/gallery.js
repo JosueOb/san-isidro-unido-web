@@ -1,3 +1,6 @@
+// CommonJS
+const Swal = require('sweetalert2')
+
 $(document).ready(function(){
     console.log('Formulario listo');
     let images = [];
@@ -59,14 +62,12 @@ $(document).ready(function(){
         event.preventDefault();
         
          //Se agrega el data del formData
-         var formData = new FormData(this);
-         formData.delete('images[]');
+        var formData = new FormData(this);
+        formData.delete('images[]');
 
          images.forEach(function(image){
             formData.append('images[]', image);
          });
-
-        //console.log(formData.get('images[]'));
 
          $.ajax({
             type:'POST',
@@ -75,18 +76,48 @@ $(document).ready(function(){
             cache:false,
             contentType: false,
             processData: false,
+            dataType: 'JSON',
             success:function(data){
-                // alert('Validation true! se pudo Añadir los datos<br>'+ {timeOut: 5000});
-                alert('Validation true! se pudo Añadir los datos');
+
                 console.log(data);
+
+                if(data.success){
+                    $('#title').removeClass('is-invalid');
+                    $('#description').removeClass('is-invalid');
+                    // $('#title').removeClass('is-invalid');
+                    Swal.fire({
+                    position: 'top-end',
+                    type: 'success',
+                    title: 'Informe publicado',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    allowOutsideClick: false,
+                  })
+                    // funciona como una redirección HTTP
+                    setTimeout(function(){ 
+                        window.location.replace('../profile');
+                    }, 1000);
+                }
             },
-            error: function(jqXHR, text, error){
-                // alert('Validation error! No se pudo Añadir los datos<br>' + error + {timeOut: 5000});
-                alert('Validation error! No se pudo Añadir los datos');
-                console.log(error);
+            error: function(jqXHR, textStatus, errorThrown){
+                var errors = jqXHR.responseJSON;
+                var validationErrors = errors.errors;
+                
+                if(validationErrors.title){
+                    $('#title').addClass('is-invalid');
+                    $('#title').siblings('.invalid-feedback').html('<strong>'+validationErrors['title'][0]+'</strong>');
+                }else{
+                    $('#title').removeClass('is-invalid');
+                }
+                if(validationErrors.description){
+                    $('#description').addClass('is-invalid');
+                    $('#description').siblings('.invalid-feedback').html('<strong>'+validationErrors['description'][0]+'</strong>');
+                }else{
+                    $('#description').removeClass('is-invalid');
+                }
+
+                console.log(errors.errors);
             }
         });
-
-        // console.log('Enviar formulario');
     });
 });
