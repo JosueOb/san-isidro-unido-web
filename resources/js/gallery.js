@@ -9,9 +9,7 @@ $(document).ready(function(){
     const previewImages = images =>{
         let imageItem = '';
         let counter = 0;
-        // let numberOfImages = 5;
 
-        // if(images.length <= numberOfImages){
             images.forEach(function(image, indice){
                 imageItem += `
                 <div class="gallery-item item-1">
@@ -22,14 +20,6 @@ $(document).ready(function(){
                 counter++;
             });
             document.getElementById('gallery').innerHTML = imageItem;
-        // }else{
-        //     Swal.fire({
-        //         type: 'error',
-        //         title: 'Fuera del límite',
-        //         text: 'Recuerda que solo puedes seleccionar hasta 5 imágenes',
-        //         // footer: '<a href>Why do I have this issue?</a>'
-        //     })
-        // }
         
         var message = images.length > 0 ? 'Imágenes seleccionadas: '+ counter : 'Seleccione alguna imagen';
         $('#images').siblings('.custom-file-label').addClass('selected').html(message);
@@ -80,7 +70,6 @@ $(document).ready(function(){
                     })
                 }
             });
-            //previewImages(renderImages);
         }
     });
 
@@ -104,6 +93,7 @@ $(document).ready(function(){
          images.forEach(function(image){
             formData.append('images[]', image);
          });
+         console.log(formData.getAll('images[]'));
 
          $.ajax({
             type:'POST',
@@ -136,23 +126,33 @@ $(document).ready(function(){
                 }
             },
             error: function(jqXHR, textStatus, errorThrown){
-                var errors = jqXHR.responseJSON;
-                var validationErrors = errors.errors;
-                
-                if(validationErrors.title){
-                    $('#title').addClass('is-invalid');
-                    $('#title').siblings('.invalid-feedback').html('<strong>'+validationErrors['title'][0]+'</strong>');
-                }else{
-                    $('#title').removeClass('is-invalid');
-                }
-                if(validationErrors.description){
-                    $('#description').addClass('is-invalid');
-                    $('#description').siblings('.invalid-feedback').html('<strong>'+validationErrors['description'][0]+'</strong>');
-                }else{
-                    $('#description').removeClass('is-invalid');
-                }
+                var getErrors = jqXHR.responseJSON;
 
-                console.log(errors.errors);
+                //Se obtienen los error de validación por parte de Laravel
+                var validationErrors = validationErrors ? getErrors.errors : null;
+                
+                if(validationErrors){
+                    if(validationErrors.title){
+                        $('#title').addClass('is-invalid');
+                        $('#title').siblings('.invalid-feedback').html('<strong>'+validationErrors['title'][0]+'</strong>');
+                    }else{
+                        $('#title').removeClass('is-invalid');
+                    }
+                    if(validationErrors.description){
+                        $('#description').addClass('is-invalid');
+                        $('#description').siblings('.invalid-feedback').html('<strong>'+validationErrors['description'][0]+'</strong>');
+                    }else{
+                        $('#description').removeClass('is-invalid');
+                    }
+                    if(validationErrors.images+".0"){
+                        $('#images').addClass('is-invalid');
+                        $('#images').siblings('.invalid-feedback').html('<strong>'+validationErrors['images.0'][0]+'</strong>');
+                    }else{
+                        $('#images').removeClass('is-invalid');
+                    }
+                }
+              
+                console.log(jqXHR.responseText);
             }
         });
     });

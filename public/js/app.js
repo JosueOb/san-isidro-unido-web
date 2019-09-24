@@ -52214,22 +52214,12 @@ $(document).ready(function () {
 
   var previewImages = function previewImages(images) {
     var imageItem = '';
-    var counter = 0; // let numberOfImages = 5;
-    // if(images.length <= numberOfImages){
-
+    var counter = 0;
     images.forEach(function (image, indice) {
       imageItem += "\n                <div class=\"gallery-item item-1\">\n                    <div class=\"image-cancel\" data-no=\"".concat(indice, "\"><i class=\"fas fa-trash-alt\"></i></div>\n                    <img src=").concat(image, " alt='image_").concat(indice, "'>\n                </div>\n                ");
       counter++;
     });
-    document.getElementById('gallery').innerHTML = imageItem; // }else{
-    //     Swal.fire({
-    //         type: 'error',
-    //         title: 'Fuera del límite',
-    //         text: 'Recuerda que solo puedes seleccionar hasta 5 imágenes',
-    //         // footer: '<a href>Why do I have this issue?</a>'
-    //     })
-    // }
-
+    document.getElementById('gallery').innerHTML = imageItem;
     var message = images.length > 0 ? 'Imágenes seleccionadas: ' + counter : 'Seleccione alguna imagen';
     $('#images').siblings('.custom-file-label').addClass('selected').html(message);
   }; //Al seleccionar el input file
@@ -52280,7 +52270,7 @@ $(document).ready(function () {
             text: 'Recuerda que solo puedes seleccionar hasta 5 imágenes'
           });
         }
-      }); //previewImages(renderImages);
+      });
     }
   });
   $('.gallery').on('click', '.image-cancel', function () {
@@ -52300,6 +52290,7 @@ $(document).ready(function () {
     images.forEach(function (image) {
       formData.append('images[]', image);
     });
+    console.log(formData.getAll('images[]'));
     $.ajax({
       type: 'POST',
       url: '../reports/store',
@@ -52330,24 +52321,32 @@ $(document).ready(function () {
         }
       },
       error: function error(jqXHR, textStatus, errorThrown) {
-        var errors = jqXHR.responseJSON;
-        var validationErrors = errors.errors;
+        var getErrors = jqXHR.responseJSON; //Se obtienen los error de validación por parte de Laravel
 
-        if (validationErrors.title) {
-          $('#title').addClass('is-invalid');
-          $('#title').siblings('.invalid-feedback').html('<strong>' + validationErrors['title'][0] + '</strong>');
-        } else {
-          $('#title').removeClass('is-invalid');
+        var validationErrors = validationErrors ? getErrors.errors : null;
+
+        if (validationErrors) {
+          if (validationErrors.title) {
+            $('#title').addClass('is-invalid');
+            $('#title').siblings('.invalid-feedback').html('<strong>' + validationErrors['title'][0] + '</strong>');
+          } else {
+            $('#title').removeClass('is-invalid');
+          }
+
+          if (validationErrors.description) {
+            $('#description').addClass('is-invalid');
+            $('#description').siblings('.invalid-feedback').html('<strong>' + validationErrors['description'][0] + '</strong>');
+          } else {
+            $('#description').removeClass('is-invalid');
+          }
+
+          if (true) {
+            $('#images').addClass('is-invalid');
+            $('#images').siblings('.invalid-feedback').html('<strong>' + validationErrors['images.0'][0] + '</strong>');
+          } else {}
         }
 
-        if (validationErrors.description) {
-          $('#description').addClass('is-invalid');
-          $('#description').siblings('.invalid-feedback').html('<strong>' + validationErrors['description'][0] + '</strong>');
-        } else {
-          $('#description').removeClass('is-invalid');
-        }
-
-        console.log(errors.errors);
+        console.log(jqXHR.responseText);
       }
     });
   });

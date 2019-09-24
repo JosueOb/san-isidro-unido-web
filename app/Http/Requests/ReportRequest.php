@@ -26,6 +26,9 @@ class ReportRequest extends FormRequest
         return [
             'title'=>'required|regex:/^[[:alpha:][:space:](0-9)(,;.áéíóúÁÉÍÓÚ)]+$/|min:3|max:45',
             'description'=> 'required|regex:/^[[:alpha:][:space:](0-9)(,;.áéíóúÁÉÍÓÚ)]+$/|max:255',
+            "images" => "nullable|array",
+            "images.*" => "nullable|image|mimes:jpeg,png|max:1000",
+            
         ];
     }
      /**
@@ -43,6 +46,11 @@ class ReportRequest extends FormRequest
             'description.required'=>'El campo :attribute es obligatorio',
             'description.max'=>'La :attribute no debe ser mayor a 255 caracteres',
             'description.regex'=>'La :attribute  debe estar conformado por caracteres alfabéticos, no se admiten caracteres especiales',
+
+            'images.*.required'=>'El campo :attribute es obligatoria',
+            'images.*.image'=>'Solo se admiten :attribute en formato jpeg y png',
+            'images.*.mimes'=>'Los formatos permitidos son jpeg y png',
+            'images.*.max'=>'El tamaño máximo para la :attribute es 1MB',
         ];
     }
     /**
@@ -55,6 +63,7 @@ class ReportRequest extends FormRequest
         return [
             'title' => 'título',
             'description' => 'descripción',
+            'images.*'=>'imágenes'
         ];
     }
 }

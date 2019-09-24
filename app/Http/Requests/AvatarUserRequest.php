@@ -23,9 +23,9 @@ class AvatarUserRequest extends FormRequest
      */
     public function rules()
     {
-        //el tamaño esta dado en kilobytes
+        //el tamaño esta dado en kilobytes y equivale a 1MB
         return [
-            'avatar'=>'required|image|max:1000',
+            'avatar'=>'required|image|mimes:jpeg,png|max:1000',
         ];
     }
     /**
@@ -38,6 +38,7 @@ class AvatarUserRequest extends FormRequest
             'avatar.required'=>'La :attribute es obligatoria',
             'avatar.image'=>'Los formatos permitidos para la :attribute son jpeg, png, bmp, gif, svg o webp',
             'avatar.max'=>'El tamaño máximo para la :attribute es 1MB',
+            'avatar.mimes'=>'Los formatos permitidos son jpeg y png',
         ];
     }
     /**

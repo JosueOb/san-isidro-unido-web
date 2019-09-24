@@ -73,7 +73,7 @@
                             <input type="file" class="custom-file-input @error('images') is-invalid @enderror" id="images" name="images[]" accept="image/jpeg,image/png"  multiple>
                             <label class="custom-file-label" id='imagesLabel' for="images" data-browse="Agregar"></label>
                             <span class="invalid-feedback" role="alert">
-    
+                            
                             </span>
                         </div>
                         <small id="imagesHelp" class="form-text text-muted">
