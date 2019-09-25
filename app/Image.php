@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Image extends Model
 {
@@ -18,10 +19,18 @@ class Image extends Model
     * @var array
     */
     protected $fillable = ['url', 'post_id'];
+
+    /**
+    * get the picrures
+    */
+    public function getUrlAttribute($image){
+        return \Storage::disk('public')->url($image);
+    }
     /**
     * An image belongs to a post
     */
     public function post(){
         return $this->belongsTo(Post::class);
     }
+
 }

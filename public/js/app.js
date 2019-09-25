@@ -52216,7 +52216,7 @@ $(document).ready(function () {
     var imageItem = '';
     var counter = 0;
     images.forEach(function (image, indice) {
-      imageItem += "\n                <div class=\"gallery-item item-1\">\n                    <div class=\"image-cancel\" data-no=\"".concat(indice, "\"><i class=\"fas fa-trash-alt\"></i></div>\n                    <img src=").concat(image, " alt='image_").concat(indice, "'>\n                </div>\n                ");
+      imageItem += "\n                <div class=\"gallery-item\">\n                    <div class=\"image-cancel\" data-no=\"".concat(indice, "\"><i class=\"fas fa-trash-alt\"></i></div>\n                    <img src=").concat(image, " alt='image_").concat(indice, "'>\n                </div>\n                ");
       counter++;
     });
     document.getElementById('gallery').innerHTML = imageItem;
@@ -52304,8 +52304,8 @@ $(document).ready(function () {
 
         if (data.success) {
           $('#title').removeClass('is-invalid');
-          $('#description').removeClass('is-invalid'); // $('#title').removeClass('is-invalid');
-
+          $('#description').removeClass('is-invalid');
+          $('#images').removeClass('is-invalid');
           Swal.fire({
             position: 'top-end',
             type: 'success',
@@ -52323,27 +52323,29 @@ $(document).ready(function () {
       error: function error(jqXHR, textStatus, errorThrown) {
         var getErrors = jqXHR.responseJSON; //Se obtienen los error de validación por parte de Laravel
 
-        var validationErrors = validationErrors ? getErrors.errors : null;
+        var validationErrors = getErrors.errors ? getErrors.errors : null;
 
         if (validationErrors) {
-          if (validationErrors.title) {
+          if (validationErrors.hasOwnProperty('title')) {
             $('#title').addClass('is-invalid');
             $('#title').siblings('.invalid-feedback').html('<strong>' + validationErrors['title'][0] + '</strong>');
           } else {
             $('#title').removeClass('is-invalid');
           }
 
-          if (validationErrors.description) {
+          if (validationErrors.hasOwnProperty('description')) {
             $('#description').addClass('is-invalid');
             $('#description').siblings('.invalid-feedback').html('<strong>' + validationErrors['description'][0] + '</strong>');
           } else {
             $('#description').removeClass('is-invalid');
           }
 
-          if (true) {
+          if (validationErrors.hasOwnProperty('images.0')) {
             $('#images').addClass('is-invalid');
             $('#images').siblings('.invalid-feedback').html('<strong>' + validationErrors['images.0'][0] + '</strong>');
-          } else {}
+          } else {
+            $('#images').removeClass('is-invalid');
+          }
         }
 
         console.log(jqXHR.responseText);

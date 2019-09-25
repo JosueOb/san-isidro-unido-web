@@ -12,7 +12,7 @@ $(document).ready(function(){
 
             images.forEach(function(image, indice){
                 imageItem += `
-                <div class="gallery-item item-1">
+                <div class="gallery-item">
                     <div class="image-cancel" data-no="${indice}"><i class="fas fa-trash-alt"></i></div>
                     <img src=${image} alt='image_${indice}'>
                 </div>
@@ -110,7 +110,7 @@ $(document).ready(function(){
                 if(data.success){
                     $('#title').removeClass('is-invalid');
                     $('#description').removeClass('is-invalid');
-                    // $('#title').removeClass('is-invalid');
+                    $('#images').removeClass('is-invalid');
                     Swal.fire({
                     position: 'top-end',
                     type: 'success',
@@ -129,22 +129,22 @@ $(document).ready(function(){
                 var getErrors = jqXHR.responseJSON;
 
                 //Se obtienen los error de validación por parte de Laravel
-                var validationErrors = validationErrors ? getErrors.errors : null;
+                var validationErrors = getErrors.errors ? getErrors.errors : null;
                 
                 if(validationErrors){
-                    if(validationErrors.title){
+                    if(validationErrors.hasOwnProperty('title')){
                         $('#title').addClass('is-invalid');
                         $('#title').siblings('.invalid-feedback').html('<strong>'+validationErrors['title'][0]+'</strong>');
                     }else{
                         $('#title').removeClass('is-invalid');
                     }
-                    if(validationErrors.description){
+                    if(validationErrors.hasOwnProperty('description')){
                         $('#description').addClass('is-invalid');
                         $('#description').siblings('.invalid-feedback').html('<strong>'+validationErrors['description'][0]+'</strong>');
                     }else{
                         $('#description').removeClass('is-invalid');
                     }
-                    if(validationErrors.images+".0"){
+                    if(validationErrors.hasOwnProperty('images.0')){
                         $('#images').addClass('is-invalid');
                         $('#images').siblings('.invalid-feedback').html('<strong>'+validationErrors['images.0'][0]+'</strong>');
                     }else{

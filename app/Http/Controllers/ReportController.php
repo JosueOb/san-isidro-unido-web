@@ -85,9 +85,13 @@ class ReportController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Post $report)
     {
-        //
+        $images= $report->images()->get();
+        return view('reports.show',[
+            'report'=>$report,
+            'images'=>$images,
+        ]);
     }
 
     /**
