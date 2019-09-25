@@ -121,7 +121,7 @@
                             </a>
                             <div id="collapseReport" class="collapse @yield('item-report-collapse')" >
                                 <div class="collapse-inner">
-                                    <a class="collapse-item @yield('item-report-list')" href="#"><i class="fas fa-list"></i>Listar informes</a>
+                                    <a class="collapse-item @yield('item-report-list')" href="{{ route('reports.index') }}"><i class="fas fa-list"></i>Listar informes</a>
                                     <a class="collapse-item @yield('item-report-create')" href="{{ route('reports.create')}}"><i class="fas fa-book-open"></i>Registrar informe</a>
                                 </div>
                             </div>

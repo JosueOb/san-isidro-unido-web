@@ -81,6 +81,11 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::get('neighbors/filters/{option}', 'NeighborController@filters')->name('neighbors.filters')->middleware('can:neighbors.index');
     Route::get('search/neighbors','SearchController@searchNeighbors')->name('search.neighbors')->middleware('can:neighbors.index');
     //INFORMES
+    Route::get('reports','ReportController@index')->name('reports.index');
     Route::get('reports/create','ReportController@create')->name('reports.create');
     Route::post('reports/store', 'ReportController@store')->name('reports.store');
+    Route::get('reports/{report}', 'ReportController@show')->name('reports.show');
+    Route::get('reports/{report}/edit', 'ReportController@edit')->name('reports.edit');
+    Route::put('reports/{report}', 'ReportController@update')->name('reports.update');
+    Route::delete('reports/{report}', 'ReportController@destroy')->name('reports.destroy');
 });

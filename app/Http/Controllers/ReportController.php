@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Category;
 use App\Http\Requests\ReportRequest;
 use App\Image;
+use App\Position;
 use App\Post;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Builder;
 
 class ReportController extends Controller
 {
@@ -17,7 +19,12 @@ class ReportController extends Controller
      */
     public function index()
     {
-        //
+        $category = Category::where('slug', 'informe')->first();
+        $reports = $category->posts()->paginate();
+
+        return view('reports.index',[
+            'reports' =>$reports,
+        ]);
     }
 
     /**
@@ -52,19 +59,13 @@ class ReportController extends Controller
         $report->description = $request['description'];
         $report->date = $date;
         $report->time = $time;
+        $report->state = true;
         $report->user_id = $request->user()->id;
         $report->category_id = $category->id;
         $report->save();
 
         //Se guardan la imagenes del post, en caso de que se hayan selecionado
         // if($request['images']){
-        //     foreach($request['images'] as $image){
-        //         Image::create([
-        //             'url'=> $image->store('images_reports', 'public'),
-        //             'post_id' => $report->id,
-        //         ]);
-        //     }
-        // }
         if($request->file('images')){
             foreach($request->file('images') as $image){
                 Image::create([
@@ -74,8 +75,6 @@ class ReportController extends Controller
             }
         }
 
-        // return response()->json(['images'=>$request->file('images')]);
-        
         session()->flash('success', 'Informe registrado con exito');
         return response()->json(['success'=>'Datos recibidos correctamente']);
     }

@@ -17,6 +17,7 @@ class CreatePostsTable extends Migration
             $table->bigIncrements('id');
             $table->string('title',45);
             $table->string('description');
+            $table->boolean('state');
             $table->date('date');
             $table->time('time');
             $table->json('ubication')->nullable();

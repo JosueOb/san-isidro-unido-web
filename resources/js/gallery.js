@@ -121,7 +121,7 @@ $(document).ready(function(){
                   })
                     // funciona como una redirección HTTP
                     setTimeout(function(){ 
-                        window.location.replace('../profile');
+                        window.location.replace('../reports');
                     }, 1000);
                 }
             },
