@@ -123,8 +123,18 @@ class ReportController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $report)
     {
-        //
+        $message = '';
+        if($report->state){
+            $report->state = false;
+            $message='desactivado';
+        }else{
+            $report->state = true;
+            $message='activado';
+        }
+        $report->save();
+        
+        return back()->with('success', "Informe $message con éxito");
     }
 }
