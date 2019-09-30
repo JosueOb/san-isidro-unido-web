@@ -19,12 +19,11 @@ class Image extends Model
     * @var array
     */
     protected $fillable = ['url', 'post_id'];
-
     /**
-    * get the picrures
+    * get image link
     */
-    public function getUrlAttribute($image){
-        return \Storage::disk('public')->url($image);
+    public function getImageLink(){
+        return \Storage::disk('public')->url($this->url);
     }
     /**
     * An image belongs to a post

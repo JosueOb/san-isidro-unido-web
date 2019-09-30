@@ -100,9 +100,20 @@ class ReportController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $report)
     {
-        //
+        // return \response()->json('success', $report->id);
+        // return response()
+        // ->view('reports.edit', $report, 200);
+        // ->json([
+        //     'report'=>$report,
+        // ]);
+
+        $images = $report->images()->get();
+        return view('reports.edit', [
+            'report'=>$report,
+            'images'=>$images,
+        ]);
     }
 
     /**

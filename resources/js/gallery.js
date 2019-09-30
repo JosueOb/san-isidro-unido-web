@@ -2,8 +2,8 @@
 const Swal = require('sweetalert2')
 
 $(document).ready(function(){
-    console.log('Formulario listo');
-    let images = [];
+    // console.log('Formulario listo');
+    var images = [];
     let renderImages = [];
 
     const previewImages = images =>{
@@ -37,7 +37,7 @@ $(document).ready(function(){
         if(files){
             //se recorre cada archivo para verificar que sea una imágen
             [].forEach.call(files, function(file, index){
-                if(images.length < numberOfImages){
+                if(renderImages.length < numberOfImages){
                     console.log('Seleccionó una imagen');
                     if ( /\.(jpe?g|png)$/i.test(file.name) ) {
                         //Si la imagen es menor a 1MB
@@ -82,7 +82,7 @@ $(document).ready(function(){
         previewImages(renderImages);
     });
     //AJAX
-    $('#report').on('submit', function(event){
+    $('#report-post').on('submit', function(event){
         // Se evita el propago del submit
         event.preventDefault();
         

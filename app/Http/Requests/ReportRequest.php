@@ -26,7 +26,7 @@ class ReportRequest extends FormRequest
         return [
             'title'=>'required|regex:/^[[:alpha:][:space:](0-9)(,;.áéíóúÁÉÍÓÚ)]+$/|min:3|max:45',
             'description'=> 'required|regex:/^[[:alpha:][:space:](0-9)(,;.áéíóúÁÉÍÓÚ)]+$/|max:255',
-            "images" => "nullable|array",
+            "images" => "nullable|array|max:5",
             "images.*" => "nullable|image|mimes:jpeg,png|max:1000",
             
         ];

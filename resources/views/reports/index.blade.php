@@ -99,7 +99,7 @@
                 <div class="row">
                     <div class="col table-responsive mt-3">
                         @if (count($reports) > 0)
-                        <table class="table table-light table-hover table-sm">
+                        <table class="table table-light table-hover table-sm" id='reports'>
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -128,7 +128,8 @@
 
                                         {{-- @can('members.edit') --}}
                                         <td width='10px'>
-                                            <a href="{{route('reports.edit',$report->id)}}" class="btn btn-secondary">Editar</a>
+                                            <a href="{{route('reports.edit',$report->id)}}" class="btn btn-secondary" id='edit'>Editar</a>
+                                            {{-- <a href="#" class="btn btn-secondary" id='edit'  data-report='{{$report->id}}'>Editar</a> --}}
                                         </td>
                                         {{-- @endcan --}}
 

@@ -34,11 +34,11 @@
                         <p><strong>Descripción:</strong> {{$report->description}}</p>
                         <p><strong>Estado:</strong> {{$report->state ? 'Activo': 'Inactivo'}}</p>
                         @if ($images)
-                        <div class="gallery" id="gallery">
+                        <div class="gallery">
                         {{-- Se presentan las imágenes seleccionadas por el usuario --}}
                             @foreach ($images as $image)
                             <div class="gallery-item">
-                                <img src="{{$image->url}}"alt='image_report'>
+                                <img src="{{$image->getImageLink()}}"alt='image_report'>
                             </div>
                             @endforeach
                         </div>

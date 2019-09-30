@@ -34,4 +34,5 @@ window.Vue = require('vue');
 require('./dropdown');
 require('./imagename');
 require('./gallery');
+require('./get-gallery');
 
