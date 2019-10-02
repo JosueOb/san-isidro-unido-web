@@ -52275,7 +52275,7 @@ $(document).ready(function () {
       });
     }
   });
-  $('.gallery').on('click', '.image-cancel', function () {
+  $('#gallery').on('click', '.image-cancel', function () {
     var imageIndex = $(this).data('no'); //console.log(imageIndex);
 
     images.splice(imageIndex, 1);
@@ -52371,42 +52371,42 @@ $(document).ready(function () {
   console.log('documento listo....'); //Se realiza la lectura de las imagenes que que encuentren en la sección de gallería
 
   var getImagesReport = document.querySelectorAll("#gallery-update .gallery-item img");
-  var urlImagesReport = []; // var imagesReportRender = [];
-
-  var inputImages = []; // var inputImagesRender = [];
-
-  var totalImages = new Array();
+  var urlImagesReport = [];
+  var inputImages = [];
   var imagesRender = [];
   getImagesReport.forEach(function (image, index) {
     var imageRender = new Array();
-    imageRender['index'] = index;
-    imageRender['render'] = image.src;
-    imageRender['group'] = 'report-image';
-    imageRender['position'] = totalImages.length; // totalImages.push(imageRender);
-
-    totalImages['report'] = imageRender;
-    imagesRender.push(totalImages); // imagesReportRender.push(image.src);
-
+    var images = new Array();
+    imageRender['src'] = image.src;
+    images['report'] = imageRender;
+    imagesRender.push(images);
     urlImagesReport.push(image.dataset.image);
   });
-  console.log(imagesRender);
 
   var previewImages = function previewImages(images) {
-    var imageItem = ''; // let counter = 0;
-
+    var imageItem = '';
     images.forEach(function (image, indice) {
-      imageItem += "\n            <div class=\"gallery-item\">\n                <div class=\"image-cancel\" id=".concat(image['group'], " data-position=\"").concat(image['position'], "\" data-index=\"").concat(image['index'], "\">\n                    <i class=\"fas fa-trash-alt\"></i>\n                </div>\n                <img src=").concat(image['render'], " alt='image_").concat(image['index'], "'>\n            </div>\n            "); // counter++;
+      for (var group in image) {
+        if (group === 'report') {
+          image[group]['index'] = urlImagesReport.length - 1;
+        }
+
+        if (group === 'input') {
+          image[group]['index'] = inputImages.length - 1;
+        }
+
+        image[group]['position'] = indice;
+        imageItem += "\n                <div class=\"gallery-item\">\n                <div class=\"image-cancel\" id=\"delete_".concat(group, "_image\" data-position=\"").concat(image[group]['position'], "\" data-index=\"").concat(image[group]['index'], "\">\n                <i class=\"fas fa-trash-alt\"></i>\n                </div>\n                <img src=").concat(image[group]['src'], " alt='image_").concat(image[group]['index'], "'>\n                </div>\n                ");
+      }
     });
-    var gallery = document.getElementById('gallery');
+    var gallery = document.getElementById('gallery-update');
 
     if (gallery) {
       gallery.innerHTML = imageItem;
-    } // var message = images.length > 0 ? 'Imágenes seleccionadas: '+ counter : 'Seleccione alguna imagen';
-    // $('#images').siblings('.custom-file-label').addClass('selected').html(message);
-
+    }
   };
 
-  previewImages(totalImages); //Al seleccionar el input file
+  previewImages(imagesRender); //Al seleccionar el input file
 
   $('#inputImages').on('change', function (event) {
     $('#images').removeClass('is-invalid'); //Se obtiene las imagenes del input
@@ -52419,8 +52419,7 @@ $(document).ready(function () {
     if (files) {
       //se recorre cada archivo para verificar que sea una imágen
       [].forEach.call(files, function (file, index) {
-        // var numberOfImages = imagesReportRender.length + inputImages.length;
-        if (totalImages.length < numberOfImagesAllowed) {
+        if (imagesRender.length < numberOfImagesAllowed) {
           console.log('Seleccionó una imagen');
 
           if (/\.(jpe?g|png)$/i.test(file.name)) {
@@ -52431,18 +52430,11 @@ $(document).ready(function () {
 
               reader.onload = function (event) {
                 var imageRender = new Array();
-                imageRender['index'] = inputImages.length - 1;
-                imageRender['render'] = event.target.result;
-                imageRender['group'] = 'input-image';
-                imageRender['position'] = totalImages.length; // totalImages.push(imageRender);
-
-                totalImages['input'] = imageRender; // inputImagesRender.push(event.target.result);
-                // previewImages(inputImagesRender);
-
-                console.log(urlImagesReport);
-                console.log(inputImages);
-                console.log(totalImages);
-                previewImages(totalImages);
+                var images = new Array();
+                imageRender['src'] = event.target.result;
+                images['input'] = imageRender;
+                imagesRender.push(images);
+                previewImages(imagesRender);
               };
 
               reader.readAsDataURL(files.item(index));
@@ -52468,27 +52460,19 @@ $(document).ready(function () {
       });
     }
   });
-  $('.gallery').on('click', '#report-image', function () {
+  $('#gallery-update').on('click', '#delete_report_image', function () {
     var imageIndex = $(this).data('index');
-    var imagePosition = $(this).data('position'); //console.log(imageIndex);
-
+    var imagePosition = $(this).data('position');
     urlImagesReport.splice(imageIndex, 1);
-    totalImages.splice(imagePosition, 1);
-    previewImages(totalImages);
-    console.log(urlImagesReport);
-    console.log(inputImages);
-    console.log(totalImages);
+    imagesRender.splice(imagePosition, 1);
+    previewImages(imagesRender);
   });
-  $('.gallery').on('click', '#input-image', function () {
+  $('#gallery-update').on('click', '#delete_input_image', function () {
     var imageIndex = $(this).data('index');
-    var imagePosition = $(this).data('position'); //console.log(imageIndex);
-
+    var imagePosition = $(this).data('position');
     inputImages.splice(imageIndex, 1);
-    totalImages.splice(imagePosition, 1);
-    previewImages(totalImages);
-    console.log(urlImagesReport);
-    console.log(inputImages);
-    console.log(totalImages);
+    imagesRender.splice(imagePosition, 1);
+    previewImages(imagesRender);
   });
 });
 

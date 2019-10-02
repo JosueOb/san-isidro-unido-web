@@ -53,7 +53,7 @@
                     </div>
                     <div class="form-group col-6 offset-3">
                         <button type="submit" class="btn btn-primary btn-block">
-                            Publicar
+                            Actualizar
                             <i class="far fa-save"></i>
                         </button>
                     </div>

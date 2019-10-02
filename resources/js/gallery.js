@@ -74,7 +74,7 @@ $(document).ready(function(){
     });
 
 
-    $('.gallery').on('click', '.image-cancel',function(){
+    $('#gallery').on('click', '.image-cancel',function(){
         let imageIndex = $(this).data('no');
         //console.log(imageIndex);
         images.splice(imageIndex, 1);
