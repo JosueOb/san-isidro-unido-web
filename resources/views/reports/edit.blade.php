@@ -21,7 +21,7 @@
     </div>
 </div>
 
-    <form class="row" id="report-update" enctype="multipart/form-data">
+    <form class="row" id="report-update" enctype="multipart/form-data" action="{{route('reports.update', $report->id)}}">
         @csrf
         @method('put')
         <div class="col-12 col-sm-7 col-md-7 col-lg-8">
@@ -84,7 +84,7 @@
                             @if ($images)
                                 @foreach ($images as $image)
                                 <div class="gallery-item">
-                                    <div class="image-cancel" data-no="0"><i class="fas fa-trash-alt"></i></div>
+                                    <div class="image-cancel"><i class="fas fa-trash-alt"></i></div>
                                     <img src={{$image->getImageLink()}} alt='image_{{$image->id}}' data-image="{{$image->url}}">
                                 </div>
                                 @endforeach

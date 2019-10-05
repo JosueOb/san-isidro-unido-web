@@ -52473,6 +52473,81 @@ $(document).ready(function () {
     inputImages.splice(imageIndex, 1);
     imagesRender.splice(imagePosition, 1);
     previewImages(imagesRender);
+  }); //AJAX
+
+  $('#report-update').on('submit', function (event) {
+    // console.log('enviar formulario');
+    // // console.log(event);
+    // console.log($(this).data('idreport'));
+    // Se evita el propago del submit
+    event.preventDefault(); // var idReport = $(this).data('idreport');
+    //Se agrega el data del formData
+
+    var formData = new FormData(this);
+    formData["delete"]('images[]');
+    inputImages.forEach(function (image) {
+      formData.append('images[]', image);
+    });
+    urlImagesReport.forEach(function (image) {
+      formData.append('images_report[]', image);
+    }); // console.log(formData.getAll('images[]'));
+    // console.log(formData.getAll('images_report[]'));
+
+    $.ajax({
+      type: 'POST',
+      url: $(this).attr('action'),
+      data: formData,
+      cache: false,
+      contentType: false,
+      processData: false,
+      dataType: 'JSON',
+      success: function success(data) {
+        console.log(data); // if(data.success){
+        //     $('#title').removeClass('is-invalid');
+        //     $('#description').removeClass('is-invalid');
+        //     $('#images').removeClass('is-invalid');
+        //     Swal.fire({
+        //     position: 'top-end',
+        //     type: 'success',
+        //     title: 'Informe publicado',
+        //     showConfirmButton: false,
+        //     timer: 1500,
+        //     allowOutsideClick: false,
+        //   })
+        //     // funciona como una redirección HTTP
+        //     setTimeout(function(){ 
+        //         window.location.replace('../');
+        //     }, 1000);
+        // }
+      },
+      error: function error(jqXHR, textStatus, errorThrown) {
+        var getErrors = jqXHR.responseJSON;
+        console.log(getErrors); // //Se obtienen los error de validación por parte de Laravel
+        // var validationErrors = getErrors.errors ? getErrors.errors : null;
+        // if(validationErrors){
+        //     if(validationErrors.hasOwnProperty('title')){
+        //         $('#title').addClass('is-invalid');
+        //         $('#title').siblings('.invalid-feedback').html('<strong>'+validationErrors['title'][0]+'</strong>');
+        //     }else{
+        //         $('#title').removeClass('is-invalid');
+        //     }
+        //     if(validationErrors.hasOwnProperty('description')){
+        //         $('#description').addClass('is-invalid');
+        //         $('#description').siblings('.invalid-feedback').html('<strong>'+validationErrors['description'][0]+'</strong>');
+        //     }else{
+        //         $('#description').removeClass('is-invalid');
+        //     }
+        //     if(validationErrors.hasOwnProperty('images.0')){
+        //         $('#images').addClass('is-invalid');
+        //         $('#images').siblings('.invalid-feedback').html('<strong>'+validationErrors['images.0'][0]+'</strong>');
+        //     }else{
+        //         $('#images').removeClass('is-invalid');
+        //     }
+        // }
+
+        console.log(jqXHR.responseText);
+      }
+    });
   });
 });
 

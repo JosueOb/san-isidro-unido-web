@@ -9,6 +9,7 @@ use App\Position;
 use App\Post;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Arr;
 
 class ReportController extends Controller
 {
@@ -75,7 +76,7 @@ class ReportController extends Controller
             }
         }
 
-        session()->flash('success', 'Informe registrado con exito');
+        session()->flash('success', 'Informe registrado con éxito');
         return response()->json(['success'=>'Datos recibidos correctamente']);
     }
 
@@ -102,19 +103,13 @@ class ReportController extends Controller
      */
     public function edit(Post $report)
     {
-        // return \response()->json('success', $report->id);
-        // return response()
-        // ->view('reports.edit', $report, 200);
-        // ->json([
-        //     'report'=>$report,
-        // ]);
-
         $images = $report->images()->get();
         return view('reports.edit', [
             'report'=>$report,
             'images'=>$images,
         ]);
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -123,9 +118,67 @@ class ReportController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ReportRequest $request, Post $report)
     {
-        //
+        $validated = $request->validated();
+
+         //Se obtiene la fecha y hora del sistema
+         $dateTime = now();
+         $date = $dateTime->toDateString(); 
+         $time = $dateTime->toTimeString();
+
+         //Se actualiza al reporte
+         $report->title = $validated['title'];
+         $report->description = $validated['description'];
+         $report->date = $date;
+         $report->time = $time;
+         //Se mantiene el id del usuario que publicó el informe
+         $report->save();
+
+          
+
+        //Se verifica si alguna imagen del reporte se mantiene o fue eliminada
+        $newImagesReport = $request['images_report'];
+        $collectionImageReport = $report->images()->get();
+        
+        if($newImagesReport){
+
+            foreach($collectionImageReport as $oldImageReport){
+                $oldImageUrl = $oldImageReport->url;
+                if($this->searchDeletedImages($oldImageUrl, $newImagesReport)){
+                    // echo $oldImageUrl."\n";
+                    //Eliminar a la imagen de la bdd y del local storage
+                    // Image::where('url', $oldImageUrl)->first()->delete();
+                    $report->images()->where('url', $oldImageUrl)->delete();
+                }
+                
+            }
+        }else{
+            //En caso no recibir el arreglo de las imagenes registradas con el reporte,
+            //se verifica si el reporte contiene imágenes
+            if(count($collectionImageReport) > 0){
+                //Si el reporte contiene imágenes, se procede a eliminar todas las imágenes
+                // echo 'Se eliminan todas las imagenes del reporte';
+                $report->images()->delete();
+            }
+        }
+
+        //Se guardan las nuevas imágenes  seleccionadas por el usuario
+        if($request->file('images')){
+            foreach($request->file('images') as $image){
+                Image::create([
+                    'url'=> $image->store('images_reports', 'public'),
+                    'post_id' => $report->id,
+                ]);
+            }
+        }
+
+        // session()->flash('success', 'Informe actualizado con éxito');
+
+        return response()->json([
+            'success'=>'Reporte actualizado con exito',
+            // 'request'=>$request->all(),
+        ]);
     }
 
     /**
@@ -147,5 +200,23 @@ class ReportController extends Controller
         $report->save();
         
         return back()->with('success', "Informe $message con éxito");
+    }
+    /**
+     * Check if any images were deleted
+     *
+     * @param  string  $search
+     * @param  array  $array
+     * @return boolean $imageIsDeleted
+     */
+
+    public function searchDeletedImages($search, $array){
+        $imageIsDeleted = true;
+        foreach($array as $image){
+            if($image === $search){
+                $imageIsDeleted = false;
+                // break;
+            }
+        }
+        return $imageIsDeleted;
     }
 }
