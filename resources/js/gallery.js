@@ -60,7 +60,7 @@ $(document).ready(function(){
                     }else{
                         console.log('Archivo no permitido');
                         $('#images').addClass('is-invalid');
-                        $('#images').siblings('.invalid-feedback').html('<strong> Archivo no permitido </strong>');
+                        $('#images').siblings('.invalid-feedback').html('<strong> Archivo/s no permitido/s </strong>');
                     }
                 }else{
                     Swal.fire({
@@ -144,11 +144,16 @@ $(document).ready(function(){
                     }else{
                         $('#description').removeClass('is-invalid');
                     }
-                    if(validationErrors.hasOwnProperty('images.0')){
+                    if(validationErrors.hasOwnProperty('images')){
                         $('#images').addClass('is-invalid');
-                        $('#images').siblings('.invalid-feedback').html('<strong>'+validationErrors['images.0'][0]+'</strong>');
+                        $('#images').siblings('.invalid-feedback').html('<strong>'+validationErrors['images'][0]+'</strong>');
                     }else{
-                        $('#images').removeClass('is-invalid');
+                        if(validationErrors.hasOwnProperty('images.0')){
+                            $('#images').addClass('is-invalid');
+                            $('#images').siblings('.invalid-feedback').html('<strong>'+validationErrors['images.0'][0]+'</strong>');
+                        }else{
+                            $('#images').removeClass('is-invalid');
+                        }
                     }
                 }
               
