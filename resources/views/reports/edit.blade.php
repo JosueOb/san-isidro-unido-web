@@ -69,7 +69,7 @@
                     <div class="form-group">
                         <label for="images">Imágenes <span class="text-muted">(opcional)</span></label>
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input @error('images') is-invalid @enderror" id="inputImages" name="images[]" accept="image/jpeg,image/png"  multiple>
+                            <input type="file" class="custom-file-input" id="inputImages" name="images[]" accept="image/jpeg,image/png"  multiple>
                             <label class="custom-file-label" id='imagesLabel' for="images" data-browse="Agregar"></label>
                             <span class="invalid-feedback" role="alert">
                             

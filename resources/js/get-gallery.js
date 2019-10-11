@@ -4,6 +4,7 @@ $(document).ready(function(){
     console.log('documento listo....');
     //Se realiza la lectura de las imagenes que que encuentren en la sección de gallería
     var getImagesReport = document.querySelectorAll("#gallery-update .gallery-item img");
+
     var urlImagesReport = [];
     var inputImages = [];
     var imagesRender = [];
@@ -21,14 +22,16 @@ $(document).ready(function(){
     
     const previewImages = images =>{
         let imageItem = '';
+        var numReport = 0;
+        var numInputImages = 0;
         
         images.forEach(function(image, indice){
             for (var group in image){
                 if(group === 'report'){
-                    image[group]['index'] = urlImagesReport.length - 1;
+                    image[group]['index'] = numReport++;
                 }
                 if(group === 'input'){
-                    image[group]['index'] = inputImages.length - 1;
+                    image[group]['index'] = numInputImages++;
                 }
                 image[group]['position'] = indice;
 
@@ -54,6 +57,7 @@ $(document).ready(function(){
     //Al seleccionar el input file
      $('#inputImages').on('change', function(event){
         $('#images').removeClass('is-invalid');
+
         //Se obtiene las imagenes del input
         var files = event.target.files;
         let numberOfImagesAllowed = 5;
@@ -65,7 +69,7 @@ $(document).ready(function(){
             [].forEach.call(files, function(file, index){
                 if(imagesRender.length < numberOfImagesAllowed){
                     console.log('Seleccionó una imagen');
-                    if ( /\.(jpe?g|png)$/i.test(file.name) ) {
+                    // if ( /\.(jpe?g|png)$/i.test(file.name) ) {
                         //Si la imagen es menor a 1MB
                         if(file.size < size){
                             inputImages.push(file);
@@ -88,11 +92,11 @@ $(document).ready(function(){
                                 text: 'La imagen '+ file.name+' pesa '+ (file.size/size).toFixed(2) + 'MB',
                             })
                         }
-                    }else{
-                        console.log('Archivo no permitido');
-                        $('#images').addClass('is-invalid');
-                        $('#images').siblings('.invalid-feedback').html('<strong> Archivo no permitido </strong>');
-                    }
+                    // }else{
+                    //     console.log('Archivo no permitido');
+                    //     $('#images').addClass('is-invalid');
+                    //     $('#images').siblings('.invalid-feedback').html('<strong> Archivo no permitido </strong>');
+                    // }
                 }else{
                     Swal.fire({
                         type: 'error',
@@ -121,12 +125,9 @@ $(document).ready(function(){
     });
     //AJAX
     $('#report-update').on('submit', function(event){
-        // console.log('enviar formulario');
-        // // console.log(event);
-        // console.log($(this).data('idreport'));
+
         // Se evita el propago del submit
         event.preventDefault();
-        // var idReport = $(this).data('idreport');
         
          //Se agrega el data del formData
         var formData = new FormData(this);
@@ -139,9 +140,6 @@ $(document).ready(function(){
             formData.append('images_report[]', image);
         });
 
-        // console.log(formData.getAll('images[]'));
-        // console.log(formData.getAll('images_report[]'));
-
          $.ajax({
             type:'POST',
             url: $(this).attr('action'),
@@ -153,51 +151,62 @@ $(document).ready(function(){
             success:function(data){
                 console.log(data);
 
-                // if(data.success){
-                //     $('#title').removeClass('is-invalid');
-                //     $('#description').removeClass('is-invalid');
-                //     $('#images').removeClass('is-invalid');
-                //     Swal.fire({
-                //     position: 'top-end',
-                //     type: 'success',
-                //     title: 'Informe publicado',
-                //     showConfirmButton: false,
-                //     timer: 1500,
-                //     allowOutsideClick: false,
-                //   })
-                //     // funciona como una redirección HTTP
-                //     setTimeout(function(){ 
-                //         window.location.replace('../');
-                //     }, 1000);
-                // }
+                if(data.success){
+                    $('#title').removeClass('is-invalid');
+                    $('#description').removeClass('is-invalid');
+                    $('#images').removeClass('is-invalid');
+                    Swal.fire({
+                    position: 'top-end',
+                    type: 'success',
+                    title: 'Informe actualizado',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    allowOutsideClick: false,
+                  })
+                    // funciona como una redirección HTTP
+                    setTimeout(function(){ 
+                        window.location.replace('../');
+                    }, 1000);
+                }
             },
             error: function(jqXHR, textStatus, errorThrown){
                 var getErrors = jqXHR.responseJSON;
-                console.log(getErrors);
+                // console.log(getErrors);
 
                 // //Se obtienen los error de validación por parte de Laravel
-                // var validationErrors = getErrors.errors ? getErrors.errors : null;
+                var validationErrors = getErrors.errors ? getErrors.errors : null;
                 
-                // if(validationErrors){
-                //     if(validationErrors.hasOwnProperty('title')){
-                //         $('#title').addClass('is-invalid');
-                //         $('#title').siblings('.invalid-feedback').html('<strong>'+validationErrors['title'][0]+'</strong>');
-                //     }else{
-                //         $('#title').removeClass('is-invalid');
-                //     }
-                //     if(validationErrors.hasOwnProperty('description')){
-                //         $('#description').addClass('is-invalid');
-                //         $('#description').siblings('.invalid-feedback').html('<strong>'+validationErrors['description'][0]+'</strong>');
-                //     }else{
-                //         $('#description').removeClass('is-invalid');
-                //     }
-                //     if(validationErrors.hasOwnProperty('images.0')){
-                //         $('#images').addClass('is-invalid');
-                //         $('#images').siblings('.invalid-feedback').html('<strong>'+validationErrors['images.0'][0]+'</strong>');
-                //     }else{
-                //         $('#images').removeClass('is-invalid');
-                //     }
-                // }
+                if(validationErrors){
+                    if(validationErrors.hasOwnProperty('title')){
+                        $('#title').addClass('is-invalid');
+                        $('#title').siblings('.invalid-feedback').html('<strong>'+validationErrors['title'][0]+'</strong>');
+                    }else{
+                        $('#title').removeClass('is-invalid');
+                    }
+                    if(validationErrors.hasOwnProperty('description')){
+                        $('#description').addClass('is-invalid');
+                        $('#description').siblings('.invalid-feedback').html('<strong>'+validationErrors['description'][0]+'</strong>');
+                    }else{
+                        $('#description').removeClass('is-invalid');
+                    }
+
+                    if(validationErrors.hasOwnProperty('images') || validationErrors.hasOwnProperty('images.0')){
+                        var message = validationErrors.hasOwnProperty('images') ? validationErrors['images'][0]: validationErrors['images.0'][0];
+                        console.log(message);
+                    }
+
+                    if(validationErrors.hasOwnProperty('images')){
+                        $('#inputImages').addClass('is-invalid');
+                        $('#inputImages').siblings('.invalid-feedback').html('<strong>'+validationErrors['images'][0]+'</strong>');
+                    }else{
+                        if(validationErrors.hasOwnProperty('images.0')){
+                            $('#inputImages').addClass('is-invalid');
+                            $('#inputImages').siblings('.invalid-feedback').html('<strong>'+validationErrors['images.0'][0]+'</strong>');
+                        }else{
+                            $('#inputImages').removeClass('is-invalid');
+                        }
+                    }
+                }
               
                 console.log(jqXHR.responseText);
             }

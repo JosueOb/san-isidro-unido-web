@@ -9,7 +9,7 @@ use App\Position;
 use App\Post;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Storage;
 
 class ReportController extends Controller
 {
@@ -135,35 +135,45 @@ class ReportController extends Controller
          //Se mantiene el id del usuario que publicó el informe
          $report->save();
 
-          
-
         //Se verifica si alguna imagen del reporte se mantiene o fue eliminada
         $newImagesReport = $request['images_report'];
         $collectionImageReport = $report->images()->get();
+        
+        // foreach ($newImagesReport as $value) {
+        //     echo $value."\n";
+        // }
         
         if($newImagesReport){
 
             foreach($collectionImageReport as $oldImageReport){
                 $oldImageUrl = $oldImageReport->url;
+                // echo $oldImageUrl."\n";
                 if($this->searchDeletedImages($oldImageUrl, $newImagesReport)){
                     // echo $oldImageUrl."\n";
                     //Eliminar a la imagen de la bdd y del local storage
                     // Image::where('url', $oldImageUrl)->first()->delete();
                     $report->images()->where('url', $oldImageUrl)->delete();
+                    if(Storage::disk('public')->exists($oldImageUrl)){
+                        Storage::disk('public')->delete($oldImageUrl);
+                    }
                 }
-                
             }
         }else{
             //En caso no recibir el arreglo de las imagenes registradas con el reporte,
             //se verifica si el reporte contiene imágenes
             if(count($collectionImageReport) > 0){
                 //Si el reporte contiene imágenes, se procede a eliminar todas las imágenes
-                // echo 'Se eliminan todas las imagenes del reporte';
+                foreach ($collectionImageReport as $oldImageReport) {
+                    $oldImageUrl = $oldImageReport->url;
+                    if(Storage::disk('public')->exists($oldImageUrl)){
+                        Storage::disk('public')->delete($oldImageUrl);
+                    }
+                }
                 $report->images()->delete();
             }
         }
 
-        //Se guardan las nuevas imágenes  seleccionadas por el usuario
+        // //Se guardan las nuevas imágenes  seleccionadas por el usuario
         if($request->file('images')){
             foreach($request->file('images') as $image){
                 Image::create([
@@ -173,7 +183,7 @@ class ReportController extends Controller
             }
         }
 
-        // session()->flash('success', 'Informe actualizado con éxito');
+        session()->flash('success', 'Informe actualizado con éxito');
 
         return response()->json([
             'success'=>'Reporte actualizado con exito',
@@ -214,6 +224,9 @@ class ReportController extends Controller
         foreach($array as $image){
             if($image === $search){
                 $imageIsDeleted = false;
+                // echo "son iguales \n";
+                // echo $image."\n";
+                // echo $search."\n";
                 // break;
             }
         }

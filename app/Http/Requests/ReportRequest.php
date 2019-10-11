@@ -47,6 +47,7 @@ class ReportRequest extends FormRequest
             'description.max'=>'La :attribute no debe ser mayor a 255 caracteres',
             'description.regex'=>'La :attribute  debe estar conformado por caracteres alfabéticos, no se admiten caracteres especiales',
 
+            'images.max'=> 'Solo se premiten 5 imágenes',
             'images.*.required'=>'El campo :attribute es obligatoria',
             'images.*.image'=>'Solo se admiten :attribute en formato jpeg y png',
             'images.*.mimes'=>'Los formatos permitidos son jpeg y png',
