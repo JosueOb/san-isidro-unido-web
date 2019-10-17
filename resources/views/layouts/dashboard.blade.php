@@ -114,18 +114,24 @@
                         </li>
                         @endcanany
                         
-                        <li class="nav-item @yield('item-neighbor')">
+                        @canany(['reports.index', 'reports.create'])
+                        <li class="nav-item @yield('item-report')">
                             <a class="nav-link" data-toggle="collapse" data-target="#collapseReport" aria-expanded="true" aria-controls="collapseReport">
                                 <i class="fas fa-book"></i>
                                 <span>Informes</span>
                             </a>
                             <div id="collapseReport" class="collapse @yield('item-report-collapse')" >
                                 <div class="collapse-inner">
+                                    @can('reports.index')
                                     <a class="collapse-item @yield('item-report-list')" href="{{ route('reports.index') }}"><i class="fas fa-list"></i>Listar informes</a>
+                                    @endcan
+                                    @can('reports.create')
                                     <a class="collapse-item @yield('item-report-create')" href="{{ route('reports.create')}}"><i class="fas fa-book-open"></i>Registrar informe</a>
+                                    @endcan
                                 </div>
                             </div>
                         </li>
+                        @endcanany
 
                         <li class="nav-item @yield('item-events')">
                             <a class="nav-link" data-toggle="collapse" data-target="#collapseEvent" aria-expanded="true" aria-controls="collapseEvent">

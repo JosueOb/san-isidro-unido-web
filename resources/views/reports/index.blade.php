@@ -5,7 +5,7 @@
 @section('page-header')
     Informes registrados
 @endsection
-@section('item-repot')
+@section('item-report')
     active
 @endsection
 @section('item-report-collapse')
@@ -79,7 +79,7 @@
                     <div class="col">
                         <h4 class="d-inline">Informes registrados</h4>
 
-                        @can('members.create')
+                        @can('reports.create')
                         <a href="{{route('reports.create')}}" class="btn btn-primary float-right">Agregar</a>
                         @endcan
 
@@ -120,20 +120,20 @@
                                             </span>
                                         </td>
                                         
-                                        {{-- @can('members.show') --}}
+                                        @can('reports.show')
                                         <td width='10px'>
                                             <a href="{{route('reports.show',$report->id)}}" class="btn btn-info">Ver</a>
                                         </td>
-                                        {{-- @endcan --}}
+                                        @endcan
 
-                                        {{-- @can('members.edit') --}}
+                                        @can('reports.edit')
                                         <td width='10px'>
                                             <a href="{{route('reports.edit',$report->id)}}" class="btn btn-secondary" id='edit'>Editar</a>
                                             {{-- <a href="#" class="btn btn-secondary" id='edit'  data-report='{{$report->id}}'>Editar</a> --}}
                                         </td>
-                                        {{-- @endcan --}}
+                                        @endcan
 
-                                        {{-- @can('members.destroy') --}}
+                                        @can('reports.destroy')
                                         <td width='10px'>
                                             @if ($report->state )
                                                 <a href="#" class="btn btn-danger"  data-toggle="modal" data-target="#deleteReport{{$report->id}}">Eliminar</a>
@@ -191,7 +191,7 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        {{-- @endcan --}}
+                                        @endcan
 
                                         </tr>
                                     @endforeach

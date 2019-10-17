@@ -82,10 +82,10 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::get('search/neighbors','SearchController@searchNeighbors')->name('search.neighbors')->middleware('can:neighbors.index');
     //INFORMES
     Route::get('reports','ReportController@index')->name('reports.index')->middleware('can:reports.index');
-    Route::get('reports/create','ReportController@create')->name('reports.create');
-    Route::post('reports/store', 'ReportController@store')->name('reports.store');
-    Route::get('reports/{report}', 'ReportController@show')->name('reports.show');
-    Route::get('reports/{report}/edit', 'ReportController@edit')->name('reports.edit');
-    Route::put('reports/{report}', 'ReportController@update')->name('reports.update');
-    Route::delete('reports/{report}', 'ReportController@destroy')->name('reports.destroy');
+    Route::get('reports/create','ReportController@create')->name('reports.create')->middleware('can:reports.create');
+    Route::post('reports/store', 'ReportController@store')->name('reports.store')->middleware('can:reports.create');
+    Route::get('reports/{report}', 'ReportController@show')->name('reports.show')->middleware('can:reports.show');
+    Route::get('reports/{report}/edit', 'ReportController@edit')->name('reports.edit')->middleware('can:reports.edit');
+    Route::put('reports/{report}', 'ReportController@update')->name('reports.update')->middleware('can:reports.edit');
+    Route::delete('reports/{report}', 'ReportController@destroy')->name('reports.destroy')->middleware('can:reports.destroy');
 });
