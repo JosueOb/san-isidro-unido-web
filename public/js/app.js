@@ -52215,15 +52215,13 @@ $(document).ready(function () {
   var renderImages = [];
 
   var previewImages = function previewImages(images) {
-    var imageItem = '';
-    var counter = 0;
+    var imageItem = ''; // let counter = 0;
+
     images.forEach(function (image, indice) {
-      imageItem += "\n                <div class=\"gallery-item\">\n                    <div class=\"image-cancel\" data-no=\"".concat(indice, "\"><i class=\"fas fa-trash-alt\"></i></div>\n                    <img src=").concat(image, " alt='image_").concat(indice, "'>\n                </div>\n                ");
-      counter++;
+      imageItem += "\n                <div class=\"gallery-item\">\n                    <div class=\"image-cancel\" data-no=\"".concat(indice, "\"><i class=\"fas fa-trash-alt\"></i></div>\n                    <img src=").concat(image, " alt='image_").concat(indice, "'>\n                </div>\n                "); // counter++;
     });
-    document.getElementById('gallery').innerHTML = imageItem;
-    var message = images.length > 0 ? 'Imágenes seleccionadas: ' + counter : 'Seleccione alguna imagen';
-    $('#images').siblings('.custom-file-label').addClass('selected').html(message);
+    document.getElementById('gallery').innerHTML = imageItem; // var message = images.length > 0 ? 'Imágenes seleccionadas: '+ counter : 'Seleccione alguna imagen';
+    // $('#images').siblings('.custom-file-label').addClass('selected').html(message);
   }; //Al seleccionar el input file
 
 
@@ -52231,14 +52229,15 @@ $(document).ready(function () {
     $('#images').removeClass('is-invalid'); //Se obtiene las imagenes del input
 
     var files = event.target.files;
-    var numberOfImages = 5;
+    var numberOfSelectedImages = 0;
+    var numberOfImagesAllowed = 5;
     var size = 1048576; //equivale a 1MB
     //se verifica que se haya seleccionado alguna imágen
 
     if (files) {
       //se recorre cada archivo para verificar que sea una imágen
       [].forEach.call(files, function (file, index) {
-        if (renderImages.length < numberOfImages) {
+        if (numberOfSelectedImages < numberOfImagesAllowed) {
           console.log('Seleccionó una imagen');
 
           if (/\.(jpe?g|png)$/i.test(file.name)) {
@@ -52250,9 +52249,11 @@ $(document).ready(function () {
               reader.onload = function (event) {
                 renderImages.push(event.target.result);
                 previewImages(renderImages);
+                numberOfSelectedImages = renderImages.length;
+                console.log(numberOfSelectedImages);
               };
 
-              reader.readAsDataURL(files.item(index));
+              reader.readAsDataURL(files.item(index)); // console.log(renderImages);
             } else {
               Swal.fire({
                 type: 'error',
@@ -52427,35 +52428,37 @@ $(document).ready(function () {
       //se recorre cada archivo para verificar que sea una imágen
       [].forEach.call(files, function (file, index) {
         if (imagesRender.length < numberOfImagesAllowed) {
-          console.log('Seleccionó una imagen'); // if ( /\.(jpe?g|png)$/i.test(file.name) ) {
-          //Si la imagen es menor a 1MB
+          // console.log('Seleccionó una imagen');
+          console.log(imagesRender.length);
 
-          if (file.size < size) {
-            inputImages.push(file);
-            var reader = new FileReader();
+          if (/\.(jpe?g|png)$/i.test(file.name)) {
+            //Si la imagen es menor a 1MB
+            if (file.size < size) {
+              inputImages.push(file);
+              var reader = new FileReader();
 
-            reader.onload = function (event) {
-              var imageRender = new Array();
-              var images = new Array();
-              imageRender['src'] = event.target.result;
-              images['input'] = imageRender;
-              imagesRender.push(images);
-              previewImages(imagesRender);
-            };
+              reader.onload = function (event) {
+                var imageRender = new Array();
+                var images = new Array();
+                imageRender['src'] = event.target.result;
+                images['input'] = imageRender;
+                imagesRender.push(images);
+                previewImages(imagesRender);
+              };
 
-            reader.readAsDataURL(files.item(index));
+              reader.readAsDataURL(files.item(index));
+            } else {
+              Swal.fire({
+                type: 'error',
+                title: 'Fuera del límite de 1MB',
+                text: 'La imagen ' + file.name + ' pesa ' + (file.size / size).toFixed(2) + 'MB'
+              });
+            }
           } else {
-            Swal.fire({
-              type: 'error',
-              title: 'Fuera del límite de 1MB',
-              text: 'La imagen ' + file.name + ' pesa ' + (file.size / size).toFixed(2) + 'MB'
-            });
-          } // }else{
-          //     console.log('Archivo no permitido');
-          //     $('#images').addClass('is-invalid');
-          //     $('#images').siblings('.invalid-feedback').html('<strong> Archivo no permitido </strong>');
-          // }
-
+            console.log('Archivo no permitido');
+            $('#images').addClass('is-invalid');
+            $('#images').siblings('.invalid-feedback').html('<strong> Archivo no permitido </strong>');
+          }
         } else {
           Swal.fire({
             type: 'error',

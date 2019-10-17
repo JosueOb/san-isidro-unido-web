@@ -68,8 +68,9 @@ $(document).ready(function(){
             //se recorre cada archivo para verificar que sea una imágen
             [].forEach.call(files, function(file, index){
                 if(imagesRender.length < numberOfImagesAllowed){
-                    console.log('Seleccionó una imagen');
-                    // if ( /\.(jpe?g|png)$/i.test(file.name) ) {
+                    // console.log('Seleccionó una imagen');
+                    console.log(imagesRender.length);
+                    if ( /\.(jpe?g|png)$/i.test(file.name) ) {
                         //Si la imagen es menor a 1MB
                         if(file.size < size){
                             inputImages.push(file);
@@ -92,11 +93,11 @@ $(document).ready(function(){
                                 text: 'La imagen '+ file.name+' pesa '+ (file.size/size).toFixed(2) + 'MB',
                             })
                         }
-                    // }else{
-                    //     console.log('Archivo no permitido');
-                    //     $('#images').addClass('is-invalid');
-                    //     $('#images').siblings('.invalid-feedback').html('<strong> Archivo no permitido </strong>');
-                    // }
+                    }else{
+                        console.log('Archivo no permitido');
+                        $('#images').addClass('is-invalid');
+                        $('#images').siblings('.invalid-feedback').html('<strong> Archivo no permitido </strong>');
+                    }
                 }else{
                     Swal.fire({
                         type: 'error',

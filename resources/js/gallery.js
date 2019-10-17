@@ -8,7 +8,7 @@ $(document).ready(function(){
 
     const previewImages = images =>{
         let imageItem = '';
-        let counter = 0;
+        // let counter = 0;
 
             images.forEach(function(image, indice){
                 imageItem += `
@@ -17,12 +17,12 @@ $(document).ready(function(){
                     <img src=${image} alt='image_${indice}'>
                 </div>
                 `;
-                counter++;
+                // counter++;
             });
             document.getElementById('gallery').innerHTML = imageItem;
         
-        var message = images.length > 0 ? 'Imágenes seleccionadas: '+ counter : 'Seleccione alguna imagen';
-        $('#images').siblings('.custom-file-label').addClass('selected').html(message);
+        // var message = images.length > 0 ? 'Imágenes seleccionadas: '+ counter : 'Seleccione alguna imagen';
+        // $('#images').siblings('.custom-file-label').addClass('selected').html(message);
     }
 
     //Al seleccionar el input file
@@ -30,15 +30,17 @@ $(document).ready(function(){
         $('#images').removeClass('is-invalid');
         //Se obtiene las imagenes del input
         var files = event.target.files;
-        let numberOfImages = 5;
+        let numberOfSelectedImages = 0;
+        let numberOfImagesAllowed = 5;
         let size = 1048576;//equivale a 1MB
         
         //se verifica que se haya seleccionado alguna imágen
         if(files){
             //se recorre cada archivo para verificar que sea una imágen
             [].forEach.call(files, function(file, index){
-                if(renderImages.length < numberOfImages){
+                if(numberOfSelectedImages < numberOfImagesAllowed){
                     console.log('Seleccionó una imagen');
+                    
                     if ( /\.(jpe?g|png)$/i.test(file.name) ) {
                         //Si la imagen es menor a 1MB
                         if(file.size < size){
@@ -47,8 +49,11 @@ $(document).ready(function(){
                             reader.onload = function(event){
                                 renderImages.push(event.target.result);
                                 previewImages(renderImages);
+                                numberOfSelectedImages = renderImages.length;
+                                console.log(numberOfSelectedImages);
                             }
                             reader.readAsDataURL(files.item(index));
+                            // console.log(renderImages);
                         }else{
                             Swal.fire({
                                 type: 'error',

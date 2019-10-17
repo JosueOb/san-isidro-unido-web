@@ -153,5 +153,41 @@ class PermissionsTableSeeder extends Seeder
             'private'=>false,
             'group'=>'morador',
         ]);
+        //Permisos sobre el módulo de reportes
+        Permission::create([
+            'name'=>'Listar los informes',
+            'slug'=>'reports.index',
+            'description'=>'Lista los informes registrados por la directiva',
+            'private'=>false,
+            'group'=>'informe',
+        ]);
+        Permission::create([
+            'name'=>'Crear informe',
+            'slug'=>'reports.create',
+            'description'=>'Registrar un nuevo informe',
+            'private'=>false,
+            'group'=>'informe',
+        ]);
+        Permission::create([
+            'name'=>'Ver a detalle un informe',
+            'slug'=>'reports.show',
+            'description'=>'Ver en detalle cada uno de los informes registrados',
+            'private'=>false,
+            'group'=>'informe',
+        ]);
+        Permission::create([
+            'name'=>'Editar informes',
+            'slug'=>'reports.edit',
+            'description'=>'Editar los informes registrados',
+            'private'=>false,
+            'group'=>'informe',
+        ]);
+        Permission::create([
+            'name'=>'Eliminar informes',
+            'slug'=>'reports.destroy',
+            'description'=>'Eliminar los registros de informes',
+            'private'=>false,
+            'group'=>'informe',
+        ]);
     }
 }
