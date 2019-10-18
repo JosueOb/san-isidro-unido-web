@@ -232,4 +232,28 @@ class ReportController extends Controller
         }
         return $imageIsDeleted;
     }
+    /**
+     * filtros para listar informes activo o inactivo
+     * @param  int  $option
+     * @return App\Post;
+     */
+    public function filters($option){
+        $category = Category::where('slug', 'informe')->first();
+
+        switch ($option) {
+            case 1:
+                $reports = $category->posts()->where('state', true)->paginate();
+                break;
+            case 2:
+                $reports = $category->posts()->where('state', false)->paginate();
+                break;
+            default:
+                return abort(404);
+                break;
+        }
+        
+        return view('reports.index',[
+            'reports'=>$reports,
+        ]);
+    }
 }

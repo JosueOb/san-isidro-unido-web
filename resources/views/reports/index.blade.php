@@ -87,15 +87,15 @@
                 </div>
             </div>
             <div class="card-body">
-                {{-- <div class="row">
+                <div class="row">
                     <div class="col text-center">
-                        @can('members.index')
-                        <a href="{{route('members.index')}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Todos</a>
-                        <a href="{{route('members.filters', 1)}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Activos</a>
-                        <a href="{{route('members.filters', 2)}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Inactivos</a>
+                        @can('reports.index')
+                        <a href="{{route('reports.index')}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Todos</a>
+                        <a href="{{route('reports.filters', 1)}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Activos</a>
+                        <a href="{{route('reports.filters', 2)}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Inactivos</a>
                         @endcan
                     </div>
-                </div> --}}
+                </div>
                 <div class="row">
                     <div class="col table-responsive mt-3">
                         @if (count($reports) > 0)
