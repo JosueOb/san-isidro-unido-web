@@ -107,7 +107,7 @@
                             <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
                                 <div class="card  card-post">
                                     <div class="card-post__image">
-                                        {{-- <img src="{{$report->getFirstImage()}}" alt=""> --}}
+                                        <img src="{{$report->getFirstImage()}}" alt="">
 
                                         <span class="badge badge-pill {{$report->state ? 'badge-success': 'badge-danger'}}">
                                             {{$report->state ? 'Activo': 'Inactivo'}}
