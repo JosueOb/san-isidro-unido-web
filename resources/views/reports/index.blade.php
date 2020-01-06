@@ -99,6 +99,113 @@
                 <div class="row">
                     <div class="col table-responsive mt-3">
                         @if (count($reports) > 0)
+                        <div class="row">
+
+                        
+                        @foreach ($reports as $report)
+                            
+                            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                                <div class="card  card-post">
+                                    <div class="card-post__image">
+                                        {{-- <img src="{{$report->getFirstImage()}}" alt=""> --}}
+
+                                        <span class="badge badge-pill {{$report->state ? 'badge-success': 'badge-danger'}}">
+                                            {{$report->state ? 'Activo': 'Inactivo'}}
+                                        </span>
+                                        {{-- <a href="#" class="card-post__category badge badge-pill badge-info">Activo</a> --}}
+                                        <small class=" card-post__name">Escrito por {{$report->user->getFullName()}}</small>
+                                        <small class="card-post__date">{{$report->date}}</small>
+                                        <div class="card-post__author">
+                                            <img class="card-post__author-avatar"  src="{{$report->user->getAvatar()}}" alt="">
+                                            {{-- <a href="#" class="card-post__author-avatar" style="background-image: url('images/avatars/0.jpg');"></a> --}}
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="card-body">
+                                        
+                                        <h5 class="card-title">{{$report->title}}</h5>
+                                        {{-- <p class="card-text text-muted">{{$report->description}}
+                                            <a class="text-muted" href="#">ver mas</a>
+                                        </p> --}}
+                                    </div>
+
+                                    <div class="card-footer border-top d-flex">
+                                        <div class="ml-auto mr-auto">
+                                           
+                                            @can('reports.show')
+                                            <a href="{{route('reports.show',$report->id)}}" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                                            @endcan
+
+                                            @can('reports.edit')
+                                                <a href="{{route('reports.edit',$report->id)}}" class="btn btn-secondary" id='edit'><i class="fas fa-pen"></i></a>
+                                            @endcan
+
+                                            @can('reports.destroy')
+                                                @if ($report->state )
+                                                    <a href="#" class="btn btn-danger"  data-toggle="modal" data-target="#deleteReport{{$report->id}}"><i class="fas fa-trash-alt"></i></a>
+                                                @else
+                                                    <a href="#" class="btn btn-success"  data-toggle="modal" data-target="#activeReport{{$report->id}}"><i class="fas fa-check-circle"></i></a>
+                                                @endif
+                                                <!--Modal-->
+                                                <div class="modal fade" id="deleteReport{{$report->id}}" tabindex="-1" role="dialog" aria-labelledby="elimarInforme" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Confirmar eliminación</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            ¿Está seguro de eliminar el reporte {{ $report->title }}?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                                        <form action="{{ route('reports.destroy', $report->id) }}" method="POST">
+                                                            @csrf
+                                                            @method('delete')
+                                                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                        </form>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal fade" id="activeReport{{$report->id}}" tabindex="-1" role="dialog" aria-labelledby="activarInforme" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Confirmar activación</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                ¿Está seguro de activar el informe {{ $report->title }}?
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                                                {{-- <button type="button" class="btn btn-primary">Eliminar</button> --}}
+                                                                <form action="{{ route('reports.destroy', $report->id) }}" method="POST">
+                                                                    @csrf
+                                                                    @method('delete')
+                                                                    <button type="submit" class="btn btn-success">Activar</button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endcan
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        @endforeach
+
+                        </div>
+
+
+
                         <table class="table table-light table-hover table-sm" id='reports'>
                             <thead>
                                 <tr>
@@ -200,6 +307,9 @@
                                     @endforeach
                             </tbody>
                         </table>
+
+
+
                         @else
                         <p class="text-center">Nigún registro</p>
                         @endif
