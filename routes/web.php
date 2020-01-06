@@ -89,4 +89,5 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::put('reports/{report}', 'ReportController@update')->name('reports.update')->middleware('can:reports.edit');
     Route::delete('reports/{report}', 'ReportController@destroy')->name('reports.destroy')->middleware('can:reports.destroy');
     Route::get('reports/filters/{option}', 'ReportController@filters')->name('reports.filters')->middleware('can:reports.index');
+    Route::get('search/reports','SearchController@searchReports')->name('search.reports')->middleware('can:reports.index');
 });

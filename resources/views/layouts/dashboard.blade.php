@@ -118,15 +118,15 @@
                         <li class="nav-item @yield('item-report')">
                             <a class="nav-link" data-toggle="collapse" data-target="#collapseReport" aria-expanded="true" aria-controls="collapseReport">
                                 <i class="fas fa-book"></i>
-                                <span>Informes</span>
+                                <span>Actividades</span>
                             </a>
                             <div id="collapseReport" class="collapse @yield('item-report-collapse')" >
                                 <div class="collapse-inner">
                                     @can('reports.index')
-                                    <a class="collapse-item @yield('item-report-list')" href="{{ route('reports.index') }}"><i class="fas fa-list"></i>Listar informes</a>
+                                    <a class="collapse-item @yield('item-report-list')" href="{{ route('reports.index') }}"><i class="fas fa-list"></i>Listar actividades</a>
                                     @endcan
                                     @can('reports.create')
-                                    <a class="collapse-item @yield('item-report-create')" href="{{ route('reports.create')}}"><i class="fas fa-book-open"></i>Registrar informe</a>
+                                    <a class="collapse-item @yield('item-report-create')" href="{{ route('reports.create')}}"><i class="fas fa-book-open"></i>Registrar actividades</a>
                                     @endcan
                                 </div>
                             </div>

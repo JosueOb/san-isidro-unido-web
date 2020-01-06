@@ -20,11 +20,11 @@
         @include('layouts.alerts')
     </div>
 </div>
-{{-- <div class="row">
+<div class="row">
     <div class="col">
         <div class="card card-primary">
             <div class="card-body">
-                <form action="{{route('search.members')}}" method="GET">
+                <form action="{{route('search.reports')}}" method="GET">
  
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -34,17 +34,17 @@
                                 @if (old('searchOption')== 1 || request('searchOption')== 1)
                                     {{'selected'}}
                                 @endif
-                                >Nombre</option>
-                                <option value="2" 
+                                >Título</option>
+                                {{-- <option value="2" 
                                 @if (old('searchOption')== 2 || request('searchOption')== 2)
                                     {{'selected'}}
                                 @endif
-                                >Apellido</option>
-                                <option value="3" 
+                                >Autor</option> --}}
+                                {{-- <option value="3" 
                                 @if (old('searchOption')== 3 || request('searchOption')== 3)
                                     {{'selected'}}
                                 @endif
-                                >Cargo</option>
+                                >Cargo</option> --}}
                             </select>
                             
                         </div>
@@ -70,7 +70,7 @@
             </div>
         </div>
     </div>
-</div> --}}
+</div>
 <div class="row">
     <div class="col">
         <div class="card card-primary">
@@ -104,9 +104,11 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Título</th>
-                                    {{-- @canany(['members.show', 'members.edit','members.destroy']) --}}
+                                    <th>Estado</th>
+                                    <th>Autor</th>
+                                    @canany(['reports.show', 'reports.edit','reports.destroy'])
                                     <th>Opciones</th>
-                                    {{-- @endcanany --}}
+                                    @endcanany
                                 </tr>
                             </thead>
                             <tbody>
@@ -116,10 +118,11 @@
                                         <td>{{$report->title}}</td>
                                         <td>
                                             <span class="badge badge-pill {{$report->state ? 'badge-success': 'badge-danger'}}">
-                                                {{$report->state ? 'Activo': 'Inactivo'}}
-                                            </span>
-                                        </td>
-                                        
+                                                    {{$report->state ? 'Activo': 'Inactivo'}}
+                                                </span>
+                                            </td>
+                                            
+                                            <td>{{$report->user_id}}</td>
                                         @can('reports.show')
                                         <td width='10px'>
                                             <a href="{{route('reports.show',$report->id)}}" class="btn btn-info">Ver</a>

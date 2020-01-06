@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
 use App\Http\Requests\SearchRequest;
 use App\Position;
 use App\User;
+use Caffeinated\Shinobi\Models\Role;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 
@@ -85,6 +87,55 @@ class SearchController extends Controller
 
         return view('neighbors.index',[
             'neighbors'=>$neighborsFound,
+        ]);
+    }
+    public function searchReports(SearchRequest $request){
+        $validated = $request->validated();
+
+        $option = $validated['searchOption'];
+        $value = $validated['searchValue'];
+
+        
+        switch ($option) {
+            case 1:
+                //Se buscan los reportes acorde el título ingresado
+                $category = Category::where('slug', 'informe')->first();
+                $reports = $category->posts()->where('title', 'LIKE', "%$value%")->paginate();
+                break;
+            
+            // case 2:
+            //     //Se divide un string en varios string, se devuelve un arreglo de string
+            //     $search = explode(' ', $value);
+
+            //     //Se obtiene el rol de directivo
+            //     $role = Role::where('slug', 'directivo')->first();
+            //     //Se obtienen a los usuarios con el rol de directivo
+            //     $users = $role->users;
+            //     // dd($users);
+
+            //     foreach($search as $name){
+            //         $filtered = $users->where('first_name', 'LIKE', "%$name%");
+            //     }
+
+            //     dd($filtered->all());
+
+            //     // dd($test);
+            //     // $test = $users->where('first_name', 'LIKE', "%$value%")->get();
+            //     // $users = $role->users()->where('first_name', 'LIKE', "%$value%")
+            //     //                        ->orWhere('last_name', 'LIKE', "%$value%")->get();
+            //     // $users = User::where('first_name', 'like', "%$value%")
+            //     //             ->orwhere('last_name', 'like', "%$value%")->get();
+
+            //     dd($users);
+            //     break;
+            
+            default:
+                return abort(404);
+                break;
+        }
+
+        return view('reports.index',[
+            'reports'=>$reports,
         ]);
     }
 }

@@ -33,7 +33,7 @@
                     <div class="form-group">
                         <label for="title">Título</label>
                         {{-- <input id="title" type="text" class="form-control  @error('title') is-invalid @enderror" name="title" value="{{ old('title') }}" maxlength="45" required autofocus> --}}
-                        <input id="title" type="text" class="form-control" name="title" value="{{ old('title') ?: $report->title}}" maxlength="45" required autofocus>
+                        <input id="title" type="text" class="form-control" name="title" value="{{ old('title') ?: $report->title}}" maxlength="255" required autofocus>
                         <span class="invalid-feedback" role="alert">
 
                         </span>

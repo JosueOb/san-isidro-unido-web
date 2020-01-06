@@ -24,8 +24,8 @@ class ReportRequest extends FormRequest
     public function rules()
     {
         return [
-            'title'=>'required|regex:/^[[:alpha:][:space:](0-9)(,;.áéíóúÁÉÍÓÚ)]+$/|min:3|max:45',
-            'description'=> 'required|regex:/^[[:alpha:][:space:](0-9)(,;.áéíóúÁÉÍÓÚ)]+$/|max:255',
+            'title'=>'required|regex:/^[[:alpha:][:space:](0-9)(,;.áéíóúÁÉÍÓÚÑñ)]+$/|min:3|max:255',
+            'description'=> 'required|regex:/^[[:alpha:][:space:](0-9)(,;.áéíóúÁÉÍÓÚÑñ)]+$/',
             "images" => "nullable|array|max:5",
             "images.*" => "nullable|image|mimes:jpeg,png|max:1000",
             

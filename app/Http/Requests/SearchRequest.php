@@ -25,7 +25,7 @@ class SearchRequest extends FormRequest
     {
         return [
             'searchOption'=>'required|integer|numeric',
-            'searchValue'=>'required|regex:/^[[:alpha:][:space:](,;.áéíóúÁÉÍÓÚ)]+$/|max:50',
+            'searchValue'=>'required|regex:/^[[:alpha:][:space:](,;.áéíóúÁÉÍÓÚÑñ)]+$/|max:50',
         ];
     }
         /**
