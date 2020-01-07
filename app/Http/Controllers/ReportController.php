@@ -242,10 +242,10 @@ class ReportController extends Controller
 
         switch ($option) {
             case 1:
-                $reports = $category->posts()->where('state', true)->paginate();
+                $reports = $category->posts()->where('state', true)->paginate(6);
                 break;
             case 2:
-                $reports = $category->posts()->where('state', false)->paginate();
+                $reports = $category->posts()->where('state', false)->paginate(6);
                 break;
             default:
                 return abort(404);

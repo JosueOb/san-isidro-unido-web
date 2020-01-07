@@ -100,7 +100,7 @@ class SearchController extends Controller
             case 1:
                 //Se buscan los reportes acorde el título ingresado
                 $category = Category::where('slug', 'informe')->first();
-                $reports = $category->posts()->where('title', 'LIKE', "%$value%")->paginate();
+                $reports = $category->posts()->where('title', 'LIKE', "%$value%")->paginate(6);
                 break;
             
             // case 2:
