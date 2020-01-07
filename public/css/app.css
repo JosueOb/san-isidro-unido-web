@@ -17038,6 +17038,69 @@ h6 {
   height: auto;
 }
 
+.card-post .card-body {
+  padding: 2.1875rem 1.5625rem;
+}
+
+.card-post__image {
+  position: relative;
+}
+
+.card-post__image > img {
+  height: 10.3125rem;
+  width: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.card-post__author,
+.card-post__category,
+.card-post__date,
+.card-post__name {
+  position: absolute;
+}
+
+.card-post__date,
+.card-post__name {
+  color: white;
+  right: 1.5625rem;
+  padding: 0.125rem;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 8.5px;
+}
+
+.card-post__date {
+  bottom: 0.125rem;
+}
+
+.card-post__name {
+  bottom: 1.8125rem;
+}
+
+.card-post__category {
+  top: 0.9375rem;
+  right: 0.9375rem;
+  position: absolute;
+  text-transform: uppercase;
+}
+
+.card-post__author {
+  transform: translateY(50%);
+  margin-left: 1.5625rem;
+  bottom: 0;
+}
+
+.card-post__author-avatar {
+  width: 3.125rem;
+  height: 3.125rem;
+  box-shadow: 0 0.125rem 0.6825rem rgba(90, 97, 105, 0.3);
+  display: block;
+  background-position: center;
+  background-size: cover;
+  border-radius: 50%;
+  text-indent: -9999px;
+}
+
 .gallery {
   display: flex;
   width: 100%;

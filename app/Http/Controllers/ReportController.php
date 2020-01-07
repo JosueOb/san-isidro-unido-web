@@ -21,7 +21,7 @@ class ReportController extends Controller
     public function index()
     {
         $category = Category::where('slug', 'informe')->first();
-        $reports = $category->posts()->paginate();
+        $reports = $category->posts()->paginate(6);
 
         return view('reports.index',[
             'reports' =>$reports,

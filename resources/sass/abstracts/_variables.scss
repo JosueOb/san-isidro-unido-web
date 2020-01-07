@@ -130,3 +130,26 @@ $page-subtitle-font-weight-sm: 400 !default;
 //Main footer
 $main-footer-height: $main-navbar-height !default;
 $main-footer-copyright-color: $blue-800 !default;
+
+// Components -> Card Post
+$card-post-padding-x: 1.5625rem !default;
+$card-post-padding-y: 2.1875rem !default;
+$card-post-padding: $card-post-padding-y $card-post-padding-x !default;
+
+$card-post-image-min-height: 10.3125rem !default;
+
+$card-post-date-bottom: 0.125rem !default;
+
+$card-post-name-bottom: 1.8125rem !default;
+
+$card-post-date-name-padding: 0.125rem !default;
+$card-post-date-name-rigth: 1.5625rem !default;
+
+$card-post-category-top: 0.9375rem !default;             // 15px
+$card-post-category-right: 0.9375rem !default;           // 15px
+
+$card-post-author-transform: translateY(50%) !default;
+$card-post-author-margin-left: 1.5625rem !default;       // 25px
+$card-post-author-avatar-width: 3.125rem !default;        // 45px
+$card-post-author-avatar-height: 3.125rem !default;       // 45px
+$card-post-author-avatar-box-shadow: $main-navbar-box-shadow;

@@ -97,7 +97,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col table-responsive mt-3">
+                    <div class="col mt-3 mb-4">
                         @if (count($reports) > 0)
                         <div class="row">
 
@@ -109,7 +109,7 @@
                                     <div class="card-post__image">
                                         <img src="{{$report->getFirstImage()}}" alt="">
 
-                                        <span class="badge badge-pill {{$report->state ? 'badge-success': 'badge-danger'}}">
+                                        <span class="card-post__category badge badge-pill {{$report->state ? 'badge-success': 'badge-danger'}}">
                                             {{$report->state ? 'Activo': 'Inactivo'}}
                                         </span>
                                         {{-- <a href="#" class="card-post__category badge badge-pill badge-info">Activo</a> --}}
@@ -147,7 +147,7 @@
                                                     <a href="#" class="btn btn-success"  data-toggle="modal" data-target="#activeReport{{$report->id}}"><i class="fas fa-check-circle"></i></a>
                                                 @endif
                                                 <!--Modal-->
-                                                <div class="modal fade" id="deleteReport{{$report->id}}" tabindex="-1" role="dialog" aria-labelledby="elimarInforme" aria-hidden="true">
+                                                {{-- <div class="modal fade" id="deleteReport{{$report->id}}" tabindex="-1" role="dialog" aria-labelledby="elimarInforme" aria-hidden="true">
                                                     <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -184,7 +184,6 @@
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                                                {{-- <button type="button" class="btn btn-primary">Eliminar</button> --}}
                                                                 <form action="{{ route('reports.destroy', $report->id) }}" method="POST">
                                                                     @csrf
                                                                     @method('delete')
@@ -193,7 +192,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div> --}}
                                             @endcan
                                         </div>
                                     </div>

@@ -1,0 +1,66 @@
+.card-post {
+
+    .card-body {
+        padding: $card-post-padding;
+    }
+
+    &__image {
+        position: relative;
+        
+        >img{
+            // position: relative;
+            height: $card-post-image-min-height;
+            width: 100%;
+            object-fit: cover;
+        }
+    }
+    
+    
+
+    &__author,
+    &__category,
+    &__date,
+    &__name{
+        position: absolute;
+    }
+    &__date, 
+    &__name {
+        // border: red solid 1px;
+        color :white;
+        right: $card-post-date-name-rigth;
+        padding: $card-post-date-name-padding;
+        background-color: rgba($color: #000000, $alpha: 0.5);
+        border-radius: 8.5px;
+    } 
+
+    &__date {
+        bottom: $card-post-date-bottom;
+    }
+    &__name {
+        bottom: $card-post-name-bottom;
+    }
+
+    &__category {
+      top: $card-post-category-top;
+      right: $card-post-category-right;
+      position: absolute;
+      text-transform: uppercase;
+    }
+
+    &__author {
+        transform: $card-post-author-transform;
+        margin-left: $card-post-author-margin-left;
+        bottom: 0;
+    }
+  
+    &__author-avatar {
+        width: $card-post-author-avatar-width;
+        height: $card-post-author-avatar-height;
+        box-shadow: $card-post-author-avatar-box-shadow;
+        display: block;
+        background-position: center;
+        background-size: cover;
+        border-radius: 50%;
+        text-indent: -9999px;
+    }
+}
