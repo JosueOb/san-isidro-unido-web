@@ -70,14 +70,14 @@
                     <div class="form-group">
                         <label for="images">Imágenes <span class="text-muted">(opcional)</span></label>
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input @error('images') is-invalid @enderror" id="images" name="images[]" accept="image/jpeg,image/png"  multiple>
+                            <input type="file" class="custom-file-input @error('images') is-invalid @enderror" id="images" name="images[]" accept="image/png, .jpeg, .jpg"  multiple>
                             <label class="custom-file-label" id='imagesLabel' for="images" data-browse="Agregar"></label>
                             <span class="invalid-feedback" role="alert">
                             
                             </span>
                         </div>
                         <small id="imagesHelp" class="form-text text-muted">
-                                Puedes subir hasta 5 imágenes de 1MB cada una
+                                Puedes adjuntar hasta 5 imágenes máximo de 1MB
                         </small>
                         {{-- @error('images')
                         <span class="invalid-feedback" role="alert">
@@ -86,6 +86,22 @@
                         @enderror --}}
                         <div class="gallery" id="gallery">
                             {{-- Se presentan las imágenes seleccionadas por el usuario --}}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="document">Documento <span class="text-muted">(opcional)</span></label>
+                        <div class="custom-file">
+                            {{-- <input type="file" class="custom-file-input @error('images') is-invalid @enderror" id="images" name="images[]" accept="image/jpeg,image/png"  multiple> --}}
+                            <input type="file" class="custom-file-input @error('document') is-invalid @enderror" id="document" name="document" accept=".pdf">
+                            <label class="custom-file-label" id='imagesLabel' for="document" data-browse="Agregar"></label>
+                            <span class="invalid-feedback" role="alert">
+                                
+                            </span>
+                        </div>
+                        <small id="documentHelp" class="form-text text-muted">
+                                Puedes adjuntar un documento PDF máximo de 5MB
+                        <div class="gallery" id="document">
+                            {{-- Se presentan el documento seleccionado por el usuario --}}
                         </div>
                     </div>
                    
