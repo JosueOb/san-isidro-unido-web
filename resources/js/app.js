@@ -35,4 +35,3 @@ require('./dropdown');
 require('./imagename');
 require('./gallery');
 require('./get-gallery');
-

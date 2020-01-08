@@ -77,6 +77,13 @@ class ReportController extends Controller
                 ]);
             }
         }
+        if($request->file('document')){
+            Resource::create([
+                'url'=> $request->file('document')->store('document_reports', 'public'),
+                'post_id' => $report->id,
+                'type'=>'document',
+            ]);
+        }
 
         session()->flash('success', 'Informe registrado con éxito');
         return response()->json(['success'=>'Datos recibidos correctamente']);

@@ -2,13 +2,13 @@
 const Swal = require('sweetalert2')
 
 $(document).ready(function(){
-    // console.log('Formulario listo');
+
     var images = [];
     let renderImages = [];
+    var document_array = [];
 
     const previewImages = images =>{
         let imageItem = '';
-        // let counter = 0;
 
             images.forEach(function(image, indice){
                 imageItem += `
@@ -17,12 +17,9 @@ $(document).ready(function(){
                     <img src=${image} alt='image_${indice}'>
                 </div>
                 `;
-                // counter++;
             });
+            
             document.getElementById('gallery').innerHTML = imageItem;
-        
-        // var message = images.length > 0 ? 'Imágenes seleccionadas: '+ counter : 'Seleccione alguna imagen';
-        // $('#images').siblings('.custom-file-label').addClass('selected').html(message);
     }
 
     //Al seleccionar el input file
@@ -58,7 +55,7 @@ $(document).ready(function(){
                             Swal.fire({
                                 type: 'error',
                                 title: 'Fuera del límite de 1MB',
-                                text: 'La imagen '+ file.name+' pesa '+ (file.size/size).toFixed(2) + 'MB',
+                                text: 'La imagen '+ file.name+' pesa '+ (file.size/1048576).toFixed(2) + 'MB',
                             })
                         }
                         
@@ -86,6 +83,49 @@ $(document).ready(function(){
         renderImages.splice(imageIndex,1);
         previewImages(renderImages);
     });
+
+    $('#document').on('change', function(event){
+        $('#document').removeClass('is-invalid');
+        //Se obtiene el documento seleccionado
+        var file = event.target.files[0];
+        let size = 5242880;//equivale a 5MB (bytes)
+        // document_array.push(file);
+        if(file){
+            // console.log(document_array.length);
+            //Se verifica que si ya se ha seleccionado un documento
+            if(!document_array.length){
+                if( /\.(pdf)$/i.test(file.name)){
+                    if(file.size < size){
+                        console.log(file.name);
+                        let name = `
+                        <div class="gallery-item">
+                            <spam>${file.name}</spam>
+                        </div>
+                        `;
+                        document.getElementById('document-show').innerHTML = name;
+                        document_array.push(file);
+                    }else{
+                        Swal.fire({
+                            type: 'error',
+                            title: 'Fuera del límite de 5MB',
+                            text: 'El documento '+ file.name+' pesa '+ (file.size/1048576).toFixed(2) + 'MB',
+                        })
+                    }
+                }else{
+                    console.log('El formato del documento no es permitido');
+                    $('#document').addClass('is-invalid');
+                    $('#document').siblings('.invalid-feedback').html('<strong> Archivo no permitido </strong>');
+                }
+            }else{
+                Swal.fire({
+                    type: 'error',
+                    title: 'Fuera del límite',
+                    text: 'Recuerda que solo puedes subir un documento PDF',
+                })
+            }
+        }
+    });
+
     //AJAX
     $('#report-post').on('submit', function(event){
         // Se evita el propago del submit
@@ -94,11 +134,18 @@ $(document).ready(function(){
          //Se agrega el data del formData
         var formData = new FormData(this);
         formData.delete('images[]');
+        formData.delete('document');
 
          images.forEach(function(image){
             formData.append('images[]', image);
          });
+         document_array.forEach(function(document){
+            formData.append('document', document);
+         });
+        //  formData.append('document', document_array);
+
          console.log(formData.getAll('images[]'));
+         console.log(formData.getAll('document'));
 
          $.ajax({
             type:'POST',
@@ -159,6 +206,12 @@ $(document).ready(function(){
                         }else{
                             $('#images').removeClass('is-invalid');
                         }
+                    }
+                    if(validationErrors.hasOwnProperty('document')){
+                        $('#document').addClass('is-invalid');
+                        $('#document').siblings('.invalid-feedback').html('<strong>'+validationErrors['document'][0]+'</strong>');
+                    }else{
+                        $('#document').removeClass('is-invalid');
                     }
                 }
               
