@@ -47,8 +47,28 @@ class Post extends Model
      /**
      * Get the first image belonging to a post
      */
+    // public function getFirstImage(){
+    //     $image = $this->images()->first();
+    //     if($image){
+    //         $image_url = $image["url"];
+    //     }else{
+    //         //en caso de no tener imagen se retorna una por defecto
+    //         $image_url = "images_reports/image-default.jpg";
+    //     }
+    //     return  \Storage::disk('public')->url($image_url);
+    // }
+    /**
+     * A post can have many resources
+     */
+    public function resources(){
+        return $this->hasMany(Resource::class);
+    }
+    /**
+     * Get the first image belonging to a post
+     */
     public function getFirstImage(){
-        $image = $this->images()->first();
+        $image = $this->resources()->where('type','image')->first();
+        
         if($image){
             $image_url = $image["url"];
         }else{
