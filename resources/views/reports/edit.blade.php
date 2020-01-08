@@ -85,7 +85,7 @@
                                 @foreach ($images as $image)
                                 <div class="gallery-item">
                                     <div class="image-cancel"><i class="fas fa-trash-alt"></i></div>
-                                    <img src={{$image->getImageLink()}} alt='image_{{$image->id}}' data-image="{{$image->url}}">
+                                    <img src={{$image->getLink()}} alt='image_{{$image->id}}' data-image="{{$image->url}}">
                                 </div>
                                 @endforeach
                             @endif

@@ -4,11 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use App\Http\Requests\ReportRequest;
-use App\Image;
-use App\Position;
 use App\Post;
-use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\Builder;
+use App\Resource;
 use Illuminate\Support\Facades\Storage;
 
 class ReportController extends Controller
@@ -69,9 +66,14 @@ class ReportController extends Controller
         // if($request['images']){
         if($request->file('images')){
             foreach($request->file('images') as $image){
-                Image::create([
+                // Image::create([
+                //     'url'=> $image->store('images_reports', 'public'),
+                //     'post_id' => $report->id,
+                // ]);
+                Resource::create([
                     'url'=> $image->store('images_reports', 'public'),
                     'post_id' => $report->id,
+                    'type'=>'image',
                 ]);
             }
         }
@@ -88,7 +90,8 @@ class ReportController extends Controller
      */
     public function show(Post $report)
     {
-        $images= $report->images()->get();
+        // $images= $report->images()->get();
+        $images = $report->resources()->where('type', 'image')->get();
         return view('reports.show',[
             'report'=>$report,
             'images'=>$images,
@@ -103,7 +106,8 @@ class ReportController extends Controller
      */
     public function edit(Post $report)
     {
-        $images = $report->images()->get();
+        // $images = $report->images()->get();
+        $images = $report->resources()->where('type', 'image')->get();
         return view('reports.edit', [
             'report'=>$report,
             'images'=>$images,
@@ -137,7 +141,8 @@ class ReportController extends Controller
 
         //Se verifica si alguna imagen del reporte se mantiene o fue eliminada
         $newImagesReport = $request['images_report'];
-        $collectionImageReport = $report->images()->get();
+        // $collectionImageReport = $report->images()->get();
+        $collectionImageReport = $report->resources()->where('type', 'image')->get();;
         
         // foreach ($newImagesReport as $value) {
         //     echo $value."\n";
@@ -152,7 +157,9 @@ class ReportController extends Controller
                     // echo $oldImageUrl."\n";
                     //Eliminar a la imagen de la bdd y del local storage
                     // Image::where('url', $oldImageUrl)->first()->delete();
-                    $report->images()->where('url', $oldImageUrl)->delete();
+                    // $report->images()->where('url', $oldImageUrl)->delete();
+                    $report->resources()->where('type', 'image')
+                                        ->where('url', $oldImageUrl)->delete();
                     if(Storage::disk('public')->exists($oldImageUrl)){
                         Storage::disk('public')->delete($oldImageUrl);
                     }
@@ -169,16 +176,22 @@ class ReportController extends Controller
                         Storage::disk('public')->delete($oldImageUrl);
                     }
                 }
-                $report->images()->delete();
+                // $report->images()->delete();
+                $report->resources()->where('type', 'image')->delete();
             }
         }
 
         // //Se guardan las nuevas imágenes  seleccionadas por el usuario
         if($request->file('images')){
             foreach($request->file('images') as $image){
-                Image::create([
+                // Image::create([
+                //     'url'=> $image->store('images_reports', 'public'),
+                //     'post_id' => $report->id,
+                // ]);
+                Resource::create([
                     'url'=> $image->store('images_reports', 'public'),
                     'post_id' => $report->id,
+                    'type'=>'image',
                 ]);
             }
         }
