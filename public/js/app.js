@@ -52444,7 +52444,12 @@ $(document).ready(function () {
     images.forEach(function (image, indice) {
       imageItem += "\n                <div class=\"gallery-item\">\n                    <div class=\"image-cancel\" data-no=\"".concat(indice, "\"><i class=\"fas fa-trash-alt\"></i></div>\n                    <img src=").concat(image, " alt='image_").concat(indice, "'>\n                </div>\n                ");
     });
-    document.getElementById('gallery').innerHTML = imageItem;
+    document.getElementById('gallery-images').innerHTML = imageItem;
+  };
+
+  var previewDocument = function previewDocument(file) {
+    var documentItem = "\n        <div class='gallery-item'>\n            <i class=\"fas fa-file-pdf image-document\"></i>\n            <p class=\"document-name\">".concat(file.name, "</p>\n            <i class=\"fas fa-trash-alt image-cancel\"></i>\n        </div>\n        ");
+    document.getElementById('gallery-document').innerHTML = documentItem;
   }; //Al seleccionar el input file
 
 
@@ -52499,7 +52504,7 @@ $(document).ready(function () {
       });
     }
   });
-  $('#gallery').on('click', '.image-cancel', function () {
+  $('#gallery-images').on('click', '.image-cancel', function () {
     var imageIndex = $(this).data('no'); //console.log(imageIndex);
 
     images.splice(imageIndex, 1);
@@ -52520,8 +52525,7 @@ $(document).ready(function () {
         if (/\.(pdf)$/i.test(file.name)) {
           if (file.size < size) {
             console.log(file.name);
-            var name = "\n                        <div class=\"gallery-item\">\n                            <spam>".concat(file.name, "</spam>\n                        </div>\n                        ");
-            document.getElementById('document-show').innerHTML = name;
+            previewDocument(file);
             document_array.push(file);
           } else {
             Swal.fire({
@@ -52557,7 +52561,7 @@ $(document).ready(function () {
     });
     document_array.forEach(function (document) {
       formData.append('document', document);
-    }); //  formData.append('document', document_array);
+    }); //  formData.append('document', document_array[0]);
 
     console.log(formData.getAll('images[]'));
     console.log(formData.getAll('document'));
@@ -52570,25 +52574,23 @@ $(document).ready(function () {
       processData: false,
       dataType: 'JSON',
       success: function success(data) {
-        console.log(data);
-
-        if (data.success) {
-          $('#title').removeClass('is-invalid');
-          $('#description').removeClass('is-invalid');
-          $('#images').removeClass('is-invalid');
-          Swal.fire({
-            position: 'top-end',
-            type: 'success',
-            title: 'Informe publicado',
-            showConfirmButton: false,
-            timer: 1500,
-            allowOutsideClick: false
-          }); // funciona como una redirección HTTP
-
-          setTimeout(function () {
-            window.location.replace('../reports');
-          }, 1000);
-        }
+        console.log(data); // if(data.success){
+        //     $('#title').removeClass('is-invalid');
+        //     $('#description').removeClass('is-invalid');
+        //     $('#images').removeClass('is-invalid');
+        //     Swal.fire({
+        //     position: 'top-end',
+        //     type: 'success',
+        //     title: 'Informe publicado',
+        //     showConfirmButton: false,
+        //     timer: 1500,
+        //     allowOutsideClick: false,
+        //   })
+        //     // funciona como una redirección HTTP
+        //     setTimeout(function(){ 
+        //         window.location.replace('../reports');
+        //     }, 1000);
+        // }
       },
       error: function error(jqXHR, textStatus, errorThrown) {
         var getErrors = jqXHR.responseJSON; //Se obtienen los error de validación por parte de Laravel

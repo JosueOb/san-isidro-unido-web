@@ -19,7 +19,17 @@ $(document).ready(function(){
                 `;
             });
             
-            document.getElementById('gallery').innerHTML = imageItem;
+            document.getElementById('gallery-images').innerHTML = imageItem;
+    }
+    const previewDocument = file =>{
+        let documentItem = `
+        <div class='gallery-item'>
+            <i class="fas fa-file-pdf image-document"></i>
+            <p class="document-name">${file.name}</p>
+            <i class="fas fa-trash-alt image-cancel"></i>
+        </div>
+        `;
+        document.getElementById('gallery-document').innerHTML = documentItem;
     }
 
     //Al seleccionar el input file
@@ -76,7 +86,7 @@ $(document).ready(function(){
     });
 
 
-    $('#gallery').on('click', '.image-cancel',function(){
+    $('#gallery-images').on('click', '.image-cancel',function(){
         let imageIndex = $(this).data('no');
         //console.log(imageIndex);
         images.splice(imageIndex, 1);
@@ -97,12 +107,7 @@ $(document).ready(function(){
                 if( /\.(pdf)$/i.test(file.name)){
                     if(file.size < size){
                         console.log(file.name);
-                        let name = `
-                        <div class="gallery-item">
-                            <spam>${file.name}</spam>
-                        </div>
-                        `;
-                        document.getElementById('document-show').innerHTML = name;
+                        previewDocument(file)
                         document_array.push(file);
                     }else{
                         Swal.fire({
@@ -142,7 +147,7 @@ $(document).ready(function(){
          document_array.forEach(function(document){
             formData.append('document', document);
          });
-        //  formData.append('document', document_array);
+        //  formData.append('document', document_array[0]);
 
          console.log(formData.getAll('images[]'));
          console.log(formData.getAll('document'));
@@ -159,23 +164,23 @@ $(document).ready(function(){
 
                 console.log(data);
 
-                if(data.success){
-                    $('#title').removeClass('is-invalid');
-                    $('#description').removeClass('is-invalid');
-                    $('#images').removeClass('is-invalid');
-                    Swal.fire({
-                    position: 'top-end',
-                    type: 'success',
-                    title: 'Informe publicado',
-                    showConfirmButton: false,
-                    timer: 1500,
-                    allowOutsideClick: false,
-                  })
-                    // funciona como una redirección HTTP
-                    setTimeout(function(){ 
-                        window.location.replace('../reports');
-                    }, 1000);
-                }
+                // if(data.success){
+                //     $('#title').removeClass('is-invalid');
+                //     $('#description').removeClass('is-invalid');
+                //     $('#images').removeClass('is-invalid');
+                //     Swal.fire({
+                //     position: 'top-end',
+                //     type: 'success',
+                //     title: 'Informe publicado',
+                //     showConfirmButton: false,
+                //     timer: 1500,
+                //     allowOutsideClick: false,
+                //   })
+                //     // funciona como una redirección HTTP
+                //     setTimeout(function(){ 
+                //         window.location.replace('../reports');
+                //     }, 1000);
+                // }
             },
             error: function(jqXHR, textStatus, errorThrown){
                 var getErrors = jqXHR.responseJSON;

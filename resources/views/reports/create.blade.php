@@ -84,7 +84,7 @@
                             <strong>{{ $message }}</strong>
                         </span>
                         @enderror --}}
-                        <div class="gallery" id="gallery">
+                        <div class="gallery-images" id="gallery-images">
                             {{-- Se presentan las imágenes seleccionadas por el usuario --}}
                         </div>
                     </div>
@@ -102,7 +102,7 @@
                         <small id="documentHelp" class="form-text text-muted">
                             Puedes adjuntar un documento PDF máximo de 5MB
                         </small>
-                        <div class="gallery" id="document-show">
+                        <div class="gallery-document" id="gallery-document">
                             {{-- Se presentan el documento seleccionado por el usuario --}}
                         </div>
                     </div>
