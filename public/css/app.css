@@ -17158,7 +17158,7 @@ h6 {
 
 .gallery-document .gallery-item {
   margin: 2.5% auto;
-  width: 60%;
+  width: 50.5%;
   border-radius: 5px;
   background-color: rgba(0, 0, 0, 0.1);
   height: auto;
@@ -17176,9 +17176,6 @@ h6 {
 
 .gallery-document .gallery-item .document-name {
   font-size: 10px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   margin: 0 0.255rem 0.355rem 0.255rem;
   text-align: center;
 }
@@ -17202,7 +17199,7 @@ h6 {
 
 @media (max-width: 767.98px) {
   .gallery-document .gallery-item {
-    width: 38.5%;
+    width: 35.5%;
   }
 }
 

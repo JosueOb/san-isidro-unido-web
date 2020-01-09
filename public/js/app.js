@@ -52447,8 +52447,11 @@ $(document).ready(function () {
     document.getElementById('gallery-images').innerHTML = imageItem;
   };
 
-  var previewDocument = function previewDocument(file) {
-    var documentItem = "\n        <div class='gallery-item'>\n            <i class=\"fas fa-file-pdf image-document\"></i>\n            <p class=\"document-name\">".concat(file.name, "</p>\n            <i class=\"fas fa-trash-alt image-cancel\"></i>\n        </div>\n        ");
+  var previewDocument = function previewDocument(file_array) {
+    var documentItem = '';
+    file_array.forEach(function (file, indice) {
+      documentItem += "\n            <div class='gallery-item'>\n                <i class=\"fas fa-file-pdf image-document\"></i>\n                <p class=\"document-name\">".concat(file.name, "</p>\n                <i class=\"fas fa-trash-alt image-cancel\" data-no=\"").concat(indice, "\"></i>\n            </div>\n            ");
+    });
     document.getElementById('gallery-document').innerHTML = documentItem;
   }; //Al seleccionar el input file
 
@@ -52511,6 +52514,12 @@ $(document).ready(function () {
     renderImages.splice(imageIndex, 1);
     previewImages(renderImages);
   });
+  $('#gallery-document').on('click', '.image-cancel', function () {
+    var documentIndex = $(this).data('no'); // console.log('eliminar'+ documentIndex);
+
+    document_array.splice(documentIndex, 1);
+    previewDocument(document_array);
+  });
   $('#document').on('change', function (event) {
     $('#document').removeClass('is-invalid'); //Se obtiene el documento seleccionado
 
@@ -52525,8 +52534,8 @@ $(document).ready(function () {
         if (/\.(pdf)$/i.test(file.name)) {
           if (file.size < size) {
             console.log(file.name);
-            previewDocument(file);
             document_array.push(file);
+            previewDocument(document_array);
           } else {
             Swal.fire({
               type: 'error',
