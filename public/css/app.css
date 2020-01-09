@@ -17113,7 +17113,7 @@ h6 {
   text-decoration: none;
   margin: 2%;
   width: 6rem;
-  height: 6em;
+  height: 6rem;
   display: flex;
   align-items: flex-end;
 }
@@ -17147,7 +17147,7 @@ h6 {
     text-decoration: none;
     margin: 2%;
     width: 4rem;
-    height: 4em;
+    height: 4rem;
   }
 
   .gallery-images .gallery-item img {
@@ -17158,10 +17158,10 @@ h6 {
 
 .gallery-document .gallery-item {
   margin: 2.5% auto;
-  width: 50.5%;
+  width: 6rem;
+  height: 6rem;
   border-radius: 5px;
   background-color: rgba(0, 0, 0, 0.1);
-  height: auto;
   position: relative;
 }
 
@@ -17170,21 +17170,22 @@ h6 {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  height: 3.5rem;
+  width: inherit;
+  height: inherit;
   color: rgba(255, 0, 0, 0.8);
 }
 
 .gallery-document .gallery-item .document-name {
   font-size: 10px;
-  margin: 0 0.255rem 0.355rem 0.255rem;
+  margin: 0.355rem 0.255rem;
   text-align: center;
 }
 
 .gallery-document .gallery-item .image-cancel,
 .gallery-document .gallery-item .link-document {
   display: flex;
-  width: 100%;
+  position: absolute;
+  width: inherit;
   color: white;
   cursor: pointer;
 }
@@ -17196,6 +17197,7 @@ h6 {
   height: 1.5rem;
   justify-content: center;
   align-items: center;
+  bottom: 0;
 }
 
 .gallery-document .gallery-item .image-cancel:hover {
@@ -17203,20 +17205,18 @@ h6 {
 }
 
 .gallery-document .gallery-item .link-document {
-  position: absolute;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
-  height: 3.5rem;
+  height: 4.5rem;
   justify-content: end;
-  align-items: center;
   text-decoration: none;
   bottom: 1.5rem;
 }
 
 .gallery-document .gallery-item .link-document .fas {
-  margin: 0 0.75rem;
+  margin: 0.75rem;
   color: rgba(0, 0, 0, 0.65);
-  font-size: 1.5rem;
+  font-size: 1.5em;
 }
 
 .gallery-document .gallery-item .link-document:hover {
@@ -17229,7 +17229,21 @@ h6 {
 
 @media (max-width: 767.98px) {
   .gallery-document .gallery-item {
-    width: 35.5%;
+    width: 4rem;
+    height: 4rem;
+  }
+
+  .gallery-document .gallery-item .image-document {
+    font-size: 1.5rem;
+  }
+
+  .gallery-document .gallery-item .link-document {
+    height: 2.5rem;
+  }
+
+  .gallery-document .gallery-item .link-document .fas {
+    margin: 0.55rem;
+    font-size: 1rem;
   }
 }
 
