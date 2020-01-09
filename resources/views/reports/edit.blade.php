@@ -79,7 +79,7 @@
                                 Puedes subir hasta 5 imágenes de 1MB cada una
                         </small>
 
-                        <div class="gallery" id="gallery-update">
+                        <div class="gallery-images" id="gallery-update">
                             {{-- Se presentan las imágenes seleccionadas por el usuario --}}
                             @if ($images)
                                 @foreach ($images as $image)
@@ -92,6 +92,39 @@
                         </div>
                     </div>
                    
+                    <div class="form-group">
+                        <label for="document">Documento <span class="text-muted">(opcional)</span></label>
+                        <div class="custom-file">
+
+                            <input type="file" class="custom-file-input" id="document" name="document" accept=".pdf">
+                            <label class="custom-file-label" id='imagesLabel' for="document" data-browse="Agregar"></label>
+                            <span class="invalid-feedback" role="alert">
+                                
+                            </span>
+                        </div>
+                        <small id="documentHelp" class="form-text text-muted">
+                            Puedes adjuntar un documento PDF máximo de 5MB
+                        </small>
+                        <div class="gallery-document" id="gallery-document">
+                            {{-- Se presentan el documento seleccionado por el usuario --}}
+                            @if ($file)
+                                @foreach ($file as $document)
+                                <div class="gallery-item">
+                                    {{-- <div class="image-cancel"><i class="fas fa-trash-alt"></i></div>
+                                    <img src={{$document->getLink()}} alt='image_{{$document->id}}' data-image="{{$image->url}}"> --}}
+
+                                    <i class="fas fa-file-pdf image-document"></i>
+                                    {{-- <p class="document-name">{{$document->getLink()}}</p> --}}
+                                    <a href="{{$document->getLink()}}" class="link-document" target="_blank" data-document="{{$document->url}}">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <i class="fas fa-trash-alt image-cancel"></i>
+
+                                </div>
+                                @endforeach
+                            @endif
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

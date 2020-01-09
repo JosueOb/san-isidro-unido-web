@@ -52583,23 +52583,24 @@ $(document).ready(function () {
       processData: false,
       dataType: 'JSON',
       success: function success(data) {
-        console.log(data); // if(data.success){
-        //     $('#title').removeClass('is-invalid');
-        //     $('#description').removeClass('is-invalid');
-        //     $('#images').removeClass('is-invalid');
-        //     Swal.fire({
-        //     position: 'top-end',
-        //     type: 'success',
-        //     title: 'Informe publicado',
-        //     showConfirmButton: false,
-        //     timer: 1500,
-        //     allowOutsideClick: false,
-        //   })
-        //     // funciona como una redirección HTTP
-        //     setTimeout(function(){ 
-        //         window.location.replace('../reports');
-        //     }, 1000);
-        // }
+        // console.log(data);
+        if (data.success) {
+          $('#title').removeClass('is-invalid');
+          $('#description').removeClass('is-invalid');
+          $('#images').removeClass('is-invalid');
+          Swal.fire({
+            position: 'top-end',
+            type: 'success',
+            title: 'Informe publicado',
+            showConfirmButton: false,
+            timer: 1500,
+            allowOutsideClick: false
+          }); // funciona como una redirección HTTP
+
+          setTimeout(function () {
+            window.location.replace('../reports');
+          }, 1000);
+        }
       },
       error: function error(jqXHR, textStatus, errorThrown) {
         var getErrors = jqXHR.responseJSON; //Se obtienen los error de validación por parte de Laravel

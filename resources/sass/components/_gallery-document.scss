@@ -6,6 +6,7 @@
         border-radius: 5px;
         background-color: rgba(0,0,0,0.1);
         height: auto;
+        position: relative;
 
         .image-document{
             font-size: 2.5rem;
@@ -25,20 +26,45 @@
             margin:0 0.255rem 0.355rem 0.255rem;
             text-align: center;
         }
+        .image-cancel, 
+        .link-document{
+            display: flex;
+            width: 100%;
+            color: white;
+            cursor: pointer;
+        }
         .image-cancel{
             border-bottom-left-radius: 5px;
             border-bottom-right-radius: 5px;
-            color: white;
             background-color: rgba(0,0,0,0.25);
-            width: 100%;
             height: 1.5rem;
-            display: flex;
             justify-content: center;
             align-items: center;
-            cursor: pointer;
 
             &:hover{
                 background-color: rgba(red,0.7);
+            }
+        }
+        .link-document{
+            position: absolute;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            height: 3.5rem;
+            justify-content: end;
+            align-items: center;
+            text-decoration: none;
+            bottom: 1.5rem;
+            .fas{
+                margin: 0 0.75rem;
+                color: rgba(#000000, 0.65);
+                font-size: 1.5rem;
+            }
+
+            &:hover{
+                background-color: rgba(rgb(21, 81, 138),0.35);
+                .fas{
+                    color: white;
+                }
             }
         }
         

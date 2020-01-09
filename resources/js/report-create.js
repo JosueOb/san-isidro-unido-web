@@ -175,25 +175,24 @@ $(document).ready(function(){
             dataType: 'JSON',
             success:function(data){
 
-                console.log(data);
-
-                // if(data.success){
-                //     $('#title').removeClass('is-invalid');
-                //     $('#description').removeClass('is-invalid');
-                //     $('#images').removeClass('is-invalid');
-                //     Swal.fire({
-                //     position: 'top-end',
-                //     type: 'success',
-                //     title: 'Informe publicado',
-                //     showConfirmButton: false,
-                //     timer: 1500,
-                //     allowOutsideClick: false,
-                //   })
-                //     // funciona como una redirección HTTP
-                //     setTimeout(function(){ 
-                //         window.location.replace('../reports');
-                //     }, 1000);
-                // }
+                // console.log(data);
+                if(data.success){
+                    $('#title').removeClass('is-invalid');
+                    $('#description').removeClass('is-invalid');
+                    $('#images').removeClass('is-invalid');
+                    Swal.fire({
+                    position: 'top-end',
+                    type: 'success',
+                    title: 'Informe publicado',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    allowOutsideClick: false,
+                  })
+                    // funciona como una redirección HTTP
+                    setTimeout(function(){ 
+                        window.location.replace('../reports');
+                    }, 1000);
+                }
             },
             error: function(jqXHR, textStatus, errorThrown){
                 var getErrors = jqXHR.responseJSON;
