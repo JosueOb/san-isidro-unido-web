@@ -34,4 +34,4 @@ window.Vue = require('vue');
 require('./dropdown');
 require('./imagename');
 require('./report-create');
-require('./get-gallery');
+require('./report-update');

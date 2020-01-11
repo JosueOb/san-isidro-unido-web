@@ -52099,7 +52099,7 @@ __webpack_require__(/*! ./imagename */ "./resources/js/imagename.js");
 
 __webpack_require__(/*! ./report-create */ "./resources/js/report-create.js");
 
-__webpack_require__(/*! ./get-gallery */ "./resources/js/get-gallery.js");
+__webpack_require__(/*! ./report-update */ "./resources/js/report-update.js");
 
 /***/ }),
 
@@ -52194,214 +52194,6 @@ $(document).ready(function () {
 
   $('.toggle-sidebar').click(function (e) {
     $('.main-sidebar').toggleClass('open');
-  });
-});
-
-/***/ }),
-
-/***/ "./resources/js/get-gallery.js":
-/*!*************************************!*\
-  !*** ./resources/js/get-gallery.js ***!
-  \*************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
-
-$(document).ready(function () {
-  console.log('documento listo....'); //Se realiza la lectura de las imagenes que que encuentren en la sección de gallería
-
-  var getImagesReport = document.querySelectorAll("#gallery-update .gallery-item img");
-  var urlImagesReport = [];
-  var inputImages = [];
-  var imagesRender = [];
-  getImagesReport.forEach(function (image, index) {
-    var imageRender = new Array();
-    var images = new Array();
-    imageRender['src'] = image.src;
-    images['report'] = imageRender;
-    imagesRender.push(images);
-    urlImagesReport.push(image.dataset.image);
-  });
-
-  var previewImages = function previewImages(images) {
-    var imageItem = '';
-    var numReport = 0;
-    var numInputImages = 0;
-    images.forEach(function (image, indice) {
-      for (var group in image) {
-        if (group === 'report') {
-          image[group]['index'] = numReport++;
-        }
-
-        if (group === 'input') {
-          image[group]['index'] = numInputImages++;
-        }
-
-        image[group]['position'] = indice;
-        imageItem += "\n                <div class=\"gallery-item\">\n                <div class=\"image-cancel\" id=\"delete_".concat(group, "_image\" data-position=\"").concat(image[group]['position'], "\" data-index=\"").concat(image[group]['index'], "\">\n                <i class=\"fas fa-trash-alt\"></i>\n                </div>\n                <img src=").concat(image[group]['src'], " alt='image_").concat(image[group]['index'], "'>\n                </div>\n                ");
-      }
-    });
-    var gallery = document.getElementById('gallery-update');
-
-    if (gallery) {
-      gallery.innerHTML = imageItem;
-    }
-  };
-
-  previewImages(imagesRender); //Al seleccionar el input file
-
-  $('#inputImages').on('change', function (event) {
-    $('#images').removeClass('is-invalid'); //Se obtiene las imagenes del input
-
-    var files = event.target.files;
-    var numberOfImagesAllowed = 5;
-    var size = 1048576; //equivale a 1MB
-    //se verifica que se haya seleccionado alguna imágen
-
-    if (files) {
-      //se recorre cada archivo para verificar que sea una imágen
-      [].forEach.call(files, function (file, index) {
-        if (imagesRender.length < numberOfImagesAllowed) {
-          // console.log('Seleccionó una imagen');
-          console.log(imagesRender.length);
-
-          if (/\.(jpe?g|png)$/i.test(file.name)) {
-            //Si la imagen es menor a 1MB
-            if (file.size < size) {
-              inputImages.push(file);
-              var reader = new FileReader();
-
-              reader.onload = function (event) {
-                var imageRender = new Array();
-                var images = new Array();
-                imageRender['src'] = event.target.result;
-                images['input'] = imageRender;
-                imagesRender.push(images);
-                previewImages(imagesRender);
-              };
-
-              reader.readAsDataURL(files.item(index));
-            } else {
-              Swal.fire({
-                type: 'error',
-                title: 'Fuera del límite de 1MB',
-                text: 'La imagen ' + file.name + ' pesa ' + (file.size / size).toFixed(2) + 'MB'
-              });
-            }
-          } else {
-            console.log('Archivo no permitido');
-            $('#images').addClass('is-invalid');
-            $('#images').siblings('.invalid-feedback').html('<strong> Archivo no permitido </strong>');
-          }
-        } else {
-          Swal.fire({
-            type: 'error',
-            title: 'Fuera del límite de imágenes seleccionadas',
-            text: 'Recuerda que solo puedes seleccionar hasta 5 imágenes'
-          });
-        }
-      });
-    }
-  });
-  $('#gallery-update').on('click', '#delete_report_image', function () {
-    var imageIndex = $(this).data('index');
-    var imagePosition = $(this).data('position');
-    urlImagesReport.splice(imageIndex, 1);
-    imagesRender.splice(imagePosition, 1);
-    previewImages(imagesRender);
-  });
-  $('#gallery-update').on('click', '#delete_input_image', function () {
-    var imageIndex = $(this).data('index');
-    var imagePosition = $(this).data('position');
-    inputImages.splice(imageIndex, 1);
-    imagesRender.splice(imagePosition, 1);
-    previewImages(imagesRender);
-  }); //AJAX
-
-  $('#report-update').on('submit', function (event) {
-    // Se evita el propago del submit
-    event.preventDefault(); //Se agrega el data del formData
-
-    var formData = new FormData(this);
-    formData["delete"]('images[]');
-    inputImages.forEach(function (image) {
-      formData.append('images[]', image);
-    });
-    urlImagesReport.forEach(function (image) {
-      formData.append('images_report[]', image);
-    });
-    $.ajax({
-      type: 'POST',
-      url: $(this).attr('action'),
-      data: formData,
-      cache: false,
-      contentType: false,
-      processData: false,
-      dataType: 'JSON',
-      success: function success(data) {
-        console.log(data);
-
-        if (data.success) {
-          $('#title').removeClass('is-invalid');
-          $('#description').removeClass('is-invalid');
-          $('#images').removeClass('is-invalid');
-          Swal.fire({
-            position: 'top-end',
-            type: 'success',
-            title: 'Informe actualizado',
-            showConfirmButton: false,
-            timer: 1500,
-            allowOutsideClick: false
-          }); // funciona como una redirección HTTP
-
-          setTimeout(function () {
-            window.location.replace('../');
-          }, 1000);
-        }
-      },
-      error: function error(jqXHR, textStatus, errorThrown) {
-        var getErrors = jqXHR.responseJSON; // console.log(getErrors);
-        // //Se obtienen los error de validación por parte de Laravel
-
-        var validationErrors = getErrors.errors ? getErrors.errors : null;
-
-        if (validationErrors) {
-          if (validationErrors.hasOwnProperty('title')) {
-            $('#title').addClass('is-invalid');
-            $('#title').siblings('.invalid-feedback').html('<strong>' + validationErrors['title'][0] + '</strong>');
-          } else {
-            $('#title').removeClass('is-invalid');
-          }
-
-          if (validationErrors.hasOwnProperty('description')) {
-            $('#description').addClass('is-invalid');
-            $('#description').siblings('.invalid-feedback').html('<strong>' + validationErrors['description'][0] + '</strong>');
-          } else {
-            $('#description').removeClass('is-invalid');
-          }
-
-          if (validationErrors.hasOwnProperty('images') || validationErrors.hasOwnProperty('images.0')) {
-            var message = validationErrors.hasOwnProperty('images') ? validationErrors['images'][0] : validationErrors['images.0'][0];
-            console.log(message);
-          }
-
-          if (validationErrors.hasOwnProperty('images')) {
-            $('#inputImages').addClass('is-invalid');
-            $('#inputImages').siblings('.invalid-feedback').html('<strong>' + validationErrors['images'][0] + '</strong>');
-          } else {
-            if (validationErrors.hasOwnProperty('images.0')) {
-              $('#inputImages').addClass('is-invalid');
-              $('#inputImages').siblings('.invalid-feedback').html('<strong>' + validationErrors['images.0'][0] + '</strong>');
-            } else {
-              $('#inputImages').removeClass('is-invalid');
-            }
-          }
-        }
-
-        console.log(jqXHR.responseText);
-      }
-    });
   });
 });
 
@@ -52639,6 +52431,214 @@ $(document).ready(function () {
             $('#document').siblings('.invalid-feedback').html('<strong>' + validationErrors['document'][0] + '</strong>');
           } else {
             $('#document').removeClass('is-invalid');
+          }
+        }
+
+        console.log(jqXHR.responseText);
+      }
+    });
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/report-update.js":
+/*!***************************************!*\
+  !*** ./resources/js/report-update.js ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+
+$(document).ready(function () {
+  console.log('documento listo....'); //Se realiza la lectura de las imagenes que que encuentren en la sección de gallería
+
+  var getImagesReport = document.querySelectorAll("#gallery-update .gallery-item img");
+  var urlImagesReport = [];
+  var inputImages = [];
+  var imagesRender = [];
+  getImagesReport.forEach(function (image, index) {
+    var imageRender = new Array();
+    var images = new Array();
+    imageRender['src'] = image.src;
+    images['report'] = imageRender;
+    imagesRender.push(images);
+    urlImagesReport.push(image.dataset.image);
+  });
+
+  var previewImages = function previewImages(images) {
+    var imageItem = '';
+    var numReport = 0;
+    var numInputImages = 0;
+    images.forEach(function (image, indice) {
+      for (var group in image) {
+        if (group === 'report') {
+          image[group]['index'] = numReport++;
+        }
+
+        if (group === 'input') {
+          image[group]['index'] = numInputImages++;
+        }
+
+        image[group]['position'] = indice;
+        imageItem += "\n                <div class=\"gallery-item\">\n                <div class=\"image-cancel\" id=\"delete_".concat(group, "_image\" data-position=\"").concat(image[group]['position'], "\" data-index=\"").concat(image[group]['index'], "\">\n                <i class=\"fas fa-trash-alt\"></i>\n                </div>\n                <img src=").concat(image[group]['src'], " alt='image_").concat(image[group]['index'], "'>\n                </div>\n                ");
+      }
+    });
+    var gallery = document.getElementById('gallery-update');
+
+    if (gallery) {
+      gallery.innerHTML = imageItem;
+    }
+  };
+
+  previewImages(imagesRender); //Al seleccionar el input file
+
+  $('#inputImages').on('change', function (event) {
+    $('#images').removeClass('is-invalid'); //Se obtiene las imagenes del input
+
+    var files = event.target.files;
+    var numberOfImagesAllowed = 5;
+    var size = 1048576; //equivale a 1MB
+    //se verifica que se haya seleccionado alguna imágen
+
+    if (files) {
+      //se recorre cada archivo para verificar que sea una imágen
+      [].forEach.call(files, function (file, index) {
+        if (imagesRender.length < numberOfImagesAllowed) {
+          // console.log('Seleccionó una imagen');
+          console.log(imagesRender.length);
+
+          if (/\.(jpe?g|png)$/i.test(file.name)) {
+            //Si la imagen es menor a 1MB
+            if (file.size < size) {
+              inputImages.push(file);
+              var reader = new FileReader();
+
+              reader.onload = function (event) {
+                var imageRender = new Array();
+                var images = new Array();
+                imageRender['src'] = event.target.result;
+                images['input'] = imageRender;
+                imagesRender.push(images);
+                previewImages(imagesRender);
+              };
+
+              reader.readAsDataURL(files.item(index));
+            } else {
+              Swal.fire({
+                type: 'error',
+                title: 'Fuera del límite de 1MB',
+                text: 'La imagen ' + file.name + ' pesa ' + (file.size / size).toFixed(2) + 'MB'
+              });
+            }
+          } else {
+            console.log('Archivo no permitido');
+            $('#images').addClass('is-invalid');
+            $('#images').siblings('.invalid-feedback').html('<strong> Archivo no permitido </strong>');
+          }
+        } else {
+          Swal.fire({
+            type: 'error',
+            title: 'Fuera del límite de imágenes seleccionadas',
+            text: 'Recuerda que solo puedes seleccionar hasta 5 imágenes'
+          });
+        }
+      });
+    }
+  });
+  $('#gallery-update').on('click', '#delete_report_image', function () {
+    var imageIndex = $(this).data('index');
+    var imagePosition = $(this).data('position');
+    urlImagesReport.splice(imageIndex, 1);
+    imagesRender.splice(imagePosition, 1);
+    previewImages(imagesRender);
+  });
+  $('#gallery-update').on('click', '#delete_input_image', function () {
+    var imageIndex = $(this).data('index');
+    var imagePosition = $(this).data('position');
+    inputImages.splice(imageIndex, 1);
+    imagesRender.splice(imagePosition, 1);
+    previewImages(imagesRender);
+  }); //AJAX
+
+  $('#report-update').on('submit', function (event) {
+    // Se evita el propago del submit
+    event.preventDefault(); //Se agrega el data del formData
+
+    var formData = new FormData(this);
+    formData["delete"]('images[]');
+    inputImages.forEach(function (image) {
+      formData.append('images[]', image);
+    });
+    urlImagesReport.forEach(function (image) {
+      formData.append('images_report[]', image);
+    });
+    $.ajax({
+      type: 'POST',
+      url: $(this).attr('action'),
+      data: formData,
+      cache: false,
+      contentType: false,
+      processData: false,
+      dataType: 'JSON',
+      success: function success(data) {
+        console.log(data);
+
+        if (data.success) {
+          $('#title').removeClass('is-invalid');
+          $('#description').removeClass('is-invalid');
+          $('#images').removeClass('is-invalid');
+          Swal.fire({
+            position: 'top-end',
+            type: 'success',
+            title: 'Informe actualizado',
+            showConfirmButton: false,
+            timer: 1500,
+            allowOutsideClick: false
+          }); // funciona como una redirección HTTP
+
+          setTimeout(function () {
+            window.location.replace('../');
+          }, 1000);
+        }
+      },
+      error: function error(jqXHR, textStatus, errorThrown) {
+        var getErrors = jqXHR.responseJSON; // console.log(getErrors);
+        // //Se obtienen los error de validación por parte de Laravel
+
+        var validationErrors = getErrors.errors ? getErrors.errors : null;
+
+        if (validationErrors) {
+          if (validationErrors.hasOwnProperty('title')) {
+            $('#title').addClass('is-invalid');
+            $('#title').siblings('.invalid-feedback').html('<strong>' + validationErrors['title'][0] + '</strong>');
+          } else {
+            $('#title').removeClass('is-invalid');
+          }
+
+          if (validationErrors.hasOwnProperty('description')) {
+            $('#description').addClass('is-invalid');
+            $('#description').siblings('.invalid-feedback').html('<strong>' + validationErrors['description'][0] + '</strong>');
+          } else {
+            $('#description').removeClass('is-invalid');
+          }
+
+          if (validationErrors.hasOwnProperty('images') || validationErrors.hasOwnProperty('images.0')) {
+            var message = validationErrors.hasOwnProperty('images') ? validationErrors['images'][0] : validationErrors['images.0'][0];
+            console.log(message);
+          }
+
+          if (validationErrors.hasOwnProperty('images')) {
+            $('#inputImages').addClass('is-invalid');
+            $('#inputImages').siblings('.invalid-feedback').html('<strong>' + validationErrors['images'][0] + '</strong>');
+          } else {
+            if (validationErrors.hasOwnProperty('images.0')) {
+              $('#inputImages').addClass('is-invalid');
+              $('#inputImages').siblings('.invalid-feedback').html('<strong>' + validationErrors['images.0'][0] + '</strong>');
+            } else {
+              $('#inputImages').removeClass('is-invalid');
+            }
           }
         }
 
