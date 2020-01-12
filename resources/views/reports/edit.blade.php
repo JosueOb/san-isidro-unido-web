@@ -52,7 +52,7 @@
                         @enderror --}}
                     </div>
                     <div class="form-group col-6 offset-3">
-                        <button type="submit" class="btn btn-primary btn-block">
+                        <button type="submit" class="btn btn-primary btn-block" id="send-data">
                             Actualizar
                             <i class="far fa-save"></i>
                         </button>
@@ -69,7 +69,7 @@
                     <div class="form-group">
                         <label for="images">Imágenes <span class="text-muted">(opcional)</span></label>
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="inputImages" name="images[]" accept="image/jpeg,image/png"  multiple>
+                            <input type="file" class="custom-file-input" id="inputImages" name="images[]" accept="image/png, .jpeg, .jpg"  multiple>
                             <label class="custom-file-label" id='imagesLabel' for="images" data-browse="Agregar"></label>
                             <span class="invalid-feedback" role="alert">
                             
@@ -96,7 +96,7 @@
                         <label for="document">Documento <span class="text-muted">(opcional)</span></label>
                         <div class="custom-file">
 
-                            <input type="file" class="custom-file-input" id="document" name="document" accept=".pdf">
+                            <input type="file" class="custom-file-input" id="imputDocument" name="document" accept=".pdf">
                             <label class="custom-file-label" id='imagesLabel' for="document" data-browse="Agregar"></label>
                             <span class="invalid-feedback" role="alert">
                                 
@@ -118,7 +118,7 @@
                                     <a href="{{$document->getLink()}}" class="link-document" target="_blank" data-document="{{$document->url}}">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <i class="fas fa-trash-alt image-cancel"></i>
+                                    <i class="fas fa-trash-alt image-cancel" id="delete_old_report"></i>
 
                                 </div>
                                 @endforeach

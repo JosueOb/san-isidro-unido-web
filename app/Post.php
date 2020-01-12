@@ -73,7 +73,8 @@ class Post extends Model
             $image_url = $image["url"];
         }else{
             //en caso de no tener imagen se retorna una por defecto
-            $image_url = "images_reports/image-default.jpg";
+            // $image_url = "images_reports/image-default.jpg";
+            $image_url = 'images_reports/'.env('IMAGE_DEFAULT_NAME');
         }
         return  \Storage::disk('public')->url($image_url);
     }

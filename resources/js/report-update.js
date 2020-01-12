@@ -4,10 +4,17 @@ $(document).ready(function(){
     console.log('documento listo....');
     //Se realiza la lectura de las imagenes que que encuentren en la sección de gallería
     var getImagesReport = document.querySelectorAll("#gallery-update .gallery-item img");
+    //Se realiza la lectura del documento adjuntado por el usuario
+    var getDocumentReport = document.querySelectorAll("#gallery-document .gallery-item a");
+    // console.log(getDocumentReport);
 
-    var urlImagesReport = [];
-    var inputImages = [];
+    // Images
+    var oldImagesReport = [];
+    var newImagesReport = [];
     var imagesRender = [];
+    // Document
+    var urlDocumentReport = [];
+    var newDocument = [];
 
     getImagesReport.forEach(function(image, index){
         var imageRender = new Array();
@@ -17,8 +24,16 @@ $(document).ready(function(){
         images['report'] = imageRender;
 
         imagesRender.push(images);
-        urlImagesReport.push(image.dataset.image);
+        oldImagesReport.push(image.dataset.image);
     });
+
+    // console.log(imagesRender);
+
+    getDocumentReport.forEach(function(file){
+        urlDocumentReport.push(file.dataset.document);
+    });
+    
+    // console.log(urlDocumentReport);
     
     const previewImages = images =>{
         let imageItem = '';
@@ -52,40 +67,74 @@ $(document).ready(function(){
         }
     }
     
+    const previewDocument = file_array =>{
+        
+        let documentItem = '';
+        file_array.forEach(function(file, indice){
+            documentItem += `
+            <div class='gallery-item'>
+                <i class="fas fa-file-pdf image-document"></i>
+                <p class="document-name">${file.name}</p>
+                <i class="fas fa-trash-alt image-cancel" data-no="${indice}"></i>
+            </div>
+            `;
+        });
+
+        document.getElementById('gallery-document').innerHTML = documentItem;
+    }
+
     previewImages(imagesRender);
     
     //Al seleccionar el input file
      $('#inputImages').on('change', function(event){
-        $('#images').removeClass('is-invalid');
+        $('#inputImages').removeClass('is-invalid');
 
         //Se obtiene las imagenes del input
         var files = event.target.files;
         let numberOfImagesAllowed = 5;
+        var imagesLength = imagesRender.length;
         let size = 1048576;//equivale a 1MB
+        
         
         //se verifica que se haya seleccionado alguna imágen
         if(files){
             //se recorre cada archivo para verificar que sea una imágen
             [].forEach.call(files, function(file, index){
-                if(imagesRender.length < numberOfImagesAllowed){
+
+                // if(imagesRender.length < numberOfImagesAllowed){
                     // console.log('Seleccionó una imagen');
-                    console.log(imagesRender.length);
+                    // console.log(imagesRender.length);
+                    //console.log("imagesLength"+imagesLength);
+
                     if ( /\.(jpe?g|png)$/i.test(file.name) ) {
                         //Si la imagen es menor a 1MB
                         if(file.size < size){
-                            inputImages.push(file);
                             var reader = new FileReader();
-                            reader.onload = function(event){
-                                var imageRender = new Array();
-                                var images = new Array();
-                                
-                                imageRender['src'] = event.target.result; 
-                                images['input'] = imageRender;
+                            reader.onload = (event) => {
+                                if(imagesRender.length < numberOfImagesAllowed){
+                                    newImagesReport.push(file);
 
-                                imagesRender.push(images); 
-                                previewImages(imagesRender);
+                                    var imageRender = new Array();
+                                    var images = new Array();
+                                    
+                                    imageRender['src'] = event.target.result; 
+                                    images['input'] = imageRender;
+    
+                                    imagesRender.push(images); 
+    
+                                    previewImages(imagesRender);
+                                    console.log(imagesRender.length)
+                                    imagesLength = imagesRender.length;
+                                }else{
+                                    Swal.fire({
+                                        type: 'error',
+                                        title: 'Fuera del límite de imágenes seleccionadas',
+                                        text: 'Recuerda que solo puedes seleccionar hasta 5 imágenes',
+                                    })
+                                }
                             }
                             reader.readAsDataURL(files.item(index));
+                            // console.log("imagesRender.length" +imagesRender.length);
                         }else{
                             Swal.fire({
                                 type: 'error',
@@ -94,36 +143,76 @@ $(document).ready(function(){
                             })
                         }
                     }else{
-                        console.log('Archivo no permitido');
-                        $('#images').addClass('is-invalid');
-                        $('#images').siblings('.invalid-feedback').html('<strong> Archivo no permitido </strong>');
+                        console.log('Archivo no permitidos');
+                        $('#inputImages').addClass('is-invalid');
+                        $('#inputImages').siblings('.invalid-feedback').html('<strong> Archivo no permitido </strong>');
                     }
-                }else{
-                    Swal.fire({
-                        type: 'error',
-                        title: 'Fuera del límite de imágenes seleccionadas',
-                        text: 'Recuerda que solo puedes seleccionar hasta 5 imágenes',
-                    })
-                }
+                // }else{
+                //     Swal.fire({
+                //         type: 'error',
+                //         title: 'Fuera del límite de imágenes seleccionadas',
+                //         text: 'Recuerda que solo puedes seleccionar hasta 5 imágenes',
+                //     })
+                // }
             });
         }
-
     });
+
+    $('#imputDocument').on('change', function(event){
+        $('#imputDocument').removeClass('is-invalid');
+        //Se obtiene el nuevo documento seleccionado
+        var newFile = event.target.files[0];
+        let size = 5242880;//equivale a 5MB (bytes)
+        // document_array.push(file);
+        if(newFile){
+            // console.log(document_array.length);
+            //Se verifica que si ya se ha seleccionado un documento
+            if(!newDocument.length && !urlDocumentReport.length){
+                // console.log(newDocument);
+                // console.log(urlDocumentReport);
+                if( /\.(pdf)$/i.test(newFile.name)){
+                    if(newFile.size < size){
+                        console.log(newFile.name);
+                        newDocument.push(newFile);
+                        previewDocument(document_array)
+                    }else{
+                        Swal.fire({
+                            type: 'error',
+                            title: 'Fuera del límite de 5MB',
+                            text: 'El documento '+ file.name+' pesa '+ (file.size/1048576).toFixed(2) + 'MB',
+                        })
+                    }
+                }else{
+                    console.log('El formato del documento no es permitido');
+                    $('#document').addClass('is-invalid');
+                    $('#document').siblings('.invalid-feedback').html('<strong> Archivo no permitido </strong>');
+                }
+            }else{
+                Swal.fire({
+                    type: 'error',
+                    title: 'Fuera del límite',
+                    text: 'Recuerda que solo puedes subir un documento PDF',
+                })
+            }
+        }
+    });
+
 
     $('#gallery-update').on('click', '#delete_report_image',function(){
         let imageIndex = $(this).data('index');
         let imagePosition = $(this).data('position');
-        urlImagesReport.splice(imageIndex, 1);
+        oldImagesReport.splice(imageIndex, 1);
         imagesRender.splice(imagePosition,1);
         previewImages(imagesRender);
     });
     $('#gallery-update').on('click', '#delete_input_image',function(){
         let imageIndex = $(this).data('index');
         let imagePosition = $(this).data('position');
-        inputImages.splice(imageIndex, 1);
+        newImagesReport.splice(imageIndex, 1);
         imagesRender.splice(imagePosition,1);
         previewImages(imagesRender);
     });
+
     //AJAX
     $('#report-update').on('submit', function(event){
 
@@ -134,12 +223,14 @@ $(document).ready(function(){
         var formData = new FormData(this);
         formData.delete('images[]');
 
-        inputImages.forEach(function(image){
+        newImagesReport.forEach(function(image){
             formData.append('images[]', image);
         });
-        urlImagesReport.forEach(function(image){
+        oldImagesReport.forEach(function(image){
             formData.append('images_report[]', image);
         });
+        console.log('Imagenes nuevas'+formData.getAll("images[]"));
+        console.log('Imagenes antiguas'+formData.getAll("images_report[]"));
 
          $.ajax({
             type:'POST',
@@ -151,6 +242,7 @@ $(document).ready(function(){
             dataType: 'JSON',
             success:function(data){
                 console.log(data);
+                
 
                 if(data.success){
                     $('#title').removeClass('is-invalid');
@@ -164,6 +256,10 @@ $(document).ready(function(){
                     timer: 1500,
                     allowOutsideClick: false,
                   })
+                  // Se deshabilita el botón enviar
+                  $('#send-data').prop("disabled", true);
+                  $('#send-data').removeClass("btn-primary");
+                  $('#send-data').addClass("btn-danger");
                     // funciona como una redirección HTTP
                     setTimeout(function(){ 
                         window.location.replace('../');

@@ -53,7 +53,7 @@
                         @enderror --}}
                     </div>
                     <div class="form-group col-6 offset-3">
-                        <button type="submit" class="btn btn-primary btn-block">
+                        <button type="submit" class="btn btn-primary btn-block" id="send-data">
                             Publicar
                             <i class="far fa-save"></i>
                         </button>
