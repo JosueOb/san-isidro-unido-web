@@ -119,7 +119,7 @@ class ReportController extends Controller
         return view('reports.edit', [
             'report'=>$report,
             'images'=>$images,
-            'file'=>$document,
+            'resource'=>$document,
         ]);
     }
 

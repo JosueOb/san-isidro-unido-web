@@ -203,8 +203,9 @@ $(document).ready(function () {
 
                 //Se obtienen los error de validación por parte de Laravel
                 var validationErrors = getErrors.errors ? getErrors.errors : null;
-
+                console.log(getErrors);
                 if (validationErrors) {
+                    console.log(validationErrors);
                     if (validationErrors.hasOwnProperty('title')) {
                         $('#title').addClass('is-invalid');
                         $('#title').siblings('.invalid-feedback').html('<strong>' + validationErrors['title'][0] + '</strong>');

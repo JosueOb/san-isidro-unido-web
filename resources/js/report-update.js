@@ -5,7 +5,7 @@ $(document).ready(function(){
     //Se realiza la lectura de las imagenes que que encuentren en la sección de gallería
     var getImagesReport = document.querySelectorAll("#gallery-update .gallery-item img");
     //Se realiza la lectura del documento adjuntado por el usuario
-    var getDocumentReport = document.querySelectorAll("#gallery-document .gallery-item a");
+    var getDocumentReport = document.querySelectorAll("#gallery-document-update .gallery-item a");
     // console.log(getDocumentReport);
 
     // Images
@@ -13,8 +13,8 @@ $(document).ready(function(){
     var newImagesReport = [];
     var imagesRender = [];
     // Document
-    var urlDocumentReport = [];
-    var newDocument = [];
+    var oldDocumentReport = [];
+    var newDocumentReport = [];
 
     getImagesReport.forEach(function(image, index){
         var imageRender = new Array();
@@ -27,13 +27,11 @@ $(document).ready(function(){
         oldImagesReport.push(image.dataset.image);
     });
 
-    // console.log(imagesRender);
 
     getDocumentReport.forEach(function(file){
-        urlDocumentReport.push(file.dataset.document);
+        oldDocumentReport.push(file.dataset.document);
     });
-    
-    // console.log(urlDocumentReport);
+
     
     const previewImages = images =>{
         let imageItem = '';
@@ -75,12 +73,12 @@ $(document).ready(function(){
             <div class='gallery-item'>
                 <i class="fas fa-file-pdf image-document"></i>
                 <p class="document-name">${file.name}</p>
-                <i class="fas fa-trash-alt image-cancel" data-no="${indice}"></i>
+                <i class="fas fa-trash-alt image-cancel" data-no="${indice}" id='delete_new_document'></i>
             </div>
             `;
         });
 
-        document.getElementById('gallery-document').innerHTML = documentItem;
+        document.getElementById('gallery-document-update').innerHTML = documentItem;
     }
 
     previewImages(imagesRender);
@@ -158,8 +156,8 @@ $(document).ready(function(){
         }
     });
 
-    $('#imputDocument').on('change', function(event){
-        $('#imputDocument').removeClass('is-invalid');
+    $('#inputDocument').on('change', function(event){
+        $('#inputDocument').removeClass('is-invalid');
         //Se obtiene el nuevo documento seleccionado
         var newFile = event.target.files[0];
         let size = 5242880;//equivale a 5MB (bytes)
@@ -167,26 +165,26 @@ $(document).ready(function(){
         if(newFile){
             // console.log(document_array.length);
             //Se verifica que si ya se ha seleccionado un documento
-            if(!newDocument.length && !urlDocumentReport.length){
+            if(!newDocumentReport.length && !oldDocumentReport.length){
                 // console.log(newDocument);
                 // console.log(urlDocumentReport);
-                if( /\.(pdf)$/i.test(newFile.name)){
+                // if( /\.(pdf)$/i.test(newFile.name)){
                     if(newFile.size < size){
                         console.log(newFile.name);
-                        newDocument.push(newFile);
-                        previewDocument(document_array)
+                        newDocumentReport.push(newFile);
+                        previewDocument(newDocumentReport)
                     }else{
                         Swal.fire({
                             type: 'error',
                             title: 'Fuera del límite de 5MB',
-                            text: 'El documento '+ file.name+' pesa '+ (file.size/1048576).toFixed(2) + 'MB',
+                            text: 'El documento '+ newFile.name+' pesa '+ (newFile.size/1048576).toFixed(2) + 'MB',
                         })
                     }
-                }else{
-                    console.log('El formato del documento no es permitido');
-                    $('#document').addClass('is-invalid');
-                    $('#document').siblings('.invalid-feedback').html('<strong> Archivo no permitido </strong>');
-                }
+                // }else{
+                //     console.log('El formato del documento no es permitido');
+                //     $('#document').addClass('is-invalid');
+                //     $('#document').siblings('.invalid-feedback').html('<strong> Archivo no permitido </strong>');
+                // }
             }else{
                 Swal.fire({
                     type: 'error',
@@ -213,6 +211,24 @@ $(document).ready(function(){
         previewImages(imagesRender);
     });
 
+    // console.log(oldDocumentReport)
+
+    $('#gallery-document-update').on('click', '#delete_old_document',function(){
+        
+        oldDocumentReport.splice(0, 1);
+        console.log(oldDocumentReport)
+        previewDocument(newDocumentReport);
+        console.log('eliminar antiguo');
+    });
+    $('#gallery-document-update').on('click', '#delete_new_document', function () {
+        let documentIndex = $(this).data('no');
+        // console.log('eliminar'+ documentIndex);
+        newDocumentReport.splice(documentIndex, 1);
+        previewDocument(newDocumentReport);
+        console.log('eliminar nuevo');
+
+    });
+
     //AJAX
     $('#report-update').on('submit', function(event){
 
@@ -229,8 +245,20 @@ $(document).ready(function(){
         oldImagesReport.forEach(function(image){
             formData.append('images_report[]', image);
         });
-        console.log('Imagenes nuevas'+formData.getAll("images[]"));
-        console.log('Imagenes antiguas'+formData.getAll("images_report[]"));
+
+        formData.delete('document[]');
+
+        oldDocumentReport.forEach(function(file){
+            formData.append('old_document[]', file);
+        });
+        newDocumentReport.forEach(function(file){
+            formData.append('new_document[]', file);
+        });
+        // console.log('Imagenes nuevas '+formData.getAll("images[]"));
+        // console.log('Imagenes antiguas '+formData.getAll("images_report[]"));
+        
+        // console.log('Documento antiguo '+formData.getAll("old_document[]"));
+        // console.log('Documento nuevo '+formData.getAll("new_document[]"));
 
          $.ajax({
             type:'POST',
@@ -302,6 +330,12 @@ $(document).ready(function(){
                         }else{
                             $('#inputImages').removeClass('is-invalid');
                         }
+                    }
+                    if (validationErrors.hasOwnProperty('document')) {
+                        $('#inputDocument').addClass('is-invalid');
+                        $('#inputDocument').siblings('.invalid-feedback').html('<strong>' + validationErrors['document'][0] + '</strong>');
+                    } else {
+                        $('#inputDocument').removeClass('is-invalid');
                     }
                 }
               

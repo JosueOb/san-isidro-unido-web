@@ -52400,8 +52400,11 @@ $(document).ready(function () {
         var getErrors = jqXHR.responseJSON; //Se obtienen los error de validación por parte de Laravel
 
         var validationErrors = getErrors.errors ? getErrors.errors : null;
+        console.log(getErrors);
 
         if (validationErrors) {
+          console.log(validationErrors);
+
           if (validationErrors.hasOwnProperty('title')) {
             $('#title').addClass('is-invalid');
             $('#title').siblings('.invalid-feedback').html('<strong>' + validationErrors['title'][0] + '</strong>');
@@ -52458,15 +52461,15 @@ $(document).ready(function () {
 
   var getImagesReport = document.querySelectorAll("#gallery-update .gallery-item img"); //Se realiza la lectura del documento adjuntado por el usuario
 
-  var getDocumentReport = document.querySelectorAll("#gallery-document .gallery-item a"); // console.log(getDocumentReport);
+  var getDocumentReport = document.querySelectorAll("#gallery-document-update .gallery-item a"); // console.log(getDocumentReport);
   // Images
 
   var oldImagesReport = [];
   var newImagesReport = [];
   var imagesRender = []; // Document
 
-  var urlDocumentReport = [];
-  var newDocument = [];
+  var oldDocumentReport = [];
+  var newDocumentReport = [];
   getImagesReport.forEach(function (image, index) {
     var imageRender = new Array();
     var images = new Array();
@@ -52474,11 +52477,10 @@ $(document).ready(function () {
     images['report'] = imageRender;
     imagesRender.push(images);
     oldImagesReport.push(image.dataset.image);
-  }); // console.log(imagesRender);
-
+  });
   getDocumentReport.forEach(function (file) {
-    urlDocumentReport.push(file.dataset.document);
-  }); // console.log(urlDocumentReport);
+    oldDocumentReport.push(file.dataset.document);
+  });
 
   var previewImages = function previewImages(images) {
     var imageItem = '';
@@ -52508,9 +52510,9 @@ $(document).ready(function () {
   var previewDocument = function previewDocument(file_array) {
     var documentItem = '';
     file_array.forEach(function (file, indice) {
-      documentItem += "\n            <div class='gallery-item'>\n                <i class=\"fas fa-file-pdf image-document\"></i>\n                <p class=\"document-name\">".concat(file.name, "</p>\n                <i class=\"fas fa-trash-alt image-cancel\" data-no=\"").concat(indice, "\"></i>\n            </div>\n            ");
+      documentItem += "\n            <div class='gallery-item'>\n                <i class=\"fas fa-file-pdf image-document\"></i>\n                <p class=\"document-name\">".concat(file.name, "</p>\n                <i class=\"fas fa-trash-alt image-cancel\" data-no=\"").concat(indice, "\" id='delete_new_document'></i>\n            </div>\n            ");
     });
-    document.getElementById('gallery-document').innerHTML = documentItem;
+    document.getElementById('gallery-document-update').innerHTML = documentItem;
   };
 
   previewImages(imagesRender); //Al seleccionar el input file
@@ -52579,8 +52581,8 @@ $(document).ready(function () {
       });
     }
   });
-  $('#imputDocument').on('change', function (event) {
-    $('#imputDocument').removeClass('is-invalid'); //Se obtiene el nuevo documento seleccionado
+  $('#inputDocument').on('change', function (event) {
+    $('#inputDocument').removeClass('is-invalid'); //Se obtiene el nuevo documento seleccionado
 
     var newFile = event.target.files[0];
     var size = 5242880; //equivale a 5MB (bytes)
@@ -52589,26 +52591,26 @@ $(document).ready(function () {
     if (newFile) {
       // console.log(document_array.length);
       //Se verifica que si ya se ha seleccionado un documento
-      if (!newDocument.length && !urlDocumentReport.length) {
+      if (!newDocumentReport.length && !oldDocumentReport.length) {
         // console.log(newDocument);
         // console.log(urlDocumentReport);
-        if (/\.(pdf)$/i.test(newFile.name)) {
-          if (newFile.size < size) {
-            console.log(newFile.name);
-            newDocument.push(newFile);
-            previewDocument(document_array);
-          } else {
-            Swal.fire({
-              type: 'error',
-              title: 'Fuera del límite de 5MB',
-              text: 'El documento ' + file.name + ' pesa ' + (file.size / 1048576).toFixed(2) + 'MB'
-            });
-          }
+        // if( /\.(pdf)$/i.test(newFile.name)){
+        if (newFile.size < size) {
+          console.log(newFile.name);
+          newDocumentReport.push(newFile);
+          previewDocument(newDocumentReport);
         } else {
-          console.log('El formato del documento no es permitido');
-          $('#document').addClass('is-invalid');
-          $('#document').siblings('.invalid-feedback').html('<strong> Archivo no permitido </strong>');
-        }
+          Swal.fire({
+            type: 'error',
+            title: 'Fuera del límite de 5MB',
+            text: 'El documento ' + newFile.name + ' pesa ' + (newFile.size / 1048576).toFixed(2) + 'MB'
+          });
+        } // }else{
+        //     console.log('El formato del documento no es permitido');
+        //     $('#document').addClass('is-invalid');
+        //     $('#document').siblings('.invalid-feedback').html('<strong> Archivo no permitido </strong>');
+        // }
+
       } else {
         Swal.fire({
           type: 'error',
@@ -52631,6 +52633,20 @@ $(document).ready(function () {
     newImagesReport.splice(imageIndex, 1);
     imagesRender.splice(imagePosition, 1);
     previewImages(imagesRender);
+  }); // console.log(oldDocumentReport)
+
+  $('#gallery-document-update').on('click', '#delete_old_document', function () {
+    oldDocumentReport.splice(0, 1);
+    console.log(oldDocumentReport);
+    previewDocument(newDocumentReport);
+    console.log('eliminar antiguo');
+  });
+  $('#gallery-document-update').on('click', '#delete_new_document', function () {
+    var documentIndex = $(this).data('no'); // console.log('eliminar'+ documentIndex);
+
+    newDocumentReport.splice(documentIndex, 1);
+    previewDocument(newDocumentReport);
+    console.log('eliminar nuevo');
   }); //AJAX
 
   $('#report-update').on('submit', function (event) {
@@ -52645,8 +52661,17 @@ $(document).ready(function () {
     oldImagesReport.forEach(function (image) {
       formData.append('images_report[]', image);
     });
-    console.log('Imagenes nuevas' + formData.getAll("images[]"));
-    console.log('Imagenes antiguas' + formData.getAll("images_report[]"));
+    formData["delete"]('document[]');
+    oldDocumentReport.forEach(function (file) {
+      formData.append('old_document[]', file);
+    });
+    newDocumentReport.forEach(function (file) {
+      formData.append('new_document[]', file);
+    }); // console.log('Imagenes nuevas '+formData.getAll("images[]"));
+    // console.log('Imagenes antiguas '+formData.getAll("images_report[]"));
+    // console.log('Documento antiguo '+formData.getAll("old_document[]"));
+    // console.log('Documento nuevo '+formData.getAll("new_document[]"));
+
     $.ajax({
       type: 'POST',
       url: $(this).attr('action'),
@@ -52716,6 +52741,13 @@ $(document).ready(function () {
             } else {
               $('#inputImages').removeClass('is-invalid');
             }
+          }
+
+          if (validationErrors.hasOwnProperty('document')) {
+            $('#inputDocument').addClass('is-invalid');
+            $('#inputDocument').siblings('.invalid-feedback').html('<strong>' + validationErrors['document'][0] + '</strong>');
+          } else {
+            $('#inputDocument').removeClass('is-invalid');
           }
         }
 

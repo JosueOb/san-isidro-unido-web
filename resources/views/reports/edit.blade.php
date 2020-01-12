@@ -96,7 +96,7 @@
                         <label for="document">Documento <span class="text-muted">(opcional)</span></label>
                         <div class="custom-file">
 
-                            <input type="file" class="custom-file-input" id="imputDocument" name="document" accept=".pdf">
+                            <input type="file" class="custom-file-input" id="inputDocument" name="document[]" accept=".pdf">
                             <label class="custom-file-label" id='imagesLabel' for="document" data-browse="Agregar"></label>
                             <span class="invalid-feedback" role="alert">
                                 
@@ -105,10 +105,10 @@
                         <small id="documentHelp" class="form-text text-muted">
                             Puedes adjuntar un documento PDF máximo de 5MB
                         </small>
-                        <div class="gallery-document" id="gallery-document">
+                        <div class="gallery-document" id="gallery-document-update">
                             {{-- Se presentan el documento seleccionado por el usuario --}}
-                            @if ($file)
-                                @foreach ($file as $document)
+                            @if ($resource)
+                                @foreach ($resource as $document)
                                 <div class="gallery-item">
                                     {{-- <div class="image-cancel"><i class="fas fa-trash-alt"></i></div>
                                     <img src={{$document->getLink()}} alt='image_{{$document->id}}' data-image="{{$image->url}}"> --}}
@@ -118,7 +118,7 @@
                                     <a href="{{$document->getLink()}}" class="link-document" target="_blank" data-document="{{$document->url}}">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <i class="fas fa-trash-alt image-cancel" id="delete_old_report"></i>
+                                    <i class="fas fa-trash-alt image-cancel" id="delete_old_document"></i>
 
                                 </div>
                                 @endforeach
