@@ -52661,12 +52661,12 @@ $(document).ready(function () {
     oldImagesReport.forEach(function (image) {
       formData.append('images_report[]', image);
     });
-    formData["delete"]('document[]');
+    formData["delete"]('document');
     oldDocumentReport.forEach(function (file) {
-      formData.append('old_document[]', file);
+      formData.append('old_document', file);
     });
     newDocumentReport.forEach(function (file) {
-      formData.append('new_document[]', file);
+      formData.append('document', file);
     }); // console.log('Imagenes nuevas '+formData.getAll("images[]"));
     // console.log('Imagenes antiguas '+formData.getAll("images_report[]"));
     // console.log('Documento antiguo '+formData.getAll("old_document[]"));

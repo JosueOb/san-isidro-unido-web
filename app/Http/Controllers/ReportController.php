@@ -151,11 +151,11 @@ class ReportController extends Controller
         //Se verifica si alguna imagen del reporte se mantiene o fue eliminada
         $newImagesReport = $request['images_report'];
         // $collectionImageReport = $report->images()->get();
-        $collectionImageReport = $report->resources()->where('type', 'image')->get();;
+        $collectionImageReport = $report->resources()->where('type', 'image')->get();
         
-        // foreach ($newImagesReport as $value) {
-        //     echo $value."\n";
-        // }
+        //Se obtienen los documentos antiguos
+        $oldDocument = $request['old_document'];
+        $collectionDocument = $report->resources()->where('type', 'document')->first();
         
         if($newImagesReport){
 
@@ -190,6 +190,16 @@ class ReportController extends Controller
             }
         }
 
+        //Se verifica si no se recibe un documento por parte del formulario, pero 
+        //tiene documentos registrados en la BDD y en el disco
+        if(!$oldDocument && $collectionDocument){
+            $oldDocumentUrl = $collectionDocument->url;
+            if(Storage::disk('public')->exists($oldDocumentUrl)){
+                Storage::disk('public')->delete($oldDocumentUrl);
+            }
+            $report->resources()->where('type', 'document')->delete();
+        }
+
         // //Se guardan las nuevas imágenes  seleccionadas por el usuario
         if($request->file('images')){
             foreach($request->file('images') as $image){
@@ -204,12 +214,20 @@ class ReportController extends Controller
                 ]);
             }
         }
+        if($request->file('document')){
+            Resource::create([
+                'url'=> $request->file('document')->store('document_reports', 'public'),
+                'post_id' => $report->id,
+                'type'=>'document',
+            ]);
+        }
+
 
         session()->flash('success', 'Informe actualizado con éxito');
 
         return response()->json([
             'success'=>'Reporte actualizado con exito',
-            // 'request'=>$request->all(),
+            'request'=>$request->all(),
         ]);
     }
 

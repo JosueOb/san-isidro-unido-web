@@ -96,7 +96,7 @@
                         <label for="document">Documento <span class="text-muted">(opcional)</span></label>
                         <div class="custom-file">
 
-                            <input type="file" class="custom-file-input" id="inputDocument" name="document[]" accept=".pdf">
+                            <input type="file" class="custom-file-input" id="inputDocument" name="document" accept=".pdf">
                             <label class="custom-file-label" id='imagesLabel' for="document" data-browse="Agregar"></label>
                             <span class="invalid-feedback" role="alert">
                                 
