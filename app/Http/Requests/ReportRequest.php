@@ -31,7 +31,7 @@ class ReportRequest extends FormRequest
 
         if($this->isMethod('POST')){
             $rules += [
-                "images" => "nullable|array|max:5",
+                "images" => "nullable|array|max:".env('NUMBER_IMAGES_ALLOWED'),
                 "images.*" => "nullable|image|mimes:jpeg,jpg,png|max:1024",//el tamaño esta expresado en kilibytes, equivale a 1MB
                 "document"=>"nullable|file|mimes:pdf|max:5120",//el tamaño esta expresado en kilibytes, equivale a 5MB];
             ];
@@ -42,6 +42,12 @@ class ReportRequest extends FormRequest
             $numberOfNewImages = $this->hasFile('images') ? count($this->file('images')) : 0;
             $numberOfOldImages = $this->has('images_report') ? count($this->get('images_report')) : 0;
             $totalImages = $numberOfNewImages + $numberOfOldImages;
+            //Se obtiene al documento nuevo y antiguo
+            $numberOfNewDocument = $this->hasFile('document') ? count($this->get('document')) : 0;
+            //Se verifica si el campo contiene contiene un valor, ya que no se recibe un array
+            $numberOfOldDocument = $this->has('old_document') ? 1 : 0;
+            // dd($this->get('old_document'));
+            $totalDocuments = $numberOfNewDocument + $numberOfOldDocument;
 
             if($totalImages > env('NUMBER_IMAGES_ALLOWED')){
                 $rules += [
@@ -52,7 +58,17 @@ class ReportRequest extends FormRequest
                     "images" => "nullable|array",
                     'images_report'=>'nullable|array',
                     "images.*" => "nullable|image|mimes:jpeg,jpg,png|max:1024",//el tamaño esta expresado en kilibytes, equivale a 1MB
+                ];
+            }
+
+            if($totalDocuments > env('NUMBER_DOCUMENTS_ALLOWED')){
+                $rules += [
+                    'documents_allowed'=>'required',
+                ];
+            }else{
+                $rules += [
                     "document"=>"nullable|file|mimes:pdf|max:5120",//el tamaño esta expresado en kilibytes, equivale a 5MB];
+                    'old_document'=>'nullable'
                 ];
             }
         }
@@ -75,15 +91,17 @@ class ReportRequest extends FormRequest
             'description.max'=>'La :attribute no debe ser mayor a 255 caracteres',
             'description.regex'=>'La :attribute  debe estar conformado por caracteres alfabéticos, no se admiten caracteres especiales',
 
-            'images.max'=> 'Solo se permiten 5 imágenes',
+            'images.max'=> 'Solo se permiten '.env('NUMBER_IMAGES_ALLOWED').' imágenes',
             'images.*.image'=>'Solo se admiten :attribute en formato jpeg y png',
             'images.*.mimes'=>'Los formatos permitidos son jpeg y png',
             'images.*.max'=>'El tamaño máximo para la :attribute es 1MB',
 
+            'document.file'=>'Solo se permite '.env('NUMBER_DOCUMENTS_ALLOWED').' documento',
             'document.mimes'=> "El formato del documento no es permitido",
             'document.max'=>"El tamaño máximo para el :attribute es 5MB",
 
-            'images_allowed.required'=>'Solo se permiten 5 imágenes'
+            'images_allowed.required'=>'Solo se permiten '.env('NUMBER_IMAGES_ALLOWED').' imágenes',
+            'documents_allowed.required'=>'Solo se permite '.env('NUMBER_DOCUMENTS_ALLOWED').' documento',
         ];
     }
     /**
@@ -96,9 +114,10 @@ class ReportRequest extends FormRequest
         return [
             'title' => 'título',
             'description' => 'descripción',
-            'images.*'=>'imágenes',
-            'document'=>'documento',
-            'images_allowed'=> 'imágenes',
+            'images.*' => 'imágenes',
+            'document' => 'documento',
+            'images_allowed' => 'imágenes',
+            'documents_allowed' => 'documento',
         ];
     }
 }

@@ -227,7 +227,6 @@ class ReportController extends Controller
 
         return response()->json([
             'success'=>'Reporte actualizado con exito',
-            'request'=>$request->all(),
         ]);
     }
 

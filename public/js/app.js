@@ -52540,22 +52540,23 @@ $(document).ready(function () {
             var reader = new FileReader();
 
             reader.onload = function (event) {
-              // if (imagesRender.length < numberOfImagesAllowed) {
-              newImagesReport.push(file);
-              var imageRender = new Array();
-              var images = new Array();
-              imageRender['src'] = event.target.result;
-              images['input'] = imageRender;
-              imagesRender.push(images);
-              previewImages(imagesRender);
-              console.log(imagesRender.length);
-              imagesLength = imagesRender.length; // } else {
-              //     Swal.fire({
-              //         type: 'error',
-              //         title: 'Fuera del límite de imágenes seleccionadas',
-              //         text: 'Recuerda que solo puedes seleccionar hasta 5 imágenes',
-              //     })
-              // }
+              if (imagesRender.length < numberOfImagesAllowed) {
+                newImagesReport.push(file);
+                var imageRender = new Array();
+                var images = new Array();
+                imageRender['src'] = event.target.result;
+                images['input'] = imageRender;
+                imagesRender.push(images);
+                previewImages(imagesRender);
+                console.log(imagesRender.length);
+                imagesLength = imagesRender.length;
+              } else {
+                Swal.fire({
+                  type: 'error',
+                  title: 'Fuera del límite de imágenes seleccionadas',
+                  text: 'Recuerda que solo puedes seleccionar hasta 5 imágenes'
+                });
+              }
             };
 
             reader.readAsDataURL(files.item(index)); // console.log("imagesRender.length" +imagesRender.length);
@@ -52594,23 +52595,23 @@ $(document).ready(function () {
       if (!newDocumentReport.length && !oldDocumentReport.length) {
         // console.log(newDocument);
         // console.log(urlDocumentReport);
-        // if( /\.(pdf)$/i.test(newFile.name)){
-        if (newFile.size < size) {
-          console.log(newFile.name);
-          newDocumentReport.push(newFile);
-          previewDocument(newDocumentReport);
+        if (/\.(pdf)$/i.test(newFile.name)) {
+          if (newFile.size < size) {
+            console.log(newFile.name);
+            newDocumentReport.push(newFile);
+            previewDocument(newDocumentReport);
+          } else {
+            Swal.fire({
+              type: 'error',
+              title: 'Fuera del límite de 5MB',
+              text: 'El documento ' + newFile.name + ' pesa ' + (newFile.size / 1048576).toFixed(2) + 'MB'
+            });
+          }
         } else {
-          Swal.fire({
-            type: 'error',
-            title: 'Fuera del límite de 5MB',
-            text: 'El documento ' + newFile.name + ' pesa ' + (newFile.size / 1048576).toFixed(2) + 'MB'
-          });
-        } // }else{
-        //     console.log('El formato del documento no es permitido');
-        //     $('#document').addClass('is-invalid');
-        //     $('#document').siblings('.invalid-feedback').html('<strong> Archivo no permitido </strong>');
-        // }
-
+          console.log('El formato del documento no es permitido');
+          $('#inputDocument').addClass('is-invalid');
+          $('#inputDocument').siblings('.invalid-feedback').html('<strong> El formato del documento no es permitido </strong>');
+        }
       } else {
         Swal.fire({
           type: 'error',
@@ -52681,8 +52682,7 @@ $(document).ready(function () {
       processData: false,
       dataType: 'JSON',
       success: function success(data) {
-        console.log(data);
-
+        // console.log(data);
         if (data.success) {
           $('#title').removeClass('is-invalid');
           $('#description').removeClass('is-invalid');
@@ -52757,6 +52757,13 @@ $(document).ready(function () {
               $('#inputImages').siblings('.invalid-feedback').html('<strong>' + validationErrors['images_allowed'][0] + '</strong>');
             } else {
               $('#inputImages').removeClass('is-invalid');
+            }
+
+            if (validationErrors.hasOwnProperty('documents_allowed')) {
+              $('#inputDocument').addClass('is-invalid');
+              $('#inputDocument').siblings('.invalid-feedback').html('<strong>' + validationErrors['documents_allowed'][0] + '</strong>');
+            } else {
+              $('#inputDocument').removeClass('is-invalid');
             }
           }
         }
