@@ -199,45 +199,46 @@ $(document).ready(function () {
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                var getErrors = jqXHR.responseJSON;
-
-                //Se obtienen los error de validación por parte de Laravel
-                var validationErrors = getErrors.errors ? getErrors.errors : null;
-                console.log(getErrors);
-                if (validationErrors) {
-                    console.log(validationErrors);
-                    if (validationErrors.hasOwnProperty('title')) {
-                        $('#title').addClass('is-invalid');
-                        $('#title').siblings('.invalid-feedback').html('<strong>' + validationErrors['title'][0] + '</strong>');
-                    } else {
-                        $('#title').removeClass('is-invalid');
-                    }
-                    if (validationErrors.hasOwnProperty('description')) {
-                        $('#description').addClass('is-invalid');
-                        $('#description').siblings('.invalid-feedback').html('<strong>' + validationErrors['description'][0] + '</strong>');
-                    } else {
-                        $('#description').removeClass('is-invalid');
-                    }
-                    if (validationErrors.hasOwnProperty('images')) {
-                        $('#images').addClass('is-invalid');
-                        $('#images').siblings('.invalid-feedback').html('<strong>' + validationErrors['images'][0] + '</strong>');
-                    } else {
-                        if (validationErrors.hasOwnProperty('images.0')) {
-                            $('#images').addClass('is-invalid');
-                            $('#images').siblings('.invalid-feedback').html('<strong>' + validationErrors['images.0'][0] + '</strong>');
+                console.log(jqXHR.responseText);
+                var getErrors = jqXHR.responseJSON ? jqXHR.responseJSON : null;
+                //
+                if(getErrors){
+                    //Se obtienen los error de validación por parte de Laravel
+                    var validationErrors = getErrors.errors ? getErrors.errors : null;
+                    // console.log(getErrors);
+                    if (validationErrors) {
+                        console.log(validationErrors);
+                        if (validationErrors.hasOwnProperty('title')) {
+                            $('#title').addClass('is-invalid');
+                            $('#title').siblings('.invalid-feedback').html('<strong>' + validationErrors['title'][0] + '</strong>');
                         } else {
-                            $('#images').removeClass('is-invalid');
+                            $('#title').removeClass('is-invalid');
+                        }
+                        if (validationErrors.hasOwnProperty('description')) {
+                            $('#description').addClass('is-invalid');
+                            $('#description').siblings('.invalid-feedback').html('<strong>' + validationErrors['description'][0] + '</strong>');
+                        } else {
+                            $('#description').removeClass('is-invalid');
+                        }
+                        if (validationErrors.hasOwnProperty('images')) {
+                            $('#images').addClass('is-invalid');
+                            $('#images').siblings('.invalid-feedback').html('<strong>' + validationErrors['images'][0] + '</strong>');
+                        } else {
+                            if (validationErrors.hasOwnProperty('images.0')) {
+                                $('#images').addClass('is-invalid');
+                                $('#images').siblings('.invalid-feedback').html('<strong>' + validationErrors['images.0'][0] + '</strong>');
+                            } else {
+                                $('#images').removeClass('is-invalid');
+                            }
+                        }
+                        if (validationErrors.hasOwnProperty('document')) {
+                            $('#document').addClass('is-invalid');
+                            $('#document').siblings('.invalid-feedback').html('<strong>' + validationErrors['document'][0] + '</strong>');
+                        } else {
+                            $('#document').removeClass('is-invalid');
                         }
                     }
-                    if (validationErrors.hasOwnProperty('document')) {
-                        $('#document').addClass('is-invalid');
-                        $('#document').siblings('.invalid-feedback').html('<strong>' + validationErrors['document'][0] + '</strong>');
-                    } else {
-                        $('#document').removeClass('is-invalid');
-                    }
                 }
-
-                console.log(jqXHR.responseText);
             }
         });
     });
