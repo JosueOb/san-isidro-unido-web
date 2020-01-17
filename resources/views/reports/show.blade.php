@@ -33,12 +33,31 @@
                         <p><strong>Título:</strong> {{$report->title}}</p>
                         <p><strong>Descripción:</strong> {{$report->description}}</p>
                         <p><strong>Estado:</strong> {{$report->state ? 'Activo': 'Inactivo'}}</p>
+
+                        
                         @if ($images)
-                        <div class="gallery">
-                        {{-- Se presentan las imágenes seleccionadas por el usuario --}}
+                        <p><strong>Imágenes:</strong></p>
+                        <div class="gallery-images">
+                            {{-- Se presentan las imágenes seleccionadas por el usuario --}}
                             @foreach ($images as $image)
                             <div class="gallery-item">
-                                <img src="{{$image->getImageLink()}}"alt='image_report'>
+                                <img src={{$image->getLink()}} alt='image_report_{{$image->id}}'>
+                            </div>
+                        @endforeach
+                        </div>
+                        @endif
+
+                        {{-- Se presentan el documento seleccionado por el usuario --}}
+                        @if ($resource)
+                        <p><strong>Documento:</strong></p>
+                        <div class="gallery-document">
+                            @foreach ($resource as $document)
+                            <div class="gallery-item">
+                                
+                                <i class="fas fa-file-pdf image-document"></i>
+                                <a href="{{$document->getLink()}}" class="link-document" target="_blank">
+                                    <i class="fas fa-eye"></i>
+                                </a>
                             </div>
                             @endforeach
                         </div>

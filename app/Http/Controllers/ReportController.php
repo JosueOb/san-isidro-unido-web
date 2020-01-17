@@ -99,9 +99,11 @@ class ReportController extends Controller
     {
         // $images= $report->images()->get();
         $images = $report->resources()->where('type', 'image')->get();
+        $document = $report->resources()->where('type', 'document')->get();
         return view('reports.show',[
             'report'=>$report,
             'images'=>$images,
+            'resource'=>$document,
         ]);
     }
 
