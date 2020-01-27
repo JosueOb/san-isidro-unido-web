@@ -93,4 +93,5 @@ Route::middleware(['auth','verified'])->group(function(){
     //Servicios Públicos
     Route::get('public-service', 'PublicServiceController@index')->name('publicServices.index'); 
     Route::get('public-service/create', 'PublicServiceController@create')->name('publicServices.create');
+    Route::get('public-service/store', 'PublicServiceController@store')->name('publicServices.store');
 });

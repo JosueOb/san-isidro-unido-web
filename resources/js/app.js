@@ -35,3 +35,5 @@ require('./dropdown');
 require('./imagename');
 require('./report-create');
 require('./report-update');
+require('./map-create');
+require('./public-service-create');
