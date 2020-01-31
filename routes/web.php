@@ -90,8 +90,11 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::delete('reports/{report}', 'ReportController@destroy')->name('reports.destroy')->middleware('can:reports.destroy');
     Route::get('reports/filters/{option}', 'ReportController@filters')->name('reports.filters')->middleware('can:reports.index');
     Route::get('search/reports','SearchController@searchReports')->name('search.reports')->middleware('can:reports.index');
-    //Servicios Públicos
+    //SERVICIOS PUBLICOS
     Route::get('public-service', 'PublicServiceController@index')->name('publicServices.index'); 
     Route::get('public-service/create', 'PublicServiceController@create')->name('publicServices.create');
     Route::get('public-service/store', 'PublicServiceController@store')->name('publicServices.store');
+    //CATEGORIA
+    Route::get('public-service/category', 'CategoryController@index')->name('publicServiceCategories.index');
+    Route::get('public-service/category/create', 'CategoryController@create')->name('publicServiceCategories.create');
 });
