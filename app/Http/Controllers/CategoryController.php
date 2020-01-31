@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CategoryRequest;
+use App\Category;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -34,9 +36,21 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        $slug = strtolower($validated['name']);
+        $slug =str_replace(' ', '-', $slug);
+
+        $category = new Category();
+        $category->name = $validated['name'];
+        $category->slug = $slug;
+        $category->group = $validated['group'];
+        $category->description = $validated['description'];
+        $category->save();
+
+        return redirect()->route('categories.index')->with('success','Categoría registrada exitosamente');
     }
 
     /**

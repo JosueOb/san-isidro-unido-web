@@ -93,8 +93,9 @@ Route::middleware(['auth','verified'])->group(function(){
     //SERVICIOS PUBLICOS
     Route::get('public-service', 'PublicServiceController@index')->name('publicServices.index'); 
     Route::get('public-service/create', 'PublicServiceController@create')->name('publicServices.create');
-    Route::get('public-service/store', 'PublicServiceController@store')->name('publicServices.store');
+    Route::post('public-service/store', 'PublicServiceController@store')->name('publicServices.store');
     //CATEGORIA
-    Route::get('public-service/category', 'CategoryController@index')->name('publicServiceCategories.index');
-    Route::get('public-service/category/create', 'CategoryController@create')->name('publicServiceCategories.create');
+    Route::get('category', 'CategoryController@index')->name('categories.index');
+    Route::get('category/create', 'CategoryController@create')->name('categories.create');
+    Route::post('category/store', 'CategoryController@store')->name('categories.store');
 });

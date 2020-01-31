@@ -174,8 +174,8 @@
                             </a>
                             <div id="collapseCategory" class="collapse @yield('item-category-collapse')" >
                                 <div class="collapse-inner">
-                                    <a class="collapse-item @yield('item-category-category-list')" href="{{ route('publicServiceCategories.index')}}"><i class="fas fa-list"></i>Listar categorías</a>
-                                    <a class="collapse-item @yield('item-category-category-create')" href="{{ route('publicServiceCategories.create') }}"><i class="fas fa-plus-circle"></i>Agregar categoría</a>
+                                    <a class="collapse-item @yield('item-category-category-list')" href="{{ route('categories.index')}}"><i class="fas fa-list"></i>Listar categorías</a>
+                                    <a class="collapse-item @yield('item-category-category-create')" href="{{ route('categories.create') }}"><i class="fas fa-plus-circle"></i>Agregar categoría</a>
                             </div>
                             </div>
                         </li>
