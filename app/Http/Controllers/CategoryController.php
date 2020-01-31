@@ -15,8 +15,10 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
-        return view('categories.index');
+        $categories = Category::paginate(10);
+        return view('categories.index',[
+            'categories'=>$categories,
+        ]);
     }
 
     /**
@@ -54,25 +56,16 @@ class CategoryController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Category $category)
     {
-        //
+        return view('categories.edit',[
+            'category'=>$category,
+        ]);
     }
 
     /**
@@ -82,9 +75,20 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CategoryRequest $request, Category $category)
     {
-        //
+        $validated = $request->validated();
+
+        $slug = strtolower($validated['name']);
+        $slug =str_replace(' ', '-', $slug);
+
+        $category->name = $validated['name'];
+        $category->slug = $slug;
+        $category->group = $validated['group'];
+        $category->description = $validated['description'];
+        $category->save();
+
+        return redirect()->route('categories.index')->with('success','Categoría actualizada exitosamente');
     }
 
     /**
@@ -93,8 +97,20 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Category $category)
     {
-        //
+        //Se debe verificar si esta siendo utilizada en la tabla post, en la subcategories y public service
+        //solo se verifica en post y public service
+        // $categoryPosts = $category->posts()->get();
+        // No se debe eliminar la categoría informes
+        $categoryPublicService = $category->publicServices()->get();
+
+        if(count($categoryPublicService) > 0){
+            return redirect()->route('categories.index')->with('danger','La categoría '.strtolower($category->name).' no se puede eliminar debido a que esta siendo utilizada');
+        }else{
+            $category->delete();
+            return redirect()->route('categories.index')->with('success','Categoría eliminada exitosamente');
+            
+        }
     }
 }

@@ -30,7 +30,7 @@ class CategoryRequest extends FormRequest
             $uniqueName = 'unique:categories,name';
         }
         if($this->method() === 'PUT'){
-            $uniqueName = 'unique:categories,name,'.$this->route('position')->id;
+            $uniqueName = 'unique:categories,name,'.$this->route('category')->id;
         }
         
         return [

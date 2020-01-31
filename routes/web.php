@@ -53,7 +53,7 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::get('positions/{position}/edit', 'PositionController@edit')->name('positions.edit')->middleware('can:positions.edit');
     Route::put('positions/{position}', 'PositionController@update')->name('positions.update')->middleware('can:positions.edit');
     Route::delete('positions/{position}', 'PositionController@destroy')->name('positions.destroy')->middleware('can:positions.destroy');
-    Route::get('positions/{member}', function () {
+    Route::get('positions/{position}', function () {
         return abort(404);
     });
     //PROFILE
@@ -98,4 +98,10 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::get('category', 'CategoryController@index')->name('categories.index');
     Route::get('category/create', 'CategoryController@create')->name('categories.create');
     Route::post('category/store', 'CategoryController@store')->name('categories.store');
+    Route::get('category/{category}/edit', 'CategoryController@edit')->name('categories.edit');
+    Route::put('category/{category}', 'CategoryController@update')->name('categories.update');
+    Route::delete('category/{category}', 'CategoryController@destroy')->name('categories.destroy')->middleware('can:positions.destroy');
+    Route::get('category/{category}', function () {
+        return abort(404);
+    });
 });
