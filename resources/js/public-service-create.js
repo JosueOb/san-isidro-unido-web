@@ -1,7 +1,11 @@
 import {obtenerGeolocalizacion, 
     obtenerDireccion, añadirMarcadorAlMapa} from './map-create';
 
+import{phone_array} from './phone_numbers';
+
 var positionSelected = null;
+var phone_numbers = phone_array;
+
 async function cargarMapa() {
     if (navigator.geolocation) {
         try {
@@ -16,6 +20,7 @@ async function cargarMapa() {
             //Obtener la dirección actual
             const direccion = await obtenerDireccion(positionSelected);
             positionSelected.address = (direccion) ? direccion : null;
+            añadirMarcadorAlMapa(positionSelected);
         } catch (err) {
             console.log("Error al obtener la localización", err);
         }
@@ -23,7 +28,7 @@ async function cargarMapa() {
 }
 
 $(document).ready(async function () {
-
+    
     if($('#map').length != 0){
         await cargarMapa();
     }
@@ -33,13 +38,11 @@ $(document).ready(async function () {
         event.preventDefault();
         var formData = new FormData(this);
         formData.append('ubication', JSON.stringify(positionSelected));
-        
-        console.log('name',formData.get('name'));
-        console.log('description',formData.get('description'));
-        console.log('category',formData.get('category'));
-        console.log('phone_numbers',formData.get('phone_numbers'));
-        console.log('ubication_description',formData.get('ubication-description'));
-        console.log('PositionSelected',formData.get('ubication'));
+        formData.delete('phone_array');
+
+        phone_numbers.forEach(function (phone) {
+            formData.append('phone_array[]', phone);
+        });
 
         $.ajax({
             type: 'POST',

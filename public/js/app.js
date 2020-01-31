@@ -66942,6 +66942,8 @@ __webpack_require__(/*! ./report-update */ "./resources/js/report-update.js");
 
 __webpack_require__(/*! ./map-create */ "./resources/js/map-create.js");
 
+__webpack_require__(/*! ./phone_numbers */ "./resources/js/phone_numbers.js");
+
 __webpack_require__(/*! ./public-service-create */ "./resources/js/public-service-create.js");
 
 /***/ }),
@@ -67202,7 +67204,7 @@ function añadirMarcadorAlMapa(punto) {
       return _ref.apply(this, arguments);
     };
   }());
-  marker.bindPopup("<b>Soy el Punto actual").openPopup();
+  marker.bindPopup("<b>Ubicaci\xF3n actual").openPopup();
   mostrarPosicionEnHTML(punto);
 } //Mostrar en el HTML la longitud, latitud y direccion
 
@@ -67227,6 +67229,98 @@ function obtenerGeolocalizacion() {
 
 /***/ }),
 
+/***/ "./resources/js/phone_numbers.js":
+/*!***************************************!*\
+  !*** ./resources/js/phone_numbers.js ***!
+  \***************************************/
+/*! exports provided: resetValues, phone_array */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "resetValues", function() { return resetValues; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "phone_array", function() { return phone_array; });
+//Se almacenan los los  números telefónicos válidos
+var phone_array = []; //Se establece la cantidad de teléfonos permitidos
+
+var numberOfPhonesAllowed = 3; //Se encarga de mostrar en el navegador los teléfonos ingresados
+
+var print_phones = function print_phones(array) {
+  var print = '';
+  console.log('ingreso');
+  array.forEach(function (element, index) {
+    print += "\n            <div class=\"input-group-prepend\" id='phone_group'>\n                <span class=\"input-group-text\" id='phone_bagde'> \n                 ".concat(element, "\n                  <i class=\"fas fa-minus-circle\" id='delete_phone' data-no=\"").concat(index, "\"></i>\n                </span>\n              </div>\n      ");
+  });
+  $('#phone_group').html(print);
+}; //Se elimina un determinado teléfono acorde su atributo data-no (posición del teléfono en el array)
+//para proceder a eliminarlo
+
+
+$('#phone_group').on('click', '#delete_phone', function () {
+  var phone_index = $(this).data('no'); // console.log('eliminar ' + phone_index);
+
+  phone_array.splice(phone_index, 1); //Se imprime los teléfonos
+
+  print_phones(phone_array); //Se verifica algunas condiciones para ya sea deshabilitar o agregar el atributo required al input
+
+  disabledAndRequiredAttribute(phone_array, '#phone_numbers', numberOfPhonesAllowed);
+}); //Evento que se ejecuta cada vez que se ingrese un valor por teclado en el input
+
+$('#phone_numbers').keyup(function () {
+  //Se obtiene el valor ingresado
+  var phone = $(this).val(); //Se establece la regla de validación
+
+  var pattern_phone = new RegExp('(^(09)[0-9]{8})+$|(^(02)[0-9]{7})+$'); //Se verifica la cantidad de telefonos ingresados
+
+  if (phone_array.length < numberOfPhonesAllowed) {
+    //Se verifica que la cadena cumpla con la validación
+    if (pattern_phone.test(phone)) {
+      // console.log('Teléfono válido');
+      phone_array.push(phone);
+      print_phones(phone_array);
+      $(this).val('');
+      disabledAndRequiredAttribute(phone_array, this, numberOfPhonesAllowed);
+    } else {
+      console.log('Teléfono inválido');
+    }
+  }
+}); //Función que permite verificar dos condiciones
+//1.- Si el arreglo contiene algún elemento, se le remueve el atributo de requerido al input; caso contrario
+// se lo agrega. Esto se realiza para verificar que se haya ingresado un teléfono y no obligar el ingreso de varios teléfonos
+//2.- Si la cantidad de elementos del arreglo supera al numéro de teléfons permitidos, se le agrega el atributo disable, evitando
+//el ingreso de teléfonos permitidos; caso contrario se lo remueve
+
+var disabledAndRequiredAttribute = function disabledAndRequiredAttribute(array, idInput, amountAllowed) {
+  if (array.length) {
+    $(idInput).removeAttr('required');
+  } else {
+    $(idInput).prop('required', true);
+  }
+
+  if (array.length < amountAllowed) {
+    $(idInput).removeAttr('disabled');
+  } else {
+    $(idInput).prop('disabled', true);
+  }
+}; //Función que permite agregar un nuevo valor al arreglo phone_array, esto se realiza cuando se edite un
+// registro que cuente con telefonos, para que todo el script trabaje con los valores recibidos y no desde cero
+
+
+function resetValues(array) {
+  if (array.length) {
+    phone_array = array;
+    print_phones(phone_array);
+    disabledAndRequiredAttribute(phone_array, '#phone_numbers', numberOfPhonesAllowed);
+  }
+
+  console.log(phone_array);
+} //Se exporta la función resertValues y el arreglo phone_array
+
+
+
+
+/***/ }),
+
 /***/ "./resources/js/public-service-create.js":
 /*!***********************************************!*\
   !*** ./resources/js/public-service-create.js ***!
@@ -67239,6 +67333,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _map_create__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./map-create */ "./resources/js/map-create.js");
+/* harmony import */ var _phone_numbers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./phone_numbers */ "./resources/js/phone_numbers.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -67246,7 +67341,9 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 
+
 var positionSelected = null;
+var phone_numbers = _phone_numbers__WEBPACK_IMPORTED_MODULE_2__["phone_array"];
 
 function cargarMapa() {
   return _cargarMapa.apply(this, arguments);
@@ -67262,7 +67359,7 @@ function _cargarMapa() {
         switch (_context2.prev = _context2.next) {
           case 0:
             if (!navigator.geolocation) {
-              _context2.next = 15;
+              _context2.next = 16;
               break;
             }
 
@@ -67285,20 +67382,21 @@ function _cargarMapa() {
           case 8:
             direccion = _context2.sent;
             positionSelected.address = direccion ? direccion : null;
-            _context2.next = 15;
+            Object(_map_create__WEBPACK_IMPORTED_MODULE_1__["añadirMarcadorAlMapa"])(positionSelected);
+            _context2.next = 16;
             break;
 
-          case 12:
-            _context2.prev = 12;
+          case 13:
+            _context2.prev = 13;
             _context2.t0 = _context2["catch"](1);
             console.log("Error al obtener la localización", _context2.t0);
 
-          case 15:
+          case 16:
           case "end":
             return _context2.stop();
         }
       }
-    }, _callee2, null, [[1, 12]]);
+    }, _callee2, null, [[1, 13]]);
   }));
   return _cargarMapa.apply(this, arguments);
 }
@@ -67326,12 +67424,10 @@ _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function 
             event.preventDefault();
             var formData = new FormData(this);
             formData.append('ubication', JSON.stringify(positionSelected));
-            console.log('name', formData.get('name'));
-            console.log('description', formData.get('description'));
-            console.log('category', formData.get('category'));
-            console.log('phone_numbers', formData.get('phone_numbers'));
-            console.log('ubication_description', formData.get('ubication-description'));
-            console.log('PositionSelected', formData.get('ubication'));
+            formData["delete"]('phone_array');
+            phone_numbers.forEach(function (phone) {
+              formData.append('phone_array[]', phone);
+            });
             $.ajax({
               type: 'POST',
               url: '../public-services/store',

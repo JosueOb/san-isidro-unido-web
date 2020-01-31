@@ -42,8 +42,8 @@
                             </div>
                             
                             <div class="form-group">
-                                <label for="description">Descripción</label>
-                                <input id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" value="{{ old('description')}}" maxlength="255" required>
+                                <label for="description">Descripción (opcional)</label>
+                                <input id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" value="{{ old('description')}}" maxlength="255">
                                 @error('description')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -74,7 +74,16 @@
 
                             <div class="form-group">
                                 <label for="phone_numbers">Teléfonos</label>
-                                <input id="phone_numbers" type="tel" class="form-control @error('phone_numbers') is-invalid @enderror" name="phone_numbers" value="{{ old('phone_numbers')}}" maxlength="255" required>
+                                
+                                <div class="input-group">
+                                    <div class="input-group-prepend" id='phone_group'>
+                                    </div>
+                                    <input id="phone_numbers" type="text" class="form-control @error('phone_numbers') is-invalid @enderror" name="phone_numbers" value="{{ old('phone_numbers')}}" maxlength="10" required pattern="(09)[0-9]{8}|(02)[0-9]{7}" title="Teléfono no válido" autocomplete="off">
+                                </div>
+                                
+                                <small id="phone_numbersHelp" class="form-text text-muted">
+                                    Recuerda anteponer el 09 al ingresar un número móvil o 02 al ser un número fijo, puedes ingresar hasta 3 teléfonos
+                                </small>
                                 @error('phone_numbers')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -104,13 +113,6 @@
                                     <p id="ubicacion_seleccionada" class="info text-muted">No tengo ubicación seleccionada</p>
                                 </div>
                             </div>
-                            {{-- <div class="form-group">
-                                <input id="ubication" type="text" class="form-control" name="ubication">
-                                <input id="latitude" type="text" class="form-control" name="latitude">
-                                <input id="longitude" type="text" class="form-control" name="longitude">
-                                <input id="ubication-description" type="text" class="form-control" name="ubication-description">
-                            </div> --}}
-                           
                         </div>
                     </div>
 

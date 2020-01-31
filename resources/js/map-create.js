@@ -71,7 +71,7 @@ function añadirMarcadorAlMapa(punto) {
     new_posicion.address = (respuestaDireccion) ? respuestaDireccion: null;
     mostrarPosicionEnHTML(new_posicion); //una vez completado la funcion, se muestra la posicion seleccionada
   });
-  marker.bindPopup(`<b>Soy el Punto actual`).openPopup();
+  marker.bindPopup(`<b>Ubicación actual`).openPopup();
   mostrarPosicionEnHTML(punto);
 }
 

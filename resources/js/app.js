@@ -36,4 +36,5 @@ require('./imagename');
 require('./report-create');
 require('./report-update');
 require('./map-create');
+require('./phone_numbers');
 require('./public-service-create');
