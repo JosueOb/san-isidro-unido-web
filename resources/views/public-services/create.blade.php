@@ -33,7 +33,7 @@
 
                             <div class="form-group">
                                 <label for="name">Nombre</label>
-                                <input id="name" type="text" class="form-control  @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" maxlength="60" required autofocus>
+                                <input id="name" type="text" class="form-control  @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" maxlength="45" required autofocus>
                                 @error('name')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -54,13 +54,14 @@
                             <div class="form-group">
                                 <label for="category">Categoría </label>
                                 
+
+                                @if (count($categories)>0)
+
                                 <select class="form-control @error('category') is-invalid @enderror" id="category" name="category" required>
                                     <option value="">Seleccione una opción</option>
-                                    <option value="farmacia">Farmacia</option>
-                                    <option value="ferretería">Ferretería</option>
-                                    <option value="tienda">Tienda</option>
-                                    {{-- <option value="one-person" {{old('category')=='one-person' ? 'selected':''}}>Para una persona</option>
-                                    <option value="several-people"  {{old('category')=='several-people' ? 'selected':''}}>Para varias personas</option> --}}
+                                    @foreach ($categories as $category)
+                                        <option value="{{$category->id}}" {{old('category')==$category->id ? 'selected':''}}>{{$category->name}}</option>
+                                    @endforeach
                                 </select>
                                 <small id="categoryHelp" class="form-text text-muted">
                                     Indica la categoría a la que pertenece el servicio público
@@ -70,6 +71,12 @@
                                     <strong>{{ $message }}</strong>
                                 </span>
                                 @enderror
+                                 
+                            @else
+                                <p class="text-danger">No existen registos de categorías, porfavor comuniquese con el administrador</p>
+                                
+                            @endif
+
                             </div>
 
                             <div class="form-group">

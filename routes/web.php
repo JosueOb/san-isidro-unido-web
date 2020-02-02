@@ -90,10 +90,7 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::delete('reports/{report}', 'ReportController@destroy')->name('reports.destroy')->middleware('can:reports.destroy');
     Route::get('reports/filters/{option}', 'ReportController@filters')->name('reports.filters')->middleware('can:reports.index');
     Route::get('search/reports','SearchController@searchReports')->name('search.reports')->middleware('can:reports.index');
-    //SERVICIOS PUBLICOS
-    Route::get('public-service', 'PublicServiceController@index')->name('publicServices.index'); 
-    Route::get('public-service/create', 'PublicServiceController@create')->name('publicServices.create');
-    Route::post('public-service/store', 'PublicServiceController@store')->name('publicServices.store');
+
     //CATEGORIA
     Route::get('category', 'CategoryController@index')->name('categories.index');
     Route::get('category/create', 'CategoryController@create')->name('categories.create');
@@ -104,4 +101,9 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::get('category/{category}', function () {
         return abort(404);
     });
+
+    //SERVICIOS PUBLICOS
+    Route::get('public-service', 'PublicServiceController@index')->name('publicServices.index'); 
+    Route::get('public-service/create', 'PublicServiceController@create')->name('publicServices.create');
+    Route::post('public-service/store', 'PublicServiceController@store')->name('publicServices.store');
 });

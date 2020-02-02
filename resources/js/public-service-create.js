@@ -37,16 +37,16 @@ $(document).ready(async function () {
     $('#public-service-create').on('submit', function (event) {
         event.preventDefault();
         var formData = new FormData(this);
-        formData.append('ubication', JSON.stringify(positionSelected));
-        formData.delete('phone_array');
 
+        formData.append('ubication', JSON.stringify(positionSelected));
+        formData.delete('phone_numbers');
         phone_numbers.forEach(function (phone) {
-            formData.append('phone_array[]', phone);
+            formData.append('phone_numbers[]', phone);
         });
 
         $.ajax({
             type: 'POST',
-            url: '../public-services/store',
+            url: '../public-service/store',
             data: formData,
             cache: false,
             contentType: false,
@@ -54,9 +54,24 @@ $(document).ready(async function () {
             dataType: 'JSON',
             success: function (data) {
                 console.log(data);
+                if (data.success) {
+                   console.log(data.success);
+                }
+                if (data.form) {
+                   console.log(data.form);
+                }
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(jqXHR.responseText);
+                var getErrors = jqXHR.responseJSON ? jqXHR.responseJSON : null;
+                if(getErrors){
+                    //Se obtienen los error de validación por parte de Laravel
+                    var validationErrors = getErrors.errors ? getErrors.errors : null;
+
+                    if (validationErrors) {
+                        console.log(validationErrors);
+                    }
+                }
             }
         });
     });

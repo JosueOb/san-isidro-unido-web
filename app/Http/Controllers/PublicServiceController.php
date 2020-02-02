@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
+use App\Http\Requests\PublicServiceRequest;
 use Illuminate\Http\Request;
 
 class PublicServiceController extends Controller
@@ -23,7 +25,10 @@ class PublicServiceController extends Controller
      */
     public function create()
     {
-        return view('public-services.create');
+        $categories = Category::where('group', 'public-service')->get();
+        return view('public-services.create',[
+            'categories'=>$categories,
+        ]);
     }
 
     /**
@@ -32,9 +37,10 @@ class PublicServiceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PublicServiceRequest $request)
     {
-        //
+        $validated = $request->validated();
+        return response()->json(['success'=>'Datos recibidos correctamente', 'form'=>$validated]);
     }
 
     /**

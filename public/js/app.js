@@ -67424,13 +67424,13 @@ _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function 
             event.preventDefault();
             var formData = new FormData(this);
             formData.append('ubication', JSON.stringify(positionSelected));
-            formData["delete"]('phone_array');
+            formData["delete"]('phone_numbers');
             phone_numbers.forEach(function (phone) {
-              formData.append('phone_array[]', phone);
+              formData.append('phone_numbers[]', phone);
             });
             $.ajax({
               type: 'POST',
-              url: '../public-services/store',
+              url: '../public-service/store',
               data: formData,
               cache: false,
               contentType: false,
@@ -67438,9 +67438,27 @@ _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function 
               dataType: 'JSON',
               success: function success(data) {
                 console.log(data);
+
+                if (data.success) {
+                  console.log(data.success);
+                }
+
+                if (data.form) {
+                  console.log(data.form);
+                }
               },
               error: function error(jqXHR, textStatus, errorThrown) {
                 console.log(jqXHR.responseText);
+                var getErrors = jqXHR.responseJSON ? jqXHR.responseJSON : null;
+
+                if (getErrors) {
+                  //Se obtienen los error de validación por parte de Laravel
+                  var validationErrors = getErrors.errors ? getErrors.errors : null;
+
+                  if (validationErrors) {
+                    console.log(validationErrors);
+                  }
+                }
               }
             });
           });
