@@ -11,7 +11,7 @@
 @section('item-category-collapse')
     show
 @endsection
-@section('item-category-category-list')
+@section('item-category-list')
     active
 @endsection
 @section('content')

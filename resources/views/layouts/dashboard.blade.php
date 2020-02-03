@@ -70,9 +70,6 @@
                                     @can('roles.index')
                                         <a class="collapse-item @yield('item-role-list')" href="{{route('roles.index')}}"><i class="fas fa-list"></i>Listar roles</a>
                                     @endcan
-                                    {{-- @can('roles.create')
-                                        <a class="collapse-item @yield('item-role-create')" href="{{ route('roles.create')}}"><i class="fas fa-plus-circle"></i>Crear rol</a>
-                                    @endcan --}}
                                 </div>
                             </div>
                         </li>
@@ -141,6 +138,35 @@
                         </li>
                         @endcanany
 
+
+                        <li class="nav-item @yield('item-category')">
+                            <a class="nav-link" data-toggle="collapse" data-target="#collapseCategory" aria-expanded="true" aria-controls="collapseCategory">
+                                <i class="fas fa-tag"></i>
+                                <span>Categorías</span>
+                            </a>
+                            <div id="collapseCategory" class="collapse @yield('item-category-collapse')" >
+                                <div class="collapse-inner">
+                                    <a class="collapse-item @yield('item-category-list')" href="{{ route('categories.index')}}"><i class="fas fa-list"></i>Listar categorías</a>
+                                    <a class="collapse-item @yield('item-category-create')" href="{{ route('categories.create') }}"><i class="fas fa-plus-circle"></i>Agregar categoría</a>
+                            </div>
+                            </div>
+                        </li>
+
+                        <li class="nav-item @yield('item-subcategory')">
+                            <a class="nav-link" data-toggle="collapse" data-target="#collapseSubcategory" aria-expanded="true" aria-controls="collapseSubcategory">
+                                <i class="fas fa-tags"></i>
+                                <span>Subcategorías</span>
+                            </a>
+                            <div id="collapseSubcategory" class="collapse @yield('item-subcategory-collapse')" >
+                                <div class="collapse-inner">
+                                    <a class="collapse-item @yield('item-subcategory-list')" href="#"><i class="fas fa-list"></i>Listar subcategorías</a>
+                                    <a class="collapse-item @yield('item-subcategory-create')" href="#"><i class="fas fa-plus-circle"></i>Agregar subcategoría</a>
+                            </div>
+                            </div>
+                        </li>
+
+                        
+
                         {{-- <li class="nav-item @yield('item-events')">
                             <a class="nav-link" data-toggle="collapse" data-target="#collapseEvent" aria-expanded="true" aria-controls="collapseEvent">
                                 <i class="fas fa-calendar-week"></i>
@@ -163,19 +189,6 @@
                                 <div class="collapse-inner">
                                     <a class="collapse-item @yield('item-public-service-list')" href="{{ route('publicServices.index') }}"><i class="fas fa-list"></i>Listar servicios publicos</a>
                                     <a class="collapse-item @yield('item-public-service-create')" href="{{ route('publicServices.create') }}"><i class="fas fa-calendar-plus"></i></i>Registrar servicio público</a>
-                            </div>
-                            </div>
-                        </li>
-                        
-                        <li class="nav-item @yield('item-category')">
-                            <a class="nav-link" data-toggle="collapse" data-target="#collapseCategory" aria-expanded="true" aria-controls="collapseCategory">
-                                <i class="fas fa-info-circle"></i>
-                                <span>Categorías</span>
-                            </a>
-                            <div id="collapseCategory" class="collapse @yield('item-category-collapse')" >
-                                <div class="collapse-inner">
-                                    <a class="collapse-item @yield('item-category-category-list')" href="{{ route('categories.index')}}"><i class="fas fa-list"></i>Listar categorías</a>
-                                    <a class="collapse-item @yield('item-category-category-create')" href="{{ route('categories.create') }}"><i class="fas fa-plus-circle"></i>Agregar categoría</a>
                             </div>
                             </div>
                         </li>
