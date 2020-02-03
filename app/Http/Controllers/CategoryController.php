@@ -28,7 +28,6 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
         return view('categories.create');
     }
 
@@ -42,13 +41,11 @@ class CategoryController extends Controller
     {
         $validated = $request->validated();
 
-        $slug = strtolower($validated['name']);
-        $slug =str_replace(' ', '-', $slug);
-
+        $slug = $this->returnSlug($validated['name']);
+        
         $category = new Category();
         $category->name = $validated['name'];
         $category->slug = $slug;
-        $category->group = $validated['group'];
         $category->description = $validated['description'];
         $category->save();
 
@@ -84,7 +81,7 @@ class CategoryController extends Controller
 
         $category->name = $validated['name'];
         $category->slug = $slug;
-        $category->group = $validated['group'];
+        // $category->group = $validated['group'];
         $category->description = $validated['description'];
         $category->save();
 
@@ -112,5 +109,20 @@ class CategoryController extends Controller
             return redirect()->route('categories.index')->with('success','Categoría eliminada exitosamente');
             
         }
+    }
+
+    //Función que en base al nombre de la categoría se retorna un slug adecuado
+    public function returnSlug($string){
+        //Se reemplazan las tíldes por su respectiva vocal
+        $string = str_replace(
+            array('Á','É','Í','Ó','Ú','á','é','í','ó','ú'),
+            array('A','E','I','O','U','a','e','i','o','u'),
+            $string
+        );
+        //Se convierte a la cadena a minúsculas
+        $string = strtolower($string);
+        //Se reemplazan los espacios por un guion
+        $string = str_replace(' ', '-', $string);
+        return $string;
     }
 }

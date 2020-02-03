@@ -34,8 +34,7 @@ class CategoryRequest extends FormRequest
         }
         
         return [
-            'name'=>'required|regex:/^[[:alpha:][:space:]]+$/|min:3|max:25|'.$uniqueName,
-            'group'=>'required|'.Rule::in(['problem', 'emergency', 'public-service']),
+            'name'=>'required|regex:/^[[:alpha:][:space:](áéíóúÁÉÍÓÚ)]+$/|min:3|max:25|'.$uniqueName,
             'description'=> 'nullable|regex:/^[[:alpha:][:space:](,;.áéíóúÁÉÍÓÚ)]+$/|max:255',
         ];
     }

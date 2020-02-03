@@ -15,7 +15,6 @@ class CategoriesTableSeeder extends Seeder
         Category::create([
             'name'=>'Informe',
             'slug'=>'informe',
-            'group'=>'report',
             'description'=>'Informe de las actividades realizadas por la directiva del barrio'
         ]);
     }

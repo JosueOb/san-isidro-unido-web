@@ -43,7 +43,6 @@
                                     <th width='10px'>Id</th>
                                     <th>Nombre</th>
                                     <th>Descripción</th>
-                                    <th>Grupo</th>
                                     {{-- @canany(['positions.show', 'positions.edit','positions.destroy']) --}}
                                     <th>Opciones</th>
                                     {{-- @endcanany --}}
@@ -55,7 +54,7 @@
                                         <td>{{$category->id}}</td>
                                         <td>{{$category->name}}</td>
                                         <td>{{$category->description ?? 'Sin descripción'}}</td>
-                                        <td>{{$category->group}}</td>
+                                        {{-- <td>{{$category->group}}</td> --}}
                                         
                                         {{-- @can('positions.edit') --}}
                                         <td width='10px'>
