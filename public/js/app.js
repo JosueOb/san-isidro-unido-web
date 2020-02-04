@@ -66936,6 +66936,8 @@ __webpack_require__(/*! ./dropdown */ "./resources/js/dropdown.js");
 
 __webpack_require__(/*! ./imagename */ "./resources/js/imagename.js");
 
+__webpack_require__(/*! ./icon-image */ "./resources/js/icon-image.js");
+
 __webpack_require__(/*! ./report-create */ "./resources/js/report-create.js");
 
 __webpack_require__(/*! ./report-update */ "./resources/js/report-update.js");
@@ -67039,6 +67041,68 @@ $(document).ready(function () {
 
   $('.toggle-sidebar').click(function (e) {
     $('.main-sidebar').toggleClass('open');
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/icon-image.js":
+/*!************************************!*\
+  !*** ./resources/js/icon-image.js ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+
+$(document).ready(function () {
+  //Se reseetea el valor del input cuando se refresque la página
+  $('#icon').val('');
+  $('#icon').on('change', function (event) {
+    $(this).removeClass('is-invalid');
+    var image = event.target.files[0];
+    var size = 1048576; //equivale a 1MB
+    //se verifica que se haya seleccionado alguna imágen
+
+    if (image) {
+      //se verifica si el formato de la imagen
+      if (/\.(jpe?g|png)$/i.test(image.name)) {
+        //Se verifica si cumple con el tamaño
+        if (image.size < size) {
+          //Se presenta en el input el nombre de la imagen
+          $(this).siblings(".custom-file-label").addClass("selected").html(image.name);
+          var reader = new FileReader();
+
+          reader.onload = function () {
+            var dataURL = reader.result;
+            renderImage(dataURL);
+          };
+
+          reader.readAsDataURL(image);
+        } else {
+          Swal.fire({
+            type: 'error',
+            title: 'Fuera del límite de 1MB',
+            text: 'La imagen ' + image.name + ' pesa ' + (image.size / 1048576).toFixed(2) + 'MB'
+          });
+        }
+
+        ;
+      } else {
+        $(this).val('');
+        $(this).siblings(".custom-file-label").addClass("selected").html('');
+        $('#icon').addClass('is-invalid');
+        $('#icon').siblings('.invalid-feedback').html('<strong> Imagen no permitida </strong>');
+        $('#gallery-images').html('');
+      }
+
+      ;
+    }
+
+    var renderImage = function renderImage(image) {
+      var imageItem = "\n            <div class=\"gallery-item\">\n                <img src=".concat(image, ">\n            </div>\n            ");
+      $('#gallery-images').html(imageItem);
+    };
   });
 });
 
