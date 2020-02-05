@@ -189,5 +189,20 @@ class PermissionsTableSeeder extends Seeder
             'private'=>false,
             'group'=>'informe',
         ]);
+        //Permisos sobre el módulo de categorías
+        Permission::create([
+            'name'=>'Listar las categorías',
+            'slug'=>'categories.index',
+            'description'=>'Lista las categorías por defecto',
+            'private'=>true,
+            'group'=>'categoría',
+        ]);
+        Permission::create([
+            'name'=>'Editar categoría',
+            'slug'=>'categories.edit',
+            'description'=>'Editar las categorías registradas',
+            'private'=>true,
+            'group'=>'categoría',
+        ]);
     }
 }

@@ -20,25 +20,25 @@ class CategoriesTableSeeder extends Seeder
         ]);
         Category::create([
             'name'=>'Servicio público',
-            'slug'=>'public-service',
+            'slug'=>'servicio-publico',
             'description'=>'Categoría de servicios públicos',
             'icon'=>env('PUBLIC_SERVICE_ICON_DEFAULT')
         ]);
         Category::create([
             'name'=>'Evento',
-            'slug'=>'event',
+            'slug'=>'evento',
             'description'=>'Categoría de eventos',
             'icon'=>env('EVENT_ICON_DEFAULT')
         ]);
         Category::create([
             'name'=>'Emergencia',
-            'slug'=>'emergency',
+            'slug'=>'emergencia',
             'description'=>'Categoría de emergencias',
             'icon'=>env('EMERGENCY_ICON_DEFAULT')
         ]);
         Category::create([
             'name'=>'Problema',
-            'slug'=>'problem',
+            'slug'=>'problema',
             'description'=>'Categoría de problemas',
             'icon'=>env('PROBLEM_ICON_DEFAULT')
         ]);

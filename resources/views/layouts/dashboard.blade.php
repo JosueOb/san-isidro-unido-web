@@ -138,7 +138,7 @@
                         </li>
                         @endcanany
 
-
+                        @canany(['categories.index','categories.edit'])
                         <li class="nav-item @yield('item-category')">
                             <a class="nav-link" data-toggle="collapse" data-target="#collapseCategory" aria-expanded="true" aria-controls="collapseCategory">
                                 <i class="fas fa-tag"></i>
@@ -151,6 +151,7 @@
                             </div>
                             </div>
                         </li>
+                        @endcanany
 
                         <li class="nav-item @yield('item-subcategory')">
                             <a class="nav-link" data-toggle="collapse" data-target="#collapseSubcategory" aria-expanded="true" aria-controls="collapseSubcategory">

@@ -43,9 +43,9 @@
                                     <th width='10px'>Id</th>
                                     <th>Nombre</th>
                                     <th>Descripción</th>
-                                    {{-- @canany(['categories.show', 'categories.edit','categories.destroy']) --}}
+                                    @can(['categories.edit'])
                                     <th>Opción</th>
-                                    {{-- @endcanany --}}
+                                    @endcan
                                 </tr>
                             </thead>
                             <tbody>
@@ -54,13 +54,12 @@
                                         <td>{{$category->id}}</td>
                                         <td>{{$category->name}}</td>
                                         <td>{{$category->description ?? 'Sin descripción'}}</td>
-                                        {{-- <td>{{$category->group}}</td> --}}
                                         
-                                        {{-- @can('categories.edit') --}}
+                                        @can('categories.edit')
                                         <td width='10px'>
                                             <a href="{{route('categories.edit', $category->id)}}" class="btn btn-secondary"> Editar</a>
                                         </td>
-                                        {{-- @endcan --}}
+                                        @endcan
 
                                     </tr>
                                 @endforeach

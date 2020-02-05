@@ -92,9 +92,9 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::get('search/reports','SearchController@searchReports')->name('search.reports')->middleware('can:reports.index');
 
     //CATEGORIA
-    Route::get('category', 'CategoryController@index')->name('categories.index');
-    Route::get('category/{category}/edit', 'CategoryController@edit')->name('categories.edit');
-    Route::put('category/{category}', 'CategoryController@update')->name('categories.update');
+    Route::get('category', 'CategoryController@index')->name('categories.index')->middleware('can:categories.index');
+    Route::get('category/{category}/edit', 'CategoryController@edit')->name('categories.edit')->middleware('can:categories.edit');
+    Route::put('category/{category}', 'CategoryController@update')->name('categories.update')->middleware('can:categories.edit');
     Route::get('category/{category}', function () {
         return abort(404);
     });
