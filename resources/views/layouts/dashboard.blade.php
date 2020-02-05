@@ -160,8 +160,8 @@
                             </a>
                             <div id="collapseSubcategory" class="collapse @yield('item-subcategory-collapse')" >
                                 <div class="collapse-inner">
-                                    <a class="collapse-item @yield('item-subcategory-list')" href="#"><i class="fas fa-list"></i>Listar subcategorías</a>
-                                    <a class="collapse-item @yield('item-subcategory-create')" href="#"><i class="fas fa-plus-circle"></i>Agregar subcategoría</a>
+                                    <a class="collapse-item @yield('item-subcategory-list')" href="{{route('subcategories.index')}}"><i class="fas fa-list"></i>Listar subcategorías</a>
+                                    <a class="collapse-item @yield('item-subcategory-create')" href="{{route('subcategories.create')}}"><i class="fas fa-plus-circle"></i>Agregar subcategoría</a>
                             </div>
                             </div>
                         </li>

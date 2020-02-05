@@ -1,9 +1,9 @@
 @extends('layouts.dashboard')
 @section('page-subtitle')
-    Módulo Servicios Públicos
+    Módulo Categoría
 @endsection
 @section('page-header')
-    Editar una categoría
+    Editar categoría
 @endsection
 @section('item-category')
     active
