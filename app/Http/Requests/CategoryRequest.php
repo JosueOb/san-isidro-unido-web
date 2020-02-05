@@ -26,9 +26,9 @@ class CategoryRequest extends FormRequest
     {
         $uniqueName = null;
 
-        if($this->method() === 'POST'){
-            $uniqueName = 'unique:categories,name';
-        }
+        // if($this->method() === 'POST'){
+        //     $uniqueName = 'unique:categories,name';
+        // }
         if($this->method() === 'PUT'){
             $uniqueName = 'unique:categories,name,'.$this->route('category')->id;
         }
@@ -36,6 +36,7 @@ class CategoryRequest extends FormRequest
         return [
             'name'=>'required|regex:/^[[:alpha:][:space:](áéíóúÁÉÍÓÚ)]+$/|min:3|max:25|'.$uniqueName,
             'description'=> 'nullable|regex:/^[[:alpha:][:space:](,;.áéíóúÁÉÍÓÚ)]+$/|max:255',
+            'icon' => "nullable|image|mimes:jpeg,png|max:1024",//el tamaño esta expresado en kilibytes, equivale a 1MB
         ];
     }
     /**
@@ -51,11 +52,12 @@ class CategoryRequest extends FormRequest
             'name.regex'=>'El :attribute debe estar conformado por caracteres alfabéticos, no se admiten signos de puntuación ni caracteres especiales',
             'name.unique'=>'El nombre ingresado ya existe',
             
-            'group.required'=>'El campo :attribute es obligatorio',
-            'group.in'=>'Lo opción seleccionada es inválida',
-            
             'description.max'=>'La :attribute no debe ser mayor a 255 caracteres',
             'description.regex'=>'La :attribute  debe estar conformado por caracteres alfabéticos, no se admiten caracteres especiales',
+
+            'icon.image'=>'Debe ser una imágen',
+            'icon.mimes'=>'Los formatos permitidos son jpeg, jpg y png',
+            'icon.max'=>'El tamaño máximo para el :attribute es 1MB',
         ];
     }
     /**
@@ -67,8 +69,8 @@ class CategoryRequest extends FormRequest
     {
         return [
             'name' => 'nombre',
-            'group' => 'grupo',
             'description' => 'descripción',
+            'icon'=> 'ícono',
         ];
     }
 }

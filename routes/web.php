@@ -93,14 +93,14 @@ Route::middleware(['auth','verified'])->group(function(){
 
     //CATEGORIA
     Route::get('category', 'CategoryController@index')->name('categories.index');
-    Route::get('category/create', 'CategoryController@create')->name('categories.create');
-    Route::post('category/store', 'CategoryController@store')->name('categories.store');
     Route::get('category/{category}/edit', 'CategoryController@edit')->name('categories.edit');
     Route::put('category/{category}', 'CategoryController@update')->name('categories.update');
-    Route::delete('category/{category}', 'CategoryController@destroy')->name('categories.destroy')->middleware('can:positions.destroy');
     Route::get('category/{category}', function () {
         return abort(404);
     });
+    // Route::get('category/create', 'CategoryController@create')->name('categories.create');
+    // Route::post('category/store', 'CategoryController@store')->name('categories.store');
+    // Route::delete('category/{category}', 'CategoryController@destroy')->name('categories.destroy')->middleware('can:positions.destroy');
 
     //SERVICIOS PUBLICOS
     Route::get('public-service', 'PublicServiceController@index')->name('publicServices.index'); 

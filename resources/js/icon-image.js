@@ -39,13 +39,14 @@ $(document).ready(function () {
                 $('#gallery-images').html('');
             };
         }
-        const renderImage = image =>{
-            let imageItem = `
-            <div class="gallery-item">
-                <img src=${image}>
-            </div>
-            `;
-            $('#gallery-images').html(imageItem);
-        }
+        
     });
+    const renderImage = image =>{
+        let imageItem = `
+        <div class="gallery-item">
+            <img src=${image}>
+        </div>
+        `;
+        $('#gallery-images').html(imageItem);
+    }
 });

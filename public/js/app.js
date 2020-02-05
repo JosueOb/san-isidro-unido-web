@@ -67098,12 +67098,12 @@ $(document).ready(function () {
 
       ;
     }
-
-    var renderImage = function renderImage(image) {
-      var imageItem = "\n            <div class=\"gallery-item\">\n                <img src=".concat(image, ">\n            </div>\n            ");
-      $('#gallery-images').html(imageItem);
-    };
   });
+
+  var renderImage = function renderImage(image) {
+    var imageItem = "\n        <div class=\"gallery-item\">\n            <img src=".concat(image, ">\n        </div>\n        ");
+    $('#gallery-images').html(imageItem);
+  };
 });
 
 /***/ }),
