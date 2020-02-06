@@ -25,12 +25,6 @@ class Category extends Model
         return $this->hasMany(Subcategory::class);
     }
     /**
-    * A category can have many public services
-    */
-    public function publicServices(){
-        return $this->hasMany(PublicService::class);
-    }
-    /**
     * get resoruce link
     */
     public function getLink(){

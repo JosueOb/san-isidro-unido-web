@@ -24,4 +24,10 @@ class Subcategory extends Model
     public function category(){
         return $this->belongsTo(Category::class);
     }
+        /**
+    * A subcategory can have many public services
+    */
+    public function publicServices(){
+        return $this->hasMany(PublicService::class);
+    }
 }

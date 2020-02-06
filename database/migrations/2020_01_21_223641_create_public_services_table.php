@@ -18,8 +18,8 @@ class CreatePublicServicesTable extends Migration
             $table->string('name', 60);
             $table->text('description');
             $table->json('ubication')->nullable();
-            $table->unsignedBigInteger('category_id')->index();
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->unsignedBigInteger('subcategory_id')->index();
+            $table->foreign('subcategory_id')->references('id')->on('subcategories')->onDelete('cascade');
             $table->timestamps();
         });
     }
