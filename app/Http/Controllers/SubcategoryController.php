@@ -51,7 +51,8 @@ class SubcategoryController extends Controller
         $subcategory->name = $validated['name'];
         $subcategory->slug = $slug;
         $subcategory->description = $validated['description'];
-
+        $subcategory->category_id = $validated['category'];
+        
         if($icon){
             $subcategory->icon = $icon->store('subcategory_icons', 'public');
         }else{
