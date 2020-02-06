@@ -105,6 +105,7 @@ Route::middleware(['auth','verified'])->group(function(){
     //SUBCATEGORIA
     Route::get('subcategory', 'SubcategoryController@index')->name('subcategories.index');
     Route::get('subcategory/create', 'SubcategoryController@create')->name('subcategories.create');
+    Route::post('subcategory/store', 'SubcategoryController@store')->name('subcategories.store');
     
     //SERVICIOS PUBLICOS
     Route::get('public-service', 'PublicServiceController@index')->name('publicServices.index'); 
