@@ -16,7 +16,10 @@ class SubcategoryController extends Controller
      */
     public function index()
     {
-        return view('subcategories.index');
+        $subcategories = Subcategory::paginate(10);
+        return view('subcategories.index',[
+            'subcategories'=>$subcategories,
+        ]);
     }
 
     /**
@@ -52,7 +55,7 @@ class SubcategoryController extends Controller
         $subcategory->slug = $slug;
         $subcategory->description = $validated['description'];
         $subcategory->category_id = $validated['category'];
-        
+
         if($icon){
             $subcategory->icon = $icon->store('subcategory_icons', 'public');
         }else{
