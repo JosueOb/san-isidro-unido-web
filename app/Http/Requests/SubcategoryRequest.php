@@ -28,9 +28,9 @@ class SubcategoryRequest extends FormRequest
         if($this->method() === 'POST'){
             $uniqueName = 'unique:subcategories,name';
         }
-        // if($this->method() === 'PUT'){
-        //     $uniqueName = 'unique:subcategories,name,'.$this->route('subcategory')->id;
-        // }
+        if($this->method() === 'PUT'){
+            $uniqueName = 'unique:subcategories,name,'.$this->route('subcategory')->id;
+        }
         
         return [
             'name'=>'required|regex:/^[[:alpha:][:space:](áéíóúÁÉÍÓÚ)]+$/|min:3|max:25|'.$uniqueName,

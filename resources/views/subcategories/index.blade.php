@@ -59,7 +59,7 @@
                                         
                                         {{-- @can('categories.edit') --}}
                                         <td width='10px'>
-                                            <a href="#" class="btn btn-secondary"> Editar</a>
+                                            <a href="{{route('subcategories.edit', $subcategory->id)}}" class="btn btn-secondary"> Editar</a>
                                         </td>
                                         {{-- @endcan --}}
 

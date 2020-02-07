@@ -6,6 +6,7 @@ use App\Category;
 use App\Http\Requests\SubcategoryRequest;
 use App\Subcategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class SubcategoryController extends Controller
 {
@@ -45,7 +46,6 @@ class SubcategoryController extends Controller
     public function store(SubcategoryRequest $request)
     {
         $validated = $request->validated();
-        // dd($validated);
 
         $slug = $this->returnSlug($validated['name']);
         $icon = $request->file('icon');
@@ -68,25 +68,19 @@ class SubcategoryController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Subcategory $subcategory)
     {
-        //
+         //Se consultan a todas las categorías registradas
+         $categories = Category::all();
+        return view('subcategories.edit',[
+            'subcategory'=>$subcategory,
+            'categories'=>$categories,
+        ]);
     }
 
     /**
@@ -96,9 +90,36 @@ class SubcategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(SubcategoryRequest $request, Subcategory $subcategory)
     {
-        //
+        $validated = $request->validated();
+
+        $slug = $this->returnSlug($validated['name']);
+        $icon = $request->file('icon');
+        
+        $subcategory->name = $validated['name'];
+        $subcategory->slug = $slug;
+        $subcategory->description = $validated['description'];
+        $subcategory->category_id = $validated['category'];
+
+        if($icon){
+
+            $icon_default = env('SUBCATEGORY_ICON_DEFAULT');
+            $subcategory_icon = $subcategory->icon;
+
+            //Se verifica que el ícono por defecto de subcategorías sea diferecte al ícono registrados,
+            //esto se realiza con la finalidad de no eliminar la imagen por defecto dentro del almacenamiento de laravel
+            if($icon_default !== $subcategory_icon){
+                if(Storage::disk('public')->exists($subcategory_icon)){
+                    Storage::disk('public')->delete($subcategory_icon);
+                }
+            }
+            $subcategory->icon = $icon->store('subcategory_icons', 'public');
+        }
+
+        $subcategory->save();
+
+        return redirect()->route('subcategories.index')->with('success','Subcategoría actualizada exitosamente');
     }
 
     /**

@@ -30,4 +30,10 @@ class Subcategory extends Model
     public function publicServices(){
         return $this->hasMany(PublicService::class);
     }
+    /**
+    * get resoruce link
+    */
+    public function getLink(){
+        return \Storage::disk('public')->url($this->icon);
+    }
 }

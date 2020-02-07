@@ -25,6 +25,7 @@ $(document).ready(function () {
                     };
                     reader.readAsDataURL(image);
                 }else{
+                    $('#icon').val('');
                     Swal.fire({
                         type: 'error',
                         title: 'Fuera del límite de 1MB',
