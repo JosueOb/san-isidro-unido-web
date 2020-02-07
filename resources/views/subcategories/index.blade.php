@@ -81,7 +81,7 @@
                                                     </div>
                                                     <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                                    <form action="#" method="POST">
+                                                    <form action="{{route('subcategories.destroy', $subcategory->id)}}" method="POST">
                                                         @csrf
                                                         @method('delete')
                                                         <button type="submit" class="btn btn-danger">Eliminar</button>

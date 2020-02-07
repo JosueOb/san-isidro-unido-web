@@ -108,6 +108,10 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::post('subcategory/store', 'SubcategoryController@store')->name('subcategories.store');
     Route::get('subcategory/{subcategory}/edit', 'SubcategoryController@edit')->name('subcategories.edit');
     Route::put('subcategory/{subcategory}', 'SubcategoryController@update')->name('subcategories.update');
+    Route::delete('subcategory/{subcategory}', 'SubcategoryController@destroy')->name('subcategories.destroy');
+    Route::get('subcategory/{subcategory}', function () {
+        return abort(404);
+    });
     
     //SERVICIOS PUBLICOS
     Route::get('public-service', 'PublicServiceController@index')->name('publicServices.index'); 

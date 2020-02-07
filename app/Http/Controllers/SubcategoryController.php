@@ -128,9 +128,17 @@ class SubcategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Subcategory $subcategory)
     {
-        //
+        $hasPots = $subcategory->posts()->first();
+        $hasPublicServices = $subcategory->publicServices()->first();
+
+        if(!$hasPots && !$hasPublicServices){
+            $subcategory->delete();
+            return redirect()->route('subcategories.index')->with('success','Subcategoría eliminada exitosamente');
+        }else{
+            return redirect()->route('subcategories.index')->with('danger','La subcategoría '.strtolower($subcategory->name).' no se puede eliminar debido a que esta siendo utilizada');
+        }
     }
     /**
      * Función que en base al nombre de la categoría se retorna un slug adecuado
