@@ -23,7 +23,7 @@ class RolesTableSeeder extends Seeder
             'mobile_app'=>false,
         ]);
         $adminRole->save();
-        $adminRole->permissions()->attach([1,2,3,4,5,6,7,8,9,10,11,12,23,24]);
+        $adminRole->permissions()->attach([1,2,3,4,5,6,7,8,9,10,11,12,23,24,25,26,27,28]);
         //Directivo
         $directiveRole = Role::create([
             'name'=>'Directivo',

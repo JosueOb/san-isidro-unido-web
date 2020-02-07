@@ -27,9 +27,9 @@
                 <div class="row">
                     <div class="col">
                         <h4 class="d-inline">Subcategorías</h4>
-                        {{-- @can('categories.create') --}}
+                        @can('subcategories.create')
                         <a href="{{route('subcategories.create')}}" class="btn btn-primary float-right">Nuevo</a>
-                        {{-- @endcan --}}
+                        @endcan
                     </div>
                 </div>
             </div>
@@ -44,9 +44,9 @@
                                     <th>Nombre</th>
                                     <th>Descripción</th>
                                     <th>Categoría</th>
-                                    {{-- @can(['categories.edit']) --}}
+                                    @canany(['subcategories.edit','subcategories.destroy'])
                                     <th>Opciones</th>
-                                    {{-- @endcan --}}
+                                    @endcanany
                                 </tr>
                             </thead>
                             <tbody>
@@ -57,13 +57,13 @@
                                         <td>{{$subcategory->description ?? 'Sin descripción'}}</td>
                                         <td>{{$subcategory->category->name }}</td>
                                         
-                                        {{-- @can('categories.edit') --}}
+                                        @can('subcategories.edit')
                                         <td width='10px'>
                                             <a href="{{route('subcategories.edit', $subcategory->id)}}" class="btn btn-secondary"> Editar</a>
                                         </td>
-                                        {{-- @endcan --}}
+                                        @endcan
 
-                                        {{-- @can('positions.destroy') --}}
+                                        @can('subcategories.destroy')
                                         <td width='10px'>
                                             <a href="#" class="btn btn-danger"  data-toggle="modal" data-target="#deleteSubcategory{{$subcategory->id}}">Eliminar</a>
                                             <!--Modal-->
@@ -91,7 +91,7 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        {{-- @endcan --}}
+                                        @endcan
 
                                     </tr>
                                 @endforeach

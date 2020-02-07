@@ -103,12 +103,12 @@ Route::middleware(['auth','verified'])->group(function(){
     // Route::delete('category/{category}', 'CategoryController@destroy')->name('categories.destroy')->middleware('can:positions.destroy');
 
     //SUBCATEGORIA
-    Route::get('subcategory', 'SubcategoryController@index')->name('subcategories.index');
-    Route::get('subcategory/create', 'SubcategoryController@create')->name('subcategories.create');
-    Route::post('subcategory/store', 'SubcategoryController@store')->name('subcategories.store');
-    Route::get('subcategory/{subcategory}/edit', 'SubcategoryController@edit')->name('subcategories.edit');
-    Route::put('subcategory/{subcategory}', 'SubcategoryController@update')->name('subcategories.update');
-    Route::delete('subcategory/{subcategory}', 'SubcategoryController@destroy')->name('subcategories.destroy');
+    Route::get('subcategory', 'SubcategoryController@index')->name('subcategories.index')->middleware('can:subcategories.index');
+    Route::get('subcategory/create', 'SubcategoryController@create')->name('subcategories.create')->middleware('can:subcategories.create');
+    Route::post('subcategory/store', 'SubcategoryController@store')->name('subcategories.store')->middleware('can:subcategories.create');
+    Route::get('subcategory/{subcategory}/edit', 'SubcategoryController@edit')->name('subcategories.edit')->middleware('can:subcategories.edit');
+    Route::put('subcategory/{subcategory}', 'SubcategoryController@update')->name('subcategories.update')->middleware('can:subcategories.edit');
+    Route::delete('subcategory/{subcategory}', 'SubcategoryController@destroy')->name('subcategories.destroy')->middleware('can:subcategories.destroy');
     Route::get('subcategory/{subcategory}', function () {
         return abort(404);
     });

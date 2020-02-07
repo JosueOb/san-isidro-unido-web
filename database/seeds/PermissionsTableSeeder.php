@@ -204,5 +204,34 @@ class PermissionsTableSeeder extends Seeder
             'private'=>true,
             'group'=>'categoría',
         ]);
+        //Permisos sobre el módulo de subcategorías
+        Permission::create([
+            'name'=>'Listar las subcategorías',
+            'slug'=>'subcategories.index',
+            'description'=>'Lista las subcategorías registradas',
+            'private'=>true,
+            'group'=>'subcategoría',
+        ]);
+        Permission::create([
+            'name'=>'Crear subcategoría',
+            'slug'=>'subcategories.create',
+            'description'=>'Registrar las subcategorías',
+            'private'=>true,
+            'group'=>'subcategoría',
+        ]);
+        Permission::create([
+            'name'=>'Editar subcategoría',
+            'slug'=>'subcategories.edit',
+            'description'=>'Editar las subcategorías registradas',
+            'private'=>true,
+            'group'=>'subcategoría',
+        ]);
+        Permission::create([
+            'name'=>'Eliminar subcategoría',
+            'slug'=>'subcategories.destroy',
+            'description'=>'Eliminar registros de las subcategorías registradas',
+            'private'=>true,
+            'group'=>'subcategoría',
+        ]);
     }
 }

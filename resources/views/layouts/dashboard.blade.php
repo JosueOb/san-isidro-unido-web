@@ -153,6 +153,7 @@
                         </li>
                         @endcanany
 
+                        @canany(['subcategories.index','subcategories.create'])
                         <li class="nav-item @yield('item-subcategory')">
                             <a class="nav-link" data-toggle="collapse" data-target="#collapseSubcategory" aria-expanded="true" aria-controls="collapseSubcategory">
                                 <i class="fas fa-tags"></i>
@@ -160,11 +161,16 @@
                             </a>
                             <div id="collapseSubcategory" class="collapse @yield('item-subcategory-collapse')" >
                                 <div class="collapse-inner">
+                                    @can('subcategories.index')
                                     <a class="collapse-item @yield('item-subcategory-list')" href="{{route('subcategories.index')}}"><i class="fas fa-list"></i>Listar subcategorías</a>
+                                    @endcan
+                                    @can('subcategories.create')
                                     <a class="collapse-item @yield('item-subcategory-create')" href="{{route('subcategories.create')}}"><i class="fas fa-plus-circle"></i>Agregar subcategoría</a>
-                            </div>
+                                    @endcan
+                                </div>
                             </div>
                         </li>
+                        @endcanany
 
                         
 
