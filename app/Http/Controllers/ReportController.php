@@ -71,7 +71,7 @@ class ReportController extends Controller
                 //     'post_id' => $report->id,
                 // ]);
                 Resource::create([
-                    'url'=> $image->store('images_reports', 'public'),
+                    'url'=> $image->store('report_images', 'public'),
                     'post_id' => $report->id,
                     'type'=>'image',
                 ]);
@@ -79,7 +79,7 @@ class ReportController extends Controller
         }
         if($request->file('document')){
             Resource::create([
-                'url'=> $request->file('document')->store('document_reports', 'public'),
+                'url'=> $request->file('document')->store('report_documents', 'public'),
                 'post_id' => $report->id,
                 'type'=>'document',
             ]);
@@ -210,7 +210,7 @@ class ReportController extends Controller
                 //     'post_id' => $report->id,
                 // ]);
                 Resource::create([
-                    'url'=> $image->store('images_reports', 'public'),
+                    'url'=> $image->store('report_images', 'public'),
                     'post_id' => $report->id,
                     'type'=>'image',
                 ]);
@@ -218,7 +218,7 @@ class ReportController extends Controller
         }
         if($request->file('document')){
             Resource::create([
-                'url'=> $request->file('document')->store('document_reports', 'public'),
+                'url'=> $request->file('document')->store('report_documents', 'public'),
                 'post_id' => $report->id,
                 'type'=>'document',
             ]);
