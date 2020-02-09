@@ -1,0 +1,17 @@
+// Estilos Main Footer
+.main-footer {
+    height: $main-footer-height;
+  
+    .copyright {
+      color: $main-footer-copyright-color;
+    }
+
+    @media(max-width:767.98px){
+    .copyright {
+            display: inline-block;
+            width: 100%;
+            padding: 1rem;
+            text-align: center;
+        }
+    }
+}

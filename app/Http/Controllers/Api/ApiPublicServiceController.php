@@ -1,0 +1,83 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+use App\Http\Controllers\Api\ApiBaseController;
+use App\PublicService;
+use App\Category;
+use Spatie\QueryBuilder\QueryBuilder;
+use Exception;
+
+class ApiPublicServiceController extends ApiBaseController {
+
+    /**
+     * Retorna el listado de servicios públicos
+     *
+     * @return array
+     */
+    public function index() {
+        try {
+            $publicServices = PublicService::orderBy('id', 'desc')->with(['phones'])->get();
+            return $this->sendResponse(200, 'success', $publicServices);
+        } catch (Exception $e) {
+            return $this->sendError(500, "error", ['server_error' => $e->getMessage()]);
+        }
+    }
+    
+    
+
+    /**
+     * Retorna el detalle de un servicio publico
+     * @param int $id;
+     * 
+     * @return array
+     */
+    public function detail($id) {
+        try {
+            $publicService = QueryBuilder::for(PublicService::class)
+            ->findById($id)
+            ->orderBy('id', 'desc')
+            ->with(['phones', 'category'])
+            ->first();
+            if(!is_null($publicService)){
+                return  $this->sendResponse(200, 'Recurso encontrado', $publicService);
+            }
+            return $this->sendError(404, 'No existe el servicio publico solicitado',[], []);
+        } catch (Exception $e) {
+            return $this->sendError(500, "error", ['server_error' => $e->getMessage()]);
+        }
+    }
+
+    public function getCategories(){
+        
+        try {
+            $publicServicesCategories = Category::findByType(PublicService::class)->get();
+            return  $this->sendResponse(200, 'Listado de Categorias', $publicServicesCategories);
+        } catch (Exception $e) {
+            return $this->sendError(500, "error", ['server_error' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * Retorna los servicios publicos que pertenecen a una categoria en especifico
+     * @param string $slug;
+     * 
+     * @return array
+     */
+    public function filterByCategory($slug) {
+        try {
+            $category = Category::slug($slug)->first();
+            if(is_null($category)){
+                return $this->sendError(404, 'No existe la categoria solicitada', []);
+            }
+            // $publicServices = $category->publicServices()->get();
+            // dd($test);
+            $publicServices = PublicService::findByCategoryId($category->id)
+            ->with(['phones'])
+            ->get();
+            return  $this->sendResponse(200, 'Recurso encontrado', $publicServices);
+        } catch (Exception $e) {
+            return $this->sendError(500, "error", ['server_error' => $e->getMessage()]);
+        }
+    }
+    
+}

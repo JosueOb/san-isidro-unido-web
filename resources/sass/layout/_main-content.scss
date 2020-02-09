@@ -1,0 +1,6 @@
+// Estilos de main content
+
+.main-content > .main-content-container.container-fluid {
+    min-height: calc(100vh - #{$main-navbar-height + $main-footer-height});
+    background-color: $main-content-background-color;
+}

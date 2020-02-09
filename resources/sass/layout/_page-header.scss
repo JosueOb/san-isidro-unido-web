@@ -1,0 +1,25 @@
+.page-header {
+    .page-title {
+        font-size: $page-title-font-size;
+        font-weight: $page-title-font-weight;
+        line-height: $page-title-line-height;
+        margin: $page-title-margin;
+        padding: $page-title-padding;
+        color: $page-title-color;
+
+        @media(max-width:767.98px){
+            font-size: $page-title-sm-font-size;
+        }
+    }
+  
+    .page-subtitle {
+        letter-spacing: $page-subtitle-letter-spacing;
+        color: $page-subtitle-color;
+        font-size: $page-subtitle-font-size;
+
+        @media(max-width:767.98px){
+            font-size: $page-subtitle-font-size-sm;
+            font-weight: $page-subtitle-font-weight-sm;
+        }
+    }
+}

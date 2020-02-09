@@ -1,0 +1,31 @@
+.btn {
+    margin: 0 auto;
+
+    &:focus {
+      box-shadow: none !important;
+      outline: none;
+    }
+
+    &:active {
+      box-shadow: none !important;
+      outline: none;
+
+      &:focus {
+        box-shadow: none !important;
+        outline: none;
+        }
+    }
+}
+
+  
+.btn-primary{
+    box-shadow: 0 2px 6px $shuttle-gray;
+    background-color: $reagent-gray;
+    border-color: $fiord-blue;
+
+    &:active, &:hover {
+      background-color: $fiord-blue !important;
+      border-color: $fiord-blue;
+      color: $white;
+    }
+}
