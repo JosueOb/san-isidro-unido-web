@@ -22,19 +22,19 @@ class ApiCategorySeeder extends Seeder
         /**CATEGORIAS POSTS */
         //TODO: Primer Categoria
         DB::table('categories')->insert([
-            'name' => 'Emergencias',
-            'slug' => 'emergencias',
+            'name' => 'Emergencia',
+            'slug' => 'emergencia',
+            "categorizable_type" => Post::class,
             'image' => 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/alarm.svg?sanitize=true',
-            'categorizable_type' => Post::class,
             'description' => 'Categoria para Publicaciones de Emergencia',
             'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
         ]);
         //TODO:Segunda Categoria
         $idTwo = DB::table('categories')->insertGetId([
-            'name' => 'Problemas Sociales',
-            'slug' => 'problemas_sociales',
+            'name' => 'Problema Social',
+            'slug' => 'problema_social',
+            "categorizable_type" => Post::class,
             'image' => 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/protest.svg?sanitize=true',
-            'categorizable_type' => Post::class,
             'description' => 'Categoria para Problemas Sociales',
             'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
         ]);
@@ -75,71 +75,22 @@ class ApiCategorySeeder extends Seeder
         ]);
         //TODO:Tercera Categoria
         DB::table('categories')->insert([
-            'name' => 'Eventos',
-            'slug' => 'eventos',
+            'name' => 'Evento',
+            'slug' => 'evento',
+            "categorizable_type" => Post::class,
             'image' => 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/calendar.svg?sanitize=true',
-            'categorizable_type' => Post::class,
             'description' => 'Categoria para Eventos',
             'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
         ]);
-        //TODO:Cuarta Categoria
+        //TODO:Quinta Categoria
         DB::table('categories')->insert([
-            'name' => 'Reportes',
-            'slug' => 'reportes',
-            'image' => 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/analytics_report.svg?sanitize=true',
-            'categorizable_type' => Post::class,
-            'description' => 'Categoria para Reportes',
+            'name' => 'Servicio Publico',
+            'slug' => 'servicio-publico',
+            "categorizable_type" => PublicService::class,
+            'image' => 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/calendar.svg?sanitize=true',
+            'description' => 'Categoria para Servicios Publicos',
             'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
         ]);
-
-         /**CATEGORIAS PUBLIC SERVICES */
-        DB::table('categories')->insert([
-            'name' => 'Ferreterias',
-            'slug' => 'ferreterias',
-            'image' => 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/ironmongery.svg?sanitize=true',
-            'categorizable_type' => PublicService::class,
-            'description' => 'Categoria para ferreterias',
-            'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
-        ]);
-        DB::table('categories')->insert([
-            'name' => 'Tiendas',
-            'slug' => 'tiendas',
-            'image' => 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/store.svg?sanitize=true',
-            'categorizable_type' => PublicService::class,
-            'description' => 'Categoria para tiendas',
-            'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
-        ]);
-        DB::table('categories')->insert([
-            'name' => 'Centros Médicos',
-            'slug' => 'centros_medicos',
-            'image' => 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/hospital.svg?sanitize=true',
-            'categorizable_type' => PublicService::class,
-            'description' => 'Categoria para centros médicos',
-            'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
-        ]);
-        DB::table('categories')->insert([
-            'name' => 'Farmacias',
-            'slug' => 'farmacias',
-            'image' => 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/medicine.svg?sanitize=true',
-            'categorizable_type' => PublicService::class,
-            'description' => 'Categoria para farmacias',
-            'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
-        ]);
-        DB::table('categories')->insert([
-            'name' => 'Restaurantes',
-            'slug' => 'restaurantes',
-            'image' => 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/baker.svg?sanitize=true',
-            'categorizable_type' => PublicService::class,
-            'description' => 'Categoria para todo tipo de establecimientos para venta de comida',
-            'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
-        ]);
-        DB::table('categories')->insert([
-            'name' => 'Hospedaje',
-            'slug' => 'hospedaje',
-            'image' => 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/hotel.svg?sanitize=true',
-            'categorizable_type' => PublicService::class,
-            'description' => 'Categoria para hoteles, hostales',
-            'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
-        ]);
+        
     }
 }

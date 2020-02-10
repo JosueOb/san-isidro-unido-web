@@ -55,14 +55,15 @@ class ApiDirectivesSeeder extends Seeder
             // dd($phone);
             // die();
             $newUser = [
-                'firstname' => $name,
-                'lastname' => $lastname,
+                'first_name' => $name,
+                'last_name' => $lastname,
                 'email' => $email,
                 'avatar' => "https://ui-avatars.com/api/?name=$name+$lastname&size=255",
                 'basic_service_image' => "https://ui-avatars.com/api/?name=basicserviceimage&size=400",
                 'password' => password_hash('12345', PASSWORD_DEFAULT),
                 'position_id' => $posID,
-                'phone' => $phone,
+                "state" => true,
+                'number_phone' => $phone,
                 'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
             ];
             //Crear usuario

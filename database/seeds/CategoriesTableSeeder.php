@@ -1,6 +1,7 @@
 <?php
 
 use App\Category;
+use App\Post;
 use Illuminate\Database\Seeder;
 
 class CategoriesTableSeeder extends Seeder
@@ -15,6 +16,7 @@ class CategoriesTableSeeder extends Seeder
         Category::create([
             'name'=>'Informe',
             'slug'=>'informe',
+            "categorizable_type" => Post::class,
             'description'=>'Informe de las actividades realizadas por la directiva del barrio'
         ]);
     }

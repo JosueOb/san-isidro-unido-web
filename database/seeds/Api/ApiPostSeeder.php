@@ -16,14 +16,15 @@ class ApiPostSeeder extends Seeder
      */
     public function run()
     {
+        $numPosts = 12;
         $faker = \Faker\Factory::create();
-        $categoriaEventos = Category::where('slug', 'eventos')->first();
-        $categoriaProblemasSociales = Category::where('slug', 'problemas_sociales')->first();
-        $categoriaEmergencias = Category::where('slug', 'emergencias')->first();
-        $categoriaInformes = Category::where('slug', 'reportes')->first();
+        $categoriaEventos = Category::where('slug', 'evento')->first();
+        $categoriaProblemasSociales = Category::where('slug', 'problema_social')->first();
+        $categoriaEmergencias = Category::where('slug', 'emergencia')->first();
+        $categoriaInformes = Category::where('slug', 'informe')->first();
 
         //Crear Emergencias
-        for($em = 1; $em <= 20; $em++){
+        for($em = 1; $em <= $numPosts; $em++){
             $user = User::orderBy(DB::raw('RAND()'))->take(1)->first();
             $initialDate =  CarbonImmutable::now();
             $idPostEmergencia = DB::table('posts')->insertGetId([
@@ -37,6 +38,7 @@ class ApiPostSeeder extends Seeder
                     "address" => $faker->address
                 ]),
                 "user_id" => $user->id,
+                'state'=>true,
                 "is_attended" => rand(0, 1),
                 "category_id" =>  $categoriaEmergencias->id,
                 "subcategory_id" => null,
@@ -53,7 +55,7 @@ class ApiPostSeeder extends Seeder
 
         }
         //Problemas Sociales
-        for($sp = 1; $sp <= 20; $sp++){
+        for($sp = 1; $sp <= $numPosts; $sp++){
             $user = User::orderBy(DB::raw('RAND()'))->take(1)->first();
             $initialDate =  CarbonImmutable::now();
             $subcategory = Subcategory::where('category_id', $categoriaProblemasSociales->id)->orderBy(DB::raw('RAND()'))->take(1)->first();
@@ -69,6 +71,7 @@ class ApiPostSeeder extends Seeder
                 ]),
                 "is_attended" => rand(0, 1),
                 "user_id" => $user->id,
+                'state'=>true,
                 "category_id" => $categoriaProblemasSociales->id,
                 "subcategory_id" => $subcategory->id,
                 'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
@@ -89,7 +92,7 @@ class ApiPostSeeder extends Seeder
             ]);
         }
         //Crear Eventos
-        for($ev = 1; $ev <= 20; $ev++){
+        for($ev = 1; $ev <= $numPosts; $ev++){
             $user = User::orderBy(DB::raw('RAND()'))->take(1)->first();
             $intervalDays = rand(2, 15);
             $initialDate =  CarbonImmutable::now();
@@ -99,11 +102,12 @@ class ApiPostSeeder extends Seeder
                 'description' =>  $faker->realText(200,2),
                 'date' => $initialDate->toDateString(),
                 'time' => $initialDate->toTimeString(),
+                'state'=>true,
                 "range_date" => json_encode([
-                    'start_date' => $initialDate->toDateTimeString(),
-                    'end_date' =>  $finalDate->toDateTimeString(),
-                    'start_time' => $initialDate->toDateTimeString(),
-                    'end_time' =>  $finalDate->toDateTimeString(),
+                    'start_date' => $initialDate->toDateString(),
+                    'end_date' =>  $finalDate->toDateString(),
+                    'start_time' => $initialDate->toTimeString(),
+                    'end_time' =>  $finalDate->toTimeString(),
                 ]),
                 "ubication" => json_encode([
                     "latitude" => $faker->latitude,
@@ -137,7 +141,7 @@ class ApiPostSeeder extends Seeder
             ]);
         }
         //Crear Reportes o Informes
-        for($rp = 1; $rp <= 20; $rp++){
+        for($rp = 1; $rp <= $numPosts; $rp++){
             $user = User::orderBy(DB::raw('RAND()'))->take(1)->first();
             $initialDate =  CarbonImmutable::now();
             $idPostReporte = DB::table('posts')->insertGetId([
@@ -151,6 +155,7 @@ class ApiPostSeeder extends Seeder
                     "address" => $faker->address
                 ]),
                 "user_id" => $user->id,
+                'state'=>true,
                 "category_id" => $categoriaInformes->id,
                 "subcategory_id" => null,
                 'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()

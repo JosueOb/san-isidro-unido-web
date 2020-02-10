@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Api\ApiBaseController;
 use App\PublicService;
+use App\Subcategory;
 use App\Category;
 use Spatie\QueryBuilder\QueryBuilder;
 use Exception;
@@ -50,7 +51,8 @@ class ApiPublicServiceController extends ApiBaseController {
     public function getCategories(){
         
         try {
-            $publicServicesCategories = Category::findByType(PublicService::class)->get();
+            $category = Category::slug('servicio-publico')->first();
+            $publicServicesCategories = Subcategory::CategoryId($category->id)->get();
             return  $this->sendResponse(200, 'Listado de Categorias', $publicServicesCategories);
         } catch (Exception $e) {
             return $this->sendError(500, "error", ['server_error' => $e->getMessage()]);
@@ -65,13 +67,14 @@ class ApiPublicServiceController extends ApiBaseController {
      */
     public function filterByCategory($slug) {
         try {
-            $category = Category::slug($slug)->first();
-            if(is_null($category)){
+            //$category = Category::slug($slug)->first();
+            $subcategory = Subcategory::slug($slug)->first();
+            if(is_null($subcategory)){
                 return $this->sendError(404, 'No existe la categoria solicitada', []);
             }
             // $publicServices = $category->publicServices()->get();
             // dd($test);
-            $publicServices = PublicService::findByCategoryId($category->id)
+            $publicServices = PublicService::findByCategoryId($subcategory->id)
             ->with(['phones'])
             ->get();
             return  $this->sendResponse(200, 'Recurso encontrado', $publicServices);

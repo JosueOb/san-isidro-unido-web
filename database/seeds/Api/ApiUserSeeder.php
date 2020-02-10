@@ -20,11 +20,12 @@ class ApiUserSeeder extends Seeder {
         $rolePolicia= Role::where('slug', 'policia')->first();
 		//TODO: Primer Usuario
 		$idOne = DB::table('users')->insertGetId([
-			'firstname' => 'Jose',
-			'lastname' => 'Maza',
+			'first_name' => 'Jose',
+			'last_name' => 'Maza',
 			'email' => 'jose@hotmail.com',
             'avatar' => "https://ui-avatars.com/api/?name=Jose+Maza&size=255",
             'basic_service_image' => "https://ui-avatars.com/api/?name=basicserviceimage&size=400",
+            'state'=>true,
             'password' => password_hash('12345', PASSWORD_DEFAULT),
             'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
         ]);
@@ -49,9 +50,10 @@ class ApiUserSeeder extends Seeder {
         $user_one->roles()->attach([$roleMorador->id],['state'=>true]);
 		//TODO:Segundo Usuario
 		$idTwo = DB::table('users')->insertGetId([
-			'firstname' => 'Ana',
-			'lastname' => 'Jimenez',
-			'email' => 'ana@hotmail.com',
+			'first_name' => 'Ana',
+			'last_name' => 'Jimenez',
+            'email' => 'ana@hotmail.com',
+            'state'=>true,
 			'avatar' => "https://ui-avatars.com/api/?name=Ana+Jimenez&size=255",
             'password' => password_hash('12345', PASSWORD_DEFAULT),
             'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
@@ -77,9 +79,10 @@ class ApiUserSeeder extends Seeder {
         $user_two->roles()->attach([$roleInvitado->id],['state'=>true]);
         //TODO:Tercer Usuario
 		$idThree = DB::table('users')->insertGetId([
-			'firstname' => 'Ramiro',
-			'lastname' => 'Gonzales',
-			'email' => 'ramiro@hotmail.com',
+			'first_name' => 'Ramiro',
+			'last_name' => 'Gonzales',
+            'email' => 'ramiro@hotmail.com',
+            'state'=>true,
 			'avatar' => "https://ui-avatars.com/api/?name=Ramiro+Gonzales&size=255",
             'password' => password_hash('12345', PASSWORD_DEFAULT),
             'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
@@ -106,10 +109,11 @@ class ApiUserSeeder extends Seeder {
         $user_three->roles()->attach([$roleInvitado->id],['state'=>true]);
         //TODO:Cuarto Usuario
         $idFour = DB::table('users')->insertGetId([
-			'firstname' => 'Bolivar',
-			'lastname' => 'Cumbicus',
+			'first_name' => 'Bolivar',
+			'last_name' => 'Cumbicus',
 			'email' => 'bolo@hotmail.com',
             'avatar' => "https://ui-avatars.com/api/?name=Bolivar+Cumbicus&size=255",
+            'state'=>true,
             'basic_service_image' => "https://ui-avatars.com/api/?name=basicserviceimage&size=400",
             'password' => password_hash('12345', PASSWORD_DEFAULT),
             'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
@@ -135,10 +139,11 @@ class ApiUserSeeder extends Seeder {
         $user_four->roles()->attach([$rolePolicia->id],['state'=>true]);
         //TODO:Quinto Usuario
 		$idFive = DB::table('users')->insert([
-			'firstname' => 'Rodrigo',
-			'lastname' => 'Sanchez',
+			'first_name' => 'Rodrigo',
+			'last_name' => 'Sanchez',
             'email' => 'rodrigo@yahoo.com',
             'basic_service_image' => "https://ui-avatars.com/api/?name=basicserviceimage&size=400",
+            'state'=>true,
 			'avatar' => "https://ui-avatars.com/api/?name=Rodrigo+Sanchez&size=255",
             'password' => password_hash('12345', PASSWORD_DEFAULT),
             'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()

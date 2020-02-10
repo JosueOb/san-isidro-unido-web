@@ -10,9 +10,10 @@ use App\Category;
 use App\Detail;
 use App\Helpers\ApiImages;
 use App\Http\Controllers\Api\ApiBaseController;
-use App\Image;
+use App\Resource;
 use App\Post;
 use App\User;
+use App\Subcategory;
 use App\Notifications\PostNotification;
 use App\Rules\Api\Base64FormatImage;
 use Illuminate\Http\Request;
@@ -47,49 +48,51 @@ class ApiPostController extends ApiBaseController
      * @return array
      */
     public function index(Request $request) {
-
-        if($request->get('category') && !Category::slug($request->get('category'))->first()){
-            dd('No existe categoria');
-        }else{
-            dd('Existe categoria');
-            
-        }
-
-        //Retornar Paginacion
-        $posts = Post::simplePaginate(10)->toArray();
-        return $this->sendPaginateResponse(200, 'Publicaciones obtenidas correctamente', $posts);
-
-        
         try {
-            $allowPaginate = ($request->get('pagination'))?true:false;
-            $sortAllowed = ['ASC', 'DESC'];
 
-            $sort_direction = ($request->get('sort') && in_array(strtoupper($request->get('sort')), $sortAllowed)) ? strtoupper($request->get('sort')): 'DESC'; 
-
-
-            $queryBuilder = QueryBuilder::for(Post::class)
-                ->join('categories', 'categories.id', '=', 'posts.category_id')
-                ->leftJoin('subcategories', 'subcategories.id', '=', 'posts.subcategory_id')
-                ->join('users', 'users.id', '=', 'posts.user_id')
-                ->select('posts.*', 'categories.slug AS category_name', 'subcategories.slug AS subcategory_name')
-                // ->select('posts.*', 'categories.id','subcategories.id', 'users.id')
-                ->allowedFilters(
-                    AllowedFilter::exact('category', 'categories.slug', false),
-                    AllowedFilter::exact('subcategory', 'subcategories.slug', false),
-                    AllowedFilter::exact('user', 'users.id', false),
-                    'title'
-                )
-                // ->orderByRaw("created_at DESC")
-                ->orderByRaw("created_at $sort_direction")
-                ->allowedIncludes(['resources', 'category', 'details', 'user', 'subcategory']);
-            //Verificar si se solicito datos paginados
-            if($allowPaginate){
-                $postsFiltered = $queryBuilder->simplePaginate(10);
-                return $this->sendPaginateResponse(200, 'success', $postsFiltered->toArray());
-            }else{
-                $postsFiltered = $queryBuilder->get();
-                return $this->sendResponse(200, 'Publicaciones obtenidas correctamente', $postsFiltered);
+            $queryset = Post::with(['resources', 'category', 'user', 'subcategory', 'details']);
+            //FILTROS PERMITIDOS
+            $filterCategory = ($request->get('category')) ? $request->get('category'): '';
+            $filterSubcategory = ($request->get('subcategory')) ? $request->get('subcategory'): '';
+            $filterUser = ($request->get('user')) ? $request->get('user'): '';
+            $filterByTitle = ($request->get('title')) ? $request->get('title'): '';
+            // dd($filterCategory, $filterSubcategory, $filterUser, $filterByTitle);
+            //BUSQUEDAS HECHAS
+            $category = Category::slug($filterCategory)->first();
+            $subcategory = Subcategory::slug($filterSubcategory)->first();
+            $user = User::findById($filterUser)->first();
+            //LANZAR ERRORES EN CASO FILTROS NO VALIDOS
+            if($filterCategory && !$category){
+                return $this->sendError(404, 'No existe la categoria solicitada', ['category' => 'No existe']);
             }
+          
+            if($filterSubcategory && !$subcategory){
+                return $this->sendError(404, 'No existe la subcategoria solicitada', ['subcategory' => 'No existe']);
+            }
+    
+            if($filterUser && !$user){
+                return $this->sendError(404, 'No existe el usuario', ['user' => 'No existe']);
+            }
+            //APLICAR FILTROS
+            if($category){
+                $queryset = $queryset->categoryId($category->id);
+            }
+            
+            if($subcategory){
+                $queryset = $queryset->subCategoryId($subcategory->id);
+            }
+    
+            if($user){
+                $queryset = $queryset->userId($user->id);
+            }
+
+            if($filterByTitle){
+                $queryset = $queryset->where('title', 'LIKE', "%$filterByTitle%");
+            }
+            //Retornar Paginacion y datos ordenados descendentemente para
+            //devolver los mas nuevos primero
+            $posts = $queryset->orderBy('created_at', 'DESC')->simplePaginate(10)->toArray();
+            return $this->sendPaginateResponse(200, 'Publicaciones obtenidas correctamente', $posts);         
         } catch (Exception $e) {
             return $this->sendError(500, "error", ['server_error' => $e->getMessage()]);
         }
@@ -104,7 +107,7 @@ class ApiPostController extends ApiBaseController
      */
     public function detail($id) {
         try {
-            $post = Post::findById($id)->with(['resources', 'category', 'user', 'subcategory'])->first();
+            $post = Post::findById($id)->with(['resources', 'category', 'user', 'subcategory', 'details'])->first();
             //Verificar si existe el post
             if (!is_null($post)) {
                 return $this->sendResponse(200, 'success', $post);
@@ -153,7 +156,7 @@ class ApiPostController extends ApiBaseController
                 //dd($ubication);
                 // $emergencyData['ubication'] = $utils->mapUbication($emergencyData['ubication']);
                 $imagesPost = ($request->filled('images')) ? $emergencyData['images'] : [];
-                $category = Category::slug('emergencia')->first();
+                $category = Category::slug($this->categories['emergencias'])->first();
                 //d($category);
                 //$this->sendDebugResponse($emergencyData)
                 $post = new Post();
@@ -167,16 +170,17 @@ class ApiPostController extends ApiBaseController
                 $post->ubication = json_encode($ubication);
                 $post->save();
                 //Guardar Resources
-                // if (!is_null($imagesPost) && count($imagesPost) > 0) {
-                //     foreach ($imagesPost as $image_b64) {
-                //         $image = new Image();
-                //         $imageApi = new ApiImages();
-                //         $image_name = $imageApi->savePostImageApi($image_b64);
-                //         $image->url = $image_name;
-                //         $image->post_id = $post->id;
-                //         $image->save();
-                //     }
-                // }
+                if (!is_null($imagesPost) && count($imagesPost) > 0) {
+                    foreach ($imagesPost as $image_b64) {
+                        $resource = new Resource();
+                        $imageApi = new ApiImages();
+                        $image_name = $imageApi->savePostImageApi($image_b64);
+                        $resource->url = $image_name;
+                        $resource->type = "image";
+                        $resource->post_id = $post->id;
+                        $resource->save();
+                    }
+                }
 
                 //Enviar notificaciones a moderadores
 
@@ -186,7 +190,7 @@ class ApiPostController extends ApiBaseController
                 // $usersDevicesIds = [];
                 foreach($moderadores as $moderador){
                     // $devices_ids = OnesignalNotification::getUserDevices($moderador->id);
-                    $moderador->notify($post);
+                    $moderador->notify(new PostNotification($post));
                     // foreach($devices_ids as $device_id){
                     //     array_push($usersDevicesIds, $device_id);
                     // }
@@ -259,6 +263,7 @@ class ApiPostController extends ApiBaseController
                 $socialProblemData = $request->all();
                 $imagesPost = ($request->filled('images')) ? $socialProblemData['images'] : [];
                 $category = Category::slug($this->categories['problemas_sociales'])->first();
+                // dd($category, $this->categories);
                 //$this->sendDebugResponse($socialProblemData);
                 $post = new Post();
                 $post->title = $socialProblemData['title'];
@@ -268,25 +273,22 @@ class ApiPostController extends ApiBaseController
                 $post->category_id = $category->id;
                 $post->date = date("Y-m-d");
                 $post->time = date("H:i:s"); 
+                $post->state = true;
                 $post->ubication = json_encode($socialProblemData['ubication']);
                 $post->save();
-                // Crear Detalle Post
-                // $detailPost = new Detail();
-                // $detailPost->post_id = $post->id;
-                // $detailPost->user_id = $token_decoded->user->id;
-                // $detailPost->type = 'social_problem_report';
-                // $detailPost->save();
-                //Guardar Imagenes
+                //Guardar Recursos
                 if (!is_null($imagesPost) && count($imagesPost) > 0) {
                     foreach ($imagesPost as $image_b64) {
-                        $image = new Image();
+                        $resource = new Resource();
                         $imageApi = new ApiImages();
                         $image_name = $imageApi->savePostImageApi($image_b64);
-                        $image->url = $image_name;
-                        $image->post_id = $post->id;
-                        $image->save();
+                        $resource->url = $image_name;
+                        $resource->type = "image";
+                        $resource->post_id = $post->id;
+                        $resource->save();
                     }
                 }
+
                 return $this->sendResponse(200, "Social Problem Created", [
                     'id' => $post->id
                 ]);

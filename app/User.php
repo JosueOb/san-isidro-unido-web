@@ -5,9 +5,17 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-
+use App\Notifications\UserResetPassword;
+use App\Notifications\UserVerifyEmail;
 use Caffeinated\Shinobi\Concerns\HasRolesAndPermissions;
-use App\Notifications\{UserResetPassword, UserVerifyEmail};
+use Illuminate\Support\Facades\Storage;
+
+use App\SocialProfile;
+use App\Position;
+use App\Device;
+use App\Detail;
+use App\RoleUser;
+
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -19,7 +27,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'first_name', 'last_name', 'email', 'password', 'avatar', 'basic_service_image', 'phone'
     ];
 
     /**
@@ -39,12 +47,34 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+   
     
     public function getWebSystemRoles(){
         //Se retorna los roles del usuario que pueden acceder al sistema
-        // return $this->roles()->whereNotIn('name',['Morador','Invitado','Policia'])->first();
         return $this->roles()->where('mobile_app', false)->get();
     }
+
+    /**
+	 *Filtra un Usuario por su id
+	 *
+	 * @param  mixed $query
+	 * @param  int $id
+	 * @return mixed
+	 */
+	public function scopeFindById($query, $id) {
+		return $query->where('id', $id);
+    }
+    
+    /**
+	 *Filtra un Usuario activo
+	 *
+	 * @param  mixed $query
+	 * @return mixed
+	 */
+	public function scopeActiveUser($query) {
+		return $query->where('state', 1);
+	}
 
     //Se obtiene un específico rol del usuario
     public function getASpecificRole($roleSlug){
@@ -68,6 +98,18 @@ class User extends Authenticatable implements MustVerifyEmail
 	 */
 	public function scopeEmail($query, string $email) {
 		return $query->where('email', $email);
+	}
+
+	/**
+	 *Filtra los Usuarios de Tipo Directivo
+	 *
+	 * @param  mixed $query
+	 * @return mixed
+	 */
+	public function scopeRolDirectivo($query) {
+		return $query->whereHas('roles', function ($q) {
+			$q->where('slug', 'directivo');
+		});
     }
 
     /**
@@ -82,6 +124,19 @@ class User extends Authenticatable implements MustVerifyEmail
 				->orWhere('slug', 'invitado')
 				->orWhere('slug', 'policia');
 		}]);
+	}
+    
+    /**
+	 *Filtra los Usuarios por un rol especifico
+	 *
+	 * @param  mixed $query
+	 * @param  string $rol_slug
+	 * @return mixed
+	 */
+	public function scopeGetBySpecificRol($query, $rol_slug) {
+		return $query->whereHas('roles', function ($q) {
+			$q->where('slug', $rol_slug);
+		});
 	}
     
     /**
@@ -110,12 +165,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return $hasSomeActiveRol;
     }
     
-    //Se sobrescribe el método sendPasswordNotificatión para cambiar a un nuevo objeto 
-    //de la clase UserResetNotification con el contenido de la notificación traducida
-    public function sendPasswordResetNotification($token)
-    {
-        $this->notify(new UserResetPassword($token));
-    }
     //Se sobrescribe el método sendEmailVerificationNotification para cambiar a un nuevo objeto 
     //de la clase UserResetNotification con el contenido de la notificación traducida
     public function sendEmailVerificationNotification(){
@@ -158,4 +207,30 @@ class User extends Authenticatable implements MustVerifyEmail
     public function posts(){
         return $this->hasMany(Post::class);
     }
+
+    /*FUNCIONES EXTRAS */    
+    //Obtener los Roles
+	public function getRol() {
+		return $this->roles()->whereNotIn('slug', ['invitado'])->first();
+	}
+
+	//Se sobrescribe el método sendPasswordNotificatión para cambiar a un nuevo objeto
+	//de la clase UserResetNotification con el contenido de la notificación traducida
+	public function sendPasswordResetNotification($token) {
+		$this->notify(new UserResetPassword($token));
+    }
+    
+
+    /*TODO: RELACIONES MODELOS */
+    //Relacion Uno a Muchos para obtener los perfiles sociales por usuario
+	public function social_profiles() {
+		return $this->hasMany(SocialProfile::class)->orderBy('id', 'DESC');
+	}
+
+	//Relacion Uno a Muchos con la Tabla Devices para obtener los dispositivos por cada usuario
+	public function devices() {
+		return $this->hasMany(Device::class)->orderBy('id', 'DESC');
+	}
+
+
 }

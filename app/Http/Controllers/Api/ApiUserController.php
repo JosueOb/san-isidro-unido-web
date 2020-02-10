@@ -313,8 +313,10 @@ class ApiUserController extends ApiBaseController
     public function getEmergenciesByUser($user_id)
     {
         try {
+            //TODO: php artisan config:clear
             $user = User::findById($user_id)->first();
             $category = Category::slug($this->categories['emergencias'])->first();
+            //dd($this->categories['emergencias'], $this->categories);
             //Verifico si existe el usuario
             if (is_null($user)) {
                 return $this->sendError(404, 'no existe el usuario', ['user' => 'no existe la emergencia']);
@@ -327,7 +329,7 @@ class ApiUserController extends ApiBaseController
             $social_problems = Post::categoryId($category->id)
                 ->userId($user_id)
                 ->orderBy('id', 'desc')
-                ->with(['images', 'category', 'subcategory', 'details', 'user'])
+                ->with(['resources', 'category', 'subcategory', 'details', 'user'])
                 ->simplePaginate(10);
             return $this->sendPaginateResponse(200, 'success', $social_problems->toArray());
         } catch (Exception $e) {

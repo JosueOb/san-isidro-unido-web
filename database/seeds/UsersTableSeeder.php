@@ -19,11 +19,11 @@ class UsersTableSeeder extends Seeder
         substr(env('USER_FIRST_NAME'),0,1).'+'.substr(env('USER_LAST_NAME'),0,1).
         '&size=255';
         $userAdmin = User::create([
-            'first_name'=>env('USER_FIRST_NAME'),
-            'last_name'=>env('USER_LAST_NAME'),
+            'first_name'=>env('USER_FIRST_NAME', 'Josué'),
+            'last_name'=>env('USER_LAST_NAME', 'Cando Obaco'),
             'avatar'=> $avatar,
-            'email'=> env('USER_EMAIL'),
-            'password'=> password_hash(env('USER_PASSWORD'), PASSWORD_DEFAULT),
+            'email'=> env('USER_EMAIL', 'josuericardocando@hotmail.com'),
+            'password'=> password_hash(env('USER_PASSWORD', 'JosueOb'), PASSWORD_DEFAULT),
             'state'=>true,
             'email_verified_at'=> now(),
         ]);

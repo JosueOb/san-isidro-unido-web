@@ -2,10 +2,10 @@
 
 return [
     'categorias' => [
-        'emergencias' => 'emergencias',
-        'reportes' => 'reportes',
-        'eventos' => 'eventos',
-        'problemas_sociales' => 'problemas_sociales'
+        'emergencias' => 'emergencia',
+        'reportes' => 'informe',
+        'eventos' => 'evento',
+        'problemas_sociales' => 'problema_social'
     ],
     "overwrite_user_images" => true,
     'roles' => [

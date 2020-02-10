@@ -3,15 +3,20 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 class Post extends Model
 {
+    use Notifiable;
+    // use Filterable;
+
     /**
      * The table associated with the model.
      *
      * @var string
      */
     protected $table = 'posts';
+    public $timestamps = true;
 
     /**
     * The attributes that are mass assignable.
@@ -20,18 +25,18 @@ class Post extends Model
     */
     protected $fillable = ['title', 'description'];
 
-    /**
-     * A post belongs to a user
+     /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
      */
-    public function user(){
-        return $this->belongsTo(User::class);
-    }
-    /**
-     * A post can have many images
-     */
-    public function images(){
-        return $this->hasMany(Image::class);
-    }
+    protected $casts = [
+        'ubication' => 'array',
+        'range_date' => 'array',
+        'additional_data' => 'array',
+    ];
+
+    /*TODO: SCOPES MODELO */    
 
     /**
      *Filtra un POST por el Id
@@ -43,6 +48,50 @@ class Post extends Model
     public function scopeFindById($query, $id)
     {
         return $query->where('id', $id);
+    }
+
+    /**
+	 *Filtra un POST por el Id de la categoria asociada
+	 *
+	 * @param  mixed $query
+	 * @param  int $categoryId
+	 * @return mixed
+	 */
+    public function scopeCategoryId($query, int $categoryId) {
+        return $query->where('category_id', $categoryId);
+    }
+
+    /**
+	 *Filtra un POST por el Id de la subcategoria asociada
+	 *
+	 * @param  mixed $query
+	 * @param  int $categoryId
+	 * @return mixed
+	 */
+    public function scopeSubCategoryId($query, int $subcategoryId) {
+        return $query->where('subcategory_id', $subcategoryId);
+    }
+
+    /**
+	 *Filtra un POST por el Id del usuario asociado
+	 *
+	 * @param  mixed $query
+	 * @param  integer $userId
+	 * @return mixed
+	 */
+    public function scopeUserId($query, string $userId) {
+        return $query->where('user_id', $userId);
+    }
+
+
+    /*TODO: RELACIONES DE LOS MODELOS */
+
+    
+    /**
+     * A post belongs to a user
+     */
+    public function user(){
+        return $this->belongsTo(User::class);
     }
     
     /**
@@ -57,25 +106,27 @@ class Post extends Model
     public function subcategory(){
         return $this->belongsTo(Subcategory::class);
     }
-     /**
-     * Get the first image belonging to a post
-     */
-    // public function getFirstImage(){
-    //     $image = $this->images()->first();
-    //     if($image){
-    //         $image_url = $image["url"];
-    //     }else{
-    //         //en caso de no tener imagen se retorna una por defecto
-    //         $image_url = "images_reports/image-default.jpg";
-    //     }
-    //     return  \Storage::disk('public')->url($image_url);
-    // }
+    
     /**
      * A post can have many resources
      */
     public function resources(){
         return $this->hasMany(Resource::class);
     }
+
+    /**
+	 *Relacion Uno a Muchos con la tabla Details
+	 *
+	 * @return mixed
+	 */
+    public function details()
+    {
+        return $this->hasMany(Detail::class, 'post_id')->orderBy('id','DESC');
+
+    }
+
+    /*TODO: FUNCIONES EXTRAS MODELO */
+
     /**
      * Get the first image belonging to a post
      */

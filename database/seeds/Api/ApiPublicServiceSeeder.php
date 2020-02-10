@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\Category;
+use App\Subcategory;
 use App\PublicService;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +17,11 @@ class ApiPublicServiceSeeder extends Seeder
     public function run()
     {
         $faker = \Faker\Factory::create();
-        $publicServicesCategories = Category::findByType(PublicService::class)->get();
+        $category = Category::slug('servicio-publico')->first();
+        if(!$category){
+            return;
+        }
+        $publicServicesCategories = Subcategory::categoryId($category->id)->get();
         $numServices = 5;
         $directions = [
             ["latitude" => -0.139413, "longitude" => -78.472171],
