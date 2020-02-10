@@ -67209,7 +67209,7 @@ function _obtenerDireccion() {
           case 8:
             _context2.prev = 8;
             _context2.t0 = _context2["catch"](1);
-            console.log(_context2.t0);
+            console.log('obtener dirección', _context2.t0);
 
           case 11:
           case "end":
@@ -67405,6 +67405,8 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+
 
 
 var positionSelected = null;
@@ -67454,7 +67456,7 @@ function _cargarMapa() {
           case 13:
             _context2.prev = 13;
             _context2.t0 = _context2["catch"](1);
-            console.log("Error al obtener la localización", _context2.t0);
+            console.log("Error al obtener la localización", _context2.t0, positionSelected);
 
           case 16:
           case "end":
@@ -67488,7 +67490,11 @@ _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function 
           $('#public-service-create').on('submit', function (event) {
             event.preventDefault();
             var formData = new FormData(this);
-            formData.append('ubication', JSON.stringify(positionSelected));
+
+            if (positionSelected) {
+              formData.append('ubication', JSON.stringify(positionSelected));
+            }
+
             formData["delete"]('phone_numbers');
             phone_numbers.forEach(function (phone) {
               formData.append('phone_numbers[]', phone);
@@ -67505,11 +67511,29 @@ _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function 
                 console.log(data);
 
                 if (data.success) {
-                  console.log(data.success);
-                }
+                  //Se eliminan los mensajes de validación
+                  $('#name').removeClass('is-invalid');
+                  $('#description').removeClass('is-invalid');
+                  $('#subcategory').removeClass('is-invalid');
+                  $('#phone_numbers').removeClass('is-invalid');
+                  $('#email').removeClass('is-invalid');
+                  $('#ubication-description').removeClass('is-invalid');
+                  Swal.fire({
+                    position: 'top-end',
+                    type: 'success',
+                    title: 'Servicio público registrado',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    allowOutsideClick: true
+                  }); // Se deshabilita el botón enviar
 
-                if (data.form) {
-                  console.log(data.form);
+                  $('#send-data').prop("disabled", true);
+                  $('#send-data').removeClass("btn-primary");
+                  $('#send-data').addClass("btn-success"); // funciona como una redirección HTTP
+
+                  setTimeout(function () {
+                    window.location.replace('../public-service');
+                  }, 1000);
                 }
               },
               error: function error(jqXHR, textStatus, errorThrown) {
@@ -67522,6 +67546,62 @@ _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function 
 
                   if (validationErrors) {
                     console.log(validationErrors);
+
+                    if (validationErrors.hasOwnProperty('name')) {
+                      $('#name').addClass('is-invalid');
+                      $('#name').siblings('.invalid-feedback').html('<strong>' + validationErrors['name'][0] + '</strong>');
+                    } else {
+                      $('#name').removeClass('is-invalid');
+                    }
+
+                    if (validationErrors.hasOwnProperty('description')) {
+                      $('#description').addClass('is-invalid');
+                      $('#description').siblings('.invalid-feedback').html('<strong>' + validationErrors['description'][0] + '</strong>');
+                    } else {
+                      $('#description').removeClass('is-invalid');
+                    }
+
+                    if (validationErrors.hasOwnProperty('subcategory')) {
+                      $('#subcategory').addClass('is-invalid');
+                      $('#subcategory').siblings('.invalid-feedback').html('<strong>' + validationErrors['subcategory'][0] + '</strong>');
+                    } else {
+                      $('#subcategory').removeClass('is-invalid');
+                    }
+
+                    if (validationErrors.hasOwnProperty('email')) {
+                      $('#email').addClass('is-invalid');
+                      $('#email').siblings('.invalid-feedback').html('<strong>' + validationErrors['email'][0] + '</strong>');
+                    } else {
+                      $('#email').removeClass('is-invalid');
+                    }
+
+                    if (validationErrors.hasOwnProperty('ubication-description')) {
+                      $('#ubication-description').addClass('is-invalid');
+                      $('#ubication-description').siblings('.invalid-feedback').html('<strong>' + validationErrors['ubication-description'][0] + '</strong>');
+                    } else {
+                      $('#ubication-description').removeClass('is-invalid');
+                    }
+
+                    if (validationErrors.hasOwnProperty('ubication')) {
+                      Swal.fire({
+                        position: 'top-end',
+                        type: 'error',
+                        title: 'Ubicación',
+                        text: 'Debe haber seleccionado una ubicación en el mapa'
+                      });
+                    }
+
+                    if (validationErrors.hasOwnProperty('phone_numbers')) {
+                      $('#phone_numbers').addClass('is-invalid');
+                      $('#phone_numbers').siblings('.invalid-feedback').html('<strong>' + validationErrors['phone_numbers'][0] + '</strong>');
+                    } else {
+                      if (validationErrors.hasOwnProperty('phone_numbers.0')) {
+                        $('#phone_numbers').addClass('is-phone_numbers');
+                        $('#phone_numbers').siblings('.invalid-feedback').html('<strong>' + validationErrors['phone_numbers.0'][0] + '</strong>');
+                      } else {
+                        $('#phone_numbers').removeClass('is-invalid');
+                      }
+                    }
                   }
                 }
               }
@@ -67700,6 +67780,7 @@ $(document).ready(function () {
           $('#title').removeClass('is-invalid');
           $('#description').removeClass('is-invalid');
           $('#images').removeClass('is-invalid');
+          $('#document').removeClass('is-invalid');
           Swal.fire({
             position: 'top-end',
             type: 'success',

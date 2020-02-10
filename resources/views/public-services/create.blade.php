@@ -34,49 +34,41 @@
                             <div class="form-group">
                                 <label for="name">Nombre</label>
                                 <input id="name" type="text" class="form-control  @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" maxlength="45" required autofocus>
-                                @error('name')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                <span class="invalid-feedback" role="alert">
+                                </span>
                             </div>
                             
                             <div class="form-group">
-                                <label for="description">Descripción (opcional)</label>
+                                <label for="description">Descripción <span class="text-muted">(opcional)</span></label>
                                 <input id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" value="{{ old('description')}}" maxlength="255">
-                                @error('description')
                                 <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
                                 </span>
-                                @enderror
                             </div>
 
                             <div class="form-group">
-                                <label for="category">Categoría </label>
-                                
+                                <label for="subcategory">Categoría </label>
 
-                                @if (count($categories)>0)
+                                @if (count($subcategories) > 0)
 
-                                <select class="form-control @error('category') is-invalid @enderror" id="category" name="category" required>
+                                <select class="form-control @error('subcategory') is-invalid @enderror" id="subcategory" name="subcategory" required>
                                     <option value="">Seleccione una opción</option>
-                                    @foreach ($categories as $category)
-                                        <option value="{{$category->id}}" {{old('category')==$category->id ? 'selected':''}}>{{$category->name}}</option>
+                                    @foreach ($subcategories as $subcategory)
+                                        <option value="{{$subcategory->id}}" {{old('subcategory')==$subcategory->id ? 'selected':''}}>{{$subcategory->name}}</option>
                                     @endforeach
                                 </select>
-                                <small id="categoryHelp" class="form-text text-muted">
+                                <small id="subcategoryHelp" class="form-text text-muted">
                                     Indica la categoría a la que pertenece el servicio público
                                 </small>
-                                @error('category')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                                @enderror
-                                 
-                            @else
-                                <p class="text-danger">No existen registos de categorías, porfavor comuniquese con el administrador</p>
-                                
-                            @endif
 
+                                @else
+
+                                <select class="form-control" id="subcategory" name="subcategory" required disabled>
+                                </select>
+                                <p class="text-danger">No existen registos de categorías, porfavor comuniquese con el administrador</p>
+
+                                @endif
+                                <span class="invalid-feedback" role="alert">
+                                </span>
                             </div>
 
                             <div class="form-group">
@@ -91,11 +83,15 @@
                                 <small id="phone_numbersHelp" class="form-text text-muted">
                                     Recuerda anteponer el 09 al ingresar un número móvil o 02 al ser un número fijo, puedes ingresar hasta 3 teléfonos
                                 </small>
-                                @error('phone_numbers')
                                 <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
                                 </span>
-                                @enderror
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">Correo electrónico <span class="text-muted">(opcional)</span></label>
+                                <input id="email" type="email" class="form-control  @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}">
+                                <span class="invalid-feedback" role="alert">
+                                </span>
                             </div>
 
                             <div class="form-group">
@@ -104,17 +100,15 @@
                                 <small id="categoryHelp" class="form-text text-muted">
                                     Puedes agregar detalles sobre la ubicación
                                 </small>
-                                @error('ubication-description')
                                 <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
                                 </span>
-                                @enderror
                             </div>
-
                         </div>
                         <div class="col-12 col-md-6">
-                            <div class="form-group">
+                            <div class="form-group mt-md-5 mt-lg-5">
                                 <label for="ubication">Ubicación</label>
+                                <span class="invalid-feedback" role="alert">
+                                </span>
                                 <div id="map" class="map">
                                     <span id="info" class="info"></span>
                                     <p id="ubicacion_seleccionada" class="info text-muted">No tengo ubicación seleccionada</p>

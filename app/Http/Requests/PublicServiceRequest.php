@@ -26,11 +26,10 @@ class PublicServiceRequest extends FormRequest
         return [
             'name'=>'required|regex:/^[[:alpha:][:space:](áéíóúÁÉÍÓÚ)]+$/|min:3|max:45',
             'description'=> 'nullable|regex:/^[[:alpha:][:space:](0-9)(,;.áéíóúÁÉÍÓÚÑñ)]+$/|max:255',
-            'category'=>'required|exists:categories,id',
+            'subcategory'=>'required|exists:categories,id',
             'phone_numbers'=>'required|array|max:3',
             "phone_numbers.*" => array("required","regex:/(^(09)[0-9]{8})+$|(^(02)[0-9]{7})+$/"),
-            //No se est;a considerando esta validación ya que al no permitir obtener la ubicación actual
-            //se retorna un null como string
+            'email'=>'nullable|email|unique:public_services,email',
             "ubication"=>"required|json",
             'ubication-description'=>'nullable|regex:/^[[:alpha:][:space:](0-9)(,;.áéíóúÁÉÍÓÚÑñ)]+$/|max:255',
         ];
@@ -51,14 +50,17 @@ class PublicServiceRequest extends FormRequest
             'description.max'=>'La :attribute no debe ser mayor a 255 caracteres',
             'description.regex'=>'La :attribute  debe estar conformado por caracteres alfabéticos, no se admiten caracteres especiales',
             
-            'category.required'=>'El campo :attribute es obligatorio',
-            'category.exists'=>'La :attribute seleccionada no existe',
+            'subcategory.required'=>'El campo :attribute es obligatorio',
+            'subcategory.exists'=>'La :attribute seleccionada no existe',
             
             'phone_numbers.required'=>'El campo :attribute es obligatorio',
             'phone_numbers.max'=> 'Solo se permiten 3 números telefónicos',
             'phone_numbers.min'=> 'Se requiere de un número telefónico',
             
             'phone_numbers.*.regex'=>'No se cumple con el formato permitido',
+
+            'email.email'=>'Fortamo del :attribute ingresado es incorrecto',
+            'email.unique'=>'El :attribute ingresado ya existe',
 
             'ubication.required'=>'Debe seleccionar una ubicación en el mapa',
             'ubication.json'=>'No se cumple con el formaro JSON',
@@ -78,8 +80,9 @@ class PublicServiceRequest extends FormRequest
         return [
             'name' => 'nombre',
             'description' => 'descripción',
-            'category' => 'categoría',
+            'subcategory' => 'categoría',
             'phone_numbers' => 'teléfonos',
+            'email'=>'correo electrónico',
             'ubication' => 'ubicación',
             'ubication-description' => 'detalle de la ubicación',
         ];

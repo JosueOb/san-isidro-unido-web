@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use App\Http\Requests\PublicServiceRequest;
+use App\Phone;
+use App\PublicService;
+use App\Subcategory;
 use Illuminate\Http\Request;
 
 class PublicServiceController extends Controller
@@ -25,9 +28,10 @@ class PublicServiceController extends Controller
      */
     public function create()
     {
-        $categories = Category::where('group', 'public-service')->get();
+        $category = Category::where('slug', 'servicio-publico')->first();
+        $subcategories = $category->subcategories()->get();
         return view('public-services.create',[
-            'categories'=>$categories,
+            'subcategories'=>$subcategories,
         ]);
     }
 
@@ -40,7 +44,30 @@ class PublicServiceController extends Controller
     public function store(PublicServiceRequest $request)
     {
         $validated = $request->validated();
-        return response()->json(['success'=>'Datos recibidos correctamente', 'form'=>$validated]);
+        //se decodifica un string JSON en un array recursivo
+        $ubication = json_decode($validated['ubication'], true);
+        //Se le agrega al arreglo el detalle de la descripción de ubicación
+        $ubication['description'] = $validated['ubication-description'];
+        // dd($ubication);
+
+        $publicService = new PublicService();
+        $publicService->name = $validated['name'];
+        $publicService->description = $validated['description'];
+        $publicService->ubication = json_encode($ubication);//Se devuelve una representación de un JSON
+        $publicService->subcategory_id = $validated['subcategory'];
+        $publicService->email = $validated['email'];
+        $publicService->save();
+
+        $phones = $validated['phone_numbers'];
+        foreach($phones as $phone){
+            Phone::create([
+                'phone_number'=> $phone,
+                'public_service_id' => $publicService->id,
+            ]);
+        }
+        
+        session()->flash('success', 'Servicio público registrado con éxito');
+        return response()->json(['success'=>'Datos recibidos correctamente']);
     }
 
     /**

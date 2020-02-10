@@ -24,4 +24,10 @@ class PublicService extends Model
     public function subcategory(){
         return $this->belongsTo(Subcategory::class);
     }
+     /**
+    * A public service can have many phones
+    */
+    public function phones(){
+        return $this->hasMany(Phone::class);
+    }
 }
