@@ -18,7 +18,10 @@ class PublicServiceController extends Controller
      */
     public function index()
     {
-        return view('public-services.index');
+        $publicServices = PublicService::paginate(10);
+        return view('public-services.index', [
+            'publicServices'=> $publicServices,
+        ]);
     }
     
     /**
