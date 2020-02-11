@@ -60,6 +60,8 @@ class PostNotification extends Notification
     {
         $post = $this->post;
         return [
+            "title" => $post->title,
+            "message" => $post->description,
             "notification_user" => $notifiable, //el usuario al que le voy a enviar 
             "post" => $post,
             // "user_post" => $post->user,

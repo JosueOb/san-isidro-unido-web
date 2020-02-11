@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Phone;
-use App\Category;
+use App\Subcategory;
 
 class PublicService extends Model
 {
@@ -56,7 +56,7 @@ class PublicService extends Model
 	 *
 	 * @return mixed
 	 */
-    public function category(){
-        return $this->belongsTo(Category::class, "category_id")->orderBy('id','DESC');
+    public function subcategory(){
+        return $this->belongsTo(SubCategory::class, "category_id")->orderBy('id','DESC');
     }
 }

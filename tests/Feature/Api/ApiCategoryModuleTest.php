@@ -70,7 +70,7 @@ class ApiCategoryModuleTest extends TestCase
     public function test_brings_subcategories_of_categories()
     {
         try {
-            $categoryNameTest = "problemas_sociales";
+            $categoryNameTest = "problema_social";
             $category = Category::slug($categoryNameTest)->first();
             $url = $this->baseUrl . "/categorias/$categoryNameTest/subcategorias";
             $statusCode = $this->httpClient->request('GET', $url, ['http_errors' => false])->getStatusCode();

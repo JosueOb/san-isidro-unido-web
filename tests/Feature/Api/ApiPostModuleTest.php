@@ -73,7 +73,7 @@ class ApiPostModuleTest extends TestCase
     /* Probar traer posts filtrados por categoria y subcategoria que existen*/
     function test_it_filter_posts_by_category_and_subcategory()
     {
-        $url = $this->baseUrl . '/publicaciones?filter[category]=problemas_sociales&filter[subcategory]=seguridad';
+        $url = $this->baseUrl . '/publicaciones?category=problema_social&subcategory=seguridad';
         try {
             $statusCode = $this->httpClient->request('GET', $url, ['http_errors' => false])->getStatusCode();
             $this->assertEquals(200, $statusCode);
@@ -85,7 +85,7 @@ class ApiPostModuleTest extends TestCase
     /* Probar traer posts filtrados por categoria y subcategoria que existen*/
     function test_it_filter_posts_by_category_and_subcategory_not_exists()
     {
-        $url = $this->baseUrl . '/publicaciones?filter[category]=emergencias&filter[subcategory]=seguridad';
+        $url = $this->baseUrl . '/publicaciones?category=emergencia&subcategory=seguridad';
         try {
             $response = $this->httpClient->request('GET', $url, ['http_errors' => false]);
             $body = $response->getBody()->getContents();

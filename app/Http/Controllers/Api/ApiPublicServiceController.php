@@ -37,7 +37,7 @@ class ApiPublicServiceController extends ApiBaseController {
             $publicService = QueryBuilder::for(PublicService::class)
             ->findById($id)
             ->orderBy('id', 'desc')
-            ->with(['phones', 'category'])
+            ->with(['phones', 'subcategory'])
             ->first();
             if(!is_null($publicService)){
                 return  $this->sendResponse(200, 'Recurso encontrado', $publicService);
@@ -67,13 +67,10 @@ class ApiPublicServiceController extends ApiBaseController {
      */
     public function filterByCategory($slug) {
         try {
-            //$category = Category::slug($slug)->first();
             $subcategory = Subcategory::slug($slug)->first();
             if(is_null($subcategory)){
                 return $this->sendError(404, 'No existe la categoria solicitada', []);
             }
-            // $publicServices = $category->publicServices()->get();
-            // dd($test);
             $publicServices = PublicService::findByCategoryId($subcategory->id)
             ->with(['phones'])
             ->get();

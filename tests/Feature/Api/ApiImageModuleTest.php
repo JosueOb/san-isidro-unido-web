@@ -3,7 +3,7 @@
 namespace Tests\Feature\Api;
 
 use Tests\TestCase;
-use App\Image;
+use App\Resource;
 use App\Helpers\Utils;
 
 class ApiImageModuleTest extends TestCase
@@ -33,7 +33,7 @@ class ApiImageModuleTest extends TestCase
     public function tests_bring_image()
     {
         try{
-            $image = Image::inRandomOrder()->first();
+            $image = Resource::inRandomOrder()->first();
             $url = $this->baseUrl . "/imagenes/$image->url";
             $statusCode = $this->httpClient->request('GET', $url, ['http_errors' => false])->getStatusCode();
             // var_dump($image->url);
