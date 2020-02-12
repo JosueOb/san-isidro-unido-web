@@ -58,7 +58,7 @@ class PostNotification extends Notification
      */
     public function toArray($notifiable)
     {
-        $post = $this->post;
+        $post =  Post::findById($this->post->id)->with(["category", "subcategory"])->first();
         return [
             "title" => $post->title,
             "message" => $post->description,

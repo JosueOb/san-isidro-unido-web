@@ -186,15 +186,34 @@ class ApiPostController extends ApiBaseController
 
                 //dd($post);
                 $rolModerador = Role::where('slug', 'moderador')->first();
+                $rolPolicia = Role::where('slug', 'policia')->first();
+
                 $moderadores = $rolModerador->users()->get();
+                $policias = $rolPolicia->users()->get();
+
+                $new_post = Post::findById($post->id)->with(["category", "subcategory"])->first();
                 // $usersDevicesIds = [];
+                //Notificar Moderadores
                 foreach($moderadores as $moderador){
                     // $devices_ids = OnesignalNotification::getUserDevices($moderador->id);
-                    $moderador->notify(new PostNotification($post));
+                    $moderador->notify(new PostNotification($new_post));
                     // foreach($devices_ids as $device_id){
                     //     array_push($usersDevicesIds, $device_id);
                     // }
                 }
+                //Notificar Policias
+                foreach($policias as $policia){
+                    $policia->notify(new PostNotification($new_post));
+                }
+                //Enviar notification a todos
+                OnesignalNotification::sendNotificationBySegments(
+                    $title = $new_post->title, 
+                    $description = substr($new_post->description, 25), 
+                    $aditionalData = [
+                        "title" => $title,
+                        "message" => $description,
+                        "post" => $new_post
+                ]);
                 //d($usersDevicesIds);
               
                 // OnesignalNotification::sendNotificationByPlayersID(
@@ -207,15 +226,7 @@ class ApiPostController extends ApiBaseController
                 //     ],
                 //     $specificIDs = $usersDevicesIds
                 // );
-                //Enviar notification a todos
-                OnesignalNotification::sendNotificationBySegments(
-                    $title = $post->title, 
-                    $description = substr($post->description, 25), 
-                    $aditionalData = [
-                        "post" => $post,
-                        "category" => $post->category,
-                        "subcategory" => $post->subcategory
-                ]);
+                
 
                 
 
