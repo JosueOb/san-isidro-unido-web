@@ -128,7 +128,6 @@ class ApiPostController extends ApiBaseController
     public function createEmergency(Request $request) {
         try {
             $token_decoded = $request->get('token');
-            // dd($token_decoded);
             // Obtener los datos de la request
             $validatorEmergency = Validator::make($request->all(), [
                 'title' => 'required|string',
@@ -226,13 +225,6 @@ class ApiPostController extends ApiBaseController
                 //     ],
                 //     $specificIDs = $usersDevicesIds
                 // );
-                
-
-                
-
-                
-                //die();
-                
                 //Respuesta Api
                 return $this->sendResponse(200, "Emergency Created", [
                     'id' => $post->id

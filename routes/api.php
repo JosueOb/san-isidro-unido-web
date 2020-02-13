@@ -49,16 +49,16 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('verificar-token', "Api\ApiUserController@checkToken");
     // Crear una Emergencia
     Route::post('emergencias', "Api\ApiPostController@createEmergency")
-    ->middleware('api.user_auth');
+    ->middleware(['api.user_auth', 'api.permission:morador']);
     //Crear un Problema Social
     Route::post('problemas-sociales', "Api\ApiPostController@createSocialProblem")
-    ->middleware('api.user_auth');
+    ->middleware(['api.user_auth', 'api.permission:morador']);
     //Crear un detalle de tipo Likes, Asistencias
     Route::post('detalles', "Api\ApiDetailController@create")
-        ->middleware('api.user_auth');
+        ->middleware(['api.user_auth', 'api.permission:morador,policia']);
     //Añadir un dispositivo
     Route::post('usuarios/dispositivos', "Api\ApiDeviceController@save")
-        ->middleware('api.user_auth');
+        ->middleware(['api.user_auth', 'api.permission:morador,policia']);
 });
 
 // Rutas PATCH
@@ -66,13 +66,13 @@ Route::group(['prefix' => 'v1'], function () {
     //Grupo de Usuarios
     Route::group(['prefix' => "usuarios"], function () { 
         Route::patch('/solicitar-afiliacion', "Api\ApiUserController@requestAfiliation")
-            ->middleware('api.user_auth');
+            ->middleware(['api.user_auth', 'api.permission:invitado']);
         Route::patch('/cambiar-contrasenia', "Api\ApiUserController@changePassword")
-            ->middleware('api.user_auth');
+            ->middleware(['api.user_auth', 'api.permission:morador,policia']);
         Route::patch('/cambiar-avatar', "Api\ApiUserController@changeAvatar")
-            ->middleware('api.user_auth');
+            ->middleware(['api.user_auth', 'api.permission:morador,policia']);
         Route::patch('/editar', "Api\ApiUserController@editProfile")
-            ->middleware('api.user_auth');
+            ->middleware(['api.user_auth', 'api.permission:morador,policia']);
     });
 });
 
@@ -80,15 +80,15 @@ Route::group(['prefix' => 'v1'], function () {
 Route::group(['prefix' => "v1"], function () {
     //Eliminar Detalle Publicacion
     Route::delete('detalles/{id}', "Api\ApiDetailController@delete")
-        ->middleware('api.user_auth');
+        ->middleware(['api.user_auth', 'api.permission:morador,policia']);
     //Grupo Usuarios
     Route::group(['prefix' => "usuarios"], function () {
         Route::delete('/perfiles-sociales/{profile_id}', "Api\ApiSocialProfileController@delete")
-            ->middleware('api.user_auth');
+            ->middleware(['api.user_auth', 'api.permission:morador,policia']);
         Route::delete('/dispositivos/{device_id}', "Api\ApiDeviceController@delete")
-            ->middleware('api.user_auth');
+            ->middleware(['api.user_auth', 'api.permission:morador,policia']);
         Route::delete('/dispositivos/logout/{device_phone_id}', "Api\ApiDeviceController@deleteByPhoneId")
-            ->middleware('api.user_auth');
+            ->middleware(['api.user_auth', 'api.permission:morador,policia']);
     });
 });
 

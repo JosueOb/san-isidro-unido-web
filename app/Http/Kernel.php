@@ -63,6 +63,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'has.role' => \Caffeinated\Shinobi\Middleware\UserHasRole::class,
         'api.user_auth' => \App\Http\Middleware\ApiAuthUserMiddleware::class,
+        "api.permission" => \App\Http\Middleware\ApiPermissionMiddleware::class
     ];
 
     /**

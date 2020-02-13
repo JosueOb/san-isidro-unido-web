@@ -134,6 +134,7 @@ class User extends Authenticatable implements MustVerifyEmail
 	 * @return mixed
 	 */
 	public function scopeGetBySpecificRol($query, $rol_slug) {
+        //dd($query, $rol_slug);
 		return $query->whereHas('roles', function ($q) {
 			$q->where('slug', $rol_slug);
 		});

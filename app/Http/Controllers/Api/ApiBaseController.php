@@ -1,6 +1,8 @@
 <?php
 namespace App\Http\Controllers\Api;
+
 use App\Http\Controllers\Controller as Controller;
+use App\User;
 
 class ApiBaseController extends Controller {
 	/**
@@ -58,5 +60,25 @@ class ApiBaseController extends Controller {
     
     public function sendDebugResponse($data = [], $code = 500){
         return response()->json($data, $code);
-    }
+	}
+	
+	public function checkReportPermisssion($token = null){		
+		$userRol = User::findById($token->user->id)->first();
+		//Verificar Usuario Rol
+		if(!$userRol){			
+			return $this->sendForbiddenResponse();
+		}
+		//Verificar Rol Morador
+		$hasRol = $userRol->hasRole('morador');
+		if(!$hasRol){			
+			return $this->sendForbiddenResponse();
+		}
+		return true;
+	}
+
+	public function sendForbiddenResponse(){
+		return response()->json([
+			"message" => "No tienes permiso para realizar esta acción"
+		], 403);
+	}
 }
