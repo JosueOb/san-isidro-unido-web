@@ -58,7 +58,7 @@ Route::group(['prefix' => 'v1'], function () {
         ->middleware(['api.user_auth', 'api.permission:morador,policia']);
     //Añadir un dispositivo
     Route::post('usuarios/dispositivos', "Api\ApiDeviceController@save")
-        ->middleware(['api.user_auth', 'api.permission:morador,policia']);
+        ->middleware(['api.user_auth', 'api.permission:morador,policia,invitado']);
 });
 
 // Rutas PATCH
