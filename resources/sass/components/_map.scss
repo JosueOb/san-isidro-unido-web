@@ -2,13 +2,10 @@
     // width: 100vh;
     // height: auto;
     height: 55vh;
-    position: relative;
+    // position: relative;
 
     .info{
-        position: absolute;
-        z-index: 99999;
-        bottom: 0;
-        margin-left: 0.75rem;
+        color: transparent !important;
     }
 }
 @media(max-width:767.98px){

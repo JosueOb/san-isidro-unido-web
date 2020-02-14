@@ -66940,13 +66940,16 @@ __webpack_require__(/*! ./icon-image */ "./resources/js/icon-image.js");
 
 __webpack_require__(/*! ./report-create */ "./resources/js/report-create.js");
 
-__webpack_require__(/*! ./report-update */ "./resources/js/report-update.js");
+__webpack_require__(/*! ./report-update */ "./resources/js/report-update.js"); // require('./map-create');
 
-__webpack_require__(/*! ./map-create */ "./resources/js/map-create.js");
+
+__webpack_require__(/*! ./map */ "./resources/js/map.js");
 
 __webpack_require__(/*! ./phone_numbers */ "./resources/js/phone_numbers.js");
 
 __webpack_require__(/*! ./public-service-create */ "./resources/js/public-service-create.js");
+
+__webpack_require__(/*! ./public-service-update */ "./resources/js/public-service-update.js");
 
 /***/ }),
 
@@ -67126,18 +67129,20 @@ $(document).ready(function () {
 
 /***/ }),
 
-/***/ "./resources/js/map-create.js":
-/*!************************************!*\
-  !*** ./resources/js/map-create.js ***!
-  \************************************/
-/*! exports provided: obtenerDireccion, obtenerGeolocalizacion, añadirMarcadorAlMapa */
+/***/ "./resources/js/map.js":
+/*!*****************************!*\
+  !*** ./resources/js/map.js ***!
+  \*****************************/
+/*! exports provided: getCurrentLocation, getAddress, setPosition, locateMarker, location */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "obtenerDireccion", function() { return obtenerDireccion; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "obtenerGeolocalizacion", function() { return obtenerGeolocalizacion; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "añadirMarcadorAlMapa", function() { return añadirMarcadorAlMapa; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCurrentLocation", function() { return getCurrentLocation; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getAddress", function() { return getAddress; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setPosition", function() { return setPosition; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "locateMarker", function() { return locateMarker; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "location", function() { return location; });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 
@@ -67146,95 +67151,133 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-var L = __webpack_require__(/*! leaflet */ "./node_modules/leaflet/dist/leaflet-src.js"); //URL PARA OBTENER LA DIRECCION ENVIANDO COMO PARAMETROS LA (LAT, LNG) DE LAS COORDENADAS
+var L = __webpack_require__(/*! leaflet */ "./node_modules/leaflet/dist/leaflet-src.js");
+
+var location = {
+  lat: -0.24320783421726888,
+  lng: -78.49732162261353,
+  address: "Casa barrial San Isidro de Puengasí, Quito, Pichincha, Ecuador"
+}; //URL PARA OBTENER LA DIRECCION ENVIANDO COMO PARAMETROS LA (LAT, LNG) DE LAS COORDENADAS
+
+var REVERSE_GEOCODING_ENDPOINT = "https://nominatim.openstreetmap.org/reverse"; //Obtiene la ubicación actual, utilizando HTML Geolocation API, se retorna una promesa
+
+function getCurrentLocation() {
+  return _getCurrentLocation.apply(this, arguments);
+} //Se obtiene la dirección a partir de su positión long y lat
 
 
-var REVERSE_GEOCODING_ENDPOINT = "https://nominatim.openstreetmap.org/reverse"; //VARIABLE PARA GUARDAR LA POSICION ACTUAL DEL USUARIO
-//Opciones del Mapa
-
-var mapOptions = {
-  zoomControl: true,
-  attributionControl: true,
-  center: [-0.1376256, -78.46379519999999],
-  zoom: 13
-}; //Se verifica que exista el elemento mapa
-
-if ($('#map').length != 0) {
-  //Crear Mapa
-  var map = L.map("map", mapOptions); //Añadir la capa al mapa
-
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: "Hola",
-    maxZoom: 18,
-    updateWhenIdle: true,
-    reuseTiles: true
-  }).addTo(map);
-} // Función para obtener la dirección de unas coordenadas
-
-
-function obtenerDireccion(_x) {
-  return _obtenerDireccion.apply(this, arguments);
-} // Añadir el marcador al Mapa
-
-
-function _obtenerDireccion() {
-  _obtenerDireccion = _asyncToGenerator(
+function _getCurrentLocation() {
+  _getCurrentLocation = _asyncToGenerator(
   /*#__PURE__*/
-  _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(positionSelected) {
-    var addressParams, direccionResponse;
+  _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+    var options;
     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
-            //Llamar a la URL para obtener la direccion a partir de las coordenadas actuales
-            addressParams = {
-              format: "json",
-              zoom: "13",
-              addressdetails: "0",
-              lat: positionSelected && positionSelected.lat ? positionSelected.lat.toString() : "",
-              lon: positionSelected && positionSelected.lng ? positionSelected.lng.toString() : ""
-            }; //Peticion HTTP para obtener la respuesta, puedes usar ajax, fetch
-            //en este caso se utiliza axios
+            options = {
+              enableHighAccuracy: true,
+              timeout: 5000,
+              maximumAge: 0
+            };
 
-            _context2.prev = 1;
-            _context2.next = 4;
-            return axios.get(REVERSE_GEOCODING_ENDPOINT, {
-              params: addressParams
-            });
+            if (!navigator.geolocation) {
+              _context2.next = 5;
+              break;
+            }
 
-          case 4:
-            direccionResponse = _context2.sent;
-            return _context2.abrupt("return", direccionResponse.data.display_name);
+            return _context2.abrupt("return", new Promise(function (resolve, reject) {
+              navigator.geolocation.getCurrentPosition(resolve, reject, options);
+            }));
 
-          case 8:
-            _context2.prev = 8;
-            _context2.t0 = _context2["catch"](1);
-            console.log('obtener dirección', _context2.t0);
+          case 5:
+            console.warn('Geolocation is not supported by this browser.');
 
-          case 11:
+          case 6:
           case "end":
             return _context2.stop();
         }
       }
-    }, _callee2, null, [[1, 8]]);
+    }, _callee2);
   }));
-  return _obtenerDireccion.apply(this, arguments);
+  return _getCurrentLocation.apply(this, arguments);
 }
 
-function añadirMarcadorAlMapa(punto) {
-  //Crear el marcador
-  var coordenadas = punto ? [punto.lat, punto.lng] : [-0.2368961059, -78.524460763];
-  var marker = L.marker(coordenadas, {
-    draggable: "true"
-  }).addTo(map); //Añadir evento al terminar el drag del marcador para redibujar marcador y el HTML Posicion
+function getAddress(_x) {
+  return _getAddress.apply(this, arguments);
+} //Se inicializa el mapa y se ubica un marcador en una determinada posición
 
-  marker.on("dragend",
+
+function _getAddress() {
+  _getAddress = _asyncToGenerator(
+  /*#__PURE__*/
+  _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(location) {
+    var parameters, _getAddress2;
+
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            parameters = {
+              format: "json",
+              zoom: "18",
+              addressdetails: "0",
+              lat: location.lat,
+              lon: location.lng
+            };
+            _context3.prev = 1;
+            _context3.next = 4;
+            return axios.get(REVERSE_GEOCODING_ENDPOINT, {
+              params: parameters
+            });
+
+          case 4:
+            _getAddress2 = _context3.sent;
+            return _context3.abrupt("return", _getAddress2.data.display_name);
+
+          case 8:
+            _context3.prev = 8;
+            _context3.t0 = _context3["catch"](1);
+            console.log('getAddress', _context3.t0);
+
+          case 11:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, _callee3, null, [[1, 8]]);
+  }));
+  return _getAddress.apply(this, arguments);
+}
+
+function locateMarker(containerMap) {
+  //Opciones del mapa
+  var mapOptions = {
+    zoomControl: true,
+    attributionControl: true,
+    center: [location.lat, location.lng],
+    zoom: 17
+  }; //Se inicializa el mapa
+
+  var map = L.map(containerMap, mapOptions); //Añadir la capa al mapa
+
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "Mapa",
+    maxZoom: 18,
+    updateWhenIdle: true,
+    reuseTiles: true
+  }).addTo(map);
+  var marker = L.marker([location.lat, location.lng], {
+    draggable: "true"
+  }).addTo(map); //Se permite el poder mover el marcador
+
+  marker.on('dragend',
   /*#__PURE__*/
   function () {
     var _ref = _asyncToGenerator(
     /*#__PURE__*/
     _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(e) {
-      var position, new_posicion, respuestaDireccion;
+      var newLocation, newAddress;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
@@ -67243,21 +67286,18 @@ function añadirMarcadorAlMapa(punto) {
               return e.target.getLatLng();
 
             case 2:
-              position = _context.sent;
-              new_posicion = {
-                lat: position.lat,
-                lng: position.lng
-              };
-              _context.next = 6;
-              return obtenerDireccion(new_posicion);
+              newLocation = _context.sent;
+              _context.next = 5;
+              return getAddress(newLocation);
 
-            case 6:
-              respuestaDireccion = _context.sent;
-              //espero que se complete la funcion de obtener direccion para que se actualice el campo direccion del objeto posicion
-              new_posicion.address = respuestaDireccion ? respuestaDireccion : null;
-              mostrarPosicionEnHTML(new_posicion); //una vez completado la funcion, se muestra la posicion seleccionada
+            case 5:
+              newAddress = _context.sent;
+              location.lat = newLocation.lat;
+              location.lng = newLocation.lng;
+              location.address = newAddress ? newAddress : null;
+              marker.bindPopup(location.address).openPopup();
 
-            case 9:
+            case 10:
             case "end":
               return _context.stop();
           }
@@ -67269,25 +67309,14 @@ function añadirMarcadorAlMapa(punto) {
       return _ref.apply(this, arguments);
     };
   }());
-  marker.bindPopup("<b>Ubicaci\xF3n actual").openPopup();
-  mostrarPosicionEnHTML(punto);
-} //Mostrar en el HTML la longitud, latitud y direccion
+  marker.bindPopup(location.address).openPopup();
+} //Se cambia la variable global location
 
 
-function mostrarPosicionEnHTML(posicionSelected) {
-  if (posicionSelected) {
-    var texto = "\n    <span>Latitud: ".concat(posicionSelected.lat, " \n    <br/> Longitud: ").concat(posicionSelected.lng, "</span>\n    <br/> Direcci\xF3n: ").concat(posicionSelected.address ? posicionSelected.address : "Sin dirección", "</span>\n    ");
-    var mensaje = document.getElementById("ubicacion_seleccionada");
-    mensaje.innerHTML = texto;
+function setPosition(newLocation) {
+  if (newLocation) {
+    location = newLocation;
   }
-} // Retornar la funcion nativa de JS para obtener la posicion actual
-
-
-function obtenerGeolocalizacion() {
-  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  return new Promise(function (resolve, reject) {
-    navigator.geolocation.getCurrentPosition(resolve, reject, options);
-  });
 }
 
 
@@ -67314,7 +67343,7 @@ var print_phones = function print_phones(array) {
   var print = '';
   console.log('ingreso');
   array.forEach(function (element, index) {
-    print += "\n            <div class=\"input-group-prepend\" id='phone_group'>\n                <span class=\"input-group-text\" id='phone_bagde'> \n                 ".concat(element, "\n                  <i class=\"fas fa-minus-circle\" id='delete_phone' data-no=\"").concat(index, "\"></i>\n                </span>\n              </div>\n      ");
+    print += "\n            <div id='phone_item'>\n                <span class=\"input-group-text\" id='phone_bagde'> \n                 ".concat(element, "\n                  <i class=\"fas fa-minus-circle\" id='delete_phone' data-no=\"").concat(index, "\"></i>\n                </span>\n              </div>\n      ");
   });
   $('#phone_group').html(print);
 }; //Se elimina un determinado teléfono acorde su atributo data-no (posición del teléfono en el array)
@@ -67376,9 +67405,8 @@ function resetValues(array) {
     phone_array = array;
     print_phones(phone_array);
     disabledAndRequiredAttribute(phone_array, '#phone_numbers', numberOfPhonesAllowed);
-  }
+  } // console.log(phone_array);
 
-  console.log(phone_array);
 } //Se exporta la función resertValues y el arreglo phone_array
 
 
@@ -67397,7 +67425,7 @@ function resetValues(array) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _map_create__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./map-create */ "./resources/js/map-create.js");
+/* harmony import */ var _map__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./map */ "./resources/js/map.js");
 /* harmony import */ var _phone_numbers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./phone_numbers */ "./resources/js/phone_numbers.js");
 
 
@@ -67409,212 +67437,384 @@ var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/di
 
 
 
-var positionSelected = null;
 var phone_numbers = _phone_numbers__WEBPACK_IMPORTED_MODULE_2__["phone_array"];
+var currentLocation = _map__WEBPACK_IMPORTED_MODULE_1__["location"];
 
-function cargarMapa() {
-  return _cargarMapa.apply(this, arguments);
+function loadMap() {
+  return _loadMap.apply(this, arguments);
 }
 
-function _cargarMapa() {
-  _cargarMapa = _asyncToGenerator(
+function _loadMap() {
+  _loadMap = _asyncToGenerator(
   /*#__PURE__*/
-  _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-    var position, direccion;
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+  _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+    var geolocationPosition, address;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
       while (1) {
-        switch (_context2.prev = _context2.next) {
+        switch (_context.prev = _context.next) {
           case 0:
-            if (!navigator.geolocation) {
-              _context2.next = 16;
-              break;
+            _context.next = 2;
+            return Object(_map__WEBPACK_IMPORTED_MODULE_1__["getCurrentLocation"])().then(function (coordinates) {
+              return coordinates;
+            })["catch"](function (errs) {
+              console.log('geolocationPosition', errs);
+            });
+
+          case 2:
+            geolocationPosition = _context.sent;
+            currentLocation = {
+              'lat': geolocationPosition ? geolocationPosition.coords.latitude : null,
+              lng: geolocationPosition ? geolocationPosition.coords.longitude : null
+            };
+            _context.next = 6;
+            return Object(_map__WEBPACK_IMPORTED_MODULE_1__["getAddress"])(currentLocation);
+
+          case 6:
+            address = _context.sent;
+            currentLocation.address = address ? address : null;
+
+            if (currentLocation.lat && currentLocation.lng && currentLocation.address) {
+              Object(_map__WEBPACK_IMPORTED_MODULE_1__["setPosition"])(currentLocation);
             }
 
-            _context2.prev = 1;
-            _context2.next = 4;
-            return Object(_map_create__WEBPACK_IMPORTED_MODULE_1__["obtenerGeolocalizacion"])();
+            Object(_map__WEBPACK_IMPORTED_MODULE_1__["locateMarker"])('map');
 
-          case 4:
-            position = _context2.sent;
-            //Actualizar el punto actual
-            positionSelected = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude,
-              address: null
-            }; //Obtener la dirección actual
-
-            _context2.next = 8;
-            return Object(_map_create__WEBPACK_IMPORTED_MODULE_1__["obtenerDireccion"])(positionSelected);
-
-          case 8:
-            direccion = _context2.sent;
-            positionSelected.address = direccion ? direccion : null;
-            Object(_map_create__WEBPACK_IMPORTED_MODULE_1__["añadirMarcadorAlMapa"])(positionSelected);
-            _context2.next = 16;
-            break;
-
-          case 13:
-            _context2.prev = 13;
-            _context2.t0 = _context2["catch"](1);
-            console.log("Error al obtener la localización", _context2.t0, positionSelected);
-
-          case 16:
+          case 10:
           case "end":
-            return _context2.stop();
+            return _context.stop();
         }
       }
-    }, _callee2, null, [[1, 13]]);
+    }, _callee);
   }));
-  return _cargarMapa.apply(this, arguments);
+  return _loadMap.apply(this, arguments);
 }
 
-$(document).ready(
-/*#__PURE__*/
-_asyncToGenerator(
-/*#__PURE__*/
-_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-    while (1) {
-      switch (_context.prev = _context.next) {
-        case 0:
-          if (!($('#map').length != 0)) {
-            _context.next = 3;
-            break;
-          }
+$(document).ready(function () {
+  if ($('#map').length != 0 && $('#public-service-create').length != 0) {
+    loadMap();
+  } //AJAX
 
-          _context.next = 3;
-          return cargarMapa();
 
-        case 3:
-          //AJAX
-          $('#public-service-create').on('submit', function (event) {
-            event.preventDefault();
-            var formData = new FormData(this);
+  $('#public-service-create').on('submit', function (event) {
+    event.preventDefault();
+    var formData = new FormData(this);
+    console.log('ubicación a enviar al formulario', _map__WEBPACK_IMPORTED_MODULE_1__["location"]);
+    formData["delete"]('phone_numbers');
+    phone_numbers.forEach(function (phone) {
+      formData.append('phone_numbers[]', phone);
+    });
+    formData.append('ubication', JSON.stringify(_map__WEBPACK_IMPORTED_MODULE_1__["location"]));
+    $.ajax({
+      type: 'POST',
+      url: '../public-service/store',
+      data: formData,
+      cache: false,
+      contentType: false,
+      processData: false,
+      dataType: 'JSON',
+      success: function success(data) {
+        console.log(data);
 
-            if (positionSelected) {
-              formData.append('ubication', JSON.stringify(positionSelected));
+        if (data.success) {
+          console.log(data.success); //Se eliminan los mensajes de validación
+
+          $('#name').removeClass('is-invalid');
+          $('#description').removeClass('is-invalid');
+          $('#subcategory').removeClass('is-invalid');
+          $('#phone_numbers').removeClass('is-invalid');
+          $('#email').removeClass('is-invalid');
+          $('#ubication-description').removeClass('is-invalid');
+          Swal.fire({
+            position: 'top-end',
+            type: 'success',
+            title: 'Servicio público registrado',
+            showConfirmButton: false,
+            timer: 1500,
+            allowOutsideClick: true
+          }); // Se deshabilita el botón enviar
+
+          $('#send-data').prop("disabled", true);
+          $('#send-data').removeClass("btn-primary");
+          $('#send-data').addClass("btn-success"); // funciona como una redirección HTTP
+
+          setTimeout(function () {
+            window.location.replace('../public-service');
+          }, 1000);
+        }
+      },
+      error: function error(jqXHR, textStatus, errorThrown) {
+        console.log(jqXHR.responseText);
+        var getErrors = jqXHR.responseJSON ? jqXHR.responseJSON : null;
+
+        if (getErrors) {
+          //Se obtienen los error de validación por parte de Laravel
+          var validationErrors = getErrors.errors ? getErrors.errors : null;
+
+          if (validationErrors) {
+            console.log(validationErrors);
+
+            if (validationErrors.hasOwnProperty('name')) {
+              $('#name').addClass('is-invalid');
+              $('#name').siblings('.invalid-feedback').html('<strong>' + validationErrors['name'][0] + '</strong>');
+            } else {
+              $('#name').removeClass('is-invalid');
             }
 
-            formData["delete"]('phone_numbers');
-            phone_numbers.forEach(function (phone) {
-              formData.append('phone_numbers[]', phone);
-            });
-            $.ajax({
-              type: 'POST',
-              url: '../public-service/store',
-              data: formData,
-              cache: false,
-              contentType: false,
-              processData: false,
-              dataType: 'JSON',
-              success: function success(data) {
-                console.log(data);
+            if (validationErrors.hasOwnProperty('description')) {
+              $('#description').addClass('is-invalid');
+              $('#description').siblings('.invalid-feedback').html('<strong>' + validationErrors['description'][0] + '</strong>');
+            } else {
+              $('#description').removeClass('is-invalid');
+            }
 
-                if (data.success) {
-                  //Se eliminan los mensajes de validación
-                  $('#name').removeClass('is-invalid');
-                  $('#description').removeClass('is-invalid');
-                  $('#subcategory').removeClass('is-invalid');
-                  $('#phone_numbers').removeClass('is-invalid');
-                  $('#email').removeClass('is-invalid');
-                  $('#ubication-description').removeClass('is-invalid');
-                  Swal.fire({
-                    position: 'top-end',
-                    type: 'success',
-                    title: 'Servicio público registrado',
-                    showConfirmButton: false,
-                    timer: 1500,
-                    allowOutsideClick: true
-                  }); // Se deshabilita el botón enviar
+            if (validationErrors.hasOwnProperty('subcategory')) {
+              $('#subcategory').addClass('is-invalid');
+              $('#subcategory').siblings('.invalid-feedback').html('<strong>' + validationErrors['subcategory'][0] + '</strong>');
+            } else {
+              $('#subcategory').removeClass('is-invalid');
+            }
 
-                  $('#send-data').prop("disabled", true);
-                  $('#send-data').removeClass("btn-primary");
-                  $('#send-data').addClass("btn-success"); // funciona como una redirección HTTP
+            if (validationErrors.hasOwnProperty('email')) {
+              $('#email').addClass('is-invalid');
+              $('#email').siblings('.invalid-feedback').html('<strong>' + validationErrors['email'][0] + '</strong>');
+            } else {
+              $('#email').removeClass('is-invalid');
+            }
 
-                  setTimeout(function () {
-                    window.location.replace('../public-service');
-                  }, 1000);
-                }
-              },
-              error: function error(jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR.responseText);
-                var getErrors = jqXHR.responseJSON ? jqXHR.responseJSON : null;
+            if (validationErrors.hasOwnProperty('ubication-description')) {
+              $('#ubication-description').addClass('is-invalid');
+              $('#ubication-description').siblings('.invalid-feedback').html('<strong>' + validationErrors['ubication-description'][0] + '</strong>');
+            } else {
+              $('#ubication-description').removeClass('is-invalid');
+            }
 
-                if (getErrors) {
-                  //Se obtienen los error de validación por parte de Laravel
-                  var validationErrors = getErrors.errors ? getErrors.errors : null;
+            if (validationErrors.hasOwnProperty('ubication')) {
+              Swal.fire({
+                position: 'top-end',
+                type: 'error',
+                title: 'Ubicación',
+                text: 'Debe haber seleccionado una ubicación en el mapa'
+              });
+            }
 
-                  if (validationErrors) {
-                    console.log(validationErrors);
-
-                    if (validationErrors.hasOwnProperty('name')) {
-                      $('#name').addClass('is-invalid');
-                      $('#name').siblings('.invalid-feedback').html('<strong>' + validationErrors['name'][0] + '</strong>');
-                    } else {
-                      $('#name').removeClass('is-invalid');
-                    }
-
-                    if (validationErrors.hasOwnProperty('description')) {
-                      $('#description').addClass('is-invalid');
-                      $('#description').siblings('.invalid-feedback').html('<strong>' + validationErrors['description'][0] + '</strong>');
-                    } else {
-                      $('#description').removeClass('is-invalid');
-                    }
-
-                    if (validationErrors.hasOwnProperty('subcategory')) {
-                      $('#subcategory').addClass('is-invalid');
-                      $('#subcategory').siblings('.invalid-feedback').html('<strong>' + validationErrors['subcategory'][0] + '</strong>');
-                    } else {
-                      $('#subcategory').removeClass('is-invalid');
-                    }
-
-                    if (validationErrors.hasOwnProperty('email')) {
-                      $('#email').addClass('is-invalid');
-                      $('#email').siblings('.invalid-feedback').html('<strong>' + validationErrors['email'][0] + '</strong>');
-                    } else {
-                      $('#email').removeClass('is-invalid');
-                    }
-
-                    if (validationErrors.hasOwnProperty('ubication-description')) {
-                      $('#ubication-description').addClass('is-invalid');
-                      $('#ubication-description').siblings('.invalid-feedback').html('<strong>' + validationErrors['ubication-description'][0] + '</strong>');
-                    } else {
-                      $('#ubication-description').removeClass('is-invalid');
-                    }
-
-                    if (validationErrors.hasOwnProperty('ubication')) {
-                      Swal.fire({
-                        position: 'top-end',
-                        type: 'error',
-                        title: 'Ubicación',
-                        text: 'Debe haber seleccionado una ubicación en el mapa'
-                      });
-                    }
-
-                    if (validationErrors.hasOwnProperty('phone_numbers')) {
-                      $('#phone_numbers').addClass('is-invalid');
-                      $('#phone_numbers').siblings('.invalid-feedback').html('<strong>' + validationErrors['phone_numbers'][0] + '</strong>');
-                    } else {
-                      if (validationErrors.hasOwnProperty('phone_numbers.0')) {
-                        $('#phone_numbers').addClass('is-phone_numbers');
-                        $('#phone_numbers').siblings('.invalid-feedback').html('<strong>' + validationErrors['phone_numbers.0'][0] + '</strong>');
-                      } else {
-                        $('#phone_numbers').removeClass('is-invalid');
-                      }
-                    }
-                  }
-                }
+            if (validationErrors.hasOwnProperty('phone_numbers')) {
+              $('#phone_numbers').addClass('is-invalid');
+              $('#phone_numbers').siblings('.invalid-feedback').html('<strong>' + validationErrors['phone_numbers'][0] + '</strong>');
+            } else {
+              if (validationErrors.hasOwnProperty('phone_numbers.0')) {
+                $('#phone_numbers').addClass('is-phone_numbers');
+                $('#phone_numbers').siblings('.invalid-feedback').html('<strong>' + validationErrors['phone_numbers.0'][0] + '</strong>');
+              } else {
+                $('#phone_numbers').removeClass('is-invalid');
               }
-            });
-          });
-
-        case 4:
-        case "end":
-          return _context.stop();
+            }
+          }
+        }
       }
-    }
-  }, _callee);
-})));
+    });
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/public-service-update.js":
+/*!***********************************************!*\
+  !*** ./resources/js/public-service-update.js ***!
+  \***********************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _map__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./map */ "./resources/js/map.js");
+/* harmony import */ var _phone_numbers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./phone_numbers */ "./resources/js/phone_numbers.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+
+
+
+var savedLocation = {};
+var savedPhones = [];
+
+function updateMap() {
+  return _updateMap.apply(this, arguments);
+}
+
+function _updateMap() {
+  _updateMap = _asyncToGenerator(
+  /*#__PURE__*/
+  _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+    var infoLocation;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            //Se obtienen las coordenadas
+            infoLocation = document.querySelectorAll("#info span");
+            infoLocation.forEach(function (element) {
+              savedLocation[element.id] = element.textContent;
+            });
+            _context.next = 4;
+            return Object(_map__WEBPACK_IMPORTED_MODULE_1__["setPosition"])(savedLocation);
+
+          case 4:
+            _context.next = 6;
+            return Object(_map__WEBPACK_IMPORTED_MODULE_1__["locateMarker"])('map');
+
+          case 6:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+  return _updateMap.apply(this, arguments);
+}
+
+function updatePhones() {
+  //Se obtienen los teléfono(s) registrados
+  var infoPhones = document.querySelectorAll("#phone_group #phone_bagde");
+  infoPhones.forEach(function (phone) {
+    //Se eliminan los espacios en blanco
+    savedPhones.push(phone.textContent.trim());
+  });
+  Object(_phone_numbers__WEBPACK_IMPORTED_MODULE_2__["resetValues"])(savedPhones);
+}
+
+$(document).ready(function () {
+  if ($('#map').length != 0 && $('#public-service-update').length != 0) {
+    updateMap();
+    updatePhones();
+  } //AJAX
+
+
+  $('#public-service-update').on('submit', function (event) {
+    event.preventDefault();
+    var formData = new FormData(this); // console.log('ubicación a enviar al formulario',location);
+    // console.log('teléfonos a enviar',phone_array);
+
+    formData["delete"]('phone_numbers');
+    _phone_numbers__WEBPACK_IMPORTED_MODULE_2__["phone_array"].forEach(function (phone) {
+      formData.append('phone_numbers[]', phone);
+    });
+    formData.append('ubication', JSON.stringify(_map__WEBPACK_IMPORTED_MODULE_1__["location"]));
+    $.ajax({
+      type: 'POST',
+      url: $(this).attr('action'),
+      data: formData,
+      cache: false,
+      contentType: false,
+      processData: false,
+      dataType: 'JSON',
+      success: function success(data) {
+        console.log(data);
+
+        if (data.success) {
+          console.log(data.success); //Se eliminan los mensajes de validación
+
+          $('#name').removeClass('is-invalid');
+          $('#description').removeClass('is-invalid');
+          $('#subcategory').removeClass('is-invalid');
+          $('#phone_numbers').removeClass('is-invalid');
+          $('#email').removeClass('is-invalid');
+          $('#ubication-description').removeClass('is-invalid');
+          Swal.fire({
+            position: 'top-end',
+            type: 'success',
+            title: 'Servicio público actualizado',
+            showConfirmButton: false,
+            timer: 1500,
+            allowOutsideClick: true
+          }); // Se deshabilita el botón enviar
+
+          $('#send-data').prop("disabled", true);
+          $('#send-data').removeClass("btn-primary");
+          $('#send-data').addClass("btn-success"); // funciona como una redirección HTTP
+
+          setTimeout(function () {
+            window.location.replace('../');
+          }, 1000);
+        }
+      },
+      error: function error(jqXHR, textStatus, errorThrown) {
+        console.log(jqXHR.responseText);
+        var getErrors = jqXHR.responseJSON ? jqXHR.responseJSON : null;
+
+        if (getErrors) {
+          //Se obtienen los error de validación por parte de Laravel
+          var validationErrors = getErrors.errors ? getErrors.errors : null;
+
+          if (validationErrors) {
+            console.log(validationErrors);
+
+            if (validationErrors.hasOwnProperty('name')) {
+              $('#name').addClass('is-invalid');
+              $('#name').siblings('.invalid-feedback').html('<strong>' + validationErrors['name'][0] + '</strong>');
+            } else {
+              $('#name').removeClass('is-invalid');
+            }
+
+            if (validationErrors.hasOwnProperty('description')) {
+              $('#description').addClass('is-invalid');
+              $('#description').siblings('.invalid-feedback').html('<strong>' + validationErrors['description'][0] + '</strong>');
+            } else {
+              $('#description').removeClass('is-invalid');
+            }
+
+            if (validationErrors.hasOwnProperty('subcategory')) {
+              $('#subcategory').addClass('is-invalid');
+              $('#subcategory').siblings('.invalid-feedback').html('<strong>' + validationErrors['subcategory'][0] + '</strong>');
+            } else {
+              $('#subcategory').removeClass('is-invalid');
+            }
+
+            if (validationErrors.hasOwnProperty('email')) {
+              $('#email').addClass('is-invalid');
+              $('#email').siblings('.invalid-feedback').html('<strong>' + validationErrors['email'][0] + '</strong>');
+            } else {
+              $('#email').removeClass('is-invalid');
+            }
+
+            if (validationErrors.hasOwnProperty('ubication-description')) {
+              $('#ubication-description').addClass('is-invalid');
+              $('#ubication-description').siblings('.invalid-feedback').html('<strong>' + validationErrors['ubication-description'][0] + '</strong>');
+            } else {
+              $('#ubication-description').removeClass('is-invalid');
+            }
+
+            if (validationErrors.hasOwnProperty('ubication')) {
+              Swal.fire({
+                position: 'top-end',
+                type: 'error',
+                title: 'Ubicación',
+                text: 'Debe haber seleccionado una ubicación en el mapa'
+              });
+            }
+
+            if (validationErrors.hasOwnProperty('phone_numbers')) {
+              $('#phone_numbers').addClass('is-invalid');
+              $('#phone_numbers').siblings('.invalid-feedback').html('<strong>' + validationErrors['phone_numbers'][0] + '</strong>');
+            } else {
+              if (validationErrors.hasOwnProperty('phone_numbers.0')) {
+                $('#phone_numbers').addClass('is-phone_numbers');
+                $('#phone_numbers').siblings('.invalid-feedback').html('<strong>' + validationErrors['phone_numbers.0'][0] + '</strong>');
+              } else {
+                $('#phone_numbers').removeClass('is-invalid');
+              }
+            }
+          }
+        }
+      }
+    });
+  });
+});
 
 /***/ }),
 

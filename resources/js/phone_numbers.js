@@ -10,7 +10,7 @@ const print_phones = (array) => {
     console.log('ingreso');
     array.forEach(function (element, index) {
         print += `
-            <div class="input-group-prepend" id='phone_group'>
+            <div id='phone_item'>
                 <span class="input-group-text" id='phone_bagde'> 
                  ${element}
                   <i class="fas fa-minus-circle" id='delete_phone' data-no="${index}"></i>
@@ -82,7 +82,7 @@ function resetValues(array){
         print_phones(phone_array);
         disabledAndRequiredAttribute(phone_array, '#phone_numbers' , numberOfPhonesAllowed);
     }
-    console.log(phone_array);
+    // console.log(phone_array);
 }
 
 //Se exporta la función resertValues y el arreglo phone_array

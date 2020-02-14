@@ -1,50 +1,56 @@
 const Swal = require('sweetalert2')
 
-import {getCurrentLocation, getAddress, locateMarker, setPosition, location} from './map';
-import{phone_array} from './phone_numbers';
+import {locateMarker, setPosition, location} from './map';
+import{phone_array, resetValues} from './phone_numbers';
 
-var phone_numbers = phone_array;
-var currentLocation = location;
+var savedLocation = {};
+var savedPhones = [];
 
-async function loadMap(){
-    var geolocationPosition = await getCurrentLocation()
-                                    .then(coordinates => coordinates)
-                                    .catch(errs =>{
-                                        console.log('geolocationPosition', errs);
-                                    });
-    currentLocation = {
-        'lat': geolocationPosition ? geolocationPosition.coords.latitude: null, 
-        lng: geolocationPosition ? geolocationPosition.coords.longitude : null,
-    };
-    var address = await getAddress(currentLocation);
-    currentLocation.address = address ? address : null;
 
-    if(currentLocation.lat && currentLocation.lng && currentLocation.address ){
-        setPosition(currentLocation);
-    }
-    
-    locateMarker('map');
+async function updateMap(){
+    //Se obtienen las coordenadas
+    var infoLocation = document.querySelectorAll("#info span");
+    infoLocation.forEach(element => {
+        savedLocation[element.id] = element.textContent;
+    });
+
+    await setPosition(savedLocation);
+    await locateMarker('map');
 }
-$(document).ready(function () {
 
-    if($('#map').length != 0 && $('#public-service-create').length != 0){
-        loadMap();
+function updatePhones(){
+    //Se obtienen los teléfono(s) registrados
+    var infoPhones = document.querySelectorAll("#phone_group #phone_bagde");
+    infoPhones.forEach(phone => {
+        //Se eliminan los espacios en blanco
+        savedPhones.push(phone.textContent.trim());
+    });
+    resetValues(savedPhones);
+}
+
+$(document).ready( function () {
+    
+    if($('#map').length != 0 && $('#public-service-update').length != 0){
+        updateMap();
+        updatePhones();
     }
+
     //AJAX
-    $('#public-service-create').on('submit', function (event) {
+    $('#public-service-update').on('submit', function (event) {
         event.preventDefault();
         var formData = new FormData(this);
         // console.log('ubicación a enviar al formulario',location);
-
+        // console.log('teléfonos a enviar',phone_array);
+   
         formData.delete('phone_numbers');
-        phone_numbers.forEach(function (phone) {
+        phone_array.forEach(function (phone) {
             formData.append('phone_numbers[]', phone);
         });
         formData.append('ubication', JSON.stringify(location));
 
         $.ajax({
             type: 'POST',
-            url: '../public-service/store',
+            url: $(this).attr('action'),
             data: formData,
             cache: false,
             contentType: false,
@@ -52,6 +58,7 @@ $(document).ready(function () {
             dataType: 'JSON',
             success: function (data) {
                 console.log(data);
+                
                 if (data.success) {
                     console.log(data.success);
                     //Se eliminan los mensajes de validación
@@ -65,7 +72,7 @@ $(document).ready(function () {
                     Swal.fire({
                         position: 'top-end',
                         type: 'success',
-                        title: 'Servicio público registrado',
+                        title: 'Servicio público actualizado',
                         showConfirmButton: false,
                         timer: 1500,
                         allowOutsideClick: true,
@@ -77,7 +84,7 @@ $(document).ready(function () {
 
                     // funciona como una redirección HTTP
                     setTimeout(function(){ 
-                        window.location.replace('../public-service');
+                        window.location.replace('../');
                     }, 1000);
                 }
             },
@@ -143,4 +150,5 @@ $(document).ready(function () {
             }
         });
     });
+    
 });

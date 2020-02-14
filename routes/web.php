@@ -117,4 +117,6 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::get('public-service', 'PublicServiceController@index')->name('publicServices.index'); 
     Route::get('public-service/create', 'PublicServiceController@create')->name('publicServices.create');
     Route::post('public-service/store', 'PublicServiceController@store')->name('publicServices.store');
+    Route::get('public-service/{publicService}/edit', 'PublicServiceController@edit')->name('publicServices.edit');
+    Route::put('public-service/{publicService}', 'PublicServiceController@update')->name('publicServices.update');
 });

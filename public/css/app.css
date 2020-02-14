@@ -17249,14 +17249,10 @@ h6 {
 
 .map {
   height: 55vh;
-  position: relative;
 }
 
 .map .info {
-  position: absolute;
-  z-index: 99999;
-  bottom: 0;
-  margin-left: 0.75rem;
+  color: transparent !important;
 }
 
 @media (max-width: 767.98px) {
@@ -17276,7 +17272,7 @@ h6 {
   min-width: 150px;
 }
 
-#phone_group > #phone_bagde > #delete_phone {
+#phone_group > #phone_item > #phone_bagde > #delete_phone {
   margin-left: 2.5px;
   color: red;
   cursor: pointer;

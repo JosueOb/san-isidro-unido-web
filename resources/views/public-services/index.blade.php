@@ -65,7 +65,7 @@
                                         
                                         {{-- @can('subcategories.edit') --}}
                                         <td width='10px'>
-                                            <a href="#" class="btn btn-secondary"> Editar</a>
+                                            <a href="{{route('publicServices.edit', $publicService->id)}}" class="btn btn-secondary"> Editar</a>
                                         </td>
                                         {{-- @endcan --}}
 
