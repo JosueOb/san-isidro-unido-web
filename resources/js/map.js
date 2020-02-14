@@ -48,7 +48,12 @@ async function getAddress(location){
 }
 
 //Se inicializa el mapa y se ubica un marcador en una determinada posición
-function locateMarker(containerMap){
+function locateMarker(containerMap, showMarker = true){
+    //Se permite o no el poder mover el marker
+    var markerOptions = {};
+    if(showMarker){
+        markerOptions['draggable'] = "true"
+    }
     //Opciones del mapa
     var mapOptions = {
         zoomControl: true,
@@ -72,19 +77,19 @@ function locateMarker(containerMap){
     var marker = L.marker([
         location.lat,
         location.lng
-    ],{
-        draggable: "true",
-    }).addTo(map);
+    ], markerOptions).addTo(map);
 
-    //Se permite el poder mover el marcador
-    marker.on('dragend', async e =>{
-        const newLocation = await e.target.getLatLng();
-        const newAddress = await getAddress(newLocation);
-        location.lat = newLocation.lat;
-        location.lng = newLocation.lng;
-        location.address = newAddress ? newAddress : null;
-        marker.bindPopup(location.address).openPopup();
-    });
+    if(showMarker){
+        //Se permite el poder mover el marcador
+        marker.on('dragend', async e =>{
+            const newLocation = await e.target.getLatLng();
+            const newAddress = await getAddress(newLocation);
+            location.lat = newLocation.lat;
+            location.lng = newLocation.lng;
+            location.address = newAddress ? newAddress : null;
+            marker.bindPopup(location.address).openPopup();
+        });
+    }
     
     marker.bindPopup(location.address).openPopup();
 }

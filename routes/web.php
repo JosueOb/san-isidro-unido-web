@@ -114,9 +114,10 @@ Route::middleware(['auth','verified'])->group(function(){
     });
     
     //SERVICIOS PUBLICOS
-    Route::get('public-service', 'PublicServiceController@index')->name('publicServices.index'); 
+    Route::get('public-service', 'PublicServiceController@index')->name('publicServices.index');
     Route::get('public-service/create', 'PublicServiceController@create')->name('publicServices.create');
     Route::post('public-service/store', 'PublicServiceController@store')->name('publicServices.store');
+    Route::get('public-service/{publicService}', 'PublicServiceController@show')->name('publicServices.show');
     Route::get('public-service/{publicService}/edit', 'PublicServiceController@edit')->name('publicServices.edit');
     Route::put('public-service/{publicService}', 'PublicServiceController@update')->name('publicServices.update');
     Route::delete('public-service/{publicService}', 'PublicServiceController@destroy')->name('publicServices.destroy');

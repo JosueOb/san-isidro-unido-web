@@ -62,6 +62,12 @@
                                         <td>{{$publicService->name}}</td>
                                         <td>{{$publicService->subcategory->name}}</td>
                                         <td>{{$publicService->description ?? 'Sin descripción'}}</td>
+
+                                        {{-- @can('members.show') --}}
+                                        <td width='10px'>
+                                            <a href="{{route('publicServices.show',$publicService->id)}}" class="btn btn-info">Ver</a>
+                                        </td>
+                                        {{-- @endcan --}}
                                         
                                         {{-- @can('subcategories.edit') --}}
                                         <td width='10px'>

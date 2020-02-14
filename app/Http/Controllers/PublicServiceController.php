@@ -81,6 +81,13 @@ class PublicServiceController extends Controller
      */
     public function show(PublicService $publicService)
     {
+        $phones = $publicService->phones()->get();
+        $ubication = json_decode($publicService->ubication, true);
+        return view('public-services.show', [
+            'publicService'=>$publicService,
+            'phones'=>$phones,
+            'ubication'=>$ubication,
+        ]);
     }
 
     /**
