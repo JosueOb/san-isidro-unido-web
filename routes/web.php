@@ -119,4 +119,5 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::post('public-service/store', 'PublicServiceController@store')->name('publicServices.store');
     Route::get('public-service/{publicService}/edit', 'PublicServiceController@edit')->name('publicServices.edit');
     Route::put('public-service/{publicService}', 'PublicServiceController@update')->name('publicServices.update');
+    Route::delete('public-service/{publicService}', 'PublicServiceController@destroy')->name('publicServices.destroy');
 });

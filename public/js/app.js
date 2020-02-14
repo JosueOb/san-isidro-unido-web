@@ -66940,8 +66940,7 @@ __webpack_require__(/*! ./icon-image */ "./resources/js/icon-image.js");
 
 __webpack_require__(/*! ./report-create */ "./resources/js/report-create.js");
 
-__webpack_require__(/*! ./report-update */ "./resources/js/report-update.js"); // require('./map-create');
-
+__webpack_require__(/*! ./report-update */ "./resources/js/report-update.js");
 
 __webpack_require__(/*! ./map */ "./resources/js/map.js");
 
@@ -67497,8 +67496,8 @@ $(document).ready(function () {
 
   $('#public-service-create').on('submit', function (event) {
     event.preventDefault();
-    var formData = new FormData(this);
-    console.log('ubicación a enviar al formulario', _map__WEBPACK_IMPORTED_MODULE_1__["location"]);
+    var formData = new FormData(this); // console.log('ubicación a enviar al formulario',location);
+
     formData["delete"]('phone_numbers');
     phone_numbers.forEach(function (phone) {
       formData.append('phone_numbers[]', phone);

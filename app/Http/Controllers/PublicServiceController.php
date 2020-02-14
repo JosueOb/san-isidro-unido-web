@@ -143,9 +143,12 @@ class PublicServiceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(PublicService $publicService)
     {
-        //
+        $publicService->delete();
+        session()->flash('success', 'Servicio público eliminado con éxito');
+        return redirect()->route('publicServices.index')->with('success', 'Servicio público eliminado con éxito');
+        
     }
 
     /**
