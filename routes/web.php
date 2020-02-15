@@ -121,4 +121,8 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::get('public-service/{publicService}/edit', 'PublicServiceController@edit')->name('publicServices.edit')->middleware('can:publicServices.edit');
     Route::put('public-service/{publicService}', 'PublicServiceController@update')->name('publicServices.update')->middleware('can:publicServices.edit');
     Route::delete('public-service/{publicService}', 'PublicServiceController@destroy')->name('publicServices.destroy')->middleware('can:publicServices.destroy');
+
+    //Eventos
+    Route::get('events', 'EventController@index')->name('events.index');
+    Route::get('events/create', 'EventController@create')->name('events.create');
 });

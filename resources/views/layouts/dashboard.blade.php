@@ -172,21 +172,6 @@
                         </li>
                         @endcanany
 
-                        
-
-                        {{-- <li class="nav-item @yield('item-events')">
-                            <a class="nav-link" data-toggle="collapse" data-target="#collapseEvent" aria-expanded="true" aria-controls="collapseEvent">
-                                <i class="fas fa-calendar-week"></i>
-                                <span>Eventos</span>
-                            </a>
-                            <div id="collapseEvent" class="collapse @yield('item-event-collapse')" >
-                                <div class="collapse-inner">
-                                    <a class="collapse-item @yield('item-event-list')" href="#"><i class="fas fa-list"></i>Listar eventos</a>
-                                    <a class="collapse-item @yield('item-event-create')" href="#"><i class="fas fa-calendar-plus"></i></i>Registrar evento</a>
-                            </div>
-                            </div>
-                        </li> --}}
-
                         @canany(['publicServices.index','publicServices.create'])
                         <li class="nav-item @yield('item-public-service')">
                             <a class="nav-link" data-toggle="collapse" data-target="#collapsePublicService" aria-expanded="true" aria-controls="collapsePublicService">
@@ -206,6 +191,22 @@
                         </li>
                         @endcanany
                         
+
+
+                        <li class="nav-item @yield('item-events')">
+                            <a class="nav-link" data-toggle="collapse" data-target="#collapseEvent" aria-expanded="true" aria-controls="collapseEvent">
+                                <i class="fas fa-calendar-week"></i>
+                                <span>Eventos</span>
+                            </a>
+                            <div id="collapseEvent" class="collapse @yield('item-event-collapse')" >
+                                <div class="collapse-inner">
+                                    <a class="collapse-item @yield('item-event-list')" href="{{route('events.index')}}"><i class="fas fa-list"></i>Listar eventos</a>
+                                    <a class="collapse-item @yield('item-event-create')" href="{{route('events.create')}}"><i class="fas fa-calendar-plus"></i></i>Registrar evento</a>
+                            </div>
+                            </div>
+                        </li>
+
+
                     </ul>
                 </div>
             </aside>
