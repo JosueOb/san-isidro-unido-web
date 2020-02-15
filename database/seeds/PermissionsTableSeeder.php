@@ -233,5 +233,41 @@ class PermissionsTableSeeder extends Seeder
             'private'=>true,
             'group'=>'subcategoría',
         ]);
+        //Permisos sobre el módulo de servicio público
+        Permission::create([
+            'name'=>'Listar servicios públicos',
+            'slug'=>'publicServices.index',
+            'description'=>'Lista los registros de servicios públicos',
+            'private'=>false,
+            'group'=>'servico público',
+        ]);
+        Permission::create([
+            'name'=>'Crear servicio público',
+            'slug'=>'publicServices.create',
+            'description'=>'Registra los servicios públicos',
+            'private'=>false,
+            'group'=>'servico público',
+        ]);
+        Permission::create([
+            'name'=>'Ver detalle de servicio público',
+            'slug'=>'publicServices.show',
+            'description'=>'Ver en detalle cada uno de los servicios públicos registrados',
+            'private'=>false,
+            'group'=>'servico público',
+        ]);
+        Permission::create([
+            'name'=>'Editar servicio público',
+            'slug'=>'publicServices.edit',
+            'description'=>'Edita los registros de servicios públicos',
+            'private'=>false,
+            'group'=>'servico público',
+        ]);
+        Permission::create([
+            'name'=>'Eliminar servicios públicos',
+            'slug'=>'publicServices.destroy',
+            'description'=>'Elimina los registros de servicios público',
+            'private'=>false,
+            'group'=>'servico público',
+        ]);
     }
 }

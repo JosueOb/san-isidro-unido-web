@@ -25,7 +25,7 @@
     <div class="col">
         <div class="card card-primary">
             <div class="card-body">
-                {{-- <form action="{{route('publicSercives.store')}}" method="POST"> --}}
+
                 <form id="public-service-update" action="{{route('publicServices.update', $publicService->id)}}">
                     @csrf
                     @method('put')

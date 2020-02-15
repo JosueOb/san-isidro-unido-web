@@ -28,9 +28,10 @@
                 <div class="row">
                     <div class="col">
                         <h4  class="d-inline">Detalle de servicio público</h4>
-                        {{-- @can('subcategories.create') --}}
+
+                        @can('publicServices.edit')
                         <a href="{{route('publicServices.edit', $publicService->id)}}" class="btn btn-primary float-right">Editar</a>
-                        {{-- @endcan --}}
+                        @endcan
                     </div>
                 </div>
             </div>

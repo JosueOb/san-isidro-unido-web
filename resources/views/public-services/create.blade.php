@@ -25,7 +25,7 @@
     <div class="col">
         <div class="card card-primary">
             <div class="card-body">
-                {{-- <form action="{{route('publicSercives.store')}}" method="POST"> --}}
+                
                 <form method="POST" id="public-service-create">
                     @csrf
                     <div class="row">

@@ -187,6 +187,7 @@
                             </div>
                         </li> --}}
 
+                        @canany(['publicServices.index','publicServices.create'])
                         <li class="nav-item @yield('item-public-service')">
                             <a class="nav-link" data-toggle="collapse" data-target="#collapsePublicService" aria-expanded="true" aria-controls="collapsePublicService">
                                 <i class="fas fa-map-marker-alt"></i>
@@ -194,11 +195,16 @@
                             </a>
                             <div id="collapsePublicService" class="collapse @yield('item-public-service-collapse')" >
                                 <div class="collapse-inner">
+                                    @can('publicServices.index')
                                     <a class="collapse-item @yield('item-public-service-list')" href="{{ route('publicServices.index') }}"><i class="fas fa-list"></i>Listar servicios publicos</a>
+                                    @endcan
+                                    @can('publicServices.create')
                                     <a class="collapse-item @yield('item-public-service-create')" href="{{ route('publicServices.create') }}"><i class="fas fa-calendar-plus"></i></i>Registrar servicio público</a>
+                                    @endcan
                             </div>
                             </div>
                         </li>
+                        @endcanany
                         
                     </ul>
                 </div>

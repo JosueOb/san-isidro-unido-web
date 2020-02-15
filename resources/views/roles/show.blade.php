@@ -39,12 +39,26 @@
                 @if ($permissionGroup->count() > 0)
                 <div class="list-group list-group-flush accordion">
                     @foreach ($permissionGroup as $key => $permissions)
-                        <a class="list-group-item list-group-item-action" data-toggle="collapse" data-target="#{{$key}}" aria-expanded="true" aria-controls="collapse">
-                            {{$key}}
+                    @php
+                        //Se pasa el primer caracter a mayúscula
+                        $nameGroup = ucfirst(strtolower($key));
+                        //Se reemplazan las tíldes por su respectiva vocal
+                        $id_element = str_replace(
+                            array('Á','É','Í','Ó','Ú','á','é','í','ó','ú'),
+                            array('A','E','I','O','U','a','e','i','o','u'),
+                            $key
+                        );
+                        //Se convierte a la cadena a minúsculas
+                        $id_element = strtolower($id_element);
+                        //Se reemplazan los espacios por un guion
+                        $id_element = str_replace(' ', '-', $id_element);
+                    @endphp
+                        <a class="list-group-item list-group-item-action" data-toggle="collapse" data-target="#{{$id_element}}" aria-expanded="true" aria-controls="collapse">
+                            {{$nameGroup}}
                             <span class="badge badge-dark badge-pill ml-1">{{$permissions->count()}}</span>
                             <i class="fas fa-caret-down float-right"></i>
                         </a>
-                        <div id="{{$key}}" class="collapse">
+                        <div id="{{$id_element}}" class="collapse">
                             <ul class="list-group list-group-flush list-unstyled">
                                 @foreach ($permissions as $permission)
                                 <li class="list-group-item">

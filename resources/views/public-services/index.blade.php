@@ -33,9 +33,9 @@
                 <div class="row">
                     <div class="col">
                         <h4 class="d-inline">Servicios públicos</h4>
-                        {{-- @can('subcategories.create') --}}
+                        @can('publicServices.create')
                         <a href="{{route('publicServices.create')}}" class="btn btn-primary float-right">Nuevo</a>
-                        {{-- @endcan --}}
+                        @endcan
                     </div>
                 </div>
             </div>
@@ -50,9 +50,9 @@
                                     <th>Nombre</th>
                                     <th>Categoría</th>
                                     <th>Descripción</th>
-                                    {{-- @canany(['subcategories.edit','subcategories.destroy']) --}}
+                                    @canany(['publicServices.edit','publicServices.destroy'])
                                     <th>Opciones</th>
-                                    {{-- @endcanany --}}
+                                    @endcanany
                                 </tr>
                             </thead>
                             <tbody>
@@ -63,19 +63,19 @@
                                         <td>{{$publicService->subcategory->name}}</td>
                                         <td>{{$publicService->description ?? 'Sin descripción'}}</td>
 
-                                        {{-- @can('members.show') --}}
+                                        @can('publicServices.show')
                                         <td width='10px'>
                                             <a href="{{route('publicServices.show',$publicService->id)}}" class="btn btn-info">Ver</a>
                                         </td>
-                                        {{-- @endcan --}}
+                                        @endcan
                                         
-                                        {{-- @can('subcategories.edit') --}}
+                                        @can('publicServices.edit')
                                         <td width='10px'>
                                             <a href="{{route('publicServices.edit', $publicService->id)}}" class="btn btn-secondary"> Editar</a>
                                         </td>
-                                        {{-- @endcan --}}
+                                        @endcan
 
-                                        {{-- @can('subcategories.destroy') --}}
+                                        @can('publicServices.destroy')
                                         <td width='10px'>
                                             <a href="#" class="btn btn-danger"  data-toggle="modal" data-target="#deletePublicService{{$publicService->id}}">Eliminar</a>
                                             <!--Modal-->
@@ -103,7 +103,7 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        {{-- @endcan --}}
+                                        @endcan
 
                                     </tr>
                                 @endforeach
