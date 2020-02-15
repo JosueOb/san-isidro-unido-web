@@ -39,7 +39,15 @@ class JwtAuth {
      */
 	public function singIn($email, $passOrToken, $provider) {
 		$validCredentials = false;
+		// $user = User::all()->get();
+		// $user = User::where('email', $email)->first();
+		// $user = User::email($email)->rolActive()->first();
 		$user = User::email($email)->rolActive()->with("roles")->first();
+		// $email = 
+		// $user = User::where('email', $email)->first();
+		// return true;
+		// dd($validCredentials, $email, $passOrToken, $provider);
+		// die();
 		if (!is_null($user)) {
 			if ($provider === 'formulario') {
 				$validCredentials = (password_verify($passOrToken, $user['password'])) ? true : false;

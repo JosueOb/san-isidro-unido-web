@@ -28,8 +28,8 @@ class ApiUserController extends ApiBaseController
     public function __construct()
     {
         $this->validacionesFormRegistro = [
-            'firstname' => 'required|string',
-            'lastname' => 'required|string',
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
             "email" => ['required', 'email'],
         ];
         $this->validacionesFormLogin = [
@@ -111,11 +111,11 @@ class ApiUserController extends ApiBaseController
                     $userExists = $utils->userExists($inputRegister['email']);
                     if (!$userExists) {
                         $user = new User();
-                        $user->firstname = $inputRegister['firstname'];
-                        $user->lastname = $inputRegister['lastname'];
+                        $user->first_name = $inputRegister['first_name'];
+                        $user->last_name = $inputRegister['last_name'];
                         $user->email = $inputRegister['email'];
                         $user->password = ($inputRegister['provider'] === 'formulario' && $inputRegister['password']) ? password_hash($inputRegister['password'], PASSWORD_DEFAULT) : null;
-                        // $user->state = true;
+                        $user->state = true;
                         $user->save();
                         $user->roles()->attach($rolInvitado->id);
                     } else {
@@ -161,25 +161,27 @@ class ApiUserController extends ApiBaseController
             // VALIDAR PROVEEDOR DATOS
             $validatorProvider = Validator::make($request->all(), [
                 "provider" => ['required', 'string', new ProviderData],
-            ]);
-            // Verificar si el validador falla
-            if (!$validatorProvider->fails()) {
-                $this->checkProviderValidation($requestData['provider'], 'login');
-                //VALIDAR CAMPOS REQUEST
-                $validatorJSONData = Validator::make($requestData, $this->validacionesFormLogin);
-                // SI VALIDACION FALLA, MANDAR ERROR
-                if (!$validatorJSONData->fails()) {
-                    //Devolver Token o datos
-                    $jwtAuth = new JwtAuth();
-                    //Verificar si se quiere obtener los datos del Token
-                    $returnDataOrToken = ($request->has('getToken')) ? true : null;
-                    //Mandar Pass or SocialID dependiendo Proveedor Login
-                    $passOrSocialID = ($requestData['provider'] === 'formulario') ? $requestData['password'] : $requestData['social_id'];
-                    //Verificar si credenciales son validas
-                    if ($jwtAuth->singIn($requestData['email'], $passOrSocialID, $requestData['provider'])) {
-                        $token = $jwtAuth->getToken($requestData['email'], $returnDataOrToken);
-                        return $this->sendResponse(200, "Login Correcto", $token);
-                    }
+                ]);
+                // Verificar si el validador falla
+                if (!$validatorProvider->fails()) {
+                    //VALIDAR CAMPOS REQUEST
+                    $this->checkProviderValidation($requestData['provider'], 'login');
+                    $validatorJSONData = Validator::make($requestData, $this->validacionesFormLogin);
+                    // SI VALIDACION FALLA, MANDAR ERROR
+                    if (!$validatorJSONData->fails()) {
+                        //Devolver Token o datos
+                        $jwtAuth = new JwtAuth();
+                        //Verificar si se quiere obtener los datos del Token
+                        $returnDataOrToken = ($request->has('getToken')) ? true : null;
+                        //Mandar Pass or SocialID dependiendo Proveedor Login
+                        $passOrSocialID = ($requestData['provider'] === 'formulario') ? $requestData['password'] : $requestData['social_id'];
+                        //Verificar si credenciales son validas
+                        if ($jwtAuth->singIn($requestData['email'], $passOrSocialID, $requestData['provider'])) {
+                            // dd($requestData);
+                            $token = $jwtAuth->getToken($requestData['email'], $returnDataOrToken);
+                        
+                            return $this->sendResponse(200, "Login Correcto", $token);
+                        }
                     //Si falla login retorno error
                     switch (strtolower($requestData['provider'])) {
                         case 'facebook':
@@ -189,7 +191,7 @@ class ApiUserController extends ApiBaseController
                             return $this->sendError(400, "No has asociado tu cuenta de google, registrate por favor", ['user' => 'No has asociado tu cuenta de google, registrate por favor']);
                             break;
                         default:
-                            return $this->sendError(400, "Usuario y/o Contraseña Inválida", ['user' => 'Usuario y/o Contraseña Inválida']);
+                            return $this->sendError(400, "Usuario y/o Contraseña Inválida", ['user' => 'Usuario y/o Contraseña Invalida']);
                             break;
                     }
                 }
@@ -391,16 +393,16 @@ class ApiUserController extends ApiBaseController
         try {
             // Obtener los datos de la request
             $validatorEditProfile = Validator::make($request->all(), [
-                "firstname" => 'required|string',
-                "lastname" => 'required|string',
+                "first_name" => 'required|string',
+                "last_name" => 'required|string',
                 "email" => 'required|string|email',
                 "phone" => 'nullable|string',
             ]);
             // Verificar si el validador falla
             if (!$validatorEditProfile->fails()) {
                 $user_update = [
-                    "firstname" => $request->get('firstname'),
-                    "lastname" => $request->get('lastname'),
+                    "first_name" => $request->get('first_name'),
+                    "last_name" => $request->get('last_name'),
                     "email" => $request->get('email'),
                     "phone" => $request->get('phone'), //debe ir tal cual la request para que actualice correctamente
                 ];

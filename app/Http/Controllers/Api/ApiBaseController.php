@@ -20,7 +20,7 @@ class ApiBaseController extends Controller {
             "status" => "success"
 		];
 		$responseApi["data"] = $data;
-		return response()->json($responseApi, $code);
+		return response()->json($responseApi, $code, [] ,JSON_UNESCAPED_UNICODE);
 	}
 
 	/**
@@ -38,7 +38,7 @@ class ApiBaseController extends Controller {
             "status" => "success"
 		];
 		$new_response_api = array_merge($responseApi, $data);
-		return response()->json($new_response_api, $code);
+		return response()->json($new_response_api, $code, [] ,JSON_UNESCAPED_UNICODE);
 	}
 
 	/**
@@ -59,7 +59,7 @@ class ApiBaseController extends Controller {
     }
     
     public function sendDebugResponse($data = [], $code = 500){
-        return response()->json($data, $code);
+        return response()->json($data, $code, [] ,JSON_UNESCAPED_UNICODE);
 	}
 	
 	public function checkReportPermisssion($token = null){		
@@ -79,6 +79,6 @@ class ApiBaseController extends Controller {
 	public function sendForbiddenResponse(){
 		return response()->json([
 			"message" => "No tienes permiso para realizar esta acción"
-		], 403);
+		], 403, [] ,JSON_UNESCAPED_UNICODE);
 	}
 }

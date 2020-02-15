@@ -17,7 +17,7 @@ class ApiPublicServiceController extends ApiBaseController {
      */
     public function index() {
         try {
-            $publicServices = PublicService::orderBy('id', 'desc')->with(['phones'])->get();
+            $publicServices = PublicService::orderBy('id', 'desc')->with(['phones', 'subcategory'])->get();
             return $this->sendResponse(200, 'success', $publicServices);
         } catch (Exception $e) {
             return $this->sendError(500, "error", ['server_error' => $e->getMessage()]);
@@ -72,7 +72,7 @@ class ApiPublicServiceController extends ApiBaseController {
                 return $this->sendError(404, 'No existe la categoria solicitada', []);
             }
             $publicServices = PublicService::findByCategoryId($subcategory->id)
-            ->with(['phones'])
+            ->with(['phones', 'subcategory'])
             ->get();
             return  $this->sendResponse(200, 'Recurso encontrado', $publicServices);
         } catch (Exception $e) {

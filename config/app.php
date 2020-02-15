@@ -165,6 +165,7 @@ return [
         App\Providers\JwtAuthServiceProvider::class,
         App\Providers\OnesignalServiceProvider::class,
         App\Providers\ApiImagesServiceProvider::class,
+        Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
 
         /*
          * Package Service Providers...

@@ -13,6 +13,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::group(['prefix' => 'system'], function () {
+    Route::get('/logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+    Route::get('/mapa', 'Api\ApiTestController@showMaptest');
+    Route::post('/mapa-receive-data', 'Api\ApiTestController@receiveMapData');
+});
+
 Route::get('/', function () {
     return view('welcome');
 });
