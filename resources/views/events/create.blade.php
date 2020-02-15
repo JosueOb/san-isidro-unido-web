@@ -79,32 +79,37 @@
                             <div class="form-group">
                                 <label for="time">Hora</span></label>
                                 <div class="row">
-                                    <div class="col">
-                                        <input id="inital-time" type="text" class="form-control" name="inital-time" value="{{ old('inital-time') }}" placeholder="Comienza" required>
+                                    <div class="col-12 col-md-6">
+                                        <input id="initial-time" type="text" class="form-control" name="inital-time" value="{{ old('inital-time') }}" placeholder="Comienza" required>
                                         <span class="invalid-feedback" role="alert">
                                         </span>
                                     </div>
-                                    <div class="col">
+                                    <div class="col-12 col-md-6 mt-md-0 mt-sm-3 mt-3">
                                         <input id="end-time" type="text" class="form-control" name="end-time" value="{{ old('end-time') }}" placeholder="Termina" required>
                                         <span class="invalid-feedback" role="alert">
                                         </span>
                                     </div>
                                 </div>
+                                
                             </div>
                             <div class="form-group">
-                                <label for="time">Fecha</span></label>
+                                <label for="date">Fecha</span></label>
                                 <div class="row">
-                                    <div class="col">
+                                    <div class="col-12 col-md-6">
                                         <input id="inital-date" type="text" class="form-control" name="inital-date" value="{{ old('inital-date') }}" placeholder="Comienza" required>
                                         <span class="invalid-feedback" role="alert">
                                         </span>
                                     </div>
-                                    <div class="col">
+                                    <div class="col-12 col-md-6 mt-md-0 mt-sm-3 mt-3">
                                         <input id="end-date" type="text" class="form-control" name="end-date" value="{{ old('end-date') }}" placeholder="Termina" required>
                                         <span class="invalid-feedback" role="alert">
                                         </span>
                                     </div>
                                 </div>
+                                <input id="date" type="text" class="form-control mt-3" name="date" value="{{ old('date') }}" placeholder="Fecha de inicio y fin" required>
+                                <span class="invalid-feedback" role="alert">
+                                </span>
+
                             </div>
 
                             <div class="form-group">
