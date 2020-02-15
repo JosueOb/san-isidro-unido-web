@@ -41,3 +41,4 @@ require('./phone_numbers');
 require('./public-service-create');
 require('./public-service-update');
 require('./public-service-show');
+require('./event-create');

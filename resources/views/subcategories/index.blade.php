@@ -54,7 +54,7 @@
                                     <tr>
                                         <td>{{$subcategory->id}}</td>
                                         <td>{{$subcategory->name}}</td>
-                                        <td>{{$subcategory->description ?? 'Sin descripción'}}</td>
+                                        <td>{{$subcategory->description ?: 'Sin descripción'}}</td>
                                         <td>{{$subcategory->category->name }}</td>
                                         
                                         @can('subcategories.edit')

@@ -64,7 +64,7 @@
 
                                 <select class="form-control" id="subcategory" name="subcategory" required disabled>
                                 </select>
-                                <p class="text-danger">No existen registos de categorías, porfavor comuniquese con el administrador</p>
+                                <p class="text-danger">No existen registos de categorías, por favor comuniquese con el administrador</p>
 
                                 @endif
                                 <span class="invalid-feedback" role="alert">

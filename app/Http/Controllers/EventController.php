@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
@@ -23,7 +24,11 @@ class EventController extends Controller
      */
     public function create()
     {
-        return view('events.create');
+        $category = Category::where('slug', 'evento')->first();
+        $subcategories = $category->subcategories()->get();
+        return view('events.create',[
+            'subcategories'=>$subcategories,
+        ]);
     }
 
     /**

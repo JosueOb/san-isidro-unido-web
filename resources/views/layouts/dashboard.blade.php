@@ -193,7 +193,7 @@
                         
 
 
-                        <li class="nav-item @yield('item-events')">
+                        <li class="nav-item @yield('item-event')">
                             <a class="nav-link" data-toggle="collapse" data-target="#collapseEvent" aria-expanded="true" aria-controls="collapseEvent">
                                 <i class="fas fa-calendar-week"></i>
                                 <span>Eventos</span>
