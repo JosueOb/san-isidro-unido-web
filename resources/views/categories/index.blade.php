@@ -53,7 +53,7 @@
                                     <tr>
                                         <td>{{$category->id}}</td>
                                         <td>{{$category->name}}</td>
-                                        <td>{{$category->description ?? 'Sin descripción'}}</td>
+                                        <td>{{$category->description ?: 'Sin descripción'}}</td>
                                         
                                         @can('categories.edit')
                                         <td width='10px'>
