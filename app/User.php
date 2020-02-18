@@ -166,6 +166,12 @@ class User extends Authenticatable implements MustVerifyEmail
         return $hasSomeActiveRol;
     }
     
+    //Se sobrescribe el método sendPasswordNotificatión para cambiar a un nuevo objeto 
+    //de la clase UserResetNotification con el contenido de la notificación traducida
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new UserResetPassword($token));
+    }
     //Se sobrescribe el método sendEmailVerificationNotification para cambiar a un nuevo objeto 
     //de la clase UserResetNotification con el contenido de la notificación traducida
     public function sendEmailVerificationNotification(){
@@ -215,13 +221,6 @@ class User extends Authenticatable implements MustVerifyEmail
 		return $this->roles()->whereNotIn('slug', ['invitado'])->first();
 	}
 
-	//Se sobrescribe el método sendPasswordNotificatión para cambiar a un nuevo objeto
-	//de la clase UserResetNotification con el contenido de la notificación traducida
-	public function sendPasswordResetNotification($token) {
-		$this->notify(new UserResetPassword($token));
-    }
-    
-
     /*TODO: RELACIONES MODELOS */
     //Relacion Uno a Muchos para obtener los perfiles sociales por usuario
 	public function social_profiles() {
@@ -232,6 +231,4 @@ class User extends Authenticatable implements MustVerifyEmail
 	public function devices() {
 		return $this->hasMany(Device::class)->orderBy('id', 'DESC');
 	}
-
-
 }

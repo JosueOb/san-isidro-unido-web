@@ -43,11 +43,11 @@ class ReportRequest extends FormRequest
             $numberOfOldImages = $this->has('images_report') ? count($this->get('images_report')) : 0;
             $totalImages = $numberOfNewImages + $numberOfOldImages;
             //Se obtiene al documento nuevo y antiguo
-            $numberOfNewDocument = $this->hasFile('document') ? count($this->get('document')) : 0;
+            $numberOfNewDocument = $this->hasFile('document') ? 1 : 0;
             //Se verifica si el campo contiene contiene un valor, ya que no se recibe un array
             $numberOfOldDocument = $this->has('old_document') ? 1 : 0;
-            // dd($this->get('old_document'));
             $totalDocuments = $numberOfNewDocument + $numberOfOldDocument;
+            // dd($totalDocuments);
 
             if($totalImages > env('NUMBER_IMAGES_ALLOWED')){
                 $rules += [
@@ -61,7 +61,7 @@ class ReportRequest extends FormRequest
                 ];
             }
 
-            if($totalDocuments > env('NUMBER_DOCUMENTS_ALLOWED')){
+            if($totalDocuments > 1){
                 $rules += [
                     'documents_allowed'=>'required',
                 ];
@@ -96,12 +96,12 @@ class ReportRequest extends FormRequest
             'images.*.mimes'=>'Los formatos permitidos son jpeg y png',
             'images.*.max'=>'El tamaño máximo para la :attribute es 1MB',
 
-            'document.file'=>'Solo se permite '.env('NUMBER_DOCUMENTS_ALLOWED').' documento',
+            'document.file'=>'Solo se permite un documento',
             'document.mimes'=> "El formato del documento no es permitido",
             'document.max'=>"El tamaño máximo para el :attribute es 5MB",
 
             'images_allowed.required'=>'Solo se permiten '.env('NUMBER_IMAGES_ALLOWED').' imágenes',
-            'documents_allowed.required'=>'Solo se permite '.env('NUMBER_DOCUMENTS_ALLOWED').' documento',
+            'documents_allowed.required'=>'Solo se permite un documento',
         ];
     }
     /**

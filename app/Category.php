@@ -55,5 +55,10 @@ class Category extends Model
    }
 
     /*TODO: FUNCIONES EXTRA MODELO */ 
-
+    /**
+    * get resoruce link
+    */
+    public function getLink(){
+        return \Storage::disk('public')->url($this->icon);
+    }
 }

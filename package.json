@@ -25,6 +25,7 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
+        "leaflet": "^1.6.0",
         "sweetalert2": "^8.17.6"
     }
 }

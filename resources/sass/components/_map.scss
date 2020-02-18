@@ -1,0 +1,15 @@
+.map {
+    // width: 100vh;
+    // height: auto;
+    height: 55vh;
+    // position: relative;
+
+    .info{
+        color: transparent !important;
+    }
+}
+@media(max-width:767.98px){
+    .map{
+        height: 45.5vh;
+    }
+}

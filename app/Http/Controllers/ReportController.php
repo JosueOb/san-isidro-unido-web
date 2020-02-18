@@ -6,7 +6,6 @@ use App\Category;
 use App\Http\Requests\ReportRequest;
 use App\Post;
 use App\Resource;
-use App\Helpers\OnesignalNotification;
 use Illuminate\Support\Facades\Storage;
 
 class ReportController extends Controller
@@ -72,7 +71,7 @@ class ReportController extends Controller
                 //     'post_id' => $report->id,
                 // ]);
                 Resource::create([
-                    'url'=> $image->store('images_reports', 'public'),
+                    'url'=> $image->store('report_images', 'public'),
                     'post_id' => $report->id,
                     'type'=>'image',
                 ]);
@@ -80,35 +79,11 @@ class ReportController extends Controller
         }
         if($request->file('document')){
             Resource::create([
-                'url'=> $request->file('document')->store('document_reports', 'public'),
+                'url'=> $request->file('document')->store('report_documents', 'public'),
                 'post_id' => $report->id,
                 'type'=>'document',
             ]);
         }
-        //dd($report->description);
-
-        // OnesignalNotification::sendNotificationBySegments(
-        //     $title = $report->title, 
-        //     $description = $report->description, 
-        //     $aditionalData = [
-        //         "post" => $report,
-        //         "category" => $report->category,
-        //         "subcategory" => $report->subcategory
-        // ]);
-
-        OnesignalNotification::sendNotificationByPlayersID(
-            $title = $report->title, 
-            $description = $report->description, 
-            $aditionalData = [
-                "post" => $report,
-                "category" => $report->category,
-                "subcategory" => $report->subcategory
-        ],
-                    $specificIDs = ["e5246923-2757-4373-9c5e-3ce3350380f2"]
-                );
-        // e5246923-2757-4373-9c5e-3ce3350380f2
-
-        dd('test');
         session()->flash('success', 'Informe registrado con éxito');
         return response()->json(['success'=>'Datos recibidos correctamente']);
     }
@@ -123,9 +98,11 @@ class ReportController extends Controller
     {
         // $images= $report->images()->get();
         $images = $report->resources()->where('type', 'image')->get();
+        $document = $report->resources()->where('type', 'document')->get();
         return view('reports.show',[
             'report'=>$report,
             'images'=>$images,
+            'resource'=>$document,
         ]);
     }
 
@@ -232,7 +209,7 @@ class ReportController extends Controller
                 //     'post_id' => $report->id,
                 // ]);
                 Resource::create([
-                    'url'=> $image->store('images_reports', 'public'),
+                    'url'=> $image->store('report_images', 'public'),
                     'post_id' => $report->id,
                     'type'=>'image',
                 ]);
@@ -240,7 +217,7 @@ class ReportController extends Controller
         }
         if($request->file('document')){
             Resource::create([
-                'url'=> $request->file('document')->store('document_reports', 'public'),
+                'url'=> $request->file('document')->store('report_documents', 'public'),
                 'post_id' => $report->id,
                 'type'=>'document',
             ]);

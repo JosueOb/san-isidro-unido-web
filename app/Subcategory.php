@@ -79,4 +79,10 @@ class Subcategory extends Model
         return $this->hasMany(PublicService::class)->orderBy('id', 'DESC');
     }
 
+    /**
+    * get resoruce link
+    */
+    public function getLink(){
+        return \Storage::disk('public')->url($this->icon);
+    }
 }

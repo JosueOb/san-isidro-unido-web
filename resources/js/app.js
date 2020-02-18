@@ -33,5 +33,11 @@ window.Vue = require('vue');
 
 require('./dropdown');
 require('./imagename');
+require('./icon-image');
 require('./report-create');
 require('./report-update');
+require('./map');
+require('./phone_numbers');
+require('./public-service-create');
+require('./public-service-update');
+require('./public-service-show');
