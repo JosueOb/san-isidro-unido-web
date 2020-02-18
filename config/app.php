@@ -161,11 +161,6 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-        App\Providers\UtilsProvider::class,
-        App\Providers\JwtAuthServiceProvider::class,
-        App\Providers\OnesignalServiceProvider::class,
-        App\Providers\ApiImagesServiceProvider::class,
-        Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -230,11 +225,6 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
-        'Utils' => App\Helpers\Utils::class,
-        'JwtAuth' => App\Helpers\JwtAuth::class,
-        'OnesignalNotification' => App\Helpers\OnesignalNotification::class,
-        'ApiImages' => App\Helpers\ApiImages::class,
 
     ],
 

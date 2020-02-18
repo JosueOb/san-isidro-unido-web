@@ -19,8 +19,6 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
-        \Spatie\Cors\Cors::class,
-        \Spatie\HttpLogger\Middlewares\HttpLogger::class
     ];
 
     /**
@@ -41,7 +39,7 @@ class Kernel extends HttpKernel
 
         'api' => [
             'throttle:60,1',
-            'bindings',            
+            'bindings',
         ],
     ];
 
@@ -63,8 +61,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'has.role' => \Caffeinated\Shinobi\Middleware\UserHasRole::class,
-        'api.user_auth' => \App\Http\Middleware\ApiAuthUserMiddleware::class,
-        "api.permission" => \App\Http\Middleware\ApiPermissionMiddleware::class
     ];
 
     /**

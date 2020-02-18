@@ -179,6 +179,7 @@ $(document).ready(function () {
                     $('#title').removeClass('is-invalid');
                     $('#description').removeClass('is-invalid');
                     $('#images').removeClass('is-invalid');
+                    $('#document').removeClass('is-invalid');
                     Swal.fire({
                         position: 'top-end',
                         type: 'success',

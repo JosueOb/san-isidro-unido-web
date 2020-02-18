@@ -13,12 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['prefix' => 'system'], function () {
-    Route::get('/logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
-    Route::get('/mapa', 'Api\ApiTestController@showMaptest');
-    Route::post('/mapa-receive-data', 'Api\ApiTestController@receiveMapData');
-});
-
 Route::get('/', function () {
     return view('welcome');
 });
@@ -59,7 +53,7 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::get('positions/{position}/edit', 'PositionController@edit')->name('positions.edit')->middleware('can:positions.edit');
     Route::put('positions/{position}', 'PositionController@update')->name('positions.update')->middleware('can:positions.edit');
     Route::delete('positions/{position}', 'PositionController@destroy')->name('positions.destroy')->middleware('can:positions.destroy');
-    Route::get('positions/{member}', function () {
+    Route::get('positions/{position}', function () {
         return abort(404);
     });
     //PROFILE
@@ -96,4 +90,35 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::delete('reports/{report}', 'ReportController@destroy')->name('reports.destroy')->middleware('can:reports.destroy');
     Route::get('reports/filters/{option}', 'ReportController@filters')->name('reports.filters')->middleware('can:reports.index');
     Route::get('search/reports','SearchController@searchReports')->name('search.reports')->middleware('can:reports.index');
+
+    //CATEGORIA
+    Route::get('category', 'CategoryController@index')->name('categories.index')->middleware('can:categories.index');
+    Route::get('category/{category}/edit', 'CategoryController@edit')->name('categories.edit')->middleware('can:categories.edit');
+    Route::put('category/{category}', 'CategoryController@update')->name('categories.update')->middleware('can:categories.edit');
+    Route::get('category/{category}', function () {
+        return abort(404);
+    });
+    // Route::get('category/create', 'CategoryController@create')->name('categories.create');
+    // Route::post('category/store', 'CategoryController@store')->name('categories.store');
+    // Route::delete('category/{category}', 'CategoryController@destroy')->name('categories.destroy')->middleware('can:positions.destroy');
+
+    //SUBCATEGORIA
+    Route::get('subcategory', 'SubcategoryController@index')->name('subcategories.index')->middleware('can:subcategories.index');
+    Route::get('subcategory/create', 'SubcategoryController@create')->name('subcategories.create')->middleware('can:subcategories.create');
+    Route::post('subcategory/store', 'SubcategoryController@store')->name('subcategories.store')->middleware('can:subcategories.create');
+    Route::get('subcategory/{subcategory}/edit', 'SubcategoryController@edit')->name('subcategories.edit')->middleware('can:subcategories.edit');
+    Route::put('subcategory/{subcategory}', 'SubcategoryController@update')->name('subcategories.update')->middleware('can:subcategories.edit');
+    Route::delete('subcategory/{subcategory}', 'SubcategoryController@destroy')->name('subcategories.destroy')->middleware('can:subcategories.destroy');
+    Route::get('subcategory/{subcategory}', function () {
+        return abort(404);
+    });
+    
+    //SERVICIOS PUBLICOS
+    Route::get('public-service', 'PublicServiceController@index')->name('publicServices.index')->middleware('can:publicServices.index');
+    Route::get('public-service/create', 'PublicServiceController@create')->name('publicServices.create')->middleware('can:publicServices.create');
+    Route::post('public-service/store', 'PublicServiceController@store')->name('publicServices.store')->middleware('can:publicServices.create');
+    Route::get('public-service/{publicService}', 'PublicServiceController@show')->name('publicServices.show')->middleware('can:publicServices.show');
+    Route::get('public-service/{publicService}/edit', 'PublicServiceController@edit')->name('publicServices.edit')->middleware('can:publicServices.edit');
+    Route::put('public-service/{publicService}', 'PublicServiceController@update')->name('publicServices.update')->middleware('can:publicServices.edit');
+    Route::delete('public-service/{publicService}', 'PublicServiceController@destroy')->name('publicServices.destroy')->middleware('can:publicServices.destroy');
 });

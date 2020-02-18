@@ -1,7 +1,6 @@
 <?php
 
 use App\Category;
-use App\Post;
 use Illuminate\Database\Seeder;
 
 class CategoriesTableSeeder extends Seeder
@@ -16,8 +15,33 @@ class CategoriesTableSeeder extends Seeder
         Category::create([
             'name'=>'Informe',
             'slug'=>'informe',
-            "categorizable_type" => Post::class,
-            'description'=>'Informe de las actividades realizadas por la directiva del barrio'
+            'description'=>'Informe de las actividades realizadas por la directiva del barrio',
+            'icon'=>env('CATEGORY_REPORT_ICON_DEFAULT')
         ]);
+        Category::create([
+            'name'=>'Servicio público',
+            'slug'=>'servicio-publico',
+            'description'=>'Categoría de servicios públicos',
+            'icon'=>env('CATEGORY_PUBLIC_SERVICE_ICON_DEFAULT')
+        ]);
+        Category::create([
+            'name'=>'Evento',
+            'slug'=>'evento',
+            'description'=>'Categoría de eventos',
+            'icon'=>env('CATEGORY_EVENT_ICON_DEFAULT')
+        ]);
+        Category::create([
+            'name'=>'Emergencia',
+            'slug'=>'emergencia',
+            'description'=>'Categoría de emergencias',
+            'icon'=>env('CATEGORY_EMERGENCY_ICON_DEFAULT')
+        ]);
+        Category::create([
+            'name'=>'Problema',
+            'slug'=>'problema',
+            'description'=>'Categoría de problemas',
+            'icon'=>env('CATEGORY_PROBLEM_ICON_DEFAULT')
+        ]);
+        
     }
 }

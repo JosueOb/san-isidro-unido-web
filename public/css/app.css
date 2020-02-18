@@ -17247,3 +17247,34 @@ h6 {
   }
 }
 
+.map {
+  height: 55vh;
+}
+
+.map .info {
+  color: transparent !important;
+}
+
+@media (max-width: 767.98px) {
+  .map {
+    height: 45.5vh;
+  }
+}
+
+.input-group-prepend {
+  display: flex;
+  margin-right: 1px;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+
+#phone_numbers {
+  min-width: 150px;
+}
+
+#phone_group > #phone_item > #phone_bagde > #delete_phone {
+  margin-left: 2.5px;
+  color: red;
+  cursor: pointer;
+}
+

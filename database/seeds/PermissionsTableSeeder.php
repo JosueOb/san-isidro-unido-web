@@ -189,5 +189,85 @@ class PermissionsTableSeeder extends Seeder
             'private'=>false,
             'group'=>'informe',
         ]);
+        //Permisos sobre el módulo de categorías
+        Permission::create([
+            'name'=>'Listar las categorías',
+            'slug'=>'categories.index',
+            'description'=>'Lista las categorías por defecto',
+            'private'=>true,
+            'group'=>'categoría',
+        ]);
+        Permission::create([
+            'name'=>'Editar categoría',
+            'slug'=>'categories.edit',
+            'description'=>'Editar las categorías registradas',
+            'private'=>true,
+            'group'=>'categoría',
+        ]);
+        //Permisos sobre el módulo de subcategorías
+        Permission::create([
+            'name'=>'Listar las subcategorías',
+            'slug'=>'subcategories.index',
+            'description'=>'Lista las subcategorías registradas',
+            'private'=>true,
+            'group'=>'subcategoría',
+        ]);
+        Permission::create([
+            'name'=>'Crear subcategoría',
+            'slug'=>'subcategories.create',
+            'description'=>'Registrar las subcategorías',
+            'private'=>true,
+            'group'=>'subcategoría',
+        ]);
+        Permission::create([
+            'name'=>'Editar subcategoría',
+            'slug'=>'subcategories.edit',
+            'description'=>'Editar las subcategorías registradas',
+            'private'=>true,
+            'group'=>'subcategoría',
+        ]);
+        Permission::create([
+            'name'=>'Eliminar subcategoría',
+            'slug'=>'subcategories.destroy',
+            'description'=>'Eliminar registros de las subcategorías registradas',
+            'private'=>true,
+            'group'=>'subcategoría',
+        ]);
+        //Permisos sobre el módulo de servicio público
+        Permission::create([
+            'name'=>'Listar servicios públicos',
+            'slug'=>'publicServices.index',
+            'description'=>'Lista los registros de servicios públicos',
+            'private'=>false,
+            'group'=>'servico público',
+        ]);
+        Permission::create([
+            'name'=>'Crear servicio público',
+            'slug'=>'publicServices.create',
+            'description'=>'Registra los servicios públicos',
+            'private'=>false,
+            'group'=>'servico público',
+        ]);
+        Permission::create([
+            'name'=>'Ver detalle de servicio público',
+            'slug'=>'publicServices.show',
+            'description'=>'Ver en detalle cada uno de los servicios públicos registrados',
+            'private'=>false,
+            'group'=>'servico público',
+        ]);
+        Permission::create([
+            'name'=>'Editar servicio público',
+            'slug'=>'publicServices.edit',
+            'description'=>'Edita los registros de servicios públicos',
+            'private'=>false,
+            'group'=>'servico público',
+        ]);
+        Permission::create([
+            'name'=>'Eliminar servicios públicos',
+            'slug'=>'publicServices.destroy',
+            'description'=>'Elimina los registros de servicios público',
+            'private'=>false,
+            'group'=>'servico público',
+        ]);
     }
 }

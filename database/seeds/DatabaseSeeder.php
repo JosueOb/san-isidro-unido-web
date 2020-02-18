@@ -1,5 +1,6 @@
 <?php
 
+use App\Subcategory;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -21,19 +22,7 @@ class DatabaseSeeder extends Seeder
         $this->call(UsersTableSeeder::class);
         //LLamado al seeder CategoriesTableSeeder
         $this->call(CategoriesTableSeeder::class);
-
-        //API SEEDERS
-        //TODO: LLamado al seeder Category
-        $this->call(ApiCategorySeeder::class);
-        //TODO: LLamado al seeder Subcategory
-        $this->call(ApiSubCategorySeeder::class);
-        //TODO: LLamado al seeder Usuarios
-        $this->call(ApiUserSeeder::class);
-        //TODO: LLamado al seeder Post
-        $this->call(ApiPostSeeder::class);
-        //TODO: LLamado al seeder Public Service 
-        $this->call(ApiPublicServiceSeeder::class);
-        //TODO: Llamado al Seeder Directives
-        $this->call(ApiDirectivesSeeder::class);
+        //Llamando al seeder de SubcategoriesTableSeefer
+        $this->call(SubcategoriesTableSeeder::class);
     }
 }

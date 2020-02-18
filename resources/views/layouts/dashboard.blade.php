@@ -20,9 +20,17 @@
     <link rel="icon" type="image/png" href="{{asset('storage/img/logo.png')}}">
 
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    {{-- <link type="text/css" rel="stylesheet" href="{{ mix('css/app.css') }}"> --}}
-    
+    {{-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> --}}
+    <link type="text/css" rel="stylesheet" href="{{ mix('css/app.css') }}">
+
+    <!--Leaflet CSS-->
+    <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+    crossorigin=""
+  />
+      
 </head>
 <body>
     <div class="container-fluid">
@@ -62,9 +70,6 @@
                                     @can('roles.index')
                                         <a class="collapse-item @yield('item-role-list')" href="{{route('roles.index')}}"><i class="fas fa-list"></i>Listar roles</a>
                                     @endcan
-                                    {{-- @can('roles.create')
-                                        <a class="collapse-item @yield('item-role-create')" href="{{ route('roles.create')}}"><i class="fas fa-plus-circle"></i>Crear rol</a>
-                                    @endcan --}}
                                 </div>
                             </div>
                         </li>
@@ -133,7 +138,43 @@
                         </li>
                         @endcanany
 
-                        <li class="nav-item @yield('item-events')">
+                        @canany(['categories.index','categories.edit'])
+                        <li class="nav-item @yield('item-category')">
+                            <a class="nav-link" data-toggle="collapse" data-target="#collapseCategory" aria-expanded="true" aria-controls="collapseCategory">
+                                <i class="fas fa-tag"></i>
+                                <span>Categorías</span>
+                            </a>
+                            <div id="collapseCategory" class="collapse @yield('item-category-collapse')" >
+                                <div class="collapse-inner">
+                                    <a class="collapse-item @yield('item-category-list')" href="{{ route('categories.index')}}"><i class="fas fa-list"></i>Listar categorías</a>
+                                    {{-- <a class="collapse-item @yield('item-category-create')" href="{{ route('categories.create') }}"><i class="fas fa-plus-circle"></i>Agregar categoría</a> --}}
+                            </div>
+                            </div>
+                        </li>
+                        @endcanany
+
+                        @canany(['subcategories.index','subcategories.create'])
+                        <li class="nav-item @yield('item-subcategory')">
+                            <a class="nav-link" data-toggle="collapse" data-target="#collapseSubcategory" aria-expanded="true" aria-controls="collapseSubcategory">
+                                <i class="fas fa-tags"></i>
+                                <span>Subcategorías</span>
+                            </a>
+                            <div id="collapseSubcategory" class="collapse @yield('item-subcategory-collapse')" >
+                                <div class="collapse-inner">
+                                    @can('subcategories.index')
+                                    <a class="collapse-item @yield('item-subcategory-list')" href="{{route('subcategories.index')}}"><i class="fas fa-list"></i>Listar subcategorías</a>
+                                    @endcan
+                                    @can('subcategories.create')
+                                    <a class="collapse-item @yield('item-subcategory-create')" href="{{route('subcategories.create')}}"><i class="fas fa-plus-circle"></i>Agregar subcategoría</a>
+                                    @endcan
+                                </div>
+                            </div>
+                        </li>
+                        @endcanany
+
+                        
+
+                        {{-- <li class="nav-item @yield('item-events')">
                             <a class="nav-link" data-toggle="collapse" data-target="#collapseEvent" aria-expanded="true" aria-controls="collapseEvent">
                                 <i class="fas fa-calendar-week"></i>
                                 <span>Eventos</span>
@@ -142,10 +183,28 @@
                                 <div class="collapse-inner">
                                     <a class="collapse-item @yield('item-event-list')" href="#"><i class="fas fa-list"></i>Listar eventos</a>
                                     <a class="collapse-item @yield('item-event-create')" href="#"><i class="fas fa-calendar-plus"></i></i>Registrar evento</a>
-                                    <a class="collapse-item @yield('item-event-category')" href="#"><i class="fas fa-plus-circle"></i></i></i>Categorías de eventos</a>
+                            </div>
+                            </div>
+                        </li> --}}
+
+                        @canany(['publicServices.index','publicServices.create'])
+                        <li class="nav-item @yield('item-public-service')">
+                            <a class="nav-link" data-toggle="collapse" data-target="#collapsePublicService" aria-expanded="true" aria-controls="collapsePublicService">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Servicios públicos</span>
+                            </a>
+                            <div id="collapsePublicService" class="collapse @yield('item-public-service-collapse')" >
+                                <div class="collapse-inner">
+                                    @can('publicServices.index')
+                                    <a class="collapse-item @yield('item-public-service-list')" href="{{ route('publicServices.index') }}"><i class="fas fa-list"></i>Listar servicios publicos</a>
+                                    @endcan
+                                    @can('publicServices.create')
+                                    <a class="collapse-item @yield('item-public-service-create')" href="{{ route('publicServices.create') }}"><i class="fas fa-calendar-plus"></i></i>Registrar servicio público</a>
+                                    @endcan
                             </div>
                             </div>
                         </li>
+                        @endcanany
                         
                     </ul>
                 </div>
