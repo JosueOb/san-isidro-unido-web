@@ -119,6 +119,78 @@ class ApiPostController extends ApiBaseController
         }
     }
 
+    /*
+    * Aceptar atender una emergencia(Policia)
+    
+    */
+    public function atenderEmergencia(Request $request){
+        $token_decoded = $request->get('token');
+        $validatorAtenderEmergencia = Validator::make($request->all(), [
+            "emergencia_id" => ['required', 'int'],
+        ]);
+        //dd($token_decoded);
+        if ($validatorAtenderEmergencia->fails()) {
+            return $this->sendError(400, "Datos no válidos", $validatorAtenderEmergencia->messages());
+        }
+        $postId = $request->get("emergencia_id");
+        //Cambiar estado post
+        $emergencia = Post::findById($postId)->first();
+        if (is_null($emergencia)) {
+            return $this->sendError(400, "Publicación No existe", ["emergencia" => "publicación no existe"]);
+        }
+        $post_info_log = json_decode($emergencia->additional_data);
+        $post_info_log["log_emergency"]["policia"] = $token_decoded->user;
+        $post_info_log["log_event"] = (array_key_exists("log_event",$post_info_log) && $post_info_log["log_event"]) ? $post_info_log["log_event"]: null;
+        $post_info_log["log_post"] = (array_key_exists("log_post",$post_info_log) && $post_info_log["log_post"]) ? $post_info_log["log_post"]: null;
+        //dd($post_info_log);
+        // $array = [
+        //     "log_event" => [
+        //           "responsable" => "Juanito" 
+        //        ], 
+        //     "log_post" => [
+        //              "moderador" => [
+        //                 "firstname" => "5" 
+        //              ] 
+        //           ], 
+        //     "log_emergency" => [
+        //                    "policia" => [
+        //                       "firstname" => "juan" 
+        //                    ] 
+        //                 ] 
+        //  ]; 
+        // $new_info
+        // dd($post_info_log);
+        $emergencia->is_attended = 1;
+        $emergencia->additional_data = json_encode($post_info_log);
+        // dd($emergencia);
+        // die();
+        // $emergencia->save();
+        //Notificar al usuario que creo el post sobre quien lo va a atender
+        $user = User::findById($emergencia->user_id)->first();
+        if(!is_null($user)){
+            //$user->notify(new PostNotification($emergencia));
+            $user_devices = OnesignalNotification::getUserDevices($emergencia->user_id);
+           
+            if(!is_null($user_devices) && count($user_devices) > 0){
+                dd("hay dispositivos para enviar", $user_devices);
+                //Enviar notification a todos
+               OnesignalNotification::sendNotificationByPlayersID(
+                   $title = $new_post->title, 
+                   $description = substr($new_post->description, 25), 
+                   $aditionalData = [
+                       "title" => $title,
+                       "message" => $description,
+                       "post" => $new_post
+                   ],
+                   $specificIDs = []
+               );
+            }
+            dd("no hay dispositivos para enviar", $user_devices);
+            die();
+        }
+        dd("no se encontro usuario");
+    }
+
     /**
      * Crea una publicación de emergencia
      * @param \Illuminate\Http\Request $request
@@ -133,7 +205,6 @@ class ApiPostController extends ApiBaseController
                 'title' => 'required|string',
                 'description' => 'required|string',
                 "ubication" => ['required'],
-
                 "ubication.latitude" => ['required', 'numeric', 'regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/'],
 
                 "ubication.longitude" => ['required', 'numeric', 'regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/'],

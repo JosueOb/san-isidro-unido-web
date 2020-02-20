@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\ApiBaseController;
 use App\Post;
 use App\Role;
 use App\Rules\Api\Base64FormatImage;
+use App\Rules\Api\ValidarCedula;
 use App\Rules\Api\ProviderData;
 use App\SocialProfile;
 use App\User;
@@ -246,16 +247,21 @@ class ApiUserController extends ApiBaseController
             //password_confirmation
             $validatorPassword = Validator::make($request->all(), [
                 "basic_service_image" => ['required', 'string', new Base64FormatImage],
+                "cedula" => ["required", "string", new ValidarCedula]
             ]);
             $image_service_b64 = $request->get('basic_service_image');
+            $cedula = $request->get('cedula');
             // Verificar si el validador falla
+            //dd($token_decoded);
             if (!$validatorPassword->fails()) {
                 $user = User::findById($token_decoded->user->id)->first();
+                //dd($user);
                 //Validar si existe el usuario
                 if (!is_null($user)) {
                     $imageApi = new ApiImages();
                     $image_name = $imageApi->saveAfiliationImageApi($image_service_b64);
                     $user->basic_service_image = $image_name;
+                    $user->cedula = $cedula;
                     $user->save();
                     $token = $jwtAuth->getToken($user->email);
                     return $this->sendResponse(200, "Afiliacion Solicitada Correctamente", ['token' => $token]);

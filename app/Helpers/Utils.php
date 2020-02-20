@@ -100,4 +100,45 @@ class Utils
             throw new \Exception("Usuario no existe", 500);
         }
     }
+
+    /**
+     * Verifica si una cedula es válida
+     * @param string  $cedula
+     *
+     * @return boolean
+     */
+    public function verificarCedula($validarCedula) {
+        $aux = 0;
+        $par = 0;
+        $impar = 0;
+        $verifi;
+        //Numeros Pares
+        for ($i = 0; $i < 9; $i += 2) {
+          $aux = 2 * (int)$validarCedula[$i];
+          if ($aux > 9) {
+            $aux -= 9;
+          }
+          $par += $aux;
+        }
+        //Numeros Impares
+        for ($i = 1; $i < 9; $i += 2) {
+          $impar += (int)$validarCedula[$i];
+        }
+        //Calcular numero auxiliar
+        $aux = $par + $impar;
+        //Calcular número de verificación
+        if ($aux % 10 !== 0) {
+          $verifi = 10 - ($aux % 10);
+        } else {
+          $verifi = 0;
+        }
+        //Verificar que numero verificacion coincida con el numero en la posicion 9
+        if ($verifi === (int)$validarCedula[9]) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+
+
 }
