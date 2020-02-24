@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d1a015164f55170a3abf4d6c59461944",
+    "content-hash": "98f1f9f043568a6fd5dec1474dde5761",
     "packages": [
         {
             "name": "caffeinated/shinobi",
@@ -59,33 +59,6 @@
                 "shinobi"
             ],
             "time": "2019-04-22T15:42:36+00:00"
-        },
-        {
-            "name": "calcinai/strut",
-            "version": "v0.2.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/calcinai/strut.git",
-                "reference": "6cd70c104d5537b71fc55d09c0112de9e25acc7e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/calcinai/strut/zipball/6cd70c104d5537b71fc55d09c0112de9e25acc7e",
-                "reference": "6cd70c104d5537b71fc55d09c0112de9e25acc7e",
-                "shasum": ""
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Calcinai\\Strut\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "Library for creating and manipulating Swagger schemas",
-            "time": "2018-01-15T20:29:15+00:00"
         },
         {
             "name": "darkaonline/l5-swagger",
@@ -541,24 +514,24 @@
         },
         {
             "name": "fideloper/proxy",
-            "version": "4.2.2",
+            "version": "4.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fideloper/TrustedProxy.git",
-                "reference": "790194d5d3da89a713478875d2e2d05855a90a81"
+                "reference": "ec38ad69ee378a1eec04fb0e417a97cfaf7ed11a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fideloper/TrustedProxy/zipball/790194d5d3da89a713478875d2e2d05855a90a81",
-                "reference": "790194d5d3da89a713478875d2e2d05855a90a81",
+                "url": "https://api.github.com/repos/fideloper/TrustedProxy/zipball/ec38ad69ee378a1eec04fb0e417a97cfaf7ed11a",
+                "reference": "ec38ad69ee378a1eec04fb0e417a97cfaf7ed11a",
                 "shasum": ""
             },
             "require": {
-                "illuminate/contracts": "^5.0|^6.0|^7.0",
+                "illuminate/contracts": "^5.0|^6.0|^7.0|^8.0",
                 "php": ">=5.4.0"
             },
             "require-dev": {
-                "illuminate/http": "^5.0|^6.0|^7.0",
+                "illuminate/http": "^5.0|^6.0|^7.0|^8.0",
                 "mockery/mockery": "^1.0",
                 "phpunit/phpunit": "^6.0"
             },
@@ -591,7 +564,7 @@
                 "proxy",
                 "trusted proxy"
             ],
-            "time": "2019-12-20T13:11:11+00:00"
+            "time": "2020-02-22T01:51:47+00:00"
         },
         {
             "name": "firebase/php-jwt",
@@ -824,73 +797,6 @@
                 "url"
             ],
             "time": "2019-07-01T23:21:34+00:00"
-        },
-        {
-            "name": "hcesrl/laravel-swagger-api",
-            "version": "v0.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/HCESrl/laravel-swagger-api.git",
-                "reference": "dd2d7e1028b1a47e76e89a69b27e6912c0343ae2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/HCESrl/laravel-swagger-api/zipball/dd2d7e1028b1a47e76e89a69b27e6912c0343ae2",
-                "reference": "dd2d7e1028b1a47e76e89a69b27e6912c0343ae2",
-                "shasum": ""
-            },
-            "require": {
-                "calcinai/strut": "^0.2",
-                "ext-json": "*",
-                "illuminate/contracts": "^5.5|^6.0",
-                "illuminate/filesystem": "^5.5|^6.0",
-                "illuminate/http": "^5.5|^6.0",
-                "illuminate/routing": "^5.5|^6.0",
-                "illuminate/support": "^5.5|^6.0",
-                "php": ">=7.1",
-                "swagger-api/swagger-ui": "^3.9"
-            },
-            "require-dev": {
-                "orchestra/testbench": "^4.3",
-                "phpunit/phpunit": "^8.0"
-            },
-            "suggest": {
-                "barryvdh/laravel-cors": "Required to send CORS headers (^0.10.0)"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "LaravelApi\\ServiceProvider"
-                    ],
-                    "aliases": {
-                        "Api": "LaravelApi\\Facade"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "LaravelApi\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabio Savina",
-                    "email": "fabio.savina@gmail.com"
-                }
-            ],
-            "description": "API Swagger package for Laravel.",
-            "homepage": "https://github.com/HCESrl/laravel-swagger-api",
-            "keywords": [
-                "api",
-                "laravel",
-                "swagger"
-            ],
-            "time": "2019-11-06T09:56:08+00:00"
         },
         {
             "name": "jakub-onderka/php-console-color",
@@ -1946,16 +1852,16 @@
         },
         {
             "name": "ramsey/uuid",
-            "version": "3.9.2",
+            "version": "3.9.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ramsey/uuid.git",
-                "reference": "7779489a47d443f845271badbdcedfe4df8e06fb"
+                "reference": "7e1633a6964b48589b142d60542f9ed31bd37a92"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ramsey/uuid/zipball/7779489a47d443f845271badbdcedfe4df8e06fb",
-                "reference": "7779489a47d443f845271badbdcedfe4df8e06fb",
+                "url": "https://api.github.com/repos/ramsey/uuid/zipball/7e1633a6964b48589b142d60542f9ed31bd37a92",
+                "reference": "7e1633a6964b48589b142d60542f9ed31bd37a92",
                 "shasum": ""
             },
             "require": {
@@ -2029,7 +1935,7 @@
                 "identifier",
                 "uuid"
             ],
-            "time": "2019-12-17T08:18:51+00:00"
+            "time": "2020-02-21T04:36:14+00:00"
         },
         {
             "name": "rap2hpoutre/laravel-log-viewer",
