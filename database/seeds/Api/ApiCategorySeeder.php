@@ -24,7 +24,6 @@ class ApiCategorySeeder extends Seeder
         DB::table('categories')->insert([
             'name' => 'Emergencia',
             'slug' => 'emergencia',
-            "categorizable_type" => Post::class,
             'image' => 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/alarm.svg?sanitize=true',
             'description' => 'Categoria para Publicaciones de Emergencia',
             'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
@@ -33,7 +32,6 @@ class ApiCategorySeeder extends Seeder
         $idTwo = DB::table('categories')->insertGetId([
             'name' => 'Problema Social',
             'slug' => 'problema_social',
-            "categorizable_type" => Post::class,
             'image' => 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/protest.svg?sanitize=true',
             'description' => 'Categoria para Problemas Sociales',
             'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
@@ -77,16 +75,22 @@ class ApiCategorySeeder extends Seeder
         DB::table('categories')->insert([
             'name' => 'Evento',
             'slug' => 'evento',
-            "categorizable_type" => Post::class,
             'image' => 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/calendar.svg?sanitize=true',
             'description' => 'Categoria para Eventos',
+            'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
+        ]);
+         //TODO:Cuarta Categoria
+         DB::table('categories')->insert([
+            'name' => 'Informe',
+            'slug' => 'informe',
+            'image' => 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/calendar.svg?sanitize=true',
+            'description' => 'Categoria para Servicios Publicos',
             'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
         ]);
         //TODO:Quinta Categoria
         DB::table('categories')->insert([
             'name' => 'Servicio Publico',
             'slug' => 'servicio-publico',
-            "categorizable_type" => PublicService::class,
             'image' => 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/calendar.svg?sanitize=true',
             'description' => 'Categoria para Servicios Publicos',
             'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()

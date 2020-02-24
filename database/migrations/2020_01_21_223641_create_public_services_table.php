@@ -18,9 +18,11 @@ class CreatePublicServicesTable extends Migration
             $table->string('name', 60);
             $table->text('description')->nullable();
             $table->json('ubication')->nullable();
-            $table->unsignedBigInteger('subcategory_id')->index();
-            $table->foreign('subcategory_id')->references('id')->on('subcategories')->onDelete('cascade');
+            $table->unsignedBigInteger('category_id')->index();
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->timestamps();
+            $table->engine = 'InnoDB';
+            $table->charset = 'utf8mb4';
         });
     }
 

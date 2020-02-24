@@ -26,6 +26,7 @@ class ApiUserSeeder extends Seeder {
             'avatar' => "https://ui-avatars.com/api/?name=Jose+Maza&size=255",
             'basic_service_image' => "https://ui-avatars.com/api/?name=basicserviceimage&size=400",
             'state'=>true,
+            "cedula" => "1102655386",
             'password' => password_hash('12345', PASSWORD_DEFAULT),
             'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
         ]);
@@ -115,6 +116,7 @@ class ApiUserSeeder extends Seeder {
             'avatar' => "https://ui-avatars.com/api/?name=Bolivar+Cumbicus&size=255",
             'state'=>true,
             'basic_service_image' => "https://ui-avatars.com/api/?name=basicserviceimage&size=400",
+            "cedula" => "1103078059",
             'password' => password_hash('12345', PASSWORD_DEFAULT),
             'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
         ]);
@@ -140,7 +142,8 @@ class ApiUserSeeder extends Seeder {
         //TODO:Quinto Usuario
 		$idFive = DB::table('users')->insert([
 			'first_name' => 'Rodrigo',
-			'last_name' => 'Sanchez',
+            'last_name' => 'Sanchez',
+            "cedula" => "1725452609",
             'email' => 'rodrigo@yahoo.com',
             'basic_service_image' => "https://ui-avatars.com/api/?name=basicserviceimage&size=400",
             'state'=>true,

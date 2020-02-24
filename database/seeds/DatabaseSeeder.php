@@ -20,8 +20,6 @@ class DatabaseSeeder extends Seeder
         $this->call(PositionsTableSeeder::class);
         //LLamado al seeder UsersTableSeeder
         $this->call(UsersTableSeeder::class);
-        //LLamado al seeder CategoriesTableSeeder
-        $this->call(CategoriesTableSeeder::class);
 
         //API SEEDERS
         //TODO: LLamado al seeder Category
@@ -36,7 +34,5 @@ class DatabaseSeeder extends Seeder
         $this->call(ApiPublicServiceSeeder::class);
         //TODO: Llamado al Seeder Directives
         $this->call(ApiDirectivesSeeder::class);
-        //Llamando al seeder de SubcategoriesTableSeefer
-        $this->call(SubcategoriesTableSeeder::class);
     }
 }

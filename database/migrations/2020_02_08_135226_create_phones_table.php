@@ -19,6 +19,8 @@ class CreatePhonesTable extends Migration
             $table->unsignedBigInteger('public_service_id')->index();
             $table->foreign('public_service_id')->references('id')->on('public_services')->onDelete('cascade');
             $table->timestamps();
+            $table->engine = 'InnoDB';
+            $table->charset = 'utf8mb4';
         });
     }
 

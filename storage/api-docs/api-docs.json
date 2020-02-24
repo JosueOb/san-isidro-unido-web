@@ -1,0 +1,222 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "San Isidro Unido API",
+        "description": "Documentación para la API del proyecto de San Isidro Unido",
+        "contact": {
+            "email": "stalinct97@gmail.com"
+        },
+        "version": "1.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000/"
+        }
+    ],
+    "paths": {
+        "/api/v1/categorias": {
+            "get": {
+                "tags": [
+                    "Categorias"
+                ],
+                "summary": "Listado de categorias",
+                "description": "Obtener el listado de categorias",
+                "operationId": "App\\Http\\Controllers\\Api\\ApiCategoryController::index",
+                "responses": {
+                    "200": {
+                        "description": "Listado de todas las categorias."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                }
+            }
+        },
+        "/api/v1/categorias/{id}": {
+            "get": {
+                "tags": [
+                    "Categorias"
+                ],
+                "summary": "Detalle de una categoría",
+                "description": "Obtener el detalle de una categoría",
+                "operationId": "App\\Http\\Controllers\\Api\\ApiCategoryController::detail",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la categoría a retornar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detalle de una categoría"
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                }
+            }
+        },
+        "/api/v1/categorias/{slug}": {
+            "get": {
+                "tags": [
+                    "Categorias"
+                ],
+                "summary": "Categorias de acuerdo a su slug",
+                "description": "Obtener el listado de categorias de acuerdo al slug",
+                "operationId": "App\\Http\\Controllers\\Api\\ApiCategoryController::filterCategories",
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "Slug de la categoria a retornar",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Listado de Categorias de acuerdo al slug solicitado"
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                }
+            }
+        },
+        "/api/v1/categorias/{slug}/subcategorias": {
+            "get": {
+                "tags": [
+                    "Categorias"
+                ],
+                "summary": "Listado de Subcategorias de una categoria",
+                "description": "Obtener el listado de subcategorias de una categoria de acuerdo al slug",
+                "operationId": "App\\Http\\Controllers\\Api\\ApiCategoryController::getSubcategory",
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "Slug de la categoria a retornar",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Listado de Subcategorias de una categoria de acuerdo al slug solicitado"
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                }
+            }
+        },
+        "/api/v1/servicios-publicos": {
+            "get": {
+                "tags": [
+                    "Servicios Públicos"
+                ],
+                "summary": "Listado de servicios públicos",
+                "description": "Obtener el listado de servicios públicos existentes",
+                "operationId": "App\\Http\\Controllers\\Api\\ApiPublicServiceController::index",
+                "responses": {
+                    "200": {
+                        "description": "Listado de todos los servicios públicos."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                }
+            }
+        },
+        "/api/v1/servicios-publicos/{id}": {
+            "get": {
+                "tags": [
+                    "Servicios Públicos"
+                ],
+                "summary": "Detalle de un servicio público",
+                "description": "Obtener el detalle de un servicio público existente",
+                "operationId": "App\\Http\\Controllers\\Api\\ApiPublicServiceController::detail",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del servicio público a retornar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detalle de un servicio público"
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                }
+            }
+        },
+        "/api/v1/servicios-publicos/categorias": {
+            "get": {
+                "tags": [
+                    "Servicios Públicos"
+                ],
+                "summary": "Listado de Categorias de los servicios públicos",
+                "description": "Obtener el listado de categorias de los servicios públicos",
+                "operationId": "App\\Http\\Controllers\\Api\\ApiPublicServiceController::getCategories",
+                "responses": {
+                    "200": {
+                        "description": "Listado de Categorias de los servicios públicos."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                }
+            }
+        },
+        "/api/v1/servicios-publicos/categoria/{slug}": {
+            "get": {
+                "tags": [
+                    "Servicios Públicos"
+                ],
+                "summary": "Servicios Públicos de una categoria",
+                "description": "Obtener el listado de servicios públicos relacionados a la categoria solicitada",
+                "operationId": "App\\Http\\Controllers\\Api\\ApiPublicServiceController::filterByCategory",
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "Slug de la categoria de los servicios públicos a retornar",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Listado de Servicios Públicos de una categoría en especifíco"
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                }
+            }
+        }
+    }
+}

@@ -10,6 +10,7 @@
     "require": {
         "php": "^7.1.3",
         "caffeinated/shinobi": "4.0",
+        "darkaonline/l5-swagger": "5.8.*",
         "fideloper/proxy": "^4.0",
         "firebase/php-jwt": "3.0.0",
         "guzzlehttp/guzzle": "~6.0",

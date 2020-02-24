@@ -17,11 +17,8 @@ class ApiPublicServiceSeeder extends Seeder
     public function run()
     {
         $faker = \Faker\Factory::create();
-        $category = Category::slug('servicio-publico')->first();
-        if(!$category){
-            return;
-        }
-        $publicServicesCategories = Subcategory::categoryId($category->id)->get();
+        $faker->addProvider(new Faker\Provider\Internet($faker) );
+        $publicServicesCategories = Category::slug('servicio-publico')->get();
         $numServices = 5;
         $directions = [
             ["latitude" => -0.139413, "longitude" => -78.472171],
@@ -37,6 +34,7 @@ class ApiPublicServiceSeeder extends Seeder
                 DB::table('public_services')->insertGetId([
                     'name' => $name,
                     'description' => "$name con la mejor atención al mejor precio",
+                    "email" => $faker->email,
                     'ubication' => json_encode([
                         "latitude" => $directions[$indexRandom]['latitude'],
                         "longitude" => $directions[$indexRandom]['longitude'],

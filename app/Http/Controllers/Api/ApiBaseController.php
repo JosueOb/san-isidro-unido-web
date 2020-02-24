@@ -4,6 +4,16 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller as Controller;
 use App\User;
 
+
+/**
+ * @OA\Info(title="San Isidro Unido API", description="Documentación para la API del proyecto de San Isidro Unido",version="1.0",
+ *   @OA\Contact(
+ *     email="stalinct97@gmail.com"
+ *   )
+ * )
+ *
+ * @OA\Server(url="http://localhost:8000/")
+ */
 class ApiBaseController extends Controller {
 	/**
 	 * Envia una respuesta correcta en Formato JSON
