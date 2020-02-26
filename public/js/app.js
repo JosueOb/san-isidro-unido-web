@@ -70206,6 +70206,8 @@ __webpack_require__(/*! ./map */ "./resources/js/map.js");
 
 __webpack_require__(/*! ./phone_numbers */ "./resources/js/phone_numbers.js");
 
+__webpack_require__(/*! ./time-date */ "./resources/js/time-date.js");
+
 __webpack_require__(/*! ./public-service-create */ "./resources/js/public-service-create.js");
 
 __webpack_require__(/*! ./public-service-update */ "./resources/js/public-service-update.js");
@@ -70332,11 +70334,6 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-// commonjs
-var flatpickr = __webpack_require__(/*! flatpickr */ "./node_modules/flatpickr/dist/flatpickr.js");
-
-__webpack_require__(/*! flatpickr/dist/themes/light.css */ "./node_modules/flatpickr/dist/themes/light.css");
-
 
 
 
@@ -70397,37 +70394,6 @@ $(document).ready(function () {
   if ($('#map').length != 0 && $('#event-create').length != 0) {
     loadMap();
     Object(_image_gallery__WEBPACK_IMPORTED_MODULE_3__["resetNumberOfImagesAllowed"])(3);
-    var fecha = flatpickr('#date', {
-      locale: {
-        firstDayOfWeek: 1,
-        weekdays: {
-          shorthand: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
-          longhand: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
-        },
-        months: {
-          shorthand: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Оct', 'Nov', 'Dic'],
-          longhand: ['Enero', 'Febrero', 'Мarzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
-        }
-      },
-      mode: "range",
-      minDate: "today",
-      // defaultDate: "today",
-      dateFormat: "Y-m-d",
-      allowInput: true,
-      inline: false
-    });
-    var horaInicio = flatpickr('#start-time', {
-      enableTime: true,
-      noCalendar: true,
-      dateFormat: "H:i" // allowInput:true,
-
-    });
-    var horaFinal = flatpickr('#end-time', {
-      enableTime: true,
-      noCalendar: true,
-      dateFormat: "H:i"
-    });
-    $('#start-time').removeAttr('readonly'); // $('#date').removeAttr('readonly');
   }
 
   $('#event-create').on('submit', function (event) {
@@ -70566,7 +70532,8 @@ var previewImages = function previewImages(arrayImages) {
 };
 
 $('#images').on('change', function (event) {
-  //Se obtiene las imagenes del input
+  $('#inputImages').removeClass('is-invalid'); //Se obtiene las imagenes del input
+
   var files = event.target.files; //se verifica que se haya seleccionado alguna imágen
 
   if (files) {
@@ -71412,6 +71379,51 @@ $(document).ready(function () {
     });
   });
 });
+
+/***/ }),
+
+/***/ "./resources/js/time-date.js":
+/*!***********************************!*\
+  !*** ./resources/js/time-date.js ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var flatpickr = __webpack_require__(/*! flatpickr */ "./node_modules/flatpickr/dist/flatpickr.js");
+
+__webpack_require__(/*! flatpickr/dist/themes/light.css */ "./node_modules/flatpickr/dist/themes/light.css");
+
+var fecha = flatpickr('#date', {
+  locale: {
+    firstDayOfWeek: 1,
+    weekdays: {
+      shorthand: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+      longhand: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
+    },
+    months: {
+      shorthand: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Оct', 'Nov', 'Dic'],
+      longhand: ['Enero', 'Febrero', 'Мarzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+    }
+  },
+  mode: "range",
+  minDate: "today",
+  // defaultDate: "today",
+  dateFormat: "Y-m-d",
+  allowInput: true,
+  inline: false
+});
+var horaInicio = flatpickr('#start-time', {
+  enableTime: true,
+  noCalendar: true,
+  dateFormat: "H:i" // allowInput:true,
+
+});
+var horaFinal = flatpickr('#end-time', {
+  enableTime: true,
+  noCalendar: true,
+  dateFormat: "H:i"
+});
+$('#start-time').removeAttr('readonly');
 
 /***/ }),
 

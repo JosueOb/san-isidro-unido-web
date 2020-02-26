@@ -39,6 +39,7 @@ require('./icon-image');
 require('./image-gallery');
 require('./map');
 require('./phone_numbers');
+require('./time-date');
 require('./public-service-create');
 require('./public-service-update');
 require('./public-service-show');

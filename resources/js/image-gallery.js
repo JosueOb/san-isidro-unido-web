@@ -39,6 +39,7 @@ const previewImages = arrayImages => {
 }
 
 $('#images').on('change', function(event){
+    $('#inputImages').removeClass('is-invalid');
 
      //Se obtiene las imagenes del input
      var files = event.target.files;
