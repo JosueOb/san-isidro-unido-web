@@ -3,7 +3,11 @@ const flatpickr = require("flatpickr")
 require("flatpickr/dist/themes/light.css");
 
 import {getCurrentLocation, getAddress, locateMarker, setPosition, location} from './map';
+import{phone_array} from './phone_numbers';
+import{newImagesReport, resetNumberOfImagesAllowed} from './image-gallery';
 
+var phone_numbers = phone_array;
+var images = newImagesReport;
 
 var currentLocation = location;
 
@@ -31,16 +35,7 @@ $(document).ready(function () {
 
     if($('#map').length != 0 && $('#event-create').length != 0){
         loadMap();
-        
-
-        var fechaInicio = flatpickr('#inital-date', {
-            // enableTime: true,
-            // dateFormat: "Y-m-d H:i"
-        });
-        var fechaFinal = flatpickr('#end-date', {
-            // enableTime: true,
-            // dateFormat: "Y-m-d H:i"
-        });
+        resetNumberOfImagesAllowed(3);
 
         var fecha = flatpickr('#date', {
             locale: {
@@ -56,43 +51,56 @@ $(document).ready(function () {
             },
             mode: "range",
             minDate: "today",
-            altInput: true,
-            altFormat: "F j, Y",
+            // defaultDate: "today",
             dateFormat: "Y-m-d",
+            allowInput:true,
+            inline: false
         });
-        var horaInicio = flatpickr('#initial-time', {
+        var horaInicio = flatpickr('#start-time', {
             enableTime: true,
             noCalendar: true,
             dateFormat: "H:i",
+            // allowInput:true,
         });
         var horaFinal = flatpickr('#end-time', {
             enableTime: true,
             noCalendar: true,
             dateFormat: "H:i",
         });
-        // $('#inital-date').prop('required', true);
-        $('#inital-date').removeAttr('readonly');
-        $('#end-date').removeAttr('readonly');
-        // $('#inital-time').removeAttr('readonly');
-        // $('#inital-time').removeAttr('readonly');
+
+        $('#start-time').removeAttr('readonly');
+        // $('#date').removeAttr('readonly');
+
     }
+
     
     $('#event-create').on('submit', function (event) {
         event.preventDefault();
         var formData = new FormData(this);
+        
         formData.append('ubication', JSON.stringify(location));
+        
+        formData.delete('images[]');
+        images.forEach(function (image) {
+            formData.append('images[]', image);
+        });
+        
+        formData.delete('phone_numbers');
+        phone_numbers.forEach(function (phone) {
+            formData.append('phone_numbers[]', phone);
+        });
 
         console.log('título', formData.get('title'));
         console.log('descripción', formData.get('description'));
         console.log('categoría', formData.get('subcategory'));
         console.log('responsable', formData.get('responsible'));
-        console.log('hora-inicio', formData.get('initial-time'));
+        console.log('hora-inicio', formData.get('start-time'));
         console.log('hora-fin', formData.get('end-time'));
-        console.log('fecha-inicio', formData.get('inital-date'));
-        console.log('fecha-fin', formData.get('end-date'));
         console.log('fecha', formData.get('date'));
+        console.log('telefonos', formData.getAll('phone_numbers[]'));
         console.log('descipción de ubicación', formData.get('ubication-description'));
         console.log('ubicación', formData.get('ubication'));
+        console.log('imagenes', formData.getAll('images[]') );
 
     });
     

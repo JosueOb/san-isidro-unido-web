@@ -1,5 +1,4 @@
-
-//Se almacenan los los  números telefónicos válidos
+//Se almacenan los números telefónicos válidos
 let phone_array = [];
 //Se establece la cantidad de teléfonos permitidos
 var numberOfPhonesAllowed = 3;
