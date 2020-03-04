@@ -84,7 +84,7 @@ class ApiPostSeeder extends Seeder
                     'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
                 ]);
             }
-            DB::table('details')->insert([
+            DB::table('reactions')->insert([
                 'post_id' => $idPostProblemaSocial,
                 'user_id' => $user->id,
                 'type' => 'like',
@@ -103,12 +103,6 @@ class ApiPostSeeder extends Seeder
                 'date' => $initialDate->toDateString(),
                 'time' => $initialDate->toTimeString(),
                 'state'=>true,
-                "range_date" => json_encode([
-                    'start_date' => $initialDate->toDateString(),
-                    'end_date' =>  $finalDate->toDateString(),
-                    'start_time' => $initialDate->toTimeString(),
-                    'end_time' =>  $finalDate->toTimeString(),
-                ]),
                 "ubication" => json_encode([
                     "latitude" => $faker->latitude,
                     "longitude" => $faker->longitude,
@@ -116,8 +110,14 @@ class ApiPostSeeder extends Seeder
                 ]),
                 //responsible" => $faker->name,
                 "additional_data" => json_encode([
-                    "log_event" => [
-                        "responsable" => $faker->firstname
+                    "event" => [
+                        "responsable" => $faker->firstname,
+                        "range_date" => [
+                            'start_date' => $initialDate->toDateString(),
+                            'end_date' =>  $finalDate->toDateString(),
+                            'start_time' => $initialDate->toTimeString(),
+                            'end_time' =>  $finalDate->toTimeString(),
+                        ]
                     ]
                 ]),
                 "user_id" => $user->id,
@@ -133,7 +133,7 @@ class ApiPostSeeder extends Seeder
                     'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
                 ]);
             }
-            DB::table('details')->insert([
+            DB::table('reactions')->insert([
                 'post_id' => $idPostEvento,
                 'user_id' => $user->id,
                 'type' => 'assistance',

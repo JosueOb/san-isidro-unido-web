@@ -7,7 +7,7 @@ use Caffeinated\Shinobi\Models\Role;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
 use App\Category;
-use App\Detail;
+use App\Reaction;
 use App\Helpers\ApiImages;
 use App\Http\Controllers\Api\ApiBaseController;
 use App\Resource;
@@ -50,7 +50,7 @@ class ApiPostController extends ApiBaseController
     public function index(Request $request) {
         try {
 
-            $queryset = Post::with(['resources', 'category', 'user', 'subcategory', 'details']);
+            $queryset = Post::with(['resources', 'category', 'user', 'subcategory', 'reactions']);
             //FILTROS PERMITIDOS
             $filterCategory = ($request->get('category')) ? $request->get('category'): '';
             $filterSubcategory = ($request->get('subcategory')) ? $request->get('subcategory'): '';
@@ -107,7 +107,7 @@ class ApiPostController extends ApiBaseController
      */
     public function detail($id) {
         try {
-            $post = Post::findById($id)->with(['resources', 'category', 'user', 'subcategory', 'details'])->first();
+            $post = Post::findById($id)->with(['resources', 'category', 'user', 'subcategory', 'reactions'])->first();
             //Verificar si existe el post
             if (!is_null($post)) {
                 return $this->sendResponse(200, 'success', $post);

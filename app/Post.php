@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use App\Reaction;
 
 class Post extends Model
 {
@@ -32,7 +33,6 @@ class Post extends Model
      */
     protected $casts = [
         'ubication' => 'array',
-        'range_date' => 'array',
         'additional_data' => 'array',
     ];
 
@@ -127,13 +127,13 @@ class Post extends Model
     }
 
     /**
-	 *Relacion Uno a Muchos con la tabla Details
+	 *Relacion Uno a Muchos con la tabla Reactions
 	 *
 	 * @return mixed
 	 */
-    public function details()
+    public function reactions()
     {
-        return $this->hasMany(Detail::class, 'post_id')->orderBy('id','DESC');
+        return $this->hasMany(Reaction::class, 'post_id')->orderBy('id','DESC');
 
     }
 

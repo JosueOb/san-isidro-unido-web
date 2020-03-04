@@ -21,7 +21,6 @@ class CreatePostsTable extends Migration
             $table->date('date');
             $table->time('time');
             $table->json('ubication')->nullable();
-            $table->json('range_date')->nullable();
             $table->json('additional_data')->nullable();
             //por ahora //event_responsible,moderator_aproval, policy_
             $table->boolean('is_attended')->default(false);

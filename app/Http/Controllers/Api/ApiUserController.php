@@ -4,20 +4,20 @@ namespace App\Http\Controllers\Api;
 
 use App\Category;
 use App\Helpers\ApiImages;
+use App\Helpers\JwtAuth;
+use App\Helpers\Utils;
 use App\Http\Controllers\Api\ApiBaseController;
 use App\Post;
 use App\Role;
 use App\Rules\Api\Base64FormatImage;
-use App\Rules\Api\ValidarCedula;
 use App\Rules\Api\ProviderData;
+use App\Rules\Api\ValidarCedula;
 use App\SocialProfile;
 use App\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
-use App\Helpers\Utils;
-use App\Helpers\JwtAuth;
 
 class ApiUserController extends ApiBaseController
 {
@@ -29,9 +29,9 @@ class ApiUserController extends ApiBaseController
     public function __construct()
     {
         $this->validacionesFormRegistro = [
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
-            "email" => ['required', 'email'],
+            'first_name' => "required|string",
+            'last_name' => "required|string",
+            "email" => "required|email|unique:users,email"
         ];
         $this->validacionesFormLogin = [
             "email" => 'email|required',
@@ -108,44 +108,78 @@ class ApiUserController extends ApiBaseController
                 $validatorJSONData = Validator::make($request->all(), $this->validacionesFormRegistro);
                 //Verificar si fallo la validacion de los datos necesarios para guardar el usuario
                 if (!$validatorJSONData->fails()) {
-                    // Crear un usuario y asignarle los datos
-                    $userExists = $utils->userExists($inputRegister['email']);
-                    if (!$userExists) {
-                        $user = new User();
-                        $user->first_name = $inputRegister['first_name'];
-                        $user->last_name = $inputRegister['last_name'];
-                        $user->email = $inputRegister['email'];
-                        $user->password = ($inputRegister['provider'] === 'formulario' && $inputRegister['password']) ? password_hash($inputRegister['password'], PASSWORD_DEFAULT) : null;
-                        $user->state = true;
-                        $user->save();
-                        $user->roles()->attach($rolInvitado->id);
-                    } else {
-                        // Usuario existe solo agregar redes sociales
-                        $user = User::email($inputRegister['email'])->first();
-                    }
-                    // Verificar si debe guardar el perfil social
-                    $socialProfileExists = $utils->socialProfileExists($inputRegister['provider'], $inputRegister['email']);
-                    //Agrear perfil Social
-                    if ($inputRegister['provider'] !== 'formulario' && !$socialProfileExists) {
-                        $socialProfile = new SocialProfile();
-                        $socialProfile->social_id = $inputRegister['social_id'];
-                        $socialProfile->user_id = $user->id;
-                        $socialProfile->provider = $inputRegister['provider'];
-                        $socialProfile->save();
-                    }
-                    //Obtener usuario para enviarlo de vuelta al FrontEnd
-                    $jwtAuth = new JwtAuth();
-                    $token = $jwtAuth->getToken($inputRegister['email'], null);
-                    return $this->sendResponse(200, "Usuario Registrado Correctamente", $token);
+                    return $this->createUser(
+                        $inputRegister['first_name'] ?? '',
+                        $inputRegister['last_name'] ?? '',
+                        $inputRegister['email'] ?? '',
+                        $inputRegister['provider'] ?? '',
+                        $inputRegister['password'] ?? '',
+                        $inputRegister['social_id'] ?? '',
+                        $inputRegister['avatar'] ?? '');
                 }
                 //Enviar error datos enviados
-                return $this->sendError(400, "Datos Inválidos", $validatorJSONData->messages());
+                return $this->sendError(400, "Datos Inválidos en el Registro", $validatorJSONData->messages());
             }
             //Enviar error proveedor invalido
             return $this->sendError(400, "Proveedor Inválido", $validatorProvider->messages());
         } catch (Exception $e) {
             return $this->sendError(500, "Error en el Servidor", ['server_error' => $e->getMessage()]);
         }
+    }
+
+    private function registerNormalUser($first_name, $last_name, $email, $provider, $password, $avatar) {
+        $rolInvitado = Role::slug($this->roles['invitado'])->first();
+        $user = new User();
+        $user->first_name = $first_name;
+        $user->last_name = $last_name;
+        $user->email = $email;
+        $user->password = ($provider === 'formulario' && $password) ? password_hash($password, PASSWORD_DEFAULT) : null;
+        $user->state = true;
+        $user->avatar = $avatar;
+        $user->save();
+        $user->roles()->attach($rolInvitado->id, [
+            'state' => 1,
+        ]);
+        return $user;
+    }
+    /*CREAR USUARIO EN EL API */
+    public function createUser($first_name, $last_name, $email, $provider, $password, $social_id, $avatar) {
+        $utils = new Utils();
+        //Crear usuario normal
+        if ($provider == 'formulario') {
+            $this->registerNormalUser(
+                $first_name,$last_name,$email,$provider,$password, $avatar);
+        } else {
+            //Crear usuario social
+            $userExist = User::email($email)->exists();
+            // dd($userExist);
+            if ($userExist == false) {
+                $user = $this->registerNormalUser($first_name,$last_name,$email,$provider,$password, $avatar);
+            } else {
+                $user = User::email($email)->first();
+            }
+            // Verificar si debe guardar el perfil social
+            $socialProfileExists = $utils->socialProfileExists($provider, $email);
+            //Agregar perfil Social
+            if (!$socialProfileExists) {
+                $this->createUserSocial($social_id, $user->id, $provider);
+            }
+        }
+        //Obtener usuario para enviarlo de vuelta al FrontEnd
+        $jwtAuth = new JwtAuth();
+        $token = $jwtAuth->getToken($email, null);
+        return $this->sendResponse(200, "Usuario Registrado Correctamente", $token);
+    }
+    /*
+    Función para crear un perfil social a un usuario
+     */
+    public function createUserSocial($socialID, $user_id, $provider)
+    {
+        $socialProfile = new SocialProfile();
+        $socialProfile->social_id = $socialID;
+        $socialProfile->user_id = $user_id;
+        $socialProfile->provider = $provider;
+        $socialProfile->save();
     }
 
     /**
@@ -158,42 +192,58 @@ class ApiUserController extends ApiBaseController
     {
         try {
             //Recoger los datos de la peticion
-            $requestData = $request->only(['email', 'password', 'provider', 'social_id']);
+            // $requestData = $request->only(['email', 'password', 'provider', 'social_id']);
+            $requestData = $request->all();
             // VALIDAR PROVEEDOR DATOS
             $validatorProvider = Validator::make($request->all(), [
                 "provider" => ['required', 'string', new ProviderData],
-                ]);
-                // Verificar si el validador falla
-                if (!$validatorProvider->fails()) {
-                    //VALIDAR CAMPOS REQUEST
-                    $this->checkProviderValidation($requestData['provider'], 'login');
-                    $validatorJSONData = Validator::make($requestData, $this->validacionesFormLogin);
-                    // SI VALIDACION FALLA, MANDAR ERROR
-                    if (!$validatorJSONData->fails()) {
-                        //Devolver Token o datos
-                        $jwtAuth = new JwtAuth();
-                        //Verificar si se quiere obtener los datos del Token
-                        $returnDataOrToken = ($request->has('getToken')) ? true : null;
-                        //Mandar Pass or SocialID dependiendo Proveedor Login
-                        $passOrSocialID = ($requestData['provider'] === 'formulario') ? $requestData['password'] : $requestData['social_id'];
+            ]);
+            // Verificar si el validador falla
+            if (!$validatorProvider->fails()) {
+                //VALIDAR CAMPOS REQUEST
+                $this->checkProviderValidation($requestData['provider'], 'login');
+                $validatorJSONData = Validator::make($requestData, $this->validacionesFormLogin);
+                // SI VALIDACION FALLA, MANDAR ERROR
+                if (!$validatorJSONData->fails()) {
+                    //Devolver Token o datos
+                    $jwtAuth = new JwtAuth();
+                    //Verificar si se quiere obtener los datos del Token
+                    $returnDataOrToken = ($request->has('getToken')) ? true : null;
+                    //Mandar Pass or SocialID dependiendo Proveedor Login
+                    $passOrSocialID = ($requestData['provider'] === 'formulario') ? $requestData['password'] : $requestData['social_id'];
+                    $userExist = User::email($requestData['email'])->exists();
+                    // dd($userExist);
+                    //Si usuario no existe, creo el usuario
+                    if ($userExist == false && $requestData['provider'] != 'formulario') {
+                        // dd($userExist);
+                        return $this->createUser(
+                            $requestData['first_name'] ?? '',
+                            $requestData['last_name'] ?? '',
+                            $requestData['email'] ?? '',
+                            $requestData['provider'] ?? '',
+                            $requestData['password'] ?? '',
+                            $requestData['social_id'] ?? '',
+                            $requestData['avatar'] ?? '');
+                    }else{
                         //Verificar si credenciales son validas
                         if ($jwtAuth->singIn($requestData['email'], $passOrSocialID, $requestData['provider'])) {
                             // dd($requestData);
-                            $token = $jwtAuth->getToken($requestData['email'], $returnDataOrToken);
-                        
+                            $token = $jwtAuth->getToken($requestData['email'], $returnDataOrToken);    
                             return $this->sendResponse(200, "Login Correcto", $token);
+                        }else{     
+                            //Si falla login retorno error
+                            switch (strtolower($requestData['provider'])) {
+                                case 'facebook':
+                                    return $this->sendError(400, "No has asociado tu cuenta de facebook, registrate por favor", ['user' => 'No has asociado tu cuenta de facebook, registrate por favor']);
+                                    break;
+                                case 'google':
+                                    return $this->sendError(400, "No has asociado tu cuenta de google, registrate por favor", ['user' => 'No has asociado tu cuenta de google, registrate por favor']);
+                                    break;
+                                default:
+                                    return $this->sendError(400, "Usuario y/o Contraseña Inválida", ['user' => 'Usuario y/o Contraseña Invalida']);
+                                    break;
+                            }
                         }
-                    //Si falla login retorno error
-                    switch (strtolower($requestData['provider'])) {
-                        case 'facebook':
-                            return $this->sendError(400, "No has asociado tu cuenta de facebook, registrate por favor", ['user' => 'No has asociado tu cuenta de facebook, registrate por favor']);
-                            break;
-                        case 'google':
-                            return $this->sendError(400, "No has asociado tu cuenta de google, registrate por favor", ['user' => 'No has asociado tu cuenta de google, registrate por favor']);
-                            break;
-                        default:
-                            return $this->sendError(400, "Usuario y/o Contraseña Inválida", ['user' => 'Usuario y/o Contraseña Invalida']);
-                            break;
                     }
                 }
                 //Si validador falla retorno error
@@ -247,7 +297,7 @@ class ApiUserController extends ApiBaseController
             //password_confirmation
             $validatorPassword = Validator::make($request->all(), [
                 "basic_service_image" => ['required', 'string', new Base64FormatImage],
-                "cedula" => ["required", "string", new ValidarCedula]
+                "cedula" => ["required", "string", new ValidarCedula],
             ]);
             $image_service_b64 = $request->get('basic_service_image');
             $cedula = $request->get('cedula');
@@ -337,7 +387,7 @@ class ApiUserController extends ApiBaseController
             $social_problems = Post::categoryId($category->id)
                 ->userId($user_id)
                 ->orderBy('id', 'desc')
-                ->with(['resources', 'category', 'subcategory', 'details', 'user'])
+                ->with(['resources', 'category', 'subcategory', 'reactions', 'user'])
                 ->simplePaginate(10);
             return $this->sendPaginateResponse(200, 'success', $social_problems->toArray());
         } catch (Exception $e) {
