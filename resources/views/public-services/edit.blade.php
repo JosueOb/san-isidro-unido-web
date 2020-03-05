@@ -78,8 +78,8 @@
                                 <div class="input-group">
                                    
                                     <div class="input-group-prepend" id='phone_group'>
-                                        @if ($phones)
-                                            @foreach ($phones as $phone)
+                                        @if (count($publicService->phones) > 0)
+                                            @foreach ($publicService->phones as $phone)
                                             <div  id='phone_item'>
                                                 <span class="input-group-text" id='phone_bagde'>
                                                     {{$phone->phone_number}}
@@ -87,6 +87,8 @@
                                                 </span>
                                             </div>
                                             @endforeach
+                                        @else
+                                            <p>Ningún teléfono registrado</p>
                                         @endif
                                     </div>
 

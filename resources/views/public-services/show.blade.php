@@ -42,9 +42,13 @@
                         <p><strong>Descripción:</strong> {{$publicService->description ?: 'sin descripción'}}</p>
                         <p><strong>Categoría:</strong> {{ strtolower($publicService->subcategory->name)}}</p>
                         <p><strong>Teléfonos:</strong><br>
-                            @foreach ($phones as $phone)
-                                {{$phone->phone_number}}<br>
-                            @endforeach
+                            @if (count($publicService->phones) > 0)
+                                @foreach ($publicService->phones as $phone)
+                                    {{$phone->phone_number}}<br>
+                                @endforeach
+                            @else
+                                <p>Ningún teléfono registrado</p>
+                            @endif
                         </p>
                         <p><strong>Corre electrónico:</strong> {{$publicService->email ?: 'sin correo electrónico'}}</p>
                         <p><strong>Detalle:</strong> {{$ubication['description'] ?: 'sin detalle de ubicación'}}</p>

@@ -6,8 +6,6 @@ use App\Category;
 use App\Http\Requests\PublicServiceRequest;
 use App\Phone;
 use App\PublicService;
-use App\Subcategory;
-use Illuminate\Http\Request;
 
 class PublicServiceController extends Controller
 {
@@ -63,10 +61,8 @@ class PublicServiceController extends Controller
 
         $phones = $validated['phone_numbers'];
         foreach($phones as $phone){
-            Phone::create([
-                'phone_number'=> $phone,
-                'public_service_id' => $publicService->id,
-            ]);
+            $phone_number = new Phone(['phone_number' => $phone]);
+            $publicService->phones()->save($phone_number);
         }
         
         session()->flash('success', 'Servicio público registrado con éxito');
@@ -81,11 +77,9 @@ class PublicServiceController extends Controller
      */
     public function show(PublicService $publicService)
     {
-        $phones = $publicService->phones()->get();
         $ubication = json_decode($publicService->ubication, true);
         return view('public-services.show', [
             'publicService'=>$publicService,
-            'phones'=>$phones,
             'ubication'=>$ubication,
         ]);
     }
@@ -100,12 +94,12 @@ class PublicServiceController extends Controller
     {
         $category = Category::where('slug', 'servicio-publico')->first();
         $subcategories = $category->subcategories()->get();
-        $phones = $publicService->phones()->get();
+        // $phones = $publicService->phones()->get();
         $ubication = json_decode($publicService->ubication, true);
         return view('public-services.edit', [
             'publicService'=>$publicService,
             'subcategories'=>$subcategories,
-            'phones'=>$phones,
+            // 'phones'=>$phones,
             'ubication'=> $ubication,
         ]);
     }
@@ -138,7 +132,7 @@ class PublicServiceController extends Controller
         $oldPhones = $publicService->phones;
 
         $this->deleteOldPhones($oldPhones, $newPhones);
-        $this->saveNewPhones($newPhones, $oldPhones, $publicService->id);
+        $this->saveNewPhones($newPhones, $oldPhones, $publicService);
 
         session()->flash('success', 'Servicio público actualizado con éxito');
         return response()->json(['success'=>'Datos recibidos correctamente']);
@@ -152,6 +146,7 @@ class PublicServiceController extends Controller
      */
     public function destroy(PublicService $publicService)
     {
+        $publicService->phones()->delete();
         $publicService->delete();
         session()->flash('success', 'Servicio público eliminado con éxito');
         return redirect()->route('publicServices.index')->with('success', 'Servicio público eliminado con éxito');
@@ -191,15 +186,13 @@ class PublicServiceController extends Controller
      * Función que guarda en la base de datos los números telefónicos que sean diferentes
      * a los almacenados anteriormente
      */
-    public function saveNewPhones($newPhones, $oldPhones, $publicServiceId){
+    public function saveNewPhones($newPhones, $oldPhones, $publicService){
         $oldPhones = $oldPhones->pluck('phone_number')->toArray();
         foreach($newPhones as $newPhone){
             //Si el teléfono es nuevo
             if(!$this->isThereAPhoneNumber($newPhone, $oldPhones)){
-                Phone::create([
-                    'phone_number'=> $newPhone,
-                    'public_service_id'=> $publicServiceId,
-                ]);
+                $phone_number = new Phone(['phone_number' => $newPhone]);
+                $publicService->phones()->save($phone_number);
             }
         }
     }

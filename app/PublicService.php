@@ -24,10 +24,11 @@ class PublicService extends Model
     public function subcategory(){
         return $this->belongsTo(Subcategory::class);
     }
-     /**
-    * A public service can have many phones
+    /**
+    * Get all of the public service's phones.
     */
-    public function phones(){
-        return $this->hasMany(Phone::class);
+    public function phones()
+    {
+        return $this->morphMany(Phone::class, 'phoneable');
     }
 }
