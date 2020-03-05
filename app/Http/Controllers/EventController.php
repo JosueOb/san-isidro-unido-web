@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\Http\Requests\EventRequest;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
@@ -37,9 +38,11 @@ class EventController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(EventRequest $request)
     {
-        //
+        $validated = $request->validated();
+        
+        return response()->json(['success'=>'Datos recibidos correctamente', 'form'=> $request->all(), 'validated'=>$validated]);
     }
 
     /**
