@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use App\Http\Requests\EventRequest;
+use App\Post;
+use App\Resource;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
@@ -40,8 +42,54 @@ class EventController extends Controller
      */
     public function store(EventRequest $request)
     {
+        //Se obtiene la fecha y hora del sistema
+        $dateTime = now();
+        $date = $dateTime->toDateString(); 
+        $time = $dateTime->toTimeString();
+
+        $category_event = Category::where('slug', 'evento')->first();
+
         $validated = $request->validated();
-        
+        //se decodifica un string JSON en un array recursivo
+        $ubication = json_decode($validated['ubication'], true);
+        //Se le agrega al arreglo el detalle de la descripción de ubicación
+        $ubication['description'] = $validated['ubication-description'];
+
+        $additional_data = [
+            'event'=>[
+                'responsible'=> $validated['responsible'],
+                'range_date' => [
+                    'start_date' => $validated['start-date'],
+                    'end_date' => $validated['end-date'],
+                    'start_time' => $validated['start-time'],
+                    'end_time' => $validated['end-time'],
+                ]
+            ]
+        ];
+
+        $event = new Post();
+        $event->title = $validated['title'];
+        $event->description = $validated['description'];
+        $event->state = true;
+        $event->date = $date;
+        $event->time = $time;
+        $event->ubication = json_encode($ubication);//Se devuelve una representación de un JSON;
+        $event->user_id = $request->user()->id;
+        $event->category_id = $category_event->id;
+        $event->subcategory_id = $validated['id'];
+        $event->additional_data = json_encode($additional_data);
+        $event->save();
+
+        if($request->file('images')){
+            foreach($request->file('images') as $image){
+                Resource::create([
+                    'url'=> $image->store('event_images', 'public'),
+                    'post_id' => $event->id,
+                    'type'=>'image',
+                ]);
+            }
+        }
+
         return response()->json(['success'=>'Datos recibidos correctamente', 'form'=> $request->all(), 'validated'=>$validated]);
     }
 
