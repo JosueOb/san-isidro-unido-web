@@ -1,3 +1,4 @@
+
 @extends('layouts.dashboard')
 @section('page-subtitle')
     Módulo Servicios Públicos
@@ -47,14 +48,17 @@
                             @endforeach
                         </p>
                         <p><strong>Corre electrónico:</strong> {{$publicService->email ?: 'sin correo electrónico'}}</p>
-                        <p><strong>Detalle:</strong> {{$ubication['description'] ?: 'sin detalle de ubicación'}}</p>
+                        <p><strong>Detalle:</strong> 
+                        {{
+                            isset($ubication['description']) ? $ubication['description'] : 'sin detalle de ubicación'
+                        }}</p>
                     </div>
                     <div class="col-12 col-md-6">
                         <p><strong>Ubicación</strong></p>
                         <div id="map" class="map">
                             <div id="info" class="info text-muted">
-                                Latitud:  <span id='lat'>{{$ubication['lat']}}</span><br>
-                                Longitud: <span id='lng'>{{$ubication['lng']}}</span><br>
+                                Latitud:  <span id='lat'>{{$ubication['latitude']}}</span><br>
+                                Longitud: <span id='lng'>{{$ubication['longitude']}}</span><br>
                                 Dirección: <span id='address'>{{$ubication['address']}}</span><br>
                                 </span>
                             </div>

@@ -12,7 +12,8 @@ class PublicService extends Model
     protected $table = "public_services";
     public $timestamps = true;
 
-
+    protected $fillable = ['name', 'description'];
+    
     protected $casts = [
         'ubication' => 'array'
     ];

@@ -5,18 +5,16 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use App\Notifications\UserResetPassword;
 use App\Notifications\UserVerifyEmail;
 use Caffeinated\Shinobi\Concerns\HasRolesAndPermissions;
 use Illuminate\Support\Facades\Storage;
-
 use App\SocialProfile;
 use App\Position;
 use App\Device;
 use App\Detail;
 use App\RoleUser;
 use App\MembershipRequest;
-
+use App\Notifications;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -49,12 +47,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
-   
-    
-    public function getWebSystemRoles(){
-        //Se retorna los roles del usuario que pueden acceder al sistema
-        return $this->roles()->where('mobile_app', false)->get();
-    }
 
     /**
 	 *Filtra un Usuario por su id
@@ -76,6 +68,13 @@ class User extends Authenticatable implements MustVerifyEmail
 	public function scopeActiveUser($query) {
 		return $query->where('state', 1);
 	}
+
+    
+    public function getWebSystemRoles(){
+        //Se retorna los roles del usuario que pueden acceder al sistema
+        // return $this->roles()->whereNotIn('name',['Morador','Invitado','Policia'])->first();
+        return $this->roles()->where('mobile_app', false)->get();
+    }
 
     //Se obtiene un específico rol del usuario
     public function getASpecificRole($roleSlug){
