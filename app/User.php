@@ -15,6 +15,7 @@ use App\Position;
 use App\Device;
 use App\Detail;
 use App\RoleUser;
+use App\MembershipRequest;
 
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -213,6 +214,12 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function posts(){
         return $this->hasMany(Post::class);
+    }
+
+    /*Un usuario puede tener una solicitud de afiliación */
+    public function membership_request()
+    {
+        return $this->hasOne(MembershipRequest::class);
     }
 
     /*FUNCIONES EXTRAS */    

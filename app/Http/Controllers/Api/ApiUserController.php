@@ -14,6 +14,7 @@ use App\Rules\Api\ProviderData;
 use App\Rules\Api\ValidarCedula;
 use App\SocialProfile;
 use App\User;
+use App\MembershipRequest;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
@@ -313,6 +314,13 @@ class ApiUserController extends ApiBaseController
                     $user->basic_service_image = $image_name;
                     $user->cedula = $cedula;
                     $user->save();
+                    //Guardar solicitud de afiliación
+                    $request = new MembershipRequest();
+                    $request->status = 'pendiente_aprobacion';
+                    $request->comment = "El Usuario $user->first_name ha solicitado la afiliación al barrio";
+                    $request->user_id = $user->id;
+                    $request->save();
+                    //Retornar Token
                     $token = $jwtAuth->getToken($user->email);
                     return $this->sendResponse(200, "Afiliacion Solicitada Correctamente", ['token' => $token]);
                 }

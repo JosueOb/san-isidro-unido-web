@@ -23,7 +23,7 @@ php artisan vendor:publish --provider="Rap2hpoutre\LaravelLogViewer\LaravelLogVi
 composer dump-autoload
 php artisan config:clear
 php artisan optimize
-php artisan migrate:fresh --seed
+php artisan migrate:fresh --seed #Reiniciar migraciones y correr seeders
 
 php artisan migrate --path=database/migrations/Api/2019_08_20_200308_create_api_categories_table.php
 php artisan migrate --path=database/migrations/Api/2019_08_20_182454_create_api_public_services_table.php
