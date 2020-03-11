@@ -15,7 +15,7 @@ async function showMap(){
 
 $(document).ready( function () {
     
-    if($('#map').length != 0 && $('#event-show').length != 0){
+    if($('#map').length != 0 && $('#public-service-show').length != 0){
         showMap();
     }
 });

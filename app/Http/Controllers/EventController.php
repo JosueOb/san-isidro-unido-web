@@ -111,9 +111,20 @@ class EventController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Post $event)
     {
-        //
+        $additional_data = json_decode($event->additional_data, true);
+        $event_range_date = $additional_data['event']['range_date'];
+        $event_responsible = $additional_data['event']['responsible'];
+        $ubication = json_decode($event->ubication, true);
+        $images = $event->resources()->where('type', 'image')->get();
+        return view('events.show', [
+            'event' => $event,
+            'event_range_date' => $event_range_date,
+            'event_responsible' => $event_responsible,
+            'ubication' => $ubication,
+            'images'=> $images,
+        ]);
     }
 
     /**

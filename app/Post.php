@@ -26,12 +26,12 @@ class Post extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
-    /**
-     * A post can have many images
-     */
-    public function images(){
-        return $this->hasMany(Image::class);
-    }
+    // /**
+    //  * A post can have many images
+    //  */
+    // public function images(){
+    //     return $this->hasMany(Image::class);
+    // }
     /**
      * A post belongs to a category
      */

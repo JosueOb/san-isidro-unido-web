@@ -33,9 +33,9 @@
                 <div class="row">
                     <div class="col">
                         <h4 class="d-inline">Servicios públicos</h4>
-                        @can('publicServices.create')
+                        {{-- @can('publicServices.create') --}}
                         <a href="{{route('events.create')}}" class="btn btn-primary float-right">Nuevo</a>
-                        @endcan
+                        {{-- @endcan --}}
                     </div>
                 </div>
             </div>
@@ -67,7 +67,7 @@
 
                                         {{-- @can('publicServices.show') --}}
                                         <td width='10px'>
-                                            <a href="#" class="btn btn-info">Ver</a>
+                                            <a href="{{ route('events.show', $event->id)}}" class="btn btn-info">Ver</a>
                                         </td>
                                         {{-- @endcan --}}
                                         

@@ -126,4 +126,5 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::get('events', 'EventController@index')->name('events.index');
     Route::get('events/create', 'EventController@create')->name('events.create');
     Route::post('events/store', 'EventController@store')->name('events.store');
+    Route::get('events/{event}', 'EventController@show')->name('events.show');
 });

@@ -3,7 +3,7 @@
     Módulo Servicios Públicos
 @endsection
 @section('page-header')
-    Registro
+    Lugar registrado
 @endsection
 @section('item-public-service')
     active

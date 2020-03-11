@@ -70216,6 +70216,8 @@ __webpack_require__(/*! ./public-service-show */ "./resources/js/public-service-
 
 __webpack_require__(/*! ./event-create */ "./resources/js/event-create.js");
 
+__webpack_require__(/*! ./event-show */ "./resources/js/event-show.js");
+
 /***/ }),
 
 /***/ "./resources/js/bootstrap.js":
@@ -70572,6 +70574,70 @@ $(document).ready(function () {
       }
     });
   });
+});
+
+/***/ }),
+
+/***/ "./resources/js/event-show.js":
+/*!************************************!*\
+  !*** ./resources/js/event-show.js ***!
+  \************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _map__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./map */ "./resources/js/map.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
+var showLocation = {};
+
+function showMap() {
+  return _showMap.apply(this, arguments);
+}
+
+function _showMap() {
+  _showMap = _asyncToGenerator(
+  /*#__PURE__*/
+  _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+    var infoLocation;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            //Se obtienen las coordenadas
+            infoLocation = document.querySelectorAll("#info span");
+            infoLocation.forEach(function (element) {
+              showLocation[element.id] = element.textContent;
+            });
+            _context.next = 4;
+            return Object(_map__WEBPACK_IMPORTED_MODULE_1__["setPosition"])(showLocation);
+
+          case 4:
+            _context.next = 6;
+            return Object(_map__WEBPACK_IMPORTED_MODULE_1__["locateMarker"])('map', false);
+
+          case 6:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+  return _showMap.apply(this, arguments);
+}
+
+$(document).ready(function () {
+  if ($('#map').length != 0 && $('#public-service-show').length != 0) {
+    showMap();
+  }
 });
 
 /***/ }),
@@ -71326,7 +71392,7 @@ function _showMap() {
 }
 
 $(document).ready(function () {
-  if ($('#map').length != 0 && $('#public-service-show').length != 0) {
+  if ($('#map').length != 0 && $('#event-show').length != 0) {
     showMap();
   }
 });
