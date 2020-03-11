@@ -42,6 +42,7 @@ class ApiUserSeeder extends Seeder {
             DB::table('devices')->insert([
                 "phone_id" => $faker->creditCardNumber,
                 "phone_model" => $faker->name,
+                "phone_platform" => 'Modelo Generico',
                 "description" => $faker->sentence(6,true),
                 'user_id' => $idOne,
                 'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
@@ -71,6 +72,7 @@ class ApiUserSeeder extends Seeder {
             DB::table('devices')->insert([
                 "phone_id" => $faker->creditCardNumber,
                 "phone_model" => $faker->name,
+                "phone_platform" => 'Modelo Generico',
                 "description" => $faker->sentence(6,true),
                 'user_id' => $idTwo,
                 'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
@@ -101,6 +103,7 @@ class ApiUserSeeder extends Seeder {
             DB::table('devices')->insert([
                 "phone_id" => $faker->creditCardNumber,
                 "phone_model" => $faker->name,
+                "phone_platform" => 'Modelo Generico',
                 "description" => $faker->sentence(6,true),
                 'user_id' => $idThree,
                 'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
@@ -133,6 +136,7 @@ class ApiUserSeeder extends Seeder {
                 "phone_id" => $faker->creditCardNumber,
                 "phone_model" => $faker->name,
                 "description" => $faker->sentence(6,true),
+                "phone_platform" => 'Modelo Generico',
                 'user_id' => $idFour,
                 'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
             ]);
@@ -164,6 +168,7 @@ class ApiUserSeeder extends Seeder {
                 "phone_id" => $faker->creditCardNumber,
                 "phone_model" => $faker->name,
                 "description" => $faker->sentence(6,true),
+                "phone_platform" => 'Modelo Generico',
                 'user_id' => $idFive,
                 'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
             ]);

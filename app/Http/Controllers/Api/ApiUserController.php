@@ -19,12 +19,14 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Api\ApiDeviceController;
 
 class ApiUserController extends ApiBaseController
 {
     // Variables Clase
     public $validacionesFormLogin;
     public $validacionesFormRegistro;
+    public $validacionesDevice;
     public $rolInvitado;
     // Constructor de la Clase
     public function __construct()
@@ -36,6 +38,11 @@ class ApiUserController extends ApiBaseController
         ];
         $this->validacionesFormLogin = [
             "email" => 'email|required',
+        ];
+        $this->validacionesDevice = [
+            "description" => 'string|required',
+            "phone_id" => 'string|required',
+            "phone_model" => 'string|required',
         ];
         $this->roles = Config::get('siu_config.roles');
         $this->categories = Config::get('siu_config.categorias');
@@ -107,8 +114,17 @@ class ApiUserController extends ApiBaseController
                 $this->checkProviderValidation($inputRegister['provider'], 'register');
                 //Crear el validador de los datos necesarios para guardar el usuario
                 $validatorJSONData = Validator::make($request->all(), $this->validacionesFormRegistro);
-                //Verificar si fallo la validacion de los datos necesarios para guardar el usuario
+                //Verificar si fallo la validacion de los datos necesarios para guardar el usuario                     
                 if (!$validatorJSONData->fails()) {
+                    //Validar dispositivo
+                    $device = $request->get('device', null);
+                    if($device){
+                        $validatorDevice = Validator::make($device, $this->validacionesDevice);
+                        if($validatorDevice->fails()){
+                            $device = null;
+                        }
+                    }
+
                     return $this->createUser(
                         $inputRegister['first_name'] ?? '',
                         $inputRegister['last_name'] ?? '',
@@ -116,10 +132,13 @@ class ApiUserController extends ApiBaseController
                         $inputRegister['provider'] ?? '',
                         $inputRegister['password'] ?? '',
                         $inputRegister['social_id'] ?? '',
-                        $inputRegister['avatar'] ?? '');
+                        $inputRegister['avatar'] ?? '',
+                        $inputRegister['device'] ?? null);
                 }
                 //Enviar error datos enviados
-                return $this->sendError(400, "Datos Inválidos en el Registro", $validatorJSONData->messages());
+                // $mensajesError = $validatorJSONData->messages();
+                $firstError = $validatorJSONData->errors()->first();
+                return $this->sendError(400, $firstError,$validatorJSONData->messages());
             }
             //Enviar error proveedor invalido
             return $this->sendError(400, "Proveedor Inválido", $validatorProvider->messages());
@@ -128,7 +147,7 @@ class ApiUserController extends ApiBaseController
         }
     }
 
-    private function registerNormalUser($first_name, $last_name, $email, $provider, $password, $avatar) {
+    private function registerNormalUser($first_name, $last_name, $email, $provider, $password, $avatar, $device = null) {
         $rolInvitado = Role::slug($this->roles['invitado'])->first();
         $user = new User();
         $user->first_name = $first_name;
@@ -141,23 +160,40 @@ class ApiUserController extends ApiBaseController
         $user->roles()->attach($rolInvitado->id, [
             'state' => 1,
         ]);
+        if($device){
+            $apiDeviceController = new ApiDeviceController;
+            $apiDeviceController->saveDevice(
+                (array_key_exists("phone_id",$device)) ? $device['phone_id']: '', 
+                (array_key_exists("phone_model",$device)) ? $device['phone_model']: '', 
+                (array_key_exists("phone_platform",$device)) ? $device['phone_platform']: 'Modelo Generico',
+                (array_key_exists("description",$device)) ? $device['description']: '', $user->id);
+        }
         return $user;
     }
     /*CREAR USUARIO EN EL API */
-    public function createUser($first_name, $last_name, $email, $provider, $password, $social_id, $avatar) {
+    public function createUser($first_name, $last_name, $email, $provider, $password, $social_id, $avatar, $device = null) {
         $utils = new Utils();
         //Crear usuario normal
         if ($provider == 'formulario') {
             $this->registerNormalUser(
-                $first_name,$last_name,$email,$provider,$password, $avatar);
+                $first_name,$last_name,$email,$provider,$password, $avatar, $device);
         } else {
             //Crear usuario social
-            $userExist = User::email($email)->exists();
+            $userExist = User::email($email)->first();
             // dd($userExist);
-            if ($userExist == false) {
-                $user = $this->registerNormalUser($first_name,$last_name,$email,$provider,$password, $avatar);
+            if (!$userExist) {
+               
+                $user = $this->registerNormalUser($first_name,$last_name,$email,$provider,$password, $avatar, $device);
             } else {
                 $user = User::email($email)->first();
+                if($device){
+                    $apiDeviceController = new ApiDeviceController;
+                    $apiDeviceController->saveDevice(
+                        (array_key_exists("phone_id",$device)) ? $device['phone_id']: '', 
+                        (array_key_exists("phone_model",$device)) ? $device['phone_model']: '', 
+                        (array_key_exists("phone_platform",$device)) ? $device['phone_platform']: 'Modelo Generico',
+                        (array_key_exists("description",$device)) ? $device['description']: '', $user->id);
+                }
             }
             // Verificar si debe guardar el perfil social
             $socialProfileExists = $utils->socialProfileExists($provider, $email);
@@ -193,7 +229,6 @@ class ApiUserController extends ApiBaseController
     {
         try {
             //Recoger los datos de la peticion
-            // $requestData = $request->only(['email', 'password', 'provider', 'social_id']);
             $requestData = $request->all();
             // VALIDAR PROVEEDOR DATOS
             $validatorProvider = Validator::make($request->all(), [
@@ -208,14 +243,27 @@ class ApiUserController extends ApiBaseController
                 if (!$validatorJSONData->fails()) {
                     //Devolver Token o datos
                     $jwtAuth = new JwtAuth();
+                    
+                    //Validar dispositivo
+                    $device = $request->get('device', null);
+                    if($device){
+                        $validatorDevice = Validator::make($device, $this->validacionesDevice);
+                        if($validatorDevice->fails()){
+                            $device = null;
+                        }
+                        // dd();
+                    }
                     //Verificar si se quiere obtener los datos del Token
                     $returnDataOrToken = ($request->has('getToken')) ? true : null;
                     //Mandar Pass or SocialID dependiendo Proveedor Login
                     $passOrSocialID = ($requestData['provider'] === 'formulario') ? $requestData['password'] : $requestData['social_id'];
-                    $userExist = User::email($requestData['email'])->exists();
-                    // dd($userExist);
+                    $userExist = User::where('email', $requestData['email'])->first();
+                    // dd($userExist, $requestData['provider'] = 'formulario');
+                    // die();
                     //Si usuario no existe, creo el usuario
-                    if ($userExist == false && $requestData['provider'] != 'formulario') {
+                    if (!$userExist && $requestData['provider'] = 'formulario') {
+                        dd('crear suuario');
+                        die();
                         // dd($userExist);
                         return $this->createUser(
                             $requestData['first_name'] ?? '',
@@ -224,11 +272,21 @@ class ApiUserController extends ApiBaseController
                             $requestData['provider'] ?? '',
                             $requestData['password'] ?? '',
                             $requestData['social_id'] ?? '',
-                            $requestData['avatar'] ?? '');
+                            $requestData['avatar'] ?? '',
+                            $device);
                     }else{
                         //Verificar si credenciales son validas
                         if ($jwtAuth->singIn($requestData['email'], $passOrSocialID, $requestData['provider'])) {
-                            // dd($requestData);
+                            //guardar device si existe
+                            $user = User::email($requestData['email'])->first();
+                            if($device){
+                                $apiDeviceController = new ApiDeviceController;
+                                $apiDeviceController->saveDevice(
+                                    (array_key_exists("phone_id",$device)) ? $device['phone_id']: '', 
+                                    (array_key_exists("phone_model",$device)) ? $device['phone_model']: '', 
+                                    (array_key_exists("phone_platform",$device)) ? $device['phone_platform']: 'Modelo Generico',
+                                    (array_key_exists("description",$device)) ? $device['description']: '', $user->id);
+                            }
                             $token = $jwtAuth->getToken($requestData['email'], $returnDataOrToken);    
                             return $this->sendResponse(200, "Login Correcto", $token);
                         }else{     
@@ -247,8 +305,9 @@ class ApiUserController extends ApiBaseController
                         }
                     }
                 }
+                // $firstError = $validatorJSONData->errors()->first();
                 //Si validador falla retorno error
-                return $this->sendError(400, "Datos no Válidos", $validatorJSONData->messages());
+                return $this->sendError(400, $firstError->errors()->first(), $validatorJSONData->messages());
             }
             //Si validador falla retorno error
             return $this->sendError(400, "Proveedor no válido", $validatorProvider->messages());
@@ -460,7 +519,7 @@ class ApiUserController extends ApiBaseController
                 "first_name" => 'required|string',
                 "last_name" => 'required|string',
                 "email" => 'required|string|email',
-                "phone" => 'nullable|string',
+                "number_phone" => 'nullable|string',
             ]);
             // Verificar si el validador falla
             if (!$validatorEditProfile->fails()) {
@@ -468,7 +527,7 @@ class ApiUserController extends ApiBaseController
                     "first_name" => $request->get('first_name'),
                     "last_name" => $request->get('last_name'),
                     "email" => $request->get('email'),
-                    "phone" => $request->get('phone'), //debe ir tal cual la request para que actualice correctamente
+                    "number_phone" => $request->get('number_phone'), //debe ir tal cual la request para que actualice correctamente
                 ];
                 // dd($user_update);
                 // return $this->sendDebugResponse([[$user_update], [$request->all()]]);
