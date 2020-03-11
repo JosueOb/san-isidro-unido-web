@@ -84,7 +84,7 @@ class ReportRequest extends FormRequest
         return [
             'title.required'=>'El campo :attribute es obligatorio',
             'title.min'=>'El :attribute debe ser mayor a 3 caracteres',
-            'title.max'=>'El :attribute no debe ser mayor a 45 caracteres',
+            'title.max'=>'El :attribute no debe ser mayor a 255 caracteres',
             'title.regex'=>'El :attribute debe estar conformado por caracteres alfabéticos, no se admiten caracteres especiales',
             
             'description.required'=>'El campo :attribute es obligatorio',

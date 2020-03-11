@@ -15,7 +15,7 @@ const print_phones = (array) => {
                   <i class="fas fa-minus-circle" id='delete_phone' data-no="${index}"></i>
                 </span>
               </div>
-      `;
+      `; 
     });
     $('#phone_group').html(print);
 };

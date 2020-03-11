@@ -28,7 +28,7 @@ class EventRequest extends FormRequest
         $categoryEvent = Category::where('slug', 'evento')->first();
         $rules = [
             'title'=>'required|regex:/^[[:alpha:][:space:](0-9)(,;.áéíóúÁÉÍÓÚÑñ)]+$/|min:3|max:255',
-            'description'=> 'nullable|regex:/^[[:alpha:][:space:](0-9)(,;.áéíóúÁÉÍÓÚÑñ)]+$/|max:255',
+            'description'=> 'required|regex:/^[[:alpha:][:space:](0-9)(,;.áéíóúÁÉÍÓÚÑñ)]+$/|max:255',
             //se recibe el id de la subcategoría
             'id'=>[
                 'required',
@@ -70,7 +70,49 @@ class EventRequest extends FormRequest
     */
     public function messages(){
         return [
+            'title.required'=>'El campo :attribute es obligatorio',
+            'title.min'=>'El :attribute debe ser mayor a 3 caracteres',
+            'title.max'=>'El :attribute no debe ser mayor a 255 caracteres',
+            'title.regex'=>'El :attribute debe estar conformado por caracteres alfabéticos, no se admiten caracteres especiales',
             
+            'description.required'=>'El campo :attribute es obligatorio',
+            'description.max'=>'La :attribute no debe ser mayor a 255 caracteres',
+            'description.regex'=>'La :attribute  debe estar conformado por caracteres alfabéticos, no se admiten caracteres especiales',
+
+            'id.required'=>'El campo :attribute es obligatorio',
+            'id.exists'=>'La :attribute seleccionada no existe',
+
+            'start-time.required'=>'El campo :attribute es obligatorio',
+            'start-time.regex'=>'La :attribute es inválida',
+
+            'end-time.regex'=>'La :attribute es inválida',
+
+            'start-date.required'=>'El campo :attribute es obligatorio',
+            'start-date.date_format'=>'La :attribute es inválida',
+
+            'end-date.date_format'=>'La :attribute es inválida',
+
+            'responsible.required'=>'El campo :attribute es obligatorio',
+            'responsible.min'=>'El :attribute debe ser mayor a 3 caracteres',
+            'responsible.max'=>'El :attribute no debe ser mayor a 125 caracteres',
+            'responsible.regex'=>'El :attribute debe estar conformado por caracteres alfabéticos, no se admiten caracteres especiales',
+
+            'phone_numbers.required'=>'El campo :attribute es obligatorio',
+            'phone_numbers.max'=> 'Solo se permiten 3 números telefónicos',
+            'phone_numbers.min'=> 'Se requiere de un número telefónico',
+            
+            'phone_numbers.*.regex'=>'No se cumple con el formato permitido',
+
+            'ubication.required'=>'Debe seleccionar una ubicación en el mapa',
+            'ubication.json'=>'No se cumple con el formaro JSON',
+
+            'ubication-description.max'=>'El :attribute no debe ser mayor a 255 caracteres',
+            'ubication-description.regex'=>'El :attribute  debe estar conformado por caracteres alfabéticos, no se admiten caracteres especiales',
+
+            'images.max'=> 'Solo se permiten '.env('NUMBER_IMAGES_EVENTS_ALLOWED').' imágenes',
+            'images.*.image'=>'Solo se admiten :attribute en formato jpeg y png',
+            'images.*.mimes'=>'Los formatos permitidos son jpeg y png',
+            'images.*.max'=>'El tamaño máximo para la :attribute es 1MB',
         ];
     }
     /**
@@ -81,7 +123,18 @@ class EventRequest extends FormRequest
     public function attributes()
     {
         return [
-
+            'title'=>'título',
+            'description' => 'descripción',
+            'id' => 'categoría',
+            'start-time' => 'hora de inicio',
+            'end-time' => 'hora de cierre',
+            'start-date' => 'fecha de inicio',
+            'end-date' => 'fecha de cierre',
+            'responsible' => 'responsable',
+            'phone_numbers' => 'teléfonos',
+            'ubication' => 'ubicación',
+            'ubication-description' => 'detalle de la ubicación',
+            'images.*' => 'imágenes',
         ];
     }
 }

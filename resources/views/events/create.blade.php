@@ -37,7 +37,7 @@
 
                             <div class="form-group">
                                 <label for="description">Descripción <span class="text-muted">(opcional)</span></label>
-                                <input id="description" type="text" class="form-control" name="description" value="{{ old('description')}}" maxlength="255">
+                                <input id="description" type="text" class="form-control" name="description" value="{{ old('description')}}" maxlength="255" required>
                                 <span class="invalid-feedback" role="alert">
                                 </span>
                             </div>
@@ -47,7 +47,7 @@
 
                                 @if (count($subcategories) > 0)
 
-                                <select class="form-control @error('subcategory') is-invalid @enderror" id="subcategory" name="id" required>
+                                <select class="form-control" id="subcategory" name="id" required>
                                     <option value="">Seleccione una opción</option>
                                     @foreach ($subcategories as $subcategory)
                                         <option value="{{$subcategory->id}}" {{old('subcategory')==$subcategory->id ? 'selected':''}}>{{$subcategory->name}}</option>
@@ -72,39 +72,29 @@
                                 <div class="form-group col-md-12 col-lg-6">
                                     <label for="start-time">Hora de inicio</label>
                                     <input id="start-time" type="time" class="form-control" name="start-time" value="{{ old('start-time') ?: "12:00"}}" placeholder="Comienza" required>
-                                    {{-- <span class="invalid-feedback" role="alert">
-                                    </span> --}}
+                                    <span class="invalid-feedback" role="alert">
+                                    </span>
                                 </div>
                                 <div class="form-group col-md-12 col-lg-6 mt-md-0 mt-sm-3 mt-3">
                                     <label for="end-time">Hora de cierre <span class="text-muted">(opcional)</span></label>
                                     <input id="end-time" type="text" class="form-control" name="end-time" value="{{ old('end-time') }}" placeholder="Termina">
-                                    {{-- <span class="invalid-feedback" role="alert">
-                                    </span> --}}
+                                    <span class="invalid-feedback" role="alert">
+                                    </span>
                                 </div>
                             </div>
-
-                            {{-- <div class="form-group">
-                                <label for="date">Fecha</span></label>
-                                <input id="date" type="date" class="form-control" name="date" value="{{ old('date') }}" placeholder="Fecha de inicio y fin" required>
-                                <small id="imagesHelp" class="form-text text-muted">
-                                    Puedes seleccionar una fecha en específico o un rango de fechas
-                                </small>
-                                <span class="invalid-feedback" role="alert">
-                                </span>
-                            </div> --}}
 
                             <div class="form-row">
                                 <div class="form-group col-md-12 col-lg-6">
                                     <label for="start-date">Fecha de inicio</label>
                                     <input id="start-date" type="date" class="form-control" name="start-date" value="{{ old('start-date') }}" placeholder="Comienza" required>
-                                    {{-- <span class="invalid-feedback" role="alert">
-                                    </span> --}}
+                                    <span class="invalid-feedback" role="alert">
+                                    </span>
                                 </div>
                                 <div class="form-group col-md-12 col-lg-6 mt-md-0 mt-sm-3 mt-3">
                                     <label for="end-date">Fecha de cierre <span class="text-muted">(opcional)</span></label>
                                     <input id="end-date" type="date" class="form-control" name="end-date" value="{{ old('end-date') }}" placeholder="Termina">
-                                    {{-- <span class="invalid-feedback" role="alert">
-                                    </span> --}}
+                                    <span class="invalid-feedback" role="alert">
+                                    </span>
                                 </div>
                             </div>
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use App\Http\Requests\EventRequest;
+use App\Phone;
 use App\Post;
 use App\Resource;
 use Illuminate\Http\Request;
@@ -80,6 +81,12 @@ class EventController extends Controller
         $event->additional_data = json_encode($additional_data);
         $event->save();
 
+        $phones = $validated['phone_numbers'];
+        foreach($phones as $phone){
+            $phone_number = new Phone(['phone_number' => $phone]);
+            $event->phones()->save($phone_number);
+        }
+
         if($request->file('images')){
             foreach($request->file('images') as $image){
                 Resource::create([
@@ -90,7 +97,8 @@ class EventController extends Controller
             }
         }
 
-        return response()->json(['success'=>'Datos recibidos correctamente', 'form'=> $request->all(), 'validated'=>$validated]);
+        session()->flash('success', 'Servicio público registrado con éxito');
+        return response()->json(['success'=>'Datos recibidos correctamente']);
     }
 
     /**
