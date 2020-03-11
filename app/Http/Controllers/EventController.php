@@ -18,7 +18,11 @@ class EventController extends Controller
      */
     public function index()
     {
-        return view('events.index');
+        $category_event = Category::where('slug', 'evento')->first();
+        $events = $category_event->posts()->paginate();
+        return view('events.index',[
+            'events' => $events,
+        ]);
     }
 
     /**

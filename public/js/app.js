@@ -70446,7 +70446,7 @@ $(document).ready(function () {
           Swal.fire({
             position: 'top-end',
             type: 'success',
-            title: 'Informe publicado',
+            title: 'Evento publicado',
             showConfirmButton: false,
             timer: 1500,
             allowOutsideClick: true
