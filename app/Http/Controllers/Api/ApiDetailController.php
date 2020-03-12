@@ -4,14 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
-use App\Rules\Api\DetailType;
-use App\Detail;
+use App\Rules\Api\ReactionType;
+use App\Reaction;
 use App\User;
 use App\Post;
 use App\Http\Controllers\Api\ApiBaseController;
 use Exception;
 
-class ApiDetailController extends ApiBaseController
+class ApiReactionController extends ApiBaseController
 {
 
     /**
@@ -24,7 +24,7 @@ class ApiDetailController extends ApiBaseController
         $token_decoded = $request->get('token');
         try {
             $validate = Validator::make($request->all(), [
-                "type" => ['required', 'string', new DetailType()],
+                "type" => ['required', 'string', new ReactionType()],
                 "post_id" => ['required', 'numeric']
             ]);
             $type = $request->get('type');
@@ -45,18 +45,21 @@ class ApiDetailController extends ApiBaseController
                 return $this->sendError(400, "El Post no existe", ['posts' => 'Post no existe']);
             }
             //Verificar si Existe el Detalle
-            $count_detail = Detail::userId($token_decoded->user->id)->type($type)->postId($post_id)->count();
+            $count_detail = Reaction::userId($token_decoded->user->id)->type($type)->postId($post_id)->count();
             if ($count_detail > 0) {
-                return $this->sendError(400, "El $type ya existe", ['detail' => "El Detalle de tipo $type no existe"]);
+                // return $this->sendError(400, "El $type ya existe", ['detail' => "El Detalle de tipo $type no existe"]);
+                return $this->sendResponse(200, "Detalle No Modificado", []);
             }
             //Crear un nuevo Detalle
-            $detail = new Detail();
+            $detail = new Reaction();
             $detail->post_id = $post_id;
             $detail->user_id = $token_decoded->user->id;
             $detail->type = $type;
             //Guardar el detalle en la BDD
             $detail->save();
-            return $this->sendResponse(200, "Detalle Creado Correctamente", []);
+            //Retornar nuevo array de BDD
+            $reactions = Reaction::postId($post_id)->get();
+            return $this->sendResponse(200, "Detalle Creado Correctamente", ["reactions"=> $reactions]);
         } catch (Exception $e) {
             return $this->sendError(500, "Error en el Servidor", ['server_error' => $e->getMessage()]);
         }
@@ -69,14 +72,18 @@ class ApiDetailController extends ApiBaseController
      *
      * @return array
      */
-    public function delete($id) {
+    public function delete(Request $request, $id) {
         try {
-            $detail = Detail::postId($id)->first();
+            $token_decoded = $request->get('token');
+            $detail = Reaction::postId($id)->first();
             if (!is_null($detail)) {
                 $detail->delete();
-                return $this->sendResponse(204, "Detalle Eliminado Correctamente", ['detail' => 'El detalle fue eliminado correctamente']);
+                 //Retornar nuevo array de BDD
+                $reactions = Reaction::postId($id)->get();
+                return $this->sendResponse(200, "Detalle Eliminado Correctamente",["reactions"=> $reactions]);
             } 
-            return $this->sendResponse(400, "El detalle no existe", ['server_error' => 'Detalle no existe']);
+            return $this->sendResponse(200, "Detalle No Modificado", []);
+            // return $this->sendResponse(400, "El detalle no existe", ['server_error' => 'Detalle no existe']);
         } catch (Exception $e) {
             return $this->sendError(500, "Error en el Servidor", ['server_error' => $e->getMessage()]);
         }

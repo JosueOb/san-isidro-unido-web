@@ -59,14 +59,13 @@ class PostNotification extends Notification
     public function toArray($notifiable)
     {
         $post =  Post::findById($this->post->id)->with(["category", "subcategory"])->first();
+        $title_noti = $post->user->first_name . " ha reportado una emergencia";
+        $description_noti = "Se reporto la emergencia " . substr($new_post->description, 25);
         return [
-            "title" => $post->title,
-            "message" => $post->description,
+            "title" => $title_noti,
+            "message" => $description_noti,
             "notification_user" => $notifiable, //el usuario al que le voy a enviar 
             "post" => $post,
-            // "user_post" => $post->user,
-            // "post_category" => $post->category,
-            // "post_subcategory" => $post->subcategory
         ];
     }
 }

@@ -4,7 +4,7 @@ namespace App\Rules\Api;
 
 use Illuminate\Contracts\Validation\Rule;
 
-class DetailType implements Rule
+class ReactionType implements Rule
 {
     /**
      * Create a new rule instance.

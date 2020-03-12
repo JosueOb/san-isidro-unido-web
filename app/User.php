@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use App\SocialProfile;
 use App\Position;
 use App\Device;
-use App\Detail;
+use App\Reaction;
 use App\RoleUser;
 use App\MembershipRequest;
 use App\Notifications;

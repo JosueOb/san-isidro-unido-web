@@ -138,57 +138,51 @@ class ApiPostController extends ApiBaseController
         if (is_null($emergencia)) {
             return $this->sendError(400, "Publicación No existe", ["emergencia" => "publicación no existe"]);
         }
-        $post_info_log = json_decode($emergencia->additional_data);
+        $post_info_log = json_decode($emergencia->additional_data, true);
+        // $post_info_log_arr = (array) $post_info_log;
+        // dd($post_info_log, gettype($post_info_log));
+        // return $this->sendDebugResponse($data = [
+        //     "post info type" => gettype($post_info_log["log_emergency"]),
+        //     "token_decoded info type" => gettype($token_decoded->user)
+        // ], 500);
+        // die();
         $post_info_log["log_emergency"]["policia"] = $token_decoded->user;
-        $post_info_log["log_event"] = (array_key_exists("log_event",$post_info_log) && $post_info_log["log_event"]) ? $post_info_log["log_event"]: null;
+        $post_info_log["log_event"] = 
+        (array_key_exists("log_event",$post_info_log) && $post_info_log["log_event"]) ? $post_info_log["log_event"]: null;
         $post_info_log["log_post"] = (array_key_exists("log_post",$post_info_log) && $post_info_log["log_post"]) ? $post_info_log["log_post"]: null;
-        //dd($post_info_log);
-        // $array = [
-        //     "log_event" => [
-        //           "responsable" => "Juanito" 
-        //        ], 
-        //     "log_post" => [
-        //              "moderador" => [
-        //                 "firstname" => "5" 
-        //              ] 
-        //           ], 
-        //     "log_emergency" => [
-        //                    "policia" => [
-        //                       "firstname" => "juan" 
-        //                    ] 
-        //                 ] 
-        //  ]; 
-        // $new_info
-        // dd($post_info_log);
         $emergencia->is_attended = 1;
         $emergencia->additional_data = json_encode($post_info_log);
         // dd($emergencia);
         // die();
-        // $emergencia->save();
+        $emergencia->save();
         //Notificar al usuario que creo el post sobre quien lo va a atender
         $user = User::findById($emergencia->user_id)->first();
         if(!is_null($user)){
             //$user->notify(new PostNotification($emergencia));
             $user_devices = OnesignalNotification::getUserDevices($emergencia->user_id);
-           
             if(!is_null($user_devices) && count($user_devices) > 0){
-                dd("hay dispositivos para enviar", $user_devices);
+                // return $this->sendDebugResponse($data = [
+                //     "user_devices" => $user_devices
+                // ], 500);
+                // dd("hay dispositivos para enviar", $user_devices);
                 //Enviar notification a todos
                OnesignalNotification::sendNotificationByPlayersID(
-                   $title = $new_post->title, 
-                   $description = substr($new_post->description, 25), 
-                   $aditionalData = [
-                       "title" => $title,
-                       "message" => $description,
-                       "post" => $new_post
+                   $title_noti = "Tu solicitud de emergencia fue aceptada", 
+                   $description_noti = "El policia " . $user->first_name . " ha aceptado atender tu emergencia", 
+                   [
+                       "title" => $title_noti,
+                       "message" => $description_noti,
+                       "post" => $emergencia
                    ],
-                   $specificIDs = []
+                   $user_devices
                );
             }
-            dd("no hay dispositivos para enviar", $user_devices);
-            die();
+            return $this->sendError(200, "Solicitud de Atención Registrada Correctamente", ["emergency" => $emergencia]);
+            // dd("no hay dispositivos para enviar", $user_devices);
+            // die();
         }
-        dd("no se encontro usuario");
+        return $this->sendError(400, "Usuario No existe", ["usuario" => "usuario no existe"]);
+        // dd("no se encontro usuario");
     }
 
     /**
@@ -276,9 +270,11 @@ class ApiPostController extends ApiBaseController
                     $policia->notify(new PostNotification($new_post));
                 }
                 //Enviar notification a todos
+                $title_noti = $new_post->user->first_name . " ha reportado una emergencia";
+                $description_noti = "Se reporto la emergencia " . substr($new_post->description, 25);
                 OnesignalNotification::sendNotificationBySegments(
-                    $title = $new_post->title, 
-                    $description = substr($new_post->description, 25), 
+                    $title = $title_noti, 
+                    $description = $description_noti, 
                     $aditionalData = [
                         "title" => $title,
                         "message" => $description,

@@ -77,7 +77,7 @@ class OnesignalNotification
      *
      * @return array
      */
-    public static function sendNotificationByPlayersID($title = '', $description = '', $aditionalData = null, $specificIDs = [])
+    public static function sendNotificationByPlayersID($title = '', $description = '', $aditionalData = [], $specificIDs = [])
     {
         $bodyPeticionOnesignal = [
             "data" => $aditionalData,
@@ -91,13 +91,14 @@ class OnesignalNotification
             ],
             "include_player_ids" => $specificIDs,
         ];
-        if(!$aditionalData){
-            $bodyPeticionOnesignal['data'] = (object)[];
-        }
+        // if(!$aditionalData){
+        //     $bodyPeticionOnesignal['data'] = (object)[];
+        // }
         
         try {
             $request = self::sendPushNotification($bodyPeticionOnesignal);
-            return ['content' => $request->getContents(), 'status' => $request->getStatusCode()];
+            $response = $request->getBody();
+            return ['content' => $response->getContents(), 'status' => $request->getStatusCode()];
         } catch (Exception $e) {
             // echo 'Excepción capturada: ', $e->getMessage(), "\n";
             return $e->getMessage();

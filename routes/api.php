@@ -51,10 +51,9 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('emergencias', "Api\ApiPostController@createEmergency")
     ->middleware(['api.user_auth']);
     //Crear un Problema Social
-    Route::post('problemas-sociales', "Api\ApiPostController@createSocialProblem");
-    // ->middleware(['api.user_auth', 'api.permission:morador']);
+    Route::post('problemas-sociales', "Api\ApiPostController@createSocialProblem")->middleware(['api.user_auth']);
     //Crear un detalle de tipo Likes, Asistencias
-    Route::post('detalles', "Api\ApiDetailController@create")
+    Route::post('detalles', "Api\ApiReactionController@create")
         ->middleware(['api.user_auth']);
         // ->middleware(['api.user_auth', 'api.permission:morador,policia']);
     //Añadir un dispositivo
@@ -83,7 +82,7 @@ Route::group(['prefix' => 'v1'], function () {
 //Rutas Delete
 Route::group(['prefix' => "v1"], function () {
     //Eliminar Detalle Publicacion
-    Route::delete('detalles/{id}', "Api\ApiDetailController@delete")
+    Route::delete('detalles/{id}', "Api\ApiReactionController@delete")
         ->middleware(['api.user_auth']);
     //Grupo Usuarios
     Route::group(['prefix' => "usuarios"], function () {
