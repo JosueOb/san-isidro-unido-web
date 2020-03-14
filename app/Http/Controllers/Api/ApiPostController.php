@@ -256,6 +256,7 @@ class ApiPostController extends ApiBaseController
                 $policias = $rolPolicia->users()->get();
 
                 $new_post = Post::findById($post->id)->with(["category", "subcategory"])->first();
+                // dd($new_post);
                 // $usersDevicesIds = [];
                 //Notificar Moderadores
                 foreach($moderadores as $moderador){
@@ -280,18 +281,6 @@ class ApiPostController extends ApiBaseController
                         "message" => $description,
                         "post" => $new_post
                 ]);
-                //d($usersDevicesIds);
-              
-                // OnesignalNotification::sendNotificationByPlayersID(
-                //     $title = $post->title, 
-                //     $description = substr($post->description, 25), 
-                //     $aditionalData = [
-                //         "post" => $post,
-                //         "category" => $post->category,
-                //         "subcategory" => $post->subcategory
-                //     ],
-                //     $specificIDs = $usersDevicesIds
-                // );
                 //Respuesta Api
                 return $this->sendResponse(200, "Emergency Created", [
                     'id' => $post->id

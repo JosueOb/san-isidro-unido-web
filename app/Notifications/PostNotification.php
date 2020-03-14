@@ -60,7 +60,7 @@ class PostNotification extends Notification
     {
         $post =  Post::findById($this->post->id)->with(["category", "subcategory"])->first();
         $title_noti = $post->user->first_name . " ha reportado una emergencia";
-        $description_noti = "Se reporto la emergencia " . substr($new_post->description, 25);
+        $description_noti = "Se reporto la emergencia " . substr($post->description, 25);
         return [
             "title" => $title_noti,
             "message" => $description_noti,
