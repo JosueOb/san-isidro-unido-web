@@ -50,9 +50,13 @@ $app = require_once __DIR__.'/../bootstrap/app.php';
 */
 
 $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
-
+// Clase Request por Defecto
+// $response = $kernel->handle(
+//     $request = Illuminate\Http\Request::capture()
+// );
+//Request Propia Customizada
 $response = $kernel->handle(
-    $request = Illuminate\Http\Request::capture()
+    $request = App\Http\Requests\AppSiuRequest::capture()
 );
 
 $response->send();

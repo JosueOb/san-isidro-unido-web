@@ -3,9 +3,20 @@
 namespace App\Helpers;
 use Illuminate\Support\Facades\Storage;
 use Error;
+use Illuminate\Support\Facades\Config;
 
 class ApiImages
 {
+
+     /**
+     * Constructor Clase
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->diskImage = Config::get('siu_config.API_IMAGES_DISK');
+    }
 
     /**
      * Guarda la imagen de un usuario y retorna el nombre de la imagen guardada
@@ -20,7 +31,7 @@ class ApiImages
             $img_file = $this->getB64Image($base64IMG);
             $img_extension = $this->getB64Extension($base64IMG);
             $img_name = ($previous_name) ? $previous_name : 'user' . time() . '.' . $img_extension;
-            $this->saveImageInDisk('images', $img_name, $img_file);
+            $this->saveImageInDisk($this->diskImage, $img_name, $img_file);
             return $img_name;
         } catch (Error $e) {
             echo $e->getMessage();
@@ -40,7 +51,7 @@ class ApiImages
             $img_file = $this->getB64Image($base64IMG);
             $img_extension = $this->getB64Extension($base64IMG);
             $img_name = ($previous_name) ? $previous_name : 'post' . time() . '.' . $img_extension;
-            $this->saveImageInDisk('images', $img_name, $img_file);
+            $this->saveImageInDisk($this->diskImage, $img_name, $img_file);
             return $img_name;
         } catch (Error $e) {
             echo $e->getMessage();
@@ -60,7 +71,7 @@ class ApiImages
             $img_file = $this->getB64Image($base64IMG);
             $img_extension = $this->getB64Extension($base64IMG);
             $img_name = ($previous_name) ? $previous_name : 'afiliation' . time() . '.' . $img_extension;
-            $this->saveImageInDisk('images', $img_name, $img_file);
+            $this->saveImageInDisk($this->diskImage, $img_name, $img_file);
             return $img_name;
         } catch (Error $e) {
             echo $e->getMessage();

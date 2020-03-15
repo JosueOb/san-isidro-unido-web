@@ -292,7 +292,7 @@ class ApiUserController extends ApiBaseController
                                     return $this->sendError(400, "No has asociado tu cuenta de google, registrate por favor", ['user' => 'No has asociado tu cuenta de google, registrate por favor']);
                                     break;
                                 default:
-                                    return $this->sendError(400, "Usuario y/o Contraseña Inválida", ['user' => 'Usuario y/o Contraseña Invalida']);
+                                    return $this->sendError(400, "Usuario y/o Contraseña Inválida", ['user' => 'Usuario y/o Contraseña Incorrecto']);
                                     break;
                             }
                         }
@@ -378,7 +378,7 @@ class ApiUserController extends ApiBaseController
                 return $this->sendError(404, "Usuario no existe", ['user' => "usuario no existe"]);
             }
             //Si validacion falla envio error
-            return $this->sendError(400, "Datos no válidos", $validatorPassword->messages());
+            return $this->sendError(400, "Los datos enviados no son válidos", $validatorPassword->messages());
         } catch (Exception $e) {
             return $this->sendError(500, "error", ['server_error' => $e->getMessage()]);
         }
@@ -438,7 +438,7 @@ class ApiUserController extends ApiBaseController
             }
             //Verificar si existe la categoria
             if (is_null($category)) {
-                return $this->sendError(404, 'no existen emergencias', ['category' => 'no existen emergencias']);
+                return $this->sendError(404, 'La categoria solicitada es incorrecta', ['category' => 'La categoria solicitada no existe']);
             }
             //Si existe retorno el listado de emergencias
             $social_problems = Post::categoryId($category->id)
