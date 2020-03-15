@@ -99,6 +99,7 @@ Route::group(['prefix' => "v1"], function () {
 Route::group(['prefix' => "v1"], function () {
     //Probar si se recibe correctamente la imagen
     Route::get('test-index', 'Api\ApiTestController@indexTest');
+    Route::get('resource-link/{id}', 'Api\ApiTestController@resourceLink');
     Route::post('imagen', "Api\ApiTestController@receiveImage");
     Route::get('check-pass', "Api\ApiTestController@CheckPass");
     Route::post('check-cors', 'Api\ApiTestController@CheckCors');

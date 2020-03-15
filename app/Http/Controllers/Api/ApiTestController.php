@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Role;
 use Illuminate\Http\Response;
 use App\User;
+use App\Resource;
 use App\Post;
 use App\Category;
 use App\PublicService;
@@ -32,6 +33,17 @@ class ApiTestController extends ApiBaseController
     public function __construct(){
         $utils = new Utils();
         $this->baseUrl = $utils->getAppURL() . "/api/v1";
+    }
+
+    public function resourceLink($resource_id){
+        $resource = Resource::where('id', $resource_id)->first();
+        if(!$resource){
+
+            return response()->json([
+                'msg' => "Resource no existe"
+            ], 400);
+        }
+        dd($resource, $resource->getApiLink());
     }
 
     public function indexTest(){

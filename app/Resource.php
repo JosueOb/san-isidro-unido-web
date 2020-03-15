@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Config;
 
 class Resource extends Model
 {
@@ -30,6 +31,13 @@ class Resource extends Model
     */
     public function getLink(){
         return \Storage::disk('public')->url($this->url);
+    }
+
+    /**
+    * get resource api link
+    */
+    public function getApiLink(){
+        return \Storage::disk(Config::get('siu_config.API_IMAGES_DISK'))->url($this->url);
     }
 
 }
