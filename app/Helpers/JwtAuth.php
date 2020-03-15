@@ -43,11 +43,7 @@ class JwtAuth {
 		// $user = User::where('email', $email)->first();
 		// $user = User::email($email)->rolActive()->first();
 		$user = User::email($email)->rolActive()->with("roles")->first();
-		// $email = 
-		// $user = User::where('email', $email)->first();
-		// return true;
-		// dd($validCredentials, $email, $passOrToken, $provider);
-		// die();
+
 		if (!is_null($user)) {
 			if ($provider === 'formulario') {
 				$validCredentials = (password_verify($passOrToken, $user['password'])) ? true : false;
@@ -116,7 +112,6 @@ class JwtAuth {
         $decoded = null;
 		try {
             $decoded = JWT::decode($jwt, $this->key, [$this->algoritmoCifrado]);
-            // dd($decoded);
 		} catch (\UnexpectedValueException $e) {
 			$auth = false;
 		} catch (\DomainException $e) {
@@ -126,8 +121,6 @@ class JwtAuth {
 		}
 
 		if (!empty($decoded) && is_object($decoded) && isset($decoded->sub)) {
-			// dd($decoded->user->state);
-			// die();
 			if ($decoded->user->state === 1) {
 				$auth = true;
 			} else {

@@ -37,7 +37,6 @@ class ApiTestController extends ApiBaseController
     public function indexTest(){
         $immutable_current_date = CarbonImmutable::now();
         $numDays = 4;
-        // $future_date = $immutable_current_date->add("day", 3);
         $future_date = $immutable_current_date->add(new DateInterval( "P".$numDays."D" ), $numDays);
         return response()->json([
             "immutable_current_date" => $immutable_current_date->toDateTimeString(),
@@ -52,17 +51,13 @@ class ApiTestController extends ApiBaseController
     public function CheckPass()
     {
         $user = User::email('jose@hotmail.com')->rolActive()->with("social_profiles", "roles")->first();
-        dd($user);
         $passwordEquals = password_verify('ramiro1234', '$2y$10$cXPiWWDT1PlKLKAvMz4yy.QRpjtABjb68wADgluuHlHhsMj/pGsam');
         dd($passwordEquals);
-        // return password_verify('ramiro1234', 'sadsadasdasdsadsad');
     }
     public function CheckCors(Request $request)
     {
         $passwordEquals = 'LAOLSLSLSLSLS';
-        // dd($headers = apache_request_headers());
         dd(apache_response_headers());
-        // return password_verify('ramiro1234', 'sadsadasdasdsadsad');
     }
     public function EncriptarPass($pass_plane)
     {

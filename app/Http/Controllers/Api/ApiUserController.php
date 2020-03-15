@@ -180,7 +180,6 @@ class ApiUserController extends ApiBaseController
         } else {
             //Crear usuario social
             $userExist = User::email($email)->first();
-            // dd($userExist);
             if (!$userExist) {
                
                 $user = $this->registerNormalUser($first_name,$last_name,$email,$provider,$password, $avatar, $device);
@@ -251,20 +250,14 @@ class ApiUserController extends ApiBaseController
                         if($validatorDevice->fails()){
                             $device = null;
                         }
-                        // dd();
                     }
                     //Verificar si se quiere obtener los datos del Token
                     $returnDataOrToken = ($request->has('getToken')) ? true : null;
                     //Mandar Pass or SocialID dependiendo Proveedor Login
                     $passOrSocialID = ($requestData['provider'] === 'formulario') ? $requestData['password'] : $requestData['social_id'];
                     $userExist = User::where('email', $requestData['email'])->first();
-                    // dd($userExist, $requestData['provider'] = 'formulario');
-                    // die();
                     //Si usuario no existe, creo el usuario
                     if (!$userExist && $requestData['provider'] = 'formulario') {
-                        dd('crear suuario');
-                        die();
-                        // dd($userExist);
                         return $this->createUser(
                             $requestData['first_name'] ?? '',
                             $requestData['last_name'] ?? '',
@@ -362,10 +355,8 @@ class ApiUserController extends ApiBaseController
             $image_service_b64 = $request->get('basic_service_image');
             $cedula = $request->get('cedula');
             // Verificar si el validador falla
-            //dd($token_decoded);
             if (!$validatorPassword->fails()) {
                 $user = User::findById($token_decoded->user->id)->first();
-                //dd($user);
                 //Validar si existe el usuario
                 if (!is_null($user)) {
                     $imageApi = new ApiImages();
@@ -441,7 +432,6 @@ class ApiUserController extends ApiBaseController
             //TODO: php artisan config:clear
             $user = User::findById($user_id)->first();
             $category = Category::slug($this->categories['emergencias'])->first();
-            //dd($this->categories['emergencias'], $this->categories);
             //Verifico si existe el usuario
             if (is_null($user)) {
                 return $this->sendError(404, 'no existe el usuario', ['user' => 'no existe la emergencia']);
@@ -529,7 +519,6 @@ class ApiUserController extends ApiBaseController
                     "email" => $request->get('email'),
                     "number_phone" => $request->get('number_phone'), //debe ir tal cual la request para que actualice correctamente
                 ];
-                // dd($user_update);
                 // return $this->sendDebugResponse([[$user_update], [$request->all()]]);
                 $user = User::findById($token_decoded->user->id)->first();
                 //Validar si el usuario existe

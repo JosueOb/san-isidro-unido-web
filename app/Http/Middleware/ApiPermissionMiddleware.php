@@ -19,7 +19,6 @@ class ApiPermissionMiddleware {
 
 		$jwtAuth = new \JwtAuth();
         $tokenHeader = $request->header("Authorization");
-        //dd($roles);
         if (!$tokenHeader) {
 			return $this->sendTokenRequiredResponse();
         }        

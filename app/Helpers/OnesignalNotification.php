@@ -39,7 +39,6 @@ class OnesignalNotification
             'Content-Type' => "application/json"
         ];
         $body["app_id"] = $onesignalAppId;
-        // dd('Peticion body', $body, json_encode($body));
         try {
             $request = $client->post($url, ['body' => json_encode($body), 'headers' => $headers]);
             return $request;
@@ -116,7 +115,6 @@ class OnesignalNotification
      */
     public static function sendNotificationBySegments($title = '', $description = '', $aditionalData = null, $segments = ["All"])
     {
-        // dd($title, $description);
         $bodyPeticionOnesignal = [
             "included_segments" => $segments,
             "contents" => [
@@ -131,19 +129,11 @@ class OnesignalNotification
         if(!$aditionalData){
             $bodyPeticionOnesignal['data'] = (object)[];
         }
-        // self::sendNotification($bodyPeticionOnesignal);
         try {
-            // dd($bodyPeticionOnesignal);
             $request= self::sendPushNotification($bodyPeticionOnesignal);
             $response = $request->getBody();
-            // dd($request->getStatusCode(), $response->getContents());
-            // dd($request->getStatusCode(), $request->getBody()->getContents());
-            // $response = $request->getBody();
-            // $reason = $response->getReasonPhrase(); // OK
-            // $content = $response->getContents();
             return ['content' => $response->getContents(), 'status' => $request->getStatusCode()];
         } catch (Exception $e) {
-            dd($e->getMessage());
             // echo 'Excepción capturada: ', $e->getMessage(), "\n";
             return ['errors' => $e->getMessage(), 'status' => 500];
         }

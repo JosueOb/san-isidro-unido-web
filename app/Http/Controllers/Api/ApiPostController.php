@@ -56,7 +56,6 @@ class ApiPostController extends ApiBaseController
             $filterSubcategory = ($request->get('subcategory')) ? $request->get('subcategory'): '';
             $filterUser = ($request->get('user')) ? $request->get('user'): '';
             $filterByTitle = ($request->get('title')) ? $request->get('title'): '';
-            // dd($filterCategory, $filterSubcategory, $filterUser, $filterByTitle);
             //BUSQUEDAS HECHAS
             $category = Category::slug($filterCategory)->first();
             $subcategory = Subcategory::slug($filterSubcategory)->first();
@@ -128,7 +127,6 @@ class ApiPostController extends ApiBaseController
         $validatorAtenderEmergencia = Validator::make($request->all(), [
             "emergencia_id" => ['required', 'int'],
         ]);
-        //dd($token_decoded);
         if ($validatorAtenderEmergencia->fails()) {
             return $this->sendError(400, "Datos no válidos", $validatorAtenderEmergencia->messages());
         }
@@ -139,21 +137,14 @@ class ApiPostController extends ApiBaseController
             return $this->sendError(400, "Publicación No existe", ["emergencia" => "publicación no existe"]);
         }
         $post_info_log = json_decode($emergencia->additional_data, true);
-        // $post_info_log_arr = (array) $post_info_log;
-        // dd($post_info_log, gettype($post_info_log));
-        // return $this->sendDebugResponse($data = [
-        //     "post info type" => gettype($post_info_log["log_emergency"]),
-        //     "token_decoded info type" => gettype($token_decoded->user)
-        // ], 500);
-        // die();
+
         $post_info_log["log_emergency"]["policia"] = $token_decoded->user;
         $post_info_log["log_event"] = 
         (array_key_exists("log_event",$post_info_log) && $post_info_log["log_event"]) ? $post_info_log["log_event"]: null;
         $post_info_log["log_post"] = (array_key_exists("log_post",$post_info_log) && $post_info_log["log_post"]) ? $post_info_log["log_post"]: null;
         $emergencia->is_attended = 1;
         $emergencia->additional_data = json_encode($post_info_log);
-        // dd($emergencia);
-        // die();
+        
         $emergencia->save();
         //Notificar al usuario que creo el post sobre quien lo va a atender
         $user = User::findById($emergencia->user_id)->first();
@@ -161,10 +152,6 @@ class ApiPostController extends ApiBaseController
             //$user->notify(new PostNotification($emergencia));
             $user_devices = OnesignalNotification::getUserDevices($emergencia->user_id);
             if(!is_null($user_devices) && count($user_devices) > 0){
-                // return $this->sendDebugResponse($data = [
-                //     "user_devices" => $user_devices
-                // ], 500);
-                // dd("hay dispositivos para enviar", $user_devices);
                 //Enviar notification a todos
                OnesignalNotification::sendNotificationByPlayersID(
                    $title_noti = "Tu solicitud de emergencia fue aceptada", 
@@ -178,11 +165,8 @@ class ApiPostController extends ApiBaseController
                );
             }
             return $this->sendError(200, "Solicitud de Atención Registrada Correctamente", ["emergency" => $emergencia]);
-            // dd("no hay dispositivos para enviar", $user_devices);
-            // die();
         }
         return $this->sendError(400, "Usuario No existe", ["usuario" => "usuario no existe"]);
-        // dd("no se encontro usuario");
     }
 
     /**
@@ -215,14 +199,9 @@ class ApiPostController extends ApiBaseController
                 $emergencyData = $request->all();
                 
                 $ubication = $emergencyData['ubication'];
-                // dd();
                 $ubication['title'] =  $emergencyData['title'];
-                //dd($ubication);
-                // $emergencyData['ubication'] = $utils->mapUbication($emergencyData['ubication']);
                 $imagesPost = ($request->filled('images')) ? $emergencyData['images'] : [];
                 $category = Category::slug($this->categories['emergencias'])->first();
-                //d($category);
-                //$this->sendDebugResponse($emergencyData)
                 $post = new Post();
                 $post->title = $emergencyData['title'];
                 $post->description = $emergencyData['description'];
@@ -247,8 +226,6 @@ class ApiPostController extends ApiBaseController
                 }
 
                 //Enviar notificaciones a moderadores
-
-                //dd($post);
                 $rolModerador = Role::where('slug', 'moderador')->first();
                 $rolPolicia = Role::where('slug', 'policia')->first();
 
@@ -256,8 +233,6 @@ class ApiPostController extends ApiBaseController
                 $policias = $rolPolicia->users()->get();
 
                 $new_post = Post::findById($post->id)->with(["category", "subcategory"])->first();
-                // dd($new_post);
-                // $usersDevicesIds = [];
                 //Notificar Moderadores
                 foreach($moderadores as $moderador){
                     // $devices_ids = OnesignalNotification::getUserDevices($moderador->id);
@@ -322,8 +297,7 @@ class ApiPostController extends ApiBaseController
                 $socialProblemData = $request->all();
                 $imagesPost = ($request->filled('images')) ? $socialProblemData['images'] : [];
                 $category = Category::slug($this->categories['problemas_sociales'])->first();
-                // dd($category, $this->categories);
-                //$this->sendDebugResponse($socialProblemData);
+                
                 $post = new Post();
                 $post->title = $socialProblemData['title'];
                 $post->description = $socialProblemData['description'];

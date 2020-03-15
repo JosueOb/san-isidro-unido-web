@@ -26,14 +26,6 @@ class ApiMobileNotificationController extends ApiBaseController
             }
             $string_notifications = json_encode($user->notifications);
             $mobileNotifications = json_decode($string_notifications);
-            // dd($string_notifications, $mobileNotifications);
-            //Verificar si existe la notificacion
-            // $mobileNotifications = (array) $user->notifications['items'];
-
-            // dd(gettype($mobileNotifications), $mobileNotifications);
-            // dd($mobileNotifications);
-            // $mobileNotifications = MobileNotification::userId((int) $user_id)->with(['user'])->orderBy('id', 'desc')
-            // ->get();
             if (is_null($mobileNotifications)) {
                 return $this->sendError(404, 'no existen notificationes', ['notifications' => 'no existen notificationes']);
             } 

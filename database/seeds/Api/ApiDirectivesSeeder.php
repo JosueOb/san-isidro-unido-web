@@ -40,10 +40,7 @@ class ApiDirectivesSeeder extends Seeder
                 $positionsFounded = true;
             }
         }
-        // dd($positionsAvalaible);
-        // dd(array_rand($positionsAvalaible,1));
-        // die();
-        // $test = [];
+
         for ($indice = 0; $indice < $numUsuarios; $indice++) {
             $posRamdom = rand(0, count($positionsAvalaible)-1);
             $roleDirectivo = Role::where('slug', 'directivo')->first();
@@ -52,8 +49,7 @@ class ApiDirectivesSeeder extends Seeder
             $lastname = $faker->lastName;
             $posID = $positionsAvalaible[$posRamdom];
             $phone = $faker->cellphone(false);
-            // dd($phone);
-            // die();
+            
             $newUser = [
                 'first_name' => $name,
                 'last_name' => $lastname,
