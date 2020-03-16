@@ -36,6 +36,16 @@ class ApiTestController extends ApiBaseController
     }
 
     public function resourceLink($resource_id){
+        // $urlLink = "https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/alarm.svg?";
+        $urlLink = "juan-jose.jpg";
+        // $urlLink = "https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/alarm.svg?sanitize=true";
+        if(preg_match(
+            "/^((?:https?\:\/\/|www\.)(?:[-a-z0-9]+\.)*[-a-z0-9]+.*)$/", $urlLink
+        )){
+            dd($urlLink, 'is url valid');
+        }else{
+            dd($urlLink, 'is url invalid');
+        }
         $resource = Resource::where('id', $resource_id)->first();
         if(!$resource){
 

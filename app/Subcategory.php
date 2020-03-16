@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\PublicService;
 use App\Category;
 use App\Post;
+use App\Helpers\ApiImages;
 
 class Subcategory extends Model
 {
@@ -53,6 +54,13 @@ class Subcategory extends Model
         return $query->where('category_id', $category_id);
     }
 
+    /*AGREGAR RESOURCE LINK ATTRIBUTE */
+    protected $attributes = ['image_link'];
+    protected $appends = ['image_link'];
+    public function getImageLinkAttribute(){
+        return $this->getApiLink();
+    }
+
     /*TODO: RELACIONES MODELO */ 
 
     /**
@@ -84,5 +92,13 @@ class Subcategory extends Model
     */
     public function getLink(){
         return \Storage::disk('public')->url($this->icon);
+    }
+
+     /**
+    * get resource api link
+    */
+    public function getApiLink(){
+        $imageApi = new ApiImages();
+        return $imageApi->getApiUrlLink($this->image);
     }
 }

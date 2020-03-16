@@ -7,10 +7,12 @@ use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Notifications\UserVerifyEmail;
+use Illuminate\Support\Facades\Config;
 use Caffeinated\Shinobi\Concerns\HasRolesAndPermissions;
 use Illuminate\Support\Facades\Storage;
 use App\SocialProfile;
 use App\Position;
+use App\Helpers\ApiImages;
 use App\Device;
 use App\Reaction;
 use App\RoleUser;
@@ -47,6 +49,13 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /*AGREGAR RESOURCE LINK ATTRIBUTE */
+    protected $attributes = ['avatar_link'];
+    protected $appends = ['avatar_link'];
+    public function getAvatarLinkAttribute(){
+        return $this->getApiLink();
+    }
 
 
     /**
@@ -237,5 +246,13 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
 	//Relacion Uno a Muchos con la Tabla Devices para obtener los dispositivos por cada usuario
 	public function devices() {
 		return $this->hasMany(Device::class)->orderBy('id', 'DESC');
-	}
+    }
+    
+    /**
+    * get resource api link
+    */
+    public function getApiLink(){
+        $imageApi = new ApiImages();
+        return $imageApi->getApiUrlLink($this->avatar);
+    }
 }

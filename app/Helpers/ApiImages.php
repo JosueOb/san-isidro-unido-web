@@ -140,4 +140,29 @@ class ApiImages
             echo $e->getMessage();
         }
     }
+
+    public function getApiUrlLink($value){
+        $diskname = \Config::get('siu_config.API_IMAGES_DISK');
+        if($this->checkURLValid($value)){
+            return $value;
+        }
+        if (\Storage::disk($diskname)->exists($value)) {
+            return \Storage::disk($diskname)->url($value);
+        }
+        return "https://ui-avatars.com/api/?name=Siu+Subcategoria";
+    }
+
+    public function checkURLValid($url){
+        $value = $url;
+        // if(preg_match(
+        //     "/^((?:https?\:\/\/|www\.)(?:[-a-z0-9]+\.)*[-a-z0-9]+.*)$/", $urlLink
+        // )){
+        //     dd($urlLink, 'is url valid');
+        // }else{
+        //     dd($urlLink, 'is url invalid');
+        // }
+        return (preg_match(
+            "/^((?:https?\:\/\/|www\.)(?:[-a-z0-9]+\.)*[-a-z0-9]+.*)$/", $value
+        ));
+    }
 }

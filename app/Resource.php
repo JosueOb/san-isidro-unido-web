@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Helpers\ApiImages;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
 
@@ -20,6 +21,15 @@ class Resource extends Model
     */
     protected $fillable = ['url', 'post_id', 'type'];
 
+    //Add Extra Attributes
+
+    /*AGREGAR RESOURCE LINK ATTRIBUTE */
+    protected $attributes = ['resource_link'];
+    protected $appends = ['resource_link'];
+    public function getResourceLinkAttribute(){
+        return $this->getApiLink();
+    }
+
     /**
     * A resource belongs to a post
     */
@@ -37,7 +47,8 @@ class Resource extends Model
     * get resource api link
     */
     public function getApiLink(){
-        return \Storage::disk(Config::get('siu_config.API_IMAGES_DISK'))->url($this->url);
+        $imageApi = new ApiImages();
+        return $imageApi->getApiUrlLink($this->url);
     }
 
 }
