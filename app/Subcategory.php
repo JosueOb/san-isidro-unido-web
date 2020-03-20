@@ -55,7 +55,7 @@ class Subcategory extends Model
     }
 
     /*AGREGAR RESOURCE LINK ATTRIBUTE */
-    protected $attributes = ['image_link'];
+    // protected $attributes = ['image_link'];
     protected $appends = ['image_link'];
     public function getImageLinkAttribute(){
         return $this->getApiLink();

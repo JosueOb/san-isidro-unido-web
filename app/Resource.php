@@ -24,7 +24,8 @@ class Resource extends Model
     //Add Extra Attributes
 
     /*AGREGAR RESOURCE LINK ATTRIBUTE */
-    protected $attributes = ['url_link'];
+    // public $url_link = '';
+    // protected $attributes = ['url_link'];
     protected $appends = ['url_link'];
     public function getUrlLinkAttribute(){
         return $this->getApiLink();
