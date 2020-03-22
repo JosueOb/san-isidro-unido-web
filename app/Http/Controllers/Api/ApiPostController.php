@@ -247,7 +247,7 @@ class ApiPostController extends ApiBaseController
                 }
                 //Enviar notification a todos
                 $title_noti = $new_post->user->first_name . " ha reportado una emergencia";
-                $description_noti = "Se reporto la emergencia " . substr($new_post->description, 25);
+                $description_noti = "Se reporto la emergencia " . substr($new_post->title, 30);
                 OnesignalNotification::sendNotificationBySegments(
                     $title = $title_noti, 
                     $description = $description_noti, 
