@@ -18,7 +18,8 @@ class ApiImageController extends ApiBaseController
      */
     public function getImageB64($filename) {
         //Disco donde se guarda las imagenes
-        $diskImage = 'images';
+        // $diskImage = 'images';
+        $diskImage = \Config::get('siu_config.API_IMAGES_DISK');
         // Verifica si existe el archivo
         $exists = Storage::disk($diskImage)->exists($filename);
         //Si existe el archivo lo sirvo, caso contrario retorno una respuesta de no encontrado

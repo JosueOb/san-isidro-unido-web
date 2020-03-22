@@ -180,7 +180,7 @@ class ApiPostController extends ApiBaseController
             $token_decoded = $request->get('token');
             // Obtener los datos de la request
             $validatorEmergency = Validator::make($request->all(), [
-                'title' => 'required|string',
+                'title' => 'required|string|max:150',
                 'description' => 'required|string',
                 "ubication" => ['required'],
                 "ubication.latitude" => ['required', 'numeric', 'regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/'],
@@ -280,7 +280,7 @@ class ApiPostController extends ApiBaseController
             $token_decoded = $request->get('token');
             //Validar Petición
             $validatorSocialProblem = Validator::make($request->all(), [
-                'title' => 'required|string',
+                'title' => 'required|string|max:150',
                 'description' => 'required|string',
                 "subcategory_id" => 'required|integer',
                 "images" => ['array'],

@@ -24,9 +24,9 @@ class ApiDeviceController extends ApiBaseController
             $token_decoded = $request->get('token');
             // Verificar si debe guardar un dispositivo asociado al usuario
             $validatorDeviceData = Validator::make($request->all(), [
-                "phone_id" => ['required', 'string'],
+                "phone_id" => ['required', 'string','max:100'],
                 'description' => ['string', 'nullable'],
-                'phone_model' => ['string', 'nullable'],
+                'phone_model' => ['string', 'nullable','max:100'],
             ]);
             //Verificar si el validator falla
             if ($validatorDeviceData->fails()) {

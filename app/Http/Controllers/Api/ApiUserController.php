@@ -32,17 +32,17 @@ class ApiUserController extends ApiBaseController
     public function __construct()
     {
         $this->validacionesFormRegistro = [
-            'first_name' => "required|string",
-            'last_name' => "required|string",
-            "email" => "required|email|unique:users,email"
+            'first_name' => "required|string|max:255",
+            'last_name' => "required|string|max:255",
+            "email" => "required|email|max:255|unique:users,email"
         ];
         $this->validacionesFormLogin = [
-            "email" => 'email|required',
+            "email" => 'email|required|max:255',
         ];
         $this->validacionesDevice = [
             "description" => 'string|required',
-            "phone_id" => 'string|required',
-            "phone_model" => 'string|required',
+            "phone_id" => 'string|required|max:100',
+            "phone_model" => 'string|required|max:100',
         ];
         $this->roles = Config::get('siu_config.roles');
         $this->categories = Config::get('siu_config.categorias');

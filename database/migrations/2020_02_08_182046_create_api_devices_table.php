@@ -21,8 +21,8 @@ class CreateApiDevicesTable extends Migration
             $table->string('phone_id',255);
             $table->unsignedBigInteger('user_id');
             $table->text('description')->nullable();
-            $table->string('phone_model', 60)->nullable();
-            $table->string('phone_platform', 60)->default('Modelo Generico');
+            $table->string('phone_model', 100)->nullable();
+            $table->string('phone_platform', 100)->default('Modelo Generico');
             $table->timestamps();
             $table->engine = 'InnoDB';
             $table->charset = 'utf8mb4';
