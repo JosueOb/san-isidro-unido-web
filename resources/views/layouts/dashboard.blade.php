@@ -55,7 +55,9 @@
                     <ul class="nav flex-column accordion" id="accordionSidebar">
                         <li class="menu-header">
                             @foreach (Auth::user()->getWebSystemRoles() as $role)
-                                {{$role->name}}<br>
+                                @if ($role->pivot->state)
+                                    {{$role->name}}<br>
+                                @endif
                             @endforeach
                         </li>
                         
