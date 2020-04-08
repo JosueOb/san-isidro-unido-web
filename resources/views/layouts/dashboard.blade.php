@@ -212,6 +212,26 @@
                         @endcanany
 
 
+                        {{-- @canany(['events.index','events.create']) --}}
+                        <li class="nav-item @yield('item-moderator')">
+                            <a class="nav-link" data-toggle="collapse" data-target="#collapseModerator" aria-expanded="true" aria-controls="collapseModerator">
+                                <i class="fas fa-calendar-week"></i>
+                                <span>Moderadores</span>
+                            </a>
+                            <div id="collapseModerator" class="collapse @yield('item-moderator-collapse')" >
+                                <div class="collapse-inner">
+                                    {{-- @can('events.create') --}}
+                                    <a class="collapse-item @yield('item-moderator-create')" href="#"><i class="fas fa-shield-alt"></i>Asignar moderador</a>
+                                    {{-- @endcan --}}
+                                    {{-- @can('events.index') --}}
+                                    <a class="collapse-item @yield('item-moderator-list')" href="#"><i class="fas fa-list"></i>Listar moderadores</a>
+                                    {{-- @endcan --}}
+                            </div>
+                            </div>
+                        </li>
+                        {{-- @endcanany --}}
+
+
                     </ul>
                 </div>
             </aside>
