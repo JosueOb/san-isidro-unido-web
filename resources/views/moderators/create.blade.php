@@ -102,9 +102,9 @@
                                     <th>Apellido</th>
                                     <th>Correo</th>
                                     <th>Estado</th>
-                                    {{-- @canany(['neighbors.show', 'neighbors.edit','neighbors.destroy']) --}}
+                                    @canany(['moderators.create'])
                                     <th>Opciones</th>
-                                    {{-- @endcanany --}}
+                                    @endcanany
                                 </tr>
                             </thead>
                             <tbody>
@@ -120,7 +120,7 @@
                                             </span>
                                         </td>
 
-                                        {{-- @can('events.show') --}}
+                                        @can('moderators.create')
                                         <td width='10px'>
                                             @if ($neighbor->getASpecificRole('moderador'))
                                                 <p>Asignado</p>
@@ -130,7 +130,7 @@
                                                 </form>
                                             @endif
                                         </td>
-                                        {{-- @endcan --}}
+                                        @endcan
 
                                     </tr>
                                     @endforeach

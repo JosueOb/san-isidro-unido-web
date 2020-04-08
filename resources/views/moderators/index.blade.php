@@ -74,9 +74,9 @@
                     <div class="col">
                         <h4 class="d-inline">Moderadores asignados</h4>
 
-                        {{-- @can('neighbors.create') --}}
+                        @can('moderators.create')
                         <a href="{{route('moderators.create')}}" class="btn btn-primary float-right">Agregar</a>
-                        {{-- @endcan --}}
+                        @endcan
 
                     </div>
                 </div>
@@ -102,9 +102,9 @@
                                     <th>Apellido</th>
                                     <th>Correo</th>
                                     <th>Estado</th>
-                                    {{-- @canany(['neighbors.show', 'neighbors.edit','neighbors.destroy']) --}}
+                                    @canany(['moderators.show','moderators.destroy'])
                                     <th>Opciones</th>
-                                    {{-- @endcanany --}}
+                                    @endcanany
                                 </tr>
                             </thead>
                             <tbody>
@@ -120,13 +120,13 @@
                                             </span>
                                         </td>
 
-                                        {{-- @can('neighbors.show') --}}
+                                        @can('moderators.show')
                                         <td width='10px'>
                                             <a href="{{route('moderators.show', $moderator->id)}}" class="btn btn-info">Ver</a>
                                         </td>
-                                        {{-- @endcan --}}
+                                        @endcan
 
-                                        {{-- @can('neighbors.destroy') --}}
+                                        @can('moderators.destroy')
                                         <td width='10px'>
                                             @if ($moderator->getRelationshipStateRolesUsers('moderador'))
                                                 <a href="#" class="btn btn-danger"  data-toggle="modal" data-target="#deleteModerator{{$moderator->id}}">Desactivar</a>
@@ -184,7 +184,7 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        {{-- @endcan --}}
+                                        @endcan
 
                                     </tr>
                                     @endforeach

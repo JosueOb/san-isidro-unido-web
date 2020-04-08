@@ -140,10 +140,10 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::delete('events/{event}', 'EventController@destroy')->name('events.destroy')->middleware('can:events.destroy');
 
     //MODERADOR
-    Route::get('moderators/create', 'ModeratorController@create')->name('moderators.create');
-    Route::get('moderators/{user}/create', 'ModeratorController@store')->name('moderators.store');
-    Route::get('moderators', 'ModeratorController@index')->name('moderators.index');
-    Route::delete('moderators/{user}', 'ModeratorController@destroy')->name('moderators.destroy');
-    Route::get('moderators/{user}', 'ModeratorController@show')->name('moderators.show');
+    Route::get('moderators/create', 'ModeratorController@create')->name('moderators.create')->middleware('can:moderators.create');
+    Route::get('moderators/{user}/create', 'ModeratorController@store')->name('moderators.store')->middleware('can:moderators.create');
+    Route::get('moderators', 'ModeratorController@index')->name('moderators.index')->middleware('can:moderators.index');
+    Route::delete('moderators/{user}', 'ModeratorController@destroy')->name('moderators.destroy')->middleware('can:moderators.destroy');
+    Route::get('moderators/{user}', 'ModeratorController@show')->name('moderators.show')->middleware('can:moderators.show');
 
 });

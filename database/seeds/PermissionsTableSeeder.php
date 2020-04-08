@@ -305,5 +305,34 @@ class PermissionsTableSeeder extends Seeder
             'private'=>false,
             'group'=>'evento',
         ]);
+        //Permisos sobre el módulo de moderadores
+        Permission::create([
+            'name'=>'Listar los moderadores',
+            'slug'=>'moderators.index',
+            'description'=>'Lista los moderadores registrados por la directiva',
+            'private'=>false,
+            'group'=>'moderador',
+        ]);
+        Permission::create([
+            'name'=>'Asignar moderador',
+            'slug'=>'moderators.create',
+            'description'=>'Asigna un nuevo moderador',
+            'private'=>false,
+            'group'=>'moderador',
+        ]);
+        Permission::create([
+            'name'=>'Ver a detalle un moderador',
+            'slug'=>'moderators.show',
+            'description'=>'Ver en detalle cada uno de los moderadores registrados',
+            'private'=>false,
+            'group'=>'moderador',
+        ]);
+        Permission::create([
+            'name'=>'Eliminar moderador',
+            'slug'=>'moderators.destroy',
+            'description'=>'Eliminar los registros de moderadores',
+            'private'=>false,
+            'group'=>'moderador',
+        ]);
     }
 }
