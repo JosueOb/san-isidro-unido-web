@@ -130,7 +130,7 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::put('public-service/{publicService}', 'PublicServiceController@update')->name('publicServices.update')->middleware('can:publicServices.edit');
     Route::delete('public-service/{publicService}', 'PublicServiceController@destroy')->name('publicServices.destroy')->middleware('can:publicServices.destroy');
 
-    //Eventos
+    //EVENTOS
     Route::get('events', 'EventController@index')->name('events.index')->middleware('can:events.index');
     Route::get('events/create', 'EventController@create')->name('events.create')->middleware('can:events.create');
     Route::post('events/store', 'EventController@store')->name('events.store')->middleware('can:events.create');
@@ -145,5 +145,10 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::get('moderators', 'ModeratorController@index')->name('moderators.index')->middleware('can:moderators.index');
     Route::delete('moderators/{user}', 'ModeratorController@destroy')->name('moderators.destroy')->middleware('can:moderators.destroy');
     Route::get('moderators/{user}', 'ModeratorController@show')->name('moderators.show')->middleware('can:moderators.show');
+
+    //POLICIA
+    Route::get('policemen', 'PoliceController@index')->name('policemen.index');
+    Route::get('policemen/create', 'PoliceController@create')->name('policemen.create');
+    Route::post('policemen/store', 'PoliceController@store')->name('policemen.store');
 
 });

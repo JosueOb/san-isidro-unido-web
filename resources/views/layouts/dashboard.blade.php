@@ -217,13 +217,13 @@
                         @canany(['moderators.index','moderators.create'])
                         <li class="nav-item @yield('item-moderator')">
                             <a class="nav-link" data-toggle="collapse" data-target="#collapseModerator" aria-expanded="true" aria-controls="collapseModerator">
-                                <i class="fas fa-calendar-week"></i>
+                                <i class="fas fa-shield-alt"></i>
                                 <span>Moderadores</span>
                             </a>
                             <div id="collapseModerator" class="collapse @yield('item-moderator-collapse')" >
                                 <div class="collapse-inner">
                                     @can('moderators.create')
-                                    <a class="collapse-item @yield('item-moderator-create')" href="{{route('moderators.create')}}"><i class="fas fa-shield-alt"></i>Asignar moderador</a>
+                                    <a class="collapse-item @yield('item-moderator-create')" href="{{route('moderators.create')}}"><i class="fas fa-user-plus"></i>Asignar moderador</a>
                                     @endcan
                                     @can('moderators.index')
                                     <a class="collapse-item @yield('item-moderator-list')" href="{{route('moderators.index')}}"><i class="fas fa-list"></i>Listar moderadores</a>
@@ -232,6 +232,25 @@
                             </div>
                         </li>
                         @endcanany
+
+                        {{-- @canany(['neighbors.index', 'neighbors.create']) --}}
+                        <li class="nav-item @yield('item-police')">
+                            <a class="nav-link" data-toggle="collapse" data-target="#collapsePolice" aria-expanded="true" aria-controls="collapsePolice">
+                                <i class="fas fa-user-shield"></i>
+                                <span>Policía</span>
+                            </a>
+                            <div id="collapsePolice" class="collapse @yield('item-police-collapse')" >
+                                <div class="collapse-inner">
+                                    {{-- @can('neighbors.index') --}}
+                                        <a class="collapse-item @yield('item-neighbor-list')" href="{{route('policemen.index')}}"><i class="fas fa-list"></i>Listar policías</a>
+                                    {{-- @endcan --}}
+                                    {{-- @can('neighbors.index') --}}
+                                        <a class="collapse-item @yield('item-neighbor-create')" href="{{route('policemen.create')}}"><i class="fas fa-user-plus"></i>Registrar policía</a>
+                                    {{-- @endcan --}}
+                                </div>
+                            </div>
+                        </li>
+                        {{-- @endcanany --}}
 
 
                     </ul>
