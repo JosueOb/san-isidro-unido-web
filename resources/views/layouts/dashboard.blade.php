@@ -224,7 +224,7 @@
                                     <a class="collapse-item @yield('item-moderator-create')" href="{{route('moderators.create')}}"><i class="fas fa-shield-alt"></i>Asignar moderador</a>
                                     {{-- @endcan --}}
                                     {{-- @can('events.index') --}}
-                                    <a class="collapse-item @yield('item-moderator-list')" href="#"><i class="fas fa-list"></i>Listar moderadores</a>
+                                    <a class="collapse-item @yield('item-moderator-list')" href="{{route('moderators.index')}}"><i class="fas fa-list"></i>Listar moderadores</a>
                                     {{-- @endcan --}}
                             </div>
                             </div>

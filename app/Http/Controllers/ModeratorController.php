@@ -22,7 +22,12 @@ class ModeratorController extends Controller
      */
     public function index()
     {
-        //
+        $role_moderator = ModelsRole::where('slug', 'moderador')->first();
+        $moderators = $role_moderator->users()->paginate();
+
+        return view('moderators.index', [
+            'moderators'=> $moderators,
+        ]);
     }
 
     /**
