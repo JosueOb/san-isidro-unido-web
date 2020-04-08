@@ -127,4 +127,6 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::get('events/create', 'EventController@create')->name('events.create');
     Route::post('events/store', 'EventController@store')->name('events.store');
     Route::get('events/{event}', 'EventController@show')->name('events.show');
+    Route::get('events/{event}/edit', 'EventController@edit')->name('events.edit');
+    Route::put('events/{event}', 'EventController@update')->name('events.update');
 });

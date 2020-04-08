@@ -3,22 +3,22 @@ const Swal = require('sweetalert2')
 let numberOfImagesAllowed = 5;
 let size = 1048576;//equivale a 1MB
 
-var oldImagesReport = [];
-var newImagesReport = [];
+var oldImages = [];
+var newImages = [];
 var imagesRender = [];
 
 const previewImages = arrayImages => {
     let imageItem = '';
-    var numberOfImagesReport = 0;
-    var numberOfImagesInput = 0;
+    var numberOfOldImages = 0;
+    var numberOfNewImages = 0;
 
     arrayImages.forEach(function(image, index){
         for(var group in image){
-            if(group === 'reportImage'){
-                image[group]['index'] = numberOfImagesReport++;
+            if(group === 'new'){
+                image[group]['index'] = numberOfNewImages++;
             }
-            if(group === 'inputImage'){
-                image[group]['index'] = numberOfImagesInput++;
+            if(group === 'old'){
+                image[group]['index'] = numberOfOldImages++;
             }
             image[group]['position'] = index;
 
@@ -54,13 +54,13 @@ $('#images').on('change', function(event){
                     var reader = new FileReader();
                     reader.onload = (event) => {
                         if (imagesRender.length < numberOfImagesAllowed) {
-                            newImagesReport.push(file);
+                            newImages.push(file);
 
                             var imageRender = new Array();
                             var images = new Array();
 
                             imageRender['src'] = event.target.result;
-                            images['input'] = imageRender;
+                            images['new'] = imageRender;
 
                             imagesRender.push(images);
 
@@ -91,18 +91,18 @@ $('#images').on('change', function(event){
     }
 });
 
-$('#gallery-images').on('click', '#delete_report_image', function () {
+$('#gallery-images').on('click', '#delete_old_image', function () {
     let imageIndex = $(this).data('index');
     let imagePosition = $(this).data('position');
-    oldImagesReport.splice(imageIndex, 1);
+    oldImages.splice(imageIndex, 1);
     imagesRender.splice(imagePosition, 1);
     previewImages(imagesRender);
 });
 
-$('#gallery-images').on('click', '#delete_input_image', function () {
+$('#gallery-images').on('click', '#delete_new_image', function () {
     let imageIndex = $(this).data('index');
     let imagePosition = $(this).data('position');
-    newImagesReport.splice(imageIndex, 1);
+    newImages.splice(imageIndex, 1);
     imagesRender.splice(imagePosition, 1);
     previewImages(imagesRender);
 });
@@ -110,5 +110,22 @@ $('#gallery-images').on('click', '#delete_input_image', function () {
 function resetNumberOfImagesAllowed(number){
     numberOfImagesAllowed = number;
 }
+function resetImages(){
+    //Se realiza la lectura de las imagenes que que encuentren en la sección de gallería
+    var getImages = document.querySelectorAll("#gallery-images .gallery-item img");
 
-export{newImagesReport, resetNumberOfImagesAllowed}
+    getImages.forEach(function (image, index) {
+        var imageRender = new Array();
+        var images = new Array();
+
+        imageRender['src'] = image.src;
+        images['old'] = imageRender;
+
+        imagesRender.push(images);
+        oldImages.push(image.dataset.image);
+    });
+
+    previewImages(imagesRender);
+}
+
+export{newImages, resetNumberOfImagesAllowed, resetImages, oldImages}

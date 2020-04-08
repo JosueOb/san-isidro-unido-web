@@ -56,9 +56,27 @@ class EventRequest extends FormRequest
 
         if($this->isMethod('POST')){
             $rules += [
-                "images" => "nullable|array|max:".env('NUMBER_IMAGES_EVENTS_ALLOWED'),
-                "images.*" => "nullable|image|mimes:jpeg,jpg,png|max:1024",//el tamaño esta expresado en kilibytes, equivale a 1MB
+                "new_images" => "nullable|array|max:".env('NUMBER_IMAGES_EVENTS_ALLOWED'),
+                "new_images.*" => "nullable|image|mimes:jpeg,jpg,png|max:1024",//el tamaño esta expresado en kilibytes, equivale a 1MB
             ];
+        }
+        if($this->isMethod('PUT')){
+             //Se obtiene la cantidad de elementos en los arregos de imágenes nuevas y antiguas
+             $numberOfNewImages = $this->hasFile('new_images') ? count($this->file('new_images')) : 0;
+             $numberOfOldImages = $this->has('old_images') ? count($this->get('old_images')) : 0;
+             $totalImages = $numberOfNewImages + $numberOfOldImages;
+
+             if($totalImages > env('NUMBER_IMAGES_EVENTS_ALLOWED')){
+                $rules += [
+                    'images_allowed'=>'required',
+                ];
+            }else{
+                $rules += [
+                    "new_images" => "nullable|array",
+                    'old_images'=>'nullable|array',
+                    "new_images.*" => "nullable|image|mimes:jpeg,jpg,png|max:1024",//el tamaño esta expresado en kilibytes, equivale a 1MB
+                ];
+            }
         }
 
         return $rules;
@@ -109,10 +127,12 @@ class EventRequest extends FormRequest
             'ubication-description.max'=>'El :attribute no debe ser mayor a 255 caracteres',
             'ubication-description.regex'=>'El :attribute  debe estar conformado por caracteres alfabéticos, no se admiten caracteres especiales',
 
-            'images.max'=> 'Solo se permiten '.env('NUMBER_IMAGES_EVENTS_ALLOWED').' imágenes',
-            'images.*.image'=>'Solo se admiten :attribute en formato jpeg y png',
-            'images.*.mimes'=>'Los formatos permitidos son jpeg y png',
-            'images.*.max'=>'El tamaño máximo para la :attribute es 1MB',
+            'new_images.max'=> 'Solo se permiten '.env('NUMBER_IMAGES_EVENTS_ALLOWED').' imágenes',
+            'new_images.*.image'=>'Solo se admiten :attribute en formato jpeg y png',
+            'new_images.*.mimes'=>'Los formatos permitidos son jpeg y png',
+            'new_images.*.max'=>'El tamaño máximo para la :attribute es 1MB',
+
+            'images_allowed.required'=>'Solo se permiten '.env('NUMBER_IMAGES_EVENTS_ALLOWED').' imágenes',
         ];
     }
     /**
@@ -134,7 +154,8 @@ class EventRequest extends FormRequest
             'phone_numbers' => 'teléfonos',
             'ubication' => 'ubicación',
             'ubication-description' => 'detalle de la ubicación',
-            'images.*' => 'imágenes',
+            'new_images.*' => 'imágenes',
+            'images_allowed' => 'imágenes',
         ];
     }
 }

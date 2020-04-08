@@ -30,7 +30,7 @@
                         <h4  class="d-inline">Detalle de evento</h4>
 
                         {{-- @can('publicServices.edit') --}}
-                        <a href="#" class="btn btn-primary float-right">Editar</a>
+                        <a href="{{route('events.edit', $event->id)}}" class="btn btn-primary float-right">Editar</a>
                         {{-- @endcan --}}
                     </div>
                 </div>

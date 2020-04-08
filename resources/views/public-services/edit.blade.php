@@ -87,8 +87,6 @@
                                                 </span>
                                             </div>
                                             @endforeach
-                                        @else
-                                            <p>Ningún teléfono registrado</p>
                                         @endif
                                     </div>
 

@@ -62,7 +62,7 @@
                                         <td>{{ $event->id}}</td>
                                         <td>{{ $event->title}}</td>
                                         <td>{{ $event->description ?: 'Sin descripción'}}</td>
-                                        <td>{{ $event->category->name }}</td>
+                                        <td>{{ $event->subcategory->name }}</td>
                                         <td>{{ $event->state ? 'Activo': 'Inactivo'}}</td>
 
                                         {{-- @can('publicServices.show') --}}
@@ -73,7 +73,7 @@
                                         
                                         {{-- @can('publicServices.edit') --}}
                                         <td width='10px'>
-                                            <a href="#" class="btn btn-secondary"> Editar</a>
+                                            <a href="{{route('events.edit', $event->id)}}" class="btn btn-secondary"> Editar</a>
                                         </td>
                                         {{-- @endcan --}}
 

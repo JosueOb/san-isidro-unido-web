@@ -1,73 +1,69 @@
 const Swal = require('sweetalert2')
 
-import {getCurrentLocation, getAddress, locateMarker, setPosition, location} from './map';
-import{phone_array} from './phone_numbers';
-import{newImages, resetNumberOfImagesAllowed} from './image-gallery';
-import{getCurrentDate} from './time-date';
+import { locateMarker, setPosition, location } from './map';
+import { phone_array, resetValues } from './phone_numbers';
+import { newImages, resetNumberOfImagesAllowed, resetImages, oldImages } from './image-gallery';
 
-var phone_numbers = phone_array;
-var images = newImages;
+var savedLocation = {};
+var savedPhones = [];
+// var currentLocation = location;
+var newEventImages = newImages;
+var oldEventImages = oldImages;
+// var phone_numbers = phone_array;
 
-var currentLocation = location;
 
-async function loadMap(){
-    var geolocationPosition = await getCurrentLocation()
-                                    .then(coordinates => coordinates)
-                                    .catch(errs =>{
-                                        console.log('geolocationPosition', errs);
-                                    });
-    currentLocation = {
-        'lat': geolocationPosition ? geolocationPosition.coords.latitude: null, 
-        lng: geolocationPosition ? geolocationPosition.coords.longitude : null,
-    };
-    var address = await getAddress(currentLocation);
-    currentLocation.address = address ? address : null;
+async function updateMap() {
+    //Se obtienen las coordenadas
+    var infoLocation = document.querySelectorAll("#info span");
+    infoLocation.forEach(element => {
+        savedLocation[element.id] = element.textContent;
+    });
 
-    if(currentLocation.lat && currentLocation.lng && currentLocation.address ){
-        setPosition(currentLocation);
-    }
-    
-    locateMarker('map');
+    await setPosition(savedLocation);
+    await locateMarker('map');
+}
+
+function updatePhones() {
+    //Se obtienen los teléfono(s) registrados
+    var infoPhones = document.querySelectorAll("#phone_group #phone_bagde");
+    infoPhones.forEach(phone => {
+        //Se eliminan los espacios en blanco
+        savedPhones.push(phone.textContent.trim());
+    });
+    resetValues(savedPhones);
+}
+
+function updateImages() {
+    resetNumberOfImagesAllowed(3);
+    resetImages();
 }
 
 $(document).ready(function () {
 
-    if($('#map').length != 0 && $('#event-create').length != 0){
-        getCurrentDate();
-        loadMap();
-        resetNumberOfImagesAllowed(3);
+    if ($('#map').length != 0 && $('#event-update').length != 0) {
+        updateMap();
+        updatePhones();
+        updateImages();
     }
 
-
-    $('#event-create').on('submit', function (event) {
+    $('#event-update').on('submit', function (event) {
         event.preventDefault();
         var formData = new FormData(this);
 
         formData.append('ubication', JSON.stringify(location));
         
         formData.delete('new_images[]');
-        images.forEach(function (image) {
+        newEventImages.forEach(function (image) {
             formData.append('new_images[]', image);
+        });
+        oldEventImages.forEach(function (image) {
+            formData.append('old_images[]', image);
         });
         
         formData.delete('phone_numbers');
-        phone_numbers.forEach(function (phone) {
+        phone_array.forEach(function (phone) {
             formData.append('phone_numbers[]', phone);
         });
-
-        // console.log('título', formData.get('title'));
-        // console.log('descripción', formData.get('description'));
-        // console.log('categoría', formData.get('id'));
-        // console.log('responsable', formData.get('responsible'));
-        // console.log('hora-inicio', formData.get('start-time'));
-        // console.log('hora-fin', formData.get('end-time'));
-        // console.log('fecha-inicio', formData.get('start-date'));
-        // console.log('fecha-final', formData.get('end-date'));
-        // console.log('telefonos', formData.getAll('phone_numbers[]'));
-        // console.log('descipción de ubicación', formData.get('ubication-description'));
-        // console.log('ubicación', formData.get('ubication'));
-        // console.log('imagenes', formData.getAll('images[]') );
-
 
         $.ajax({
             type: 'POST',
@@ -80,6 +76,7 @@ $(document).ready(function () {
             success: function (data) {
 
                 if (data.success) {
+                    // console.log(data.success);
                     $('#title').removeClass('is-invalid');
                     $('#description').removeClass('is-invalid');
                     $('#id').removeClass('is-invalid');
@@ -95,7 +92,7 @@ $(document).ready(function () {
                     Swal.fire({
                         position: 'top-end',
                         type: 'success',
-                        title: 'Evento publicado',
+                        title: 'Evento actualizado',
                         showConfirmButton: false,
                         timer: 1500,
                         allowOutsideClick: true,
@@ -107,7 +104,7 @@ $(document).ready(function () {
 
                     // funciona como una redirección HTTP
                     setTimeout(function(){ 
-                        window.location.replace('../events');
+                        window.location.replace('../');
                     }, 1000);
                 }
             },
@@ -203,6 +200,12 @@ $(document).ready(function () {
                             } else {
                                 $('#images').removeClass('is-invalid');
                             }
+                        }
+                        if (validationErrors.hasOwnProperty('images_allowed')) {
+                            $('#images').addClass('is-invalid');
+                            $('#images').siblings('.invalid-feedback').html('<strong>' + validationErrors['images_allowed'][0] + '</strong>');
+                        } else {
+                            $('#images').removeClass('is-invalid');
                         }
                     }
                 }
