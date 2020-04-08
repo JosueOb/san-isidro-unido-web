@@ -269,5 +269,41 @@ class PermissionsTableSeeder extends Seeder
             'private'=>false,
             'group'=>'servico público',
         ]);
+        //Permisos sobre el módulo de eventos
+        Permission::create([
+            'name'=>'Listar los eventos',
+            'slug'=>'events.index',
+            'description'=>'Lista los eventos registrados por la directiva',
+            'private'=>false,
+            'group'=>'evento',
+        ]);
+        Permission::create([
+            'name'=>'Crear evento',
+            'slug'=>'events.create',
+            'description'=>'Registrar un nuevo evento',
+            'private'=>false,
+            'group'=>'evento',
+        ]);
+        Permission::create([
+            'name'=>'Ver a detalle un evento',
+            'slug'=>'events.show',
+            'description'=>'Ver en detalle cada uno de los eventos registrados',
+            'private'=>false,
+            'group'=>'evento',
+        ]);
+        Permission::create([
+            'name'=>'Editar evento',
+            'slug'=>'events.edit',
+            'description'=>'Editar los eventos registrados',
+            'private'=>false,
+            'group'=>'evento',
+        ]);
+        Permission::create([
+            'name'=>'Eliminar evento',
+            'slug'=>'events.destroy',
+            'description'=>'Eliminar los registros de eventos',
+            'private'=>false,
+            'group'=>'evento',
+        ]);
     }
 }

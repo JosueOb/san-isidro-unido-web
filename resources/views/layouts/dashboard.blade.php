@@ -192,7 +192,7 @@
                         @endcanany
                         
 
-
+                        @canany(['events.index','events.create'])
                         <li class="nav-item @yield('item-event')">
                             <a class="nav-link" data-toggle="collapse" data-target="#collapseEvent" aria-expanded="true" aria-controls="collapseEvent">
                                 <i class="fas fa-calendar-week"></i>
@@ -200,11 +200,16 @@
                             </a>
                             <div id="collapseEvent" class="collapse @yield('item-event-collapse')" >
                                 <div class="collapse-inner">
+                                    @can('events.index')
                                     <a class="collapse-item @yield('item-event-list')" href="{{route('events.index')}}"><i class="fas fa-list"></i>Listar eventos</a>
+                                    @endcan
+                                    @can('events.create')
                                     <a class="collapse-item @yield('item-event-create')" href="{{route('events.create')}}"><i class="fas fa-calendar-plus"></i></i>Registrar evento</a>
+                                    @endcan
                             </div>
                             </div>
                         </li>
+                        @endcanany
 
 
                     </ul>

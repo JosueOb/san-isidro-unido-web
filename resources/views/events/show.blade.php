@@ -29,9 +29,9 @@
                     <div class="col">
                         <h4  class="d-inline">Detalle de evento</h4>
 
-                        {{-- @can('publicServices.edit') --}}
+                        @can('events.edit')
                         <a href="{{route('events.edit', $event->id)}}" class="btn btn-primary float-right">Editar</a>
-                        {{-- @endcan --}}
+                        @endcan
                     </div>
                 </div>
             </div>

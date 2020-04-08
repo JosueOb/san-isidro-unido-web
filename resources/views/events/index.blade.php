@@ -33,9 +33,9 @@
                 <div class="row">
                     <div class="col">
                         <h4 class="d-inline">Servicios públicos</h4>
-                        {{-- @can('publicServices.create') --}}
+                        @can('events.create')
                         <a href="{{route('events.create')}}" class="btn btn-primary float-right">Nuevo</a>
-                        {{-- @endcan --}}
+                        @endcan
                     </div>
                 </div>
             </div>
@@ -51,9 +51,9 @@
                                     <th>Descripción</th>
                                     <th>Categoría</th>
                                     <th>Estado</th>
-                                    {{-- @canany(['publicServices.edit','publicServices.destroy']) --}}
+                                    @canany(['events.show','events.edit','events.destroy'])
                                     <th>Opciones</th>
-                                    {{-- @endcanany --}}
+                                    @endcanany
                                 </tr>
                             </thead>
                             <tbody>
@@ -65,19 +65,19 @@
                                         <td>{{ $event->subcategory->name }}</td>
                                         <td>{{ $event->state ? 'Activo': 'Inactivo'}}</td>
 
-                                        {{-- @can('publicServices.show') --}}
+                                        @can('events.show')
                                         <td width='10px'>
                                             <a href="{{ route('events.show', $event->id)}}" class="btn btn-info">Ver</a>
                                         </td>
-                                        {{-- @endcan --}}
+                                        @endcan
                                         
-                                        {{-- @can('publicServices.edit') --}}
+                                        @can('events.edit')
                                         <td width='10px'>
                                             <a href="{{route('events.edit', $event->id)}}" class="btn btn-secondary"> Editar</a>
                                         </td>
-                                        {{-- @endcan --}}
+                                        @endcan
 
-                                        {{-- @can('publicServices.destroy') --}}
+                                        @can('events.destroy')
                                         <td width='10px'>
                                             @if ($event->state )
                                                 <a href="#" class="btn btn-danger"  data-toggle="modal" data-target="#deleteEvent{{$event->id}}">Eliminar</a>
@@ -132,7 +132,7 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        {{-- @endcan --}}
+                                        @endcan
 
                                     </tr>
                                 @endforeach

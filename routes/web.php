@@ -123,11 +123,11 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::delete('public-service/{publicService}', 'PublicServiceController@destroy')->name('publicServices.destroy')->middleware('can:publicServices.destroy');
 
     //Eventos
-    Route::get('events', 'EventController@index')->name('events.index');
-    Route::get('events/create', 'EventController@create')->name('events.create');
-    Route::post('events/store', 'EventController@store')->name('events.store');
-    Route::get('events/{event}', 'EventController@show')->name('events.show');
-    Route::get('events/{event}/edit', 'EventController@edit')->name('events.edit');
-    Route::put('events/{event}', 'EventController@update')->name('events.update');
-    Route::delete('events/{event}', 'EventController@destroy')->name('events.destroy');
+    Route::get('events', 'EventController@index')->name('events.index')->middleware('can:events.index');
+    Route::get('events/create', 'EventController@create')->name('events.create')->middleware('can:events.create');
+    Route::post('events/store', 'EventController@store')->name('events.store')->middleware('can:events.create');
+    Route::get('events/{event}', 'EventController@show')->name('events.show')->middleware('can:events.show');
+    Route::get('events/{event}/edit', 'EventController@edit')->name('events.edit')->middleware('can:events.edit');
+    Route::put('events/{event}', 'EventController@update')->name('events.update')->middleware('can:events.edit');
+    Route::delete('events/{event}', 'EventController@destroy')->name('events.destroy')->middleware('can:events.destroy');
 });
