@@ -130,4 +130,9 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::get('events/{event}/edit', 'EventController@edit')->name('events.edit')->middleware('can:events.edit');
     Route::put('events/{event}', 'EventController@update')->name('events.update')->middleware('can:events.edit');
     Route::delete('events/{event}', 'EventController@destroy')->name('events.destroy')->middleware('can:events.destroy');
+
+    //MODERADOR
+    Route::get('moderators', 'ModeratorController@create')->name('moderators.create');
+    Route::get('moderators/{user}/create', 'ModeratorController@store')->name('moderators.store');
+
 });
