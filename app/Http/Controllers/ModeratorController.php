@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Middleware\ProtectedDirectiveUsers;
+use App\Notifications\ModeratorCreated;
 use App\User;
 use Caffeinated\Shinobi\Contracts\Role;
 use Caffeinated\Shinobi\Models\Role as ModelsRole;
@@ -76,6 +77,7 @@ class ModeratorController extends Controller
                 $user->roles()->attach($role_moderator->id, ['state'=>true]);
 
                 //Se envía un correo electrónico
+                $user->notify(new ModeratorCreated());
                 return redirect()->back()->with('success', 'Moderador asignado correctamente');
             }else{
                 return redirect()->back()->with('danger', 'El morador no a verificado su correo electrónico');
