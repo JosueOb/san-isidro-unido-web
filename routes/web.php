@@ -1,5 +1,6 @@
 <?php
 use Illuminate\Auth\Events\Verified;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,6 +21,13 @@ Route::get('/', function () {
 //rutas de autenticación
 Auth::routes(['register'=>false,'verify'=>true]);
 // RUTAS PÚBLICAS
+
+Route::get('verifiedMail/{id}', function (Request $request) {
+    if(!$request->hasValidSignature()){
+        abort(401);
+    }
+    return view('auth.verifiedMail');
+})->name('verifiedMail');
 
 Route::get('/home', 'HomeController@index')->name('home')->middleware('verified');
 

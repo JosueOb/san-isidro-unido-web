@@ -71,9 +71,15 @@ class ModeratorController extends Controller
             if($user->getASpecificRole('moderador')){
                 return redirect()->back()->with('danger', 'Moderador ya asignado');
             }
-            $role_moderator = ModelsRole::where('slug', 'moderador')->first();
-            $user->roles()->attach($role_moderator->id, ['state'=>true]);
-            return redirect()->back()->with('success', 'Moderador asignado correctamente');
+            if($user->email_verified_at){
+                $role_moderator = ModelsRole::where('slug', 'moderador')->first();
+                $user->roles()->attach($role_moderator->id, ['state'=>true]);
+
+                //Se envía un correo electrónico
+                return redirect()->back()->with('success', 'Moderador asignado correctamente');
+            }else{
+                return redirect()->back()->with('danger', 'El morador no a verificado su correo electrónico');
+            }
         }else{
             return redirect()->back()->with('danger', 'El morador se encuentra inactivo');
         }
