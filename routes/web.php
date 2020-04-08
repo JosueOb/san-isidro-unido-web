@@ -136,5 +136,6 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::get('moderators/{user}/create', 'ModeratorController@store')->name('moderators.store');
     Route::get('moderators', 'ModeratorController@index')->name('moderators.index');
     Route::delete('moderators/{user}', 'ModeratorController@destroy')->name('moderators.destroy');
+    Route::get('moderators/{user}', 'ModeratorController@show')->name('moderators.show');
 
 });

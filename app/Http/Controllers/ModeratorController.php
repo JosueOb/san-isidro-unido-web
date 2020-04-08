@@ -13,7 +13,7 @@ class ModeratorController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(ProtectedDirectiveUsers::class)->only('store');
+        $this->middleware(ProtectedDirectiveUsers::class)->only('store', 'show', 'destroy');
     }
     /**
      * Display a listing of the resource.
@@ -88,9 +88,11 @@ class ModeratorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(User $user)
     {
-        //
+        return view('moderators.show', [
+            'moderator'=> $user,
+        ]);
     }
 
     // /**

@@ -122,7 +122,7 @@
 
                                         {{-- @can('neighbors.show') --}}
                                         <td width='10px'>
-                                            <a href="#" class="btn btn-info">Ver</a>
+                                            <a href="{{route('moderators.show', $moderator->id)}}" class="btn btn-info">Ver</a>
                                         </td>
                                         {{-- @endcan --}}
 
