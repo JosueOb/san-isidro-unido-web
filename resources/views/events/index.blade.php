@@ -79,10 +79,14 @@
 
                                         {{-- @can('publicServices.destroy') --}}
                                         <td width='10px'>
-                                            <a href="#" class="btn btn-danger"  data-toggle="modal" data-target="#deleteEvent{{$event->id}}">Eliminar</a>
+                                            @if ($event->state )
+                                                <a href="#" class="btn btn-danger"  data-toggle="modal" data-target="#deleteEvent{{$event->id}}">Eliminar</a>
+                                            @else
+                                                <a href="#" class="btn btn-success"  data-toggle="modal" data-target="#activeEvent{{$event->id}}">Activar</a>
+                                            @endif
                                             <!--Modal-->
-                                            <div class="modal fade" id="deleteEvent{{$event->id}}" tabindex="-1" role="dialog" aria-labelledby="eliminarEvento" aria-hidden="true">
-                                                <div class="modal-dialog">
+                                            <div class="modal fade" id="deleteEvent{{$event->id}}" tabindex="-1" role="dialog" aria-labelledby="elimarEvento" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                     <h5 class="modal-title" id="exampleModalLabel">Confirmar eliminación</h5>
@@ -91,17 +95,40 @@
                                                     </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        ¿Está seguro de eliminar el evento {{ strtolower($event->title) }}?
+                                                        ¿Está seguro de eliminar el evento {{ $event->title }}?
                                                     </div>
                                                     <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                                    <form action="#" method="POST">
+                                                    <form action="{{ route('events.destroy', $event->id) }}" method="POST">
                                                         @csrf
                                                         @method('delete')
                                                         <button type="submit" class="btn btn-danger">Eliminar</button>
                                                     </form>
                                                     </div>
                                                 </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal fade" id="activeEvent{{$event->id}}" tabindex="-1" role="dialog" aria-labelledby="activarEvento" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Confirmar activación</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            ¿Está seguro de activar el evento {{ $event->title }}?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                                            <form action="{{ route('events.destroy', $event->id) }}" method="POST">
+                                                                @csrf
+                                                                @method('delete')
+                                                                <button type="submit" class="btn btn-success">Activar</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </td>

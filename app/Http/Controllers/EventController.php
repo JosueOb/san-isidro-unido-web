@@ -251,9 +251,19 @@ class EventController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $event)
     {
-        //
+        $message = '';
+        if($event->state){
+            $event->state = false;
+            $message='desactivado';
+        }else{
+            $event->state = true;
+            $message='activado';
+        }
+        $event->save();
+        
+        return back()->with('success', "Evento $message con éxito");
     }
     /**
      * Check if any images were deleted
