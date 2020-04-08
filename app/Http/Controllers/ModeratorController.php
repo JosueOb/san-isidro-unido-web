@@ -93,28 +93,28 @@ class ModeratorController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+    // /**
+    //  * Show the form for editing the specified resource.
+    //  *
+    //  * @param  int  $id
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function edit($id)
+    // {
+    //     //
+    // }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+    // /**
+    //  * Update the specified resource in storage.
+    //  *
+    //  * @param  \Illuminate\Http\Request  $request
+    //  * @param  int  $id
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function update(Request $request, $id)
+    // {
+    //     //
+    // }
 
     /**
      * Remove the specified resource from storage.
@@ -122,8 +122,18 @@ class ModeratorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        //
+        $message = null;
+        $roleModeratorUser = $user->getASpecificRole('moderador');
+
+        if($roleModeratorUser->pivot->state){
+            $message = 'desactivado';
+            $user->roles()->updateExistingPivot($roleModeratorUser->id, ['state'=>false]);
+        }else{
+            $message = 'activado';
+            $user->roles()->updateExistingPivot($roleModeratorUser->id, ['state'=>true]);
+        }
+        return redirect()->back()->with('success', 'Moderador '.$message.' con éxito');
     }
 }

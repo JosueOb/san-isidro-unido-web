@@ -150,7 +150,7 @@
                                                     </div>
                                                     <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                                    <form action="#" method="POST">
+                                                    <form action="{{route('moderators.destroy', $moderator->id)}}" method="POST">
                                                         @csrf
                                                         @method('delete')
                                                         <button type="submit" class="btn btn-danger">Desactivar</button>
@@ -174,7 +174,7 @@
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                                                         {{-- <button type="button" class="btn btn-primary">Eliminar</button> --}}
-                                                        <form action="#" method="POST">
+                                                        <form action="{{route('moderators.destroy', $moderator->id)}}" method="POST">
                                                             @csrf
                                                             @method('delete')
                                                             <button type="submit" class="btn btn-success">Activar</button>
