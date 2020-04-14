@@ -49,9 +49,9 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('verificar-token', "Api\ApiUserController@checkToken");
     // Crear una Emergencia
     Route::post('emergencias', "Api\ApiPostController@createEmergency")
-    ->middleware(['api.user_auth']);
+    ->middleware(['api.user_auth', 'base64Image']);
     //Crear un Problema Social
-    Route::post('problemas-sociales', "Api\ApiPostController@createSocialProblem")->middleware(['api.user_auth']);
+    Route::post('problemas-sociales', "Api\ApiPostController@createSocialProblem")->middleware(['api.user_auth', 'base64Image']);
     //Crear un detalle de tipo Likes, Asistencias
     Route::post('detalles', "Api\ApiReactionController@create")
         ->middleware(['api.user_auth']);
@@ -62,17 +62,17 @@ Route::group(['prefix' => 'v1'], function () {
     //Aceptar atender una emergencia
     Route::post('emergencias/atender', "Api\ApiPostController@atenderEmergencia")
         ->middleware(['api.user_auth']);
+    Route::post('usuarios/solicitar-afiliacion', "Api\ApiUserController@requestAfiliation")
+        ->middleware(['api.user_auth', 'base64Image']);
+    Route::post('usuarios/cambiar-avatar', "Api\ApiUserController@changeAvatar")
+        ->middleware(['api.user_auth', 'base64Image']);
 });
 
 // Rutas PATCH
 Route::group(['prefix' => 'v1'], function () {
     //Grupo de Usuarios
-    Route::group(['prefix' => "usuarios"], function () { 
-        Route::patch('/solicitar-afiliacion', "Api\ApiUserController@requestAfiliation")
-            ->middleware(['api.user_auth']);
+    Route::group(['prefix' => "usuarios"], function () {       
         Route::patch('/cambiar-contrasenia', "Api\ApiUserController@changePassword")
-            ->middleware(['api.user_auth']);
-        Route::patch('/cambiar-avatar', "Api\ApiUserController@changeAvatar")
             ->middleware(['api.user_auth']);
         Route::patch('/editar', "Api\ApiUserController@editProfile")
             ->middleware(['api.user_auth']);

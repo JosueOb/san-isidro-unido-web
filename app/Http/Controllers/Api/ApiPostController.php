@@ -38,6 +38,15 @@ class ApiPostController extends ApiBaseController
             'ubication.address.regex' => 'El campo :attribute debe contener solo letras y números',
             'ubication.description.regex' => 'El campo :attribute debe contener solo letras y números'
         ];
+        $this->ubicationValidationRules = [
+            "latitude" => ['required', 'numeric', 'regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/'],
+
+           "longitude" => ['required', 'numeric', 'regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/'],
+
+           "description" => ['required', 'string'],
+
+           "address" => ['required', 'string'],
+       ];
     }
 
    /**
@@ -169,6 +178,104 @@ class ApiPostController extends ApiBaseController
         return $this->sendError(400, "Usuario No existe", ["usuario" => "usuario no existe"]);
     }
 
+    /*Crea una publicacion emergencia con Base64 y JSON 
+    * @param \Illuminate\Http\Request $request
+    *
+    * @return array
+    */
+    // public function createEmergency(Request $request) {
+    //     try {
+    //         $token_decoded = $request->get('token');
+    //         // Obtener los datos de la request
+    //         $validatorEmergency = Validator::make($request->all(), [
+    //             'title' => 'required|string|max:150',
+    //             'description' => 'required|string',
+    //             "ubication" => ['required'],
+    //             "ubication.latitude" => ['required', 'numeric', 'regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/'],
+
+    //             "ubication.longitude" => ['required', 'numeric', 'regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/'],
+
+    //             "ubication.description" => ['required', 'string'],
+
+    //             "ubication.address" => ['required', 'string'],
+
+    //             "images" => ['array'],
+    //             "images.*" => [new Base64FormatImage],
+    //         ], $this->ubicationErrors);
+    //         // Verificar la Request
+    //         if (!$validatorEmergency->fails()) {
+    //             $emergencyData = $request->all();
+                
+    //             $ubication = $emergencyData['ubication'];
+    //             $ubication['title'] =  $emergencyData['title'];
+    //             $imagesPost = ($request->filled('images')) ? $emergencyData['images'] : [];
+    //             $category = Category::slug($this->categories['emergencias'])->first();
+    //             $post = new Post();
+    //             $post->title = $emergencyData['title'];
+    //             $post->description = $emergencyData['description'];
+    //             $post->user_id = $token_decoded->user->id;
+    //             $post->category_id = $category->id;
+    //             $post->date = date("Y-m-d");
+    //             $post->time = date("H:i:s");
+    //             $post->state = 1;
+    //             $post->ubication = json_encode($ubication);
+    //             $post->save();
+    //             //Guardar Resources
+    //             if (!is_null($imagesPost) && count($imagesPost) > 0) {
+    //                 foreach ($imagesPost as $image_b64) {
+    //                     $resource = new Resource();
+    //                     $imageApi = new ApiImages();
+    //                     $image_name = $imageApi->savePostImageApi($image_b64);
+    //                     $resource->url = $image_name;
+    //                     $resource->type = "image";
+    //                     $resource->post_id = $post->id;
+    //                     $resource->save();
+    //                 }
+    //             }
+
+    //             //Enviar notificaciones a moderadores
+    //             $rolModerador = Role::where('slug', 'moderador')->first();
+    //             $rolPolicia = Role::where('slug', 'policia')->first();
+
+    //             $moderadores = $rolModerador->users()->get();
+    //             $policias = $rolPolicia->users()->get();
+
+    //             $new_post = Post::findById($post->id)->with(["category", "subcategory"])->first();
+    //             //Notificar Moderadores
+    //             foreach($moderadores as $moderador){
+    //                 // $devices_ids = OnesignalNotification::getUserDevices($moderador->id);
+    //                 $moderador->notify(new PostNotification($new_post));
+    //                 // foreach($devices_ids as $device_id){
+    //                 //     array_push($usersDevicesIds, $device_id);
+    //                 // }
+    //             }
+    //             //Notificar Policias
+    //             foreach($policias as $policia){
+    //                 $policia->notify(new PostNotification($new_post));
+    //             }
+    //             //Enviar notification a todos
+    //             $title_noti = $new_post->user->first_name . " ha reportado una emergencia";
+    //             $description_noti = "Se reporto la emergencia " . substr($new_post->title, 30);
+    //             OnesignalNotification::sendNotificationBySegments(
+    //                 $title = $title_noti, 
+    //                 $description = $description_noti, 
+    //                 $aditionalData = [
+    //                     "title" => $title,
+    //                     "message" => $description,
+    //                     "post" => $new_post
+    //             ]);
+    //             //Respuesta Api
+    //             return $this->sendResponse(200, "Emergency Created", [
+    //                 'id' => $post->id
+    //             ]);
+    //         }
+    //         // Si falla la validación envio un error
+    //         return $this->sendError(400, "Error en la Petición", $validatorEmergency->messages());
+    //     } catch (Exception $e) {
+    //         return $this->sendError(500, "error", ['server_error' => $e->getMessage()]);
+    //     }
+    // }
+
     /**
      * Crea una publicación de emergencia
      * @param \Illuminate\Http\Request $request
@@ -182,29 +289,29 @@ class ApiPostController extends ApiBaseController
             $validatorEmergency = Validator::make($request->all(), [
                 'title' => 'required|string|max:150',
                 'description' => 'required|string',
-                "ubication" => ['required'],
-                "ubication.latitude" => ['required', 'numeric', 'regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/'],
-
-                "ubication.longitude" => ['required', 'numeric', 'regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/'],
-
-                "ubication.description" => ['required', 'string'],
-
-                "ubication.address" => ['required', 'string'],
-
+                "ubication" => ['required', 'array'],
                 "images" => ['array'],
-                "images.*" => [new Base64FormatImage],
             ], $this->ubicationErrors);
+           
+            $ubication = $request->ubication;
+            // $ubicationDecode = json_decode($request->ubication, true);
+          
+            $validatorUbication = Validator::make($ubication, $this->ubicationValidationRules);           
+          
             // Verificar la Request
             if (!$validatorEmergency->fails()) {
-                $emergencyData = $request->all();
-                
-                $ubication = $emergencyData['ubication'];
-                $ubication['title'] =  $emergencyData['title'];
-                $imagesPost = ($request->filled('images')) ? $emergencyData['images'] : [];
+                //Verificar Ubicacion
+                if ($validatorUbication->fails()){
+                    return $this->sendError(400, "Error en la Petición", $validatorUbication->messages());
+                }
+                // $ubication = $ubicationDecode;
+                $imagesPost = $request->images;
                 $category = Category::slug($this->categories['emergencias'])->first();
+                // $imageApi = new ApiImages();
+                // $image_name = $imageApi->savePostFileImageApi($imagesPost[0]);
                 $post = new Post();
-                $post->title = $emergencyData['title'];
-                $post->description = $emergencyData['description'];
+                $post->title = $request->title;
+                $post->description = $request->description;
                 $post->user_id = $token_decoded->user->id;
                 $post->category_id = $category->id;
                 $post->date = date("Y-m-d");
@@ -214,10 +321,10 @@ class ApiPostController extends ApiBaseController
                 $post->save();
                 //Guardar Resources
                 if (!is_null($imagesPost) && count($imagesPost) > 0) {
-                    foreach ($imagesPost as $image_b64) {
+                    foreach ($imagesPost as $image_file) {
                         $resource = new Resource();
                         $imageApi = new ApiImages();
-                        $image_name = $imageApi->savePostImageApi($image_b64);
+                        $image_name = $imageApi->savePostFileImageApi($image_file);
                         $resource->url = $image_name;
                         $resource->type = "image";
                         $resource->post_id = $post->id;
@@ -232,34 +339,32 @@ class ApiPostController extends ApiBaseController
                 $moderadores = $rolModerador->users()->get();
                 $policias = $rolPolicia->users()->get();
 
-                $new_post = Post::findById($post->id)->with(["category", "subcategory"])->first();
+                $new_post = Post::findById($post->id)->with(["category", "subcategory", 'resources', 'reactions'])->first();
                 //Notificar Moderadores
-                foreach($moderadores as $moderador){
+                // foreach($moderadores as $moderador){
                     // $devices_ids = OnesignalNotification::getUserDevices($moderador->id);
-                    $moderador->notify(new PostNotification($new_post));
+                    // $moderador->notify(new PostNotification($new_post));
                     // foreach($devices_ids as $device_id){
                     //     array_push($usersDevicesIds, $device_id);
                     // }
-                }
+                // }
                 //Notificar Policias
-                foreach($policias as $policia){
-                    $policia->notify(new PostNotification($new_post));
-                }
+                // foreach($policias as $policia){
+                    // $policia->notify(new PostNotification($new_post));
+                // }
                 //Enviar notification a todos
                 $title_noti = $new_post->user->first_name . " ha reportado una emergencia";
-                $description_noti = "Se reporto la emergencia " . substr($new_post->title, 30);
-                OnesignalNotification::sendNotificationBySegments(
-                    $title = $title_noti, 
-                    $description = $description_noti, 
-                    $aditionalData = [
-                        "title" => $title,
-                        "message" => $description,
-                        "post" => $new_post
-                ]);
+                // $description_noti = "Se reporto la emergencia " . substr($new_post->title, 30);
+                // OnesignalNotification::sendNotificationBySegments(
+                //     $title = $title_noti, 
+                //     $description = $description_noti, 
+                //     $aditionalData = [
+                //         "title" => $title,
+                //         "message" => $description,
+                //         "post" => $new_post
+                // ]);
                 //Respuesta Api
-                return $this->sendResponse(200, "Emergency Created", [
-                    'id' => $post->id
-                ]);
+                return $this->sendResponse(200, "Emergency Created", $new_post);
             }
             // Si falla la validación envio un error
             return $this->sendError(400, "Error en la Petición", $validatorEmergency->messages());
@@ -282,49 +387,47 @@ class ApiPostController extends ApiBaseController
             $validatorSocialProblem = Validator::make($request->all(), [
                 'title' => 'required|string|max:150',
                 'description' => 'required|string',
-                "subcategory_id" => 'required|integer',
+                "ubication" => ['required', 'array'],
                 "images" => ['array'],
-                "images.*" => [new Base64FormatImage],
-                'description' => 'required|string',
-                "ubication" => ['required'],
-                "ubication.latitude" => ['required', 'numeric', 'regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/'],
-                "ubication.longitude" => ['required', 'numeric', 'regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/'],
-                "ubication.description" => ['required', 'string'],
-                "ubication.address" => ['required', 'string'],
+                "subcategory_id" => 'required|integer'
             ], $this->ubicationErrors);
+            $ubication = $request->ubication;
+            //Validacion Ubicacion
+            $validatorUbication = Validator::make($ubication, $this->ubicationValidationRules);
             // Verificar la Request
             if (!$validatorSocialProblem->fails()) {
-                $socialProblemData = $request->all();
-                $imagesPost = ($request->filled('images')) ? $socialProblemData['images'] : [];
+                //Verificar Ubicacion
+                if ($validatorUbication->fails()){
+                    return $this->sendError(400, "Error en la Petición", $validatorUbication->messages());
+                }
+                // $ubication = $ubicationDecode;
+                $imagesPost = $request->images;
                 $category = Category::slug($this->categories['problemas_sociales'])->first();
                 
                 $post = new Post();
-                $post->title = $socialProblemData['title'];
-                $post->description = $socialProblemData['description'];
+                $post->title = $request->title;
+                $post->description = $request->description;
                 $post->user_id = $token_decoded->user->id;
-                $post->subcategory_id = $socialProblemData['subcategory_id'];
+                $post->subcategory_id = $request->subcategory_id;
                 $post->category_id = $category->id;
                 $post->date = date("Y-m-d");
                 $post->time = date("H:i:s"); 
-                $post->state = true;
-                $post->ubication = json_encode($socialProblemData['ubication']);
+                $post->state = 1;
+                $post->ubication = json_encode($ubication);
                 $post->save();
                 //Guardar Recursos
                 if (!is_null($imagesPost) && count($imagesPost) > 0) {
-                    foreach ($imagesPost as $image_b64) {
+                    foreach ($imagesPost as $image_file) {
                         $resource = new Resource();
                         $imageApi = new ApiImages();
-                        $image_name = $imageApi->savePostImageApi($image_b64);
+                        $image_name = $imageApi->savePostFileImageApi($image_file);
                         $resource->url = $image_name;
                         $resource->type = "image";
                         $resource->post_id = $post->id;
                         $resource->save();
                     }
                 }
-
-                return $this->sendResponse(200, "Social Problem Created", [
-                    'id' => $post->id
-                ]);
+                return $this->sendResponse(200, "Social Problem Created", $post);
             }
             // Si la validacion falla retorno un error
             return $this->sendError(400, "Error en la Petición", $validatorSocialProblem->messages());
@@ -332,5 +435,70 @@ class ApiPostController extends ApiBaseController
             return $this->sendError(500, "Error en el servidor", ['server_error' => $e->getMessage()]);
         }
     }
+
+    /**
+     * Crea una publicación de un problema social via JSON
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return array
+     */
+    // public function createSocialProblem(Request $request) {
+    //     try {
+    //         // $utils = new \Utils();
+    //         $token_decoded = $request->get('token');
+    //         //Validar Petición
+    //         $validatorSocialProblem = Validator::make($request->all(), [
+    //             'title' => 'required|string|max:150',
+    //             'description' => 'required|string',
+    //             "subcategory_id" => 'required|integer',
+    //             "images" => ['array'],
+    //             "images.*" => [new Base64FormatImage],
+    //             'description' => 'required|string',
+    //             "ubication" => ['required'],
+    //             "ubication.latitude" => ['required', 'numeric', 'regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/'],
+    //             "ubication.longitude" => ['required', 'numeric', 'regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/'],
+    //             "ubication.description" => ['required', 'string'],
+    //             "ubication.address" => ['required', 'string'],
+    //         ], $this->ubicationErrors);
+    //         // Verificar la Request
+    //         if (!$validatorSocialProblem->fails()) {
+    //             $socialProblemData = $request->all();
+    //             $imagesPost = ($request->filled('images')) ? $socialProblemData['images'] : [];
+    //             $category = Category::slug($this->categories['problemas_sociales'])->first();
+                
+    //             $post = new Post();
+    //             $post->title = $socialProblemData['title'];
+    //             $post->description = $socialProblemData['description'];
+    //             $post->user_id = $token_decoded->user->id;
+    //             $post->subcategory_id = $socialProblemData['subcategory_id'];
+    //             $post->category_id = $category->id;
+    //             $post->date = date("Y-m-d");
+    //             $post->time = date("H:i:s"); 
+    //             $post->state = true;
+    //             $post->ubication = json_encode($socialProblemData['ubication']);
+    //             $post->save();
+    //             //Guardar Recursos
+    //             if (!is_null($imagesPost) && count($imagesPost) > 0) {
+    //                 foreach ($imagesPost as $image_b64) {
+    //                     $resource = new Resource();
+    //                     $imageApi = new ApiImages();
+    //                     $image_name = $imageApi->savePostImageApi($image_b64);
+    //                     $resource->url = $image_name;
+    //                     $resource->type = "image";
+    //                     $resource->post_id = $post->id;
+    //                     $resource->save();
+    //                 }
+    //             }
+
+    //             return $this->sendResponse(200, "Social Problem Created", [
+    //                 'id' => $post->id
+    //             ]);
+    //         }
+    //         // Si la validacion falla retorno un error
+    //         return $this->sendError(400, "Error en la Petición", $validatorSocialProblem->messages());
+    //     } catch (Exception $e) {
+    //         return $this->sendError(500, "Error en el servidor", ['server_error' => $e->getMessage()]);
+    //     }
+    // }
 
 }

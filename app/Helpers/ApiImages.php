@@ -4,6 +4,7 @@ namespace App\Helpers;
 use Illuminate\Support\Facades\Storage;
 use Error;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\File;
 
 class ApiImages
 {
@@ -32,6 +33,26 @@ class ApiImages
             $img_extension = $this->getB64Extension($base64IMG);
             $img_name = ($previous_name) ? $previous_name : 'user' . time() . '.' . $img_extension;
             $this->saveImageInDisk($this->diskImage, $img_name, $img_file);
+            return $img_name;
+        } catch (Error $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    /**
+     * Guarda la imagen de un usuario y retorna el nombre de la imagen guardada
+     * @param string $base64IMG
+     * @param  mixed  $previous_name
+     *
+     * @return string
+     */
+    public function savePostFileImageApi($imageFile, $previous_name = null)
+    {
+        try {
+            $uploadedFile = File::get($imageFile);
+            $img_extension = $imageFile->extension();
+            $img_name = ($previous_name) ? $previous_name : 'post_siu' . time() . '.' . $img_extension;
+            $this->saveImageInDisk($this->diskImage, $img_name, $uploadedFile);
             return $img_name;
         } catch (Error $e) {
             echo $e->getMessage();
@@ -72,6 +93,26 @@ class ApiImages
             $img_extension = $this->getB64Extension($base64IMG);
             $img_name = ($previous_name) ? $previous_name : 'afiliation' . time() . '.' . $img_extension;
             $this->saveImageInDisk($this->diskImage, $img_name, $img_file);
+            return $img_name;
+        } catch (Error $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    /**
+     * Guarda la imagen de una solicitud de afiliacion y retorna el nombre de la imagen guardada
+     * @param string $base64IMG
+     * @param  mixed  $previous_name
+     *
+     * @return string
+     */
+    public function saveAfiliationFileImageApi($imageFile, $previous_name = null, $titleIncluded='user_afiliation')
+    {
+        try {
+            $uploadedFile = File::get($imageFile);
+            $img_extension = $imageFile->extension();
+            $img_name = ($previous_name) ? $previous_name : $titleIncluded . time() . '.' . $img_extension;
+            $this->saveImageInDisk($this->diskImage, $img_name, $uploadedFile);
             return $img_name;
         } catch (Error $e) {
             echo $e->getMessage();
@@ -154,13 +195,6 @@ class ApiImages
 
     public function checkURLValid($url){
         $value = $url;
-        // if(preg_match(
-        //     "/^((?:https?\:\/\/|www\.)(?:[-a-z0-9]+\.)*[-a-z0-9]+.*)$/", $urlLink
-        // )){
-        //     dd($urlLink, 'is url valid');
-        // }else{
-        //     dd($urlLink, 'is url invalid');
-        // }
         return (preg_match(
             "/^((?:https?\:\/\/|www\.)(?:[-a-z0-9]+\.)*[-a-z0-9]+.*)$/", $value
         ));

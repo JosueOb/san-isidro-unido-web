@@ -102,33 +102,6 @@ class SearchController extends Controller
                 $category = Category::where('slug', 'informe')->first();
                 $reports = $category->posts()->where('title', 'LIKE', "%$value%")->paginate(6);
                 break;
-            
-            // case 2:
-            //     //Se divide un string en varios string, se devuelve un arreglo de string
-            //     $search = explode(' ', $value);
-
-            //     //Se obtiene el rol de directivo
-            //     $role = Role::where('slug', 'directivo')->first();
-            //     //Se obtienen a los usuarios con el rol de directivo
-            //     $users = $role->users;
-            //     // dd($users);
-
-            //     foreach($search as $name){
-            //         $filtered = $users->where('first_name', 'LIKE', "%$name%");
-            //     }
-
-            //     dd($filtered->all());
-
-            //     // dd($test);
-            //     // $test = $users->where('first_name', 'LIKE', "%$value%")->get();
-            //     // $users = $role->users()->where('first_name', 'LIKE', "%$value%")
-            //     //                        ->orWhere('last_name', 'LIKE', "%$value%")->get();
-            //     // $users = User::where('first_name', 'like', "%$value%")
-            //     //             ->orwhere('last_name', 'like', "%$value%")->get();
-
-            //     dd($users);
-            //     break;
-            
             default:
                 return abort(404);
                 break;

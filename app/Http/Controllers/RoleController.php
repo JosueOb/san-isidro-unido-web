@@ -125,7 +125,6 @@ class RoleController extends Controller
     {
 
         $validated = $request->validated();
-        // dd($validated);
         // $role->name = $validated['name'];
         // $role->slug = $validated['slug'];
         $role->description = $validated['description'];

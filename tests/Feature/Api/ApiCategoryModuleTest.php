@@ -34,8 +34,6 @@ class ApiCategoryModuleTest extends TestCase
     public function test_brings_all_categories()
     {
         $url = $this->baseUrl . '/categorias';
-        // dd($url);
-        // die();
         try {
             $statusCode = $this->httpClient->request('GET', $url, ['http_errors' => false])->getStatusCode();
             $this->assertEquals(200, $statusCode);

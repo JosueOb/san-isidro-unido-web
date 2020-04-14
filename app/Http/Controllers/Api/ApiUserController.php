@@ -345,24 +345,24 @@ class ApiUserController extends ApiBaseController
     {
         $utils = new Utils();
         $jwtAuth = new JwtAuth();
-        $token_decoded = $request->get('token');
+        $token_decoded = $request->token;
         try {
+           
             //password_confirmation
-            $validatorPassword = Validator::make($request->all(), [
-                "basic_service_image" => ['required', 'string', new Base64FormatImage],
+            $validatorAfiliation = Validator::make($request->all(), [
                 "cedula" => ["required", "string", new ValidarCedula],
+                "basic_service_image" => ['required', 'mimes:png,jpeg,jpg'],
             ]);
             $image_service_b64 = $request->get('basic_service_image');
-            $cedula = $request->get('cedula');
             // Verificar si el validador falla
-            if (!$validatorPassword->fails()) {
+            if (!$validatorAfiliation->fails()) {
                 $user = User::findById($token_decoded->user->id)->first();
                 //Validar si existe el usuario
                 if (!is_null($user)) {
                     $imageApi = new ApiImages();
-                    $image_name = $imageApi->saveAfiliationImageApi($image_service_b64);
+                    $image_name = $imageApi->saveAfiliationFileImageApi($request->basic_service_image);
                     $user->basic_service_image = $image_name;
-                    $user->cedula = $cedula;
+                    $user->cedula = $request->cedula;
                     $user->save();
                     //Guardar solicitud de afiliación
                     $request = new MembershipRequest();
@@ -378,11 +378,54 @@ class ApiUserController extends ApiBaseController
                 return $this->sendError(404, "Usuario no existe", ['user' => "usuario no existe"]);
             }
             //Si validacion falla envio error
-            return $this->sendError(400, "Los datos enviados no son válidos", $validatorPassword->messages());
+            return $this->sendError(400, "Los datos enviados no son válidos", $validatorAfiliation->messages());
         } catch (Exception $e) {
             return $this->sendError(500, "error", ['server_error' => $e->getMessage()]);
         }
     }
+
+    // public function requestAfiliation(Request $request)
+    // {
+    //     $utils = new Utils();
+    //     $jwtAuth = new JwtAuth();
+    //     $token_decoded = $request->get('token');
+    //     try {
+    //         //password_confirmation
+    //         $validatorPassword = Validator::make($request->all(), [
+    //             "cedula" => ["required", "string", new ValidarCedula],
+    //             "basic_service_image" => ['required', 'string', new Base64FormatImage],
+    //         ]);
+    //         $image_service_b64 = $request->get('basic_service_image');
+    //         $cedula = $request->get('cedula');
+    //         // Verificar si el validador falla
+    //         if (!$validatorPassword->fails()) {
+    //             $user = User::findById($token_decoded->user->id)->first();
+    //             //Validar si existe el usuario
+    //             if (!is_null($user)) {
+    //                 $imageApi = new ApiImages();
+    //                 $image_name = $imageApi->saveAfiliationImageApi($image_service_b64);
+    //                 $user->basic_service_image = $image_name;
+    //                 $user->cedula = $cedula;
+    //                 $user->save();
+    //                 //Guardar solicitud de afiliación
+    //                 $request = new MembershipRequest();
+    //                 $request->status = 'pendiente_aprobacion';
+    //                 $request->comment = "El Usuario $user->first_name ha solicitado la afiliación al barrio";
+    //                 $request->user_id = $user->id;
+    //                 $request->save();
+    //                 //Retornar Token
+    //                 $token = $jwtAuth->getToken($user->email);
+    //                 return $this->sendResponse(200, "Afiliacion Solicitada Correctamente", ['token' => $token]);
+    //             }
+    //             //Si no existe envio error
+    //             return $this->sendError(404, "Usuario no existe", ['user' => "usuario no existe"]);
+    //         }
+    //         //Si validacion falla envio error
+    //         return $this->sendError(400, "Los datos enviados no son válidos", $validatorPassword->messages());
+    //     } catch (Exception $e) {
+    //         return $this->sendError(500, "error", ['server_error' => $e->getMessage()]);
+    //     }
+    // }
 
     /**
      * Actualiza la contraseña de un usuario
@@ -465,18 +508,17 @@ class ApiUserController extends ApiBaseController
             $jwtAuth = new JwtAuth();
             $token_decoded = $request->get('token');
             // Verificar que me llegue imagen del avatar
-            $validatorPassword = Validator::make($request->all(), [
-                "avatar" => ['required', 'string', new Base64FormatImage],
+            $validatorAvatar = Validator::make($request->all(), [
+                "avatar" => ['required','mimes:png,jpeg,jpg'],
             ]);
             // Verificar si el validador falla
-            if (!$validatorPassword->fails()) {
+            if (!$validatorAvatar->fails()) {
                 // Obtener los datos de la request
-                $image_avatar_b64 = $request->get('avatar');
                 $user = User::findById($token_decoded->user->id)->first();
                 //Validar si el usuario existe
                 if (!is_null($user)) {
                     $imageApi = new ApiImages();
-                    $image_name = $imageApi->saveAfiliationImageApi($image_avatar_b64);
+                    $image_name = $imageApi->saveAfiliationFileImageApi($request->avatar, null, 'avatar_usuario');
                     $user->avatar = $image_name;
                     $user->save();
                     $token = $jwtAuth->getToken($user->email);
@@ -486,11 +528,51 @@ class ApiUserController extends ApiBaseController
                 return $this->sendError(404, "Usuario no existe", ['user' => "usuario no existe"]);
             }
             //Si validacion falla envio error
-            return $this->sendError(400, "Datos no Válidos", $validatorPassword->messages());
+            return $this->sendError(400, "Datos no Válidos", $validatorAvatar->messages());
         } catch (Exception $e) {
             return $this->sendError(500, "error", ['server_error' => $e->getMessage()]);
         }
     }
+
+    // /**
+    //  * Actualiza el Avatar de un Usuario
+    //  * @param \Illuminate\Http\Request $request
+    //  *
+    //  * @return array
+    //  */
+    // public function changeAvatar(Request $request)
+    // {
+    //     try {
+    //         $utils = new Utils();
+    //         $jwtAuth = new JwtAuth();
+    //         $token_decoded = $request->get('token');
+    //         // Verificar que me llegue imagen del avatar
+    //         $validatorPassword = Validator::make($request->all(), [
+    //             "avatar" => ['required', 'string', new Base64FormatImage],
+    //         ]);
+    //         // Verificar si el validador falla
+    //         if (!$validatorPassword->fails()) {
+    //             // Obtener los datos de la request
+    //             $image_avatar_b64 = $request->get('avatar');
+    //             $user = User::findById($token_decoded->user->id)->first();
+    //             //Validar si el usuario existe
+    //             if (!is_null($user)) {
+    //                 $imageApi = new ApiImages();
+    //                 $image_name = $imageApi->saveAfiliationImageApi($image_avatar_b64);
+    //                 $user->avatar = $image_name;
+    //                 $user->save();
+    //                 $token = $jwtAuth->getToken($user->email);
+    //                 return $this->sendResponse(200, "Avatar Actualizado", ['token' => $token]);
+    //             }
+    //             //si no existe el usuario envio error
+    //             return $this->sendError(404, "Usuario no existe", ['user' => "usuario no existe"]);
+    //         }
+    //         //Si validacion falla envio error
+    //         return $this->sendError(400, "Datos no Válidos", $validatorPassword->messages());
+    //     } catch (Exception $e) {
+    //         return $this->sendError(500, "error", ['server_error' => $e->getMessage()]);
+    //     }
+    // }
 
     /**
      * Edita el Perfil Social de un Usuario

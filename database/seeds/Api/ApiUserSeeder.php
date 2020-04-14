@@ -17,7 +17,7 @@ class ApiUserSeeder extends Seeder {
         $provider_options = ['facebook', 'google'];
         $roleMorador = Role::where('slug', 'morador')->first();
         $roleInvitado= Role::where('slug', 'invitado')->first();
-        $rolePolicia= Role::where('slug', 'policia')->first();
+        $rolePolicia = Role::where('slug', 'policia')->first();
 		//TODO: Primer Usuario
 		$idOne = DB::table('users')->insertGetId([
 			'first_name' => 'Jose',
