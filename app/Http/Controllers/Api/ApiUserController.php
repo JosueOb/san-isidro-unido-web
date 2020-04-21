@@ -11,7 +11,6 @@ use App\Post;
 use App\Role;
 use App\Rules\Api\Base64FormatImage;
 use App\Rules\Api\ProviderData;
-use App\Rules\Api\ValidarCedula;
 use App\SocialProfile;
 use App\User;
 use App\MembershipRequest;
@@ -350,7 +349,6 @@ class ApiUserController extends ApiBaseController
            
             //password_confirmation
             $validatorAfiliation = Validator::make($request->all(), [
-                "cedula" => ["required", "string", new ValidarCedula],
                 "basic_service_image" => ['required', 'mimes:png,jpeg,jpg'],
             ]);
             $image_service_b64 = $request->get('basic_service_image');
@@ -362,7 +360,6 @@ class ApiUserController extends ApiBaseController
                     $imageApi = new ApiImages();
                     $image_name = $imageApi->saveAfiliationFileImageApi($request->basic_service_image);
                     $user->basic_service_image = $image_name;
-                    $user->cedula = $request->cedula;
                     $user->save();
                     //Guardar solicitud de afiliación
                     $request = new MembershipRequest();
@@ -383,49 +380,6 @@ class ApiUserController extends ApiBaseController
             return $this->sendError(500, "error", ['server_error' => $e->getMessage()]);
         }
     }
-
-    // public function requestAfiliation(Request $request)
-    // {
-    //     $utils = new Utils();
-    //     $jwtAuth = new JwtAuth();
-    //     $token_decoded = $request->get('token');
-    //     try {
-    //         //password_confirmation
-    //         $validatorPassword = Validator::make($request->all(), [
-    //             "cedula" => ["required", "string", new ValidarCedula],
-    //             "basic_service_image" => ['required', 'string', new Base64FormatImage],
-    //         ]);
-    //         $image_service_b64 = $request->get('basic_service_image');
-    //         $cedula = $request->get('cedula');
-    //         // Verificar si el validador falla
-    //         if (!$validatorPassword->fails()) {
-    //             $user = User::findById($token_decoded->user->id)->first();
-    //             //Validar si existe el usuario
-    //             if (!is_null($user)) {
-    //                 $imageApi = new ApiImages();
-    //                 $image_name = $imageApi->saveAfiliationImageApi($image_service_b64);
-    //                 $user->basic_service_image = $image_name;
-    //                 $user->cedula = $cedula;
-    //                 $user->save();
-    //                 //Guardar solicitud de afiliación
-    //                 $request = new MembershipRequest();
-    //                 $request->status = 'pendiente_aprobacion';
-    //                 $request->comment = "El Usuario $user->first_name ha solicitado la afiliación al barrio";
-    //                 $request->user_id = $user->id;
-    //                 $request->save();
-    //                 //Retornar Token
-    //                 $token = $jwtAuth->getToken($user->email);
-    //                 return $this->sendResponse(200, "Afiliacion Solicitada Correctamente", ['token' => $token]);
-    //             }
-    //             //Si no existe envio error
-    //             return $this->sendError(404, "Usuario no existe", ['user' => "usuario no existe"]);
-    //         }
-    //         //Si validacion falla envio error
-    //         return $this->sendError(400, "Los datos enviados no son válidos", $validatorPassword->messages());
-    //     } catch (Exception $e) {
-    //         return $this->sendError(500, "error", ['server_error' => $e->getMessage()]);
-    //     }
-    // }
 
     /**
      * Actualiza la contraseña de un usuario

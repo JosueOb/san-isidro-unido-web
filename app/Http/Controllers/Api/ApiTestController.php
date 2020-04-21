@@ -105,7 +105,6 @@ class ApiTestController extends ApiBaseController
     public function receiveImage(Request $request)
     {
         dd($request->all());
-        die();
     }
 
     public function mapUser()

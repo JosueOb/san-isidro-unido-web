@@ -62,6 +62,9 @@ Route::group(['prefix' => 'v1'], function () {
     //Aceptar atender una emergencia
     Route::post('emergencias/atender', "Api\ApiPostController@atenderEmergencia")
         ->middleware(['api.user_auth']);
+    //Rechazar emergencia
+    Route::post('emergencias/rechazar', "Api\ApiPostController@rechazarEmergencia")
+        ->middleware(['api.user_auth']);
     Route::post('usuarios/solicitar-afiliacion', "Api\ApiUserController@requestAfiliation")
         ->middleware(['api.user_auth', 'base64Image']);
     Route::post('usuarios/cambiar-avatar', "Api\ApiUserController@changeAvatar")

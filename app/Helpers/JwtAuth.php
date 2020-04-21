@@ -51,7 +51,6 @@ class JwtAuth {
 				if (count($user['social_profiles']) > 0) {
 					$socialIDCorrect = false;
 					foreach ($user['social_profiles'] as $socialProfile) {
-						// die();
 						if ($socialProfile['social_id'] === $passOrToken && $socialProfile['provider'] === $provider) {
 							$socialIDCorrect = true;
 							break;

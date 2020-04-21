@@ -82,7 +82,6 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
     
     public function getWebSystemRoles(){
         //Se retorna los roles del usuario que pueden acceder al sistema
-        // return $this->roles()->whereNotIn('name',['Morador','Invitado','Policia'])->first();
         return $this->roles()->where('mobile_app', false)->get();
     }
 

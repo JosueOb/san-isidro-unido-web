@@ -25,8 +25,10 @@ class CreatePostsTable extends Migration
             //por ahora //event_responsible,moderator_aproval, policy_
             $table->boolean('is_attended')->default(false);
             $table->unsignedBigInteger('user_id')->index();
+            // $table->unsignedBigInteger('police_id')->index()->nullable();
             //foreign
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            // $table->foreign('police_id')->references('id')->on('users')->onDelete('set null');
             $table->timestamps();
         });
     }

@@ -22,12 +22,12 @@ class DatabaseSeeder extends Seeder
         $this->call(UsersTableSeeder::class);
 
         //API SEEDERS
+        //TODO: LLamado al seeder Usuarios
+        $this->call(ApiUserSeeder::class);
         //TODO: LLamado al seeder Category
         $this->call(ApiCategorySeeder::class);
         //TODO: LLamado al seeder Subcategory
         $this->call(ApiSubCategorySeeder::class);
-        //TODO: LLamado al seeder Usuarios
-        $this->call(ApiUserSeeder::class);
         //TODO: LLamado al seeder Post
         $this->call(ApiPostSeeder::class);
         //TODO: LLamado al seeder Public Service 
