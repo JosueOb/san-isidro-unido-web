@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Middleware\NeighborIsActive;
+use App\Http\Middleware\PoliceIsActive;
 use App\Http\Middleware\ProtectedAdminUsers;
 use App\Http\Middleware\ProtectedDirectiveUsers;
 use App\Http\Requests\NeighborRequest;
@@ -18,7 +18,7 @@ class PoliceController extends Controller
     {
         $this->middleware(ProtectedAdminUsers::class)->only('show','edit','update','destroy');
         $this->middleware(ProtectedDirectiveUsers::class)->only('show','edit','update','destroy');
-        // $this->middleware(NeighborIsActive::class)->only('edit','update');
+        $this->middleware(PoliceIsActive::class)->only('edit','update');
     }
     /**
      * Display a listing of the resource.
@@ -142,8 +142,17 @@ class PoliceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        //
+        $message = null;
+        $roleUser = $user->getASpecificRole('policia');
+        if($roleUser->pivot->state){
+            $message='desactivado';
+            $user->roles()->updateExistingPivot($roleUser->id, ['state'=>false]);
+        }else{
+            $message='activo';
+            $user->roles()->updateExistingPivot($roleUser->id, ['state'=>true]);
+        }
+        return redirect()->back()->with('success', 'Policía '.$message.' con éxito');
     }
 }

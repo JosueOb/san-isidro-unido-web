@@ -128,12 +128,12 @@
 
                                         {{-- @can('neighbors.edit') --}}
                                         {{-- Si el usuario tiene al menos un rol del sistema web no se presenta la opción de editar --}}
-                                            {{-- @if ($neighbor->getWebSystemRoles()->isEmpty() && $neighbor->getRelationshipStateRolesUsers('morador')) --}}
+                                            @if ($police->getRelationshipStateRolesUsers('policia'))
                                                 <td width='10px'>
                                                     <a href="{{route('policemen.edit', $police->id)}}" class="btn btn-secondary"> Editar</a>
                                                 </td>
                                                 
-                                            {{-- @endif --}}
+                                            @endif
                                         {{-- @endcan --}}
 
                                         {{-- @can('neighbors.destroy') --}}
@@ -162,7 +162,7 @@
                                                     </div>
                                                     <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                                    <form action="#" method="POST">
+                                                    <form action="{{route('policemen.destroy', $police->id)}}" method="POST">
                                                         @csrf
                                                         @method('delete')
                                                         <button type="submit" class="btn btn-danger">Eliminar</button>
@@ -186,7 +186,7 @@
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                                                         {{-- <button type="button" class="btn btn-primary">Eliminar</button> --}}
-                                                        <form action="#" method="POST">
+                                                        <form action="{{route('policemen.destroy', $police->id)}}" method="POST">
                                                             @csrf
                                                             @method('delete')
                                                             <button type="submit" class="btn btn-success">Activar</button>
