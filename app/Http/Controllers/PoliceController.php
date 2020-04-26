@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\NeighborIsActive;
+use App\Http\Middleware\ProtectedAdminUsers;
+use App\Http\Middleware\ProtectedDirectiveUsers;
 use App\Http\Requests\NeighborRequest;
 use App\Notifications\NeighborCreated;
 use App\User;
@@ -11,6 +14,12 @@ use Illuminate\Support\Str;
 
 class PoliceController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(ProtectedAdminUsers::class)->only('show','edit','update','destroy');
+        $this->middleware(ProtectedDirectiveUsers::class)->only('show','edit','update','destroy');
+        // $this->middleware(NeighborIsActive::class)->only('edit','update');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -75,9 +84,11 @@ class PoliceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(User $user)
     {
-        //
+        return view('policemen.show', [
+            'police'=>$user,
+        ]);
     }
 
     /**

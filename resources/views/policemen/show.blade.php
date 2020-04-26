@@ -1,17 +1,17 @@
 @extends('layouts.dashboard')
 @section('page-subtitle')
-    Módulo Vecinos
+    Módulo Policía
 @endsection
 @section('page-header')
-    Morador
+    Policía
 @endsection
-@section('item-neighbor')
+@section('item-police')
     active
 @endsection
-@section('item-neighbor-collapse')
+@section('item-police-collapse')
     show
 @endsection
-@section('item-neighbor-list')
+@section('item-police-list')
     active
 @endsection
 @section('content')
@@ -24,23 +24,30 @@
     <div class="col">
         <div class="card card-primary">
             <div class="card-header">
-                    <h4>Detalle de usuario</h4>
+                    <div class="row">
+                        <div class="col">
+                            <h4  class="d-inline">Detalle del policía</h4>
+                            {{-- @can('events.edit') --}}
+                            {{-- <a href="{{route('policemen.edit', $police->id)}}" class="btn btn-primary float-right">Editar</a> --}}
+                            {{-- @endcan --}}
+                        </div>
+                    </div>
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col">
-                        <p><strong>Id:</strong> {{$neighbor->id}}</p>
-                        <p><strong>Nombre:</strong> {{$neighbor->first_name}}</p>
-                        <p><strong>Apellidos:</strong> {{$neighbor->last_name}}</p>
-                        <p><strong>Corre electrónico:</strong> {{$neighbor->email}}</p>
-                        <p><strong>Estado:</strong> {{$neighbor->getRelationshipStateRolesUsers('morador') ? 'Activo': 'Inactivo'}}</p>
-                        <p><strong>Número telefónico:</strong> {{$neighbor->number_phone ?: 'No registrado'}}</p>
-                        <p><strong>Corre verificado:</strong> {{$neighbor->email_verified_at ?: 'No verificado'}}</p>
+                        <p><strong>Id:</strong> {{$police->id}}</p>
+                        <p><strong>Nombre:</strong> {{$police->first_name}}</p>
+                        <p><strong>Apellidos:</strong> {{$police->last_name}}</p>
+                        <p><strong>Corre electrónico:</strong> {{$police->email}}</p>
+                        <p><strong>Estado:</strong> {{$police->getRelationshipStateRolesUsers('policia') ? 'Activo': 'Inactivo'}}</p>
+                        <p><strong>Número telefónico:</strong> {{$police->number_phone ?: 'No registrado'}}</p>
+                        <p><strong>Corre verificado:</strong> {{$police->email_verified_at ?: 'No verificado'}}</p>
 
 
                     </div>
                     <div class="col text-center">
-                        <img class="rounded-circle dark w-25" src="{{$neighbor->getAvatar()}}" alt="">
+                        <img class="rounded-circle dark w-25" src="{{$police->getAvatar()}}" alt="">
                     </div>
                 </div>
             </div>
