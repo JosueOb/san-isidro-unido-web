@@ -333,20 +333,20 @@ class ApiPostController extends ApiBaseController
                     // }
                 // }
                 //Notificar Policias
-                // foreach($policias as $policia){
-                    // $policia->notify(new PostNotification($new_post));
-                // }
+                foreach($policias as $policia){
+                    $policia->notify(new PostNotification($new_post));
+                }
                 //Enviar notification a todos
                 $title_noti = $new_post->user->first_name . " ha reportado una emergencia";
-                // $description_noti = "Se reporto la emergencia " . substr($new_post->title, 30);
-                // OnesignalNotification::sendNotificationBySegments(
-                //     $title = $title_noti, 
-                //     $description = $description_noti, 
-                //     $aditionalData = [
-                //         "title" => $title,
-                //         "message" => $description,
-                //         "post" => $new_post
-                // ]);
+                $description_noti = "Se reporto la emergencia " . substr($new_post->title, 30);
+                OnesignalNotification::sendNotificationBySegments(
+                    $title = $title_noti, 
+                    $description = $description_noti, 
+                    $aditionalData = [
+                        "title" => $title,
+                        "message" => $description,
+                        "post" => $new_post
+                ]);
                 //Respuesta Api
                 return $this->sendResponse(200, "Emergency Created", $new_post);
             }
