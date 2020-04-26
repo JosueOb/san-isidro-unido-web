@@ -97,9 +97,11 @@ class PoliceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        //
+        return view('policemen.edit', [
+            'police'=>$user,
+        ]);
     }
 
     /**
@@ -109,9 +111,29 @@ class PoliceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(NeighborRequest $request, User $user)
     {
-        //
+        $validated = $request->validated();
+
+        //Se obtiene el correo del objeto usuario y del formulario
+        $oldEmail = $user->email;
+        $newEmail = $validated['email'];
+
+        //Se actualiza el campo email y teléfono del usuario
+        $user->email = $validated['email'];
+        $user->number_phone = $validated['number_phone'];
+        //Se verifica si el correo del formulario con el del usuario no iguales
+        if($oldEmail != $newEmail){
+            //Se procede a generar una contraseña
+            $password = Str::random(8);
+            //Se cambia la contraseña del usuario
+            $user->password = password_hash($password, PASSWORD_DEFAULT);
+            //Se envía una notificación
+            $user->notify(new NeighborCreated($password, 'policía'));
+        }
+        $user->save();
+
+        return redirect()->route('policemen.index')->with('success','Policía actualizado exitosamente');
     }
 
     /**

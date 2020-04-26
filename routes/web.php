@@ -151,5 +151,7 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::get('policemen/create', 'PoliceController@create')->name('policemen.create');
     Route::post('policemen/store', 'PoliceController@store')->name('policemen.store');
     Route::get('policemen/{user}', 'PoliceController@show')->name('policemen.show');
+    Route::get('policemen/{user}/edit', 'PoliceController@edit')->name('policemen.edit');
+    Route::put('policemen/{user}', 'PoliceController@update')->name('policemen.update');
 
 });

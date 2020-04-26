@@ -242,10 +242,10 @@
                             <div id="collapsePolice" class="collapse @yield('item-police-collapse')" >
                                 <div class="collapse-inner">
                                     {{-- @can('neighbors.index') --}}
-                                        <a class="collapse-item @yield('item-neighbor-list')" href="{{route('policemen.index')}}"><i class="fas fa-list"></i>Listar policías</a>
+                                        <a class="collapse-item @yield('item-police-list')" href="{{route('policemen.index')}}"><i class="fas fa-list"></i>Listar policías</a>
                                     {{-- @endcan --}}
                                     {{-- @can('neighbors.index') --}}
-                                        <a class="collapse-item @yield('item-neighbor-create')" href="{{route('policemen.create')}}"><i class="fas fa-user-plus"></i>Registrar policía</a>
+                                        <a class="collapse-item @yield('item-police-create')" href="{{route('policemen.create')}}"><i class="fas fa-user-plus"></i>Registrar policía</a>
                                     {{-- @endcan --}}
                                 </div>
                             </div>

@@ -130,7 +130,7 @@
                                         {{-- Si el usuario tiene al menos un rol del sistema web no se presenta la opción de editar --}}
                                             {{-- @if ($neighbor->getWebSystemRoles()->isEmpty() && $neighbor->getRelationshipStateRolesUsers('morador')) --}}
                                                 <td width='10px'>
-                                                    <a href="#" class="btn btn-secondary"> Editar</a>
+                                                    <a href="{{route('policemen.edit', $police->id)}}" class="btn btn-secondary"> Editar</a>
                                                 </td>
                                                 
                                             {{-- @endif --}}
