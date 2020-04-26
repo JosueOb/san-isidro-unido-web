@@ -147,12 +147,12 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::get('moderators/{user}', 'ModeratorController@show')->name('moderators.show')->middleware('can:moderators.show');
 
     //POLICIA
-    Route::get('policemen', 'PoliceController@index')->name('policemen.index');
-    Route::get('policemen/create', 'PoliceController@create')->name('policemen.create');
-    Route::post('policemen/store', 'PoliceController@store')->name('policemen.store');
-    Route::get('policemen/{user}', 'PoliceController@show')->name('policemen.show');
-    Route::get('policemen/{user}/edit', 'PoliceController@edit')->name('policemen.edit');
-    Route::put('policemen/{user}', 'PoliceController@update')->name('policemen.update');
-    Route::delete('policemen/{user}', 'PoliceController@destroy')->name('policemen.destroy');
+    Route::get('policemen', 'PoliceController@index')->name('policemen.index')->middleware('can:policemen.index');
+    Route::get('policemen/create', 'PoliceController@create')->name('policemen.create')->middleware('can:policemen.create');
+    Route::post('policemen/store', 'PoliceController@store')->name('policemen.store')->middleware('can:policemen.create');
+    Route::get('policemen/{user}', 'PoliceController@show')->name('policemen.show')->middleware('can:policemen.show');
+    Route::get('policemen/{user}/edit', 'PoliceController@edit')->name('policemen.edit')->middleware('can:policemen.edit');
+    Route::put('policemen/{user}', 'PoliceController@update')->name('policemen.update')->middleware('can:policemen.edit');
+    Route::delete('policemen/{user}', 'PoliceController@destroy')->name('policemen.destroy')->middleware('can:policemen.destroy');
 
 });

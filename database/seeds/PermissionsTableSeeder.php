@@ -334,5 +334,41 @@ class PermissionsTableSeeder extends Seeder
             'private'=>false,
             'group'=>'moderador',
         ]);
+        //Permisos sobre el módulo de policía
+        Permission::create([
+            'name'=>'Listar a los policías del barrio',
+            'slug'=>'policemen.index',
+            'description'=>'Lista a los policías registrados',
+            'private'=>false,
+            'group'=>'policia',
+        ]);
+        Permission::create([
+            'name'=>'Crear policía del barrio',
+            'slug'=>'policemen.create',
+            'description'=>'Registrar a los policías del barrio',
+            'private'=>false,
+            'group'=>'policia',
+        ]);
+        Permission::create([
+            'name'=>'Ver detalle de los policías del barrio',
+            'slug'=>'policemen.show',
+            'description'=>'Ver en detalle cada uno de policías del barrio registrados',
+            'private'=>false,
+            'group'=>'policia',
+        ]);
+        Permission::create([
+            'name'=>'Editar policías del barrio',
+            'slug'=>'policemen.edit',
+            'description'=>'Editar registros de los policía del barrio',
+            'private'=>false,
+            'group'=>'policia',
+        ]);
+        Permission::create([
+            'name'=>'Eliminar policías del barrio',
+            'slug'=>'policemen.destroy',
+            'description'=>'Eliminar registros de los policías del barrio',
+            'private'=>false,
+            'group'=>'policia',
+        ]);
     }
 }

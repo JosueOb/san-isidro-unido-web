@@ -233,7 +233,7 @@
                         </li>
                         @endcanany
 
-                        {{-- @canany(['neighbors.index', 'neighbors.create']) --}}
+                        @canany(['policemen.index', 'policemen.create'])
                         <li class="nav-item @yield('item-police')">
                             <a class="nav-link" data-toggle="collapse" data-target="#collapsePolice" aria-expanded="true" aria-controls="collapsePolice">
                                 <i class="fas fa-user-shield"></i>
@@ -241,16 +241,16 @@
                             </a>
                             <div id="collapsePolice" class="collapse @yield('item-police-collapse')" >
                                 <div class="collapse-inner">
-                                    {{-- @can('neighbors.index') --}}
+                                    @can('policemen.index')
                                         <a class="collapse-item @yield('item-police-list')" href="{{route('policemen.index')}}"><i class="fas fa-list"></i>Listar policías</a>
-                                    {{-- @endcan --}}
-                                    {{-- @can('neighbors.index') --}}
+                                    @endcan
+                                    @can('policemen.create')
                                         <a class="collapse-item @yield('item-police-create')" href="{{route('policemen.create')}}"><i class="fas fa-user-plus"></i>Registrar policía</a>
-                                    {{-- @endcan --}}
+                                    @endcan
                                 </div>
                             </div>
                         </li>
-                        {{-- @endcanany --}}
+                        @endcanany
 
 
                     </ul>

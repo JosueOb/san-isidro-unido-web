@@ -74,9 +74,9 @@
                     <div class="col">
                         <h4 class="d-inline">Policías registrados</h4>
 
-                        {{-- @can('neighbors.create') --}}
+                        @can('policemen.create')
                         <a href="{{route('policemen.create')}}" class="btn btn-primary float-right">Agregar</a>
-                        {{-- @endcan --}}
+                        @endcan
 
                     </div>
                 </div>
@@ -102,9 +102,9 @@
                                     <th>Apellido</th>
                                     <th>Correo</th>
                                     <th>Estado</th>
-                                    {{-- @canany(['neighbors.show', 'neighbors.edit','neighbors.destroy']) --}}
+                                    @canany(['policemen.show', 'policemen.edit','policemen.destroy'])
                                     <th>Opciones</th>
-                                    {{-- @endcanany --}}
+                                    @endcanany
                                 </tr>
                             </thead>
                             <tbody>
@@ -120,13 +120,13 @@
                                             </span>
                                         </td>
 
-                                        {{-- @can('neighbors.show') --}}
+                                        @can('policemen.show')
                                         <td width='10px'>
                                             <a href="{{route('policemen.show', $police->id)}}" class="btn btn-info">Ver</a>
                                         </td>
-                                        {{-- @endcan --}}
+                                        @endcan
 
-                                        {{-- @can('neighbors.edit') --}}
+                                        @can('policemen.edit')
                                         {{-- Si el usuario tiene al menos un rol del sistema web no se presenta la opción de editar --}}
                                             @if ($police->getRelationshipStateRolesUsers('policia'))
                                                 <td width='10px'>
@@ -134,9 +134,9 @@
                                                 </td>
                                                 
                                             @endif
-                                        {{-- @endcan --}}
+                                        @endcan
 
-                                        {{-- @can('neighbors.destroy') --}}
+                                        @can('policemen.destroy')
                                         <td width='10px'>
                                             {{-- @if (Auth::user()->id != $neighbor->id) --}}
                                                 @if ($police->getRelationshipStateRolesUsers('policia'))
@@ -196,7 +196,7 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        {{-- @endcan --}}
+                                        @endcan
 
                                         </tr>
                                     @endforeach
