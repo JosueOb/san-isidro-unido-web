@@ -86,7 +86,7 @@ class NeighborController extends Controller
 
         $neighbor->roles()->attach($roleNeighbord->id, ['state'=>true]);
 
-        $neighbor->notify(new NeighborCreated($password));
+        $neighbor->notify(new NeighborCreated($password, $roleNeighbord->name));
 
         return redirect()->route('neighbors.index')->with('success', 'Morador registrado con éxito');
     }
@@ -141,7 +141,7 @@ class NeighborController extends Controller
             //Se cambia la contraseña del usuario
             $user->password = password_hash($password, PASSWORD_DEFAULT);
             //Se envía una notificación
-            $user->notify(new NeighborCreated($password));
+            $user->notify(new NeighborCreated($password, 'morador'));
         }
 
         $user->save();

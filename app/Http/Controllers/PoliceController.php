@@ -64,7 +64,7 @@ class PoliceController extends Controller
 
         $police->roles()->attach($rolePolice->id, ['state'=>true]);
 
-        $police->notify(new NeighborCreated($password));
+        $police->notify(new NeighborCreated($password, $rolePolice->name));
 
         return redirect()->route('policemen.index')->with('success', 'Policía registrado con éxito');
     }
