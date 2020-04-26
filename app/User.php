@@ -54,8 +54,11 @@ class User extends Authenticatable implements MustVerifyEmail
     //Obtener el estado de la realción entre roles y usuarios
     //Se obtiene el valor de la columna state de la tabla pivote entre roles y usuarios
     public function getRelationshipStateRolesUsers($roleSlug){
+        $state = false;
         $role = $this->roles()->where('slug', $roleSlug)->first();
-        $state = $role->pivot->state;
+        if($role){
+            $state = $role->pivot->state;
+        }
         return $state;
     }
 
@@ -70,7 +73,6 @@ class User extends Authenticatable implements MustVerifyEmail
         }
         return $hasSomeActiveRol;
     }
-    
     //Se sobrescribe el método sendPasswordNotificatión para cambiar a un nuevo objeto 
     //de la clase UserResetNotification con el contenido de la notificación traducida
     public function sendPasswordResetNotification($token)

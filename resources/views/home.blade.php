@@ -20,7 +20,9 @@
                     : {{Auth::user()->getFullName()}}</p>
                 <p class="text-center"><span class="font-weight-bold">Roles</span>:
                     @foreach (Auth::user()->getWebSystemRoles() as $role)
-                        {{$role->name}}<br>
+                        @if ($role->pivot->state)
+                            {{$role->name}}<br>
+                        @endif
                     @endforeach
                 @if (Auth::user()->position)
                     <p class="text-center"><span class="font-weight-bold">Cargo</span>

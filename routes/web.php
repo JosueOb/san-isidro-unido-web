@@ -29,7 +29,7 @@ Route::get('verifiedMail/{id}', function (Request $request) {
     return view('auth.verifiedMail');
 })->name('verifiedMail');
 
-Route::get('/home', 'HomeController@index')->name('home')->middleware('verified');
+Route::get('/home', 'HomeController@index')->name('home')->middleware('verified', 'logout');
 
 
 Route::get('logout', function () {
@@ -38,7 +38,7 @@ Route::get('logout', function () {
 
 //RUTAS PRIVADAS
 //Se debe autenticar el usuario para ingresar a las siguientes rutas
-Route::middleware(['auth','verified'])->group(function(){
+Route::middleware(['auth','verified', 'logout'])->group(function(){
     //ROLES
     Route::get('roles', 'RoleController@index')->name('roles.index')->middleware('can:roles.index');
     Route::get('roles/{role}', 'RoleController@show')->name('roles.show')->middleware('can:roles.show');
@@ -146,13 +146,16 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::delete('moderators/{user}', 'ModeratorController@destroy')->name('moderators.destroy')->middleware('can:moderators.destroy');
     Route::get('moderators/{user}', 'ModeratorController@show')->name('moderators.show')->middleware('can:moderators.show');
 
-    //POLICIA
-    Route::get('policemen', 'PoliceController@index')->name('policemen.index')->middleware('can:policemen.index');
-    Route::get('policemen/create', 'PoliceController@create')->name('policemen.create')->middleware('can:policemen.create');
-    Route::post('policemen/store', 'PoliceController@store')->name('policemen.store')->middleware('can:policemen.create');
-    Route::get('policemen/{user}', 'PoliceController@show')->name('policemen.show')->middleware('can:policemen.show');
-    Route::get('policemen/{user}/edit', 'PoliceController@edit')->name('policemen.edit')->middleware('can:policemen.edit');
-    Route::put('policemen/{user}', 'PoliceController@update')->name('policemen.update')->middleware('can:policemen.edit');
-    Route::delete('policemen/{user}', 'PoliceController@destroy')->name('policemen.destroy')->middleware('can:policemen.destroy');
+
+    Route::middleware(['checkRoleState:moderador'])->group(function(){
+        //POLICIA
+        Route::get('policemen', 'PoliceController@index')->name('policemen.index')->middleware('can:policemen.index');
+        Route::get('policemen/create', 'PoliceController@create')->name('policemen.create')->middleware('can:policemen.create');
+        Route::post('policemen/store', 'PoliceController@store')->name('policemen.store')->middleware('can:policemen.create');
+        Route::get('policemen/{user}', 'PoliceController@show')->name('policemen.show')->middleware('can:policemen.show');
+        Route::get('policemen/{user}/edit', 'PoliceController@edit')->name('policemen.edit')->middleware('can:policemen.edit');
+        Route::put('policemen/{user}', 'PoliceController@update')->name('policemen.update')->middleware('can:policemen.edit');
+        Route::delete('policemen/{user}', 'PoliceController@destroy')->name('policemen.destroy')->middleware('can:policemen.destroy');
+    });
 
 });
