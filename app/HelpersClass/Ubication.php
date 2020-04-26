@@ -9,15 +9,7 @@ class Ubication
     protected $longitude;
     protected $description;
 
-    public function __construct() 
-    {
-        $this->address = '';
-        $this->latitude = '';
-        $this->longitude = '';
-        $this->description = '';
-    }
-
-    public function __construct1($address, $latitude, $longitude, $description){
+    public function __construct($address = '', $latitude = '', $longitude = '', $description = ''){
         $this->address = $address;
         $this->latitude = $latitude;
         $this->longitude = $longitude;
@@ -75,5 +67,3 @@ class Ubication
         ];
     }
 }
-// $person = new Person(array('id' => 1, 'name' => 'Amir'));
-// echo json_encode($person);

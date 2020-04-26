@@ -9,7 +9,6 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7;
 use Exception;
 use App\Device;
-// Exception
 
 class Utils
 {
@@ -96,7 +95,6 @@ class Utils
             ])->first();
             return (is_null($socialProfile)) ? false : true;
         } else {
-            // throw new Exception('Usuario no existe');
             throw new \Exception("Usuario no existe", 500);
         }
     }

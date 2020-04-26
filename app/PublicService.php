@@ -8,7 +8,6 @@ use App\Subcategory;
 
 class PublicService extends Model
 {
-    //
     protected $table = "public_services";
     public $timestamps = true;
 

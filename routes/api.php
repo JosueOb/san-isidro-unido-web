@@ -34,6 +34,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('/{id}/perfiles-sociales', 'Api\ApiUserController@socialProfilesXUser');
         Route::get('/{id}/emergencias', 'Api\ApiUserController@getEmergenciesByUser');
         Route::get('/{id}/notificaciones', 'Api\ApiMobileNotificationController@getNotificationsUser');
+        // ->middleware(['api.user_auth']);
     });
     //Servir las Imagenes
     Route::get('imagenes/{filename}', "Api\ApiImageController@getImageB64");
@@ -55,7 +56,6 @@ Route::group(['prefix' => 'v1'], function () {
     //Crear un detalle de tipo Likes, Asistencias
     Route::post('detalles', "Api\ApiReactionController@create")
         ->middleware(['api.user_auth']);
-        // ->middleware(['api.user_auth', 'api.permission:morador,policia']);
     //Añadir un dispositivo
     Route::post('usuarios/dispositivos', "Api\ApiDeviceController@save")
         ->middleware(['api.user_auth']);

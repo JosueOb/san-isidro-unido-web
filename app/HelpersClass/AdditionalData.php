@@ -9,16 +9,7 @@ class AdditionalData
     protected $info_social_problem;
     protected $info_activity;
     protected $info_post;
-    
-    // public function __construct(array $data) 
-    // {
-    //     $this->info_emergency = $data['info_emergency'];
-    //     $this->info_event = $data['info_event'];
-    //     $this->info_social_problem = $data['info_social_problem'];
-    //     $this->info_activity = $data['info_activity'];
-    //     $this->info_post = $data['info_post'];
-    // }
-
+   
     public function __construct() 
     {
         $this->info_emergency = [
@@ -27,7 +18,13 @@ class AdditionalData
             'rechazed_reason' => null
         ];
         $this->info_event = [
-            "responsable" => null
+            "responsable" => null,
+            "range_date" => [
+                'start_date' => date("Y-m-d"),
+                'end_date' => date("Y-m-d",strtotime(date("Y-m-d")."+ 1 week")),
+                'start_time' => date("H:i:s"),
+                'end_time' => date("H:i:s", strtotime('+3 hours', strtotime(date("H:i:s")))) 
+            ]
         ];
         $this->info_social_problem = null;
         $this->info_activity = null;
@@ -98,5 +95,3 @@ class AdditionalData
         ];
     }
 }
-// $person = new Person(array('id' => 1, 'name' => 'Amir'));
-// echo json_encode($person);

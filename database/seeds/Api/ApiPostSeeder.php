@@ -98,9 +98,22 @@ class ApiPostSeeder extends Seeder
             ]);
         }
         //Crear Eventos
+        //Start point of our range date
+        $start = strtotime("10 September 2018");
+        //End point of our date range.
+        $end = strtotime("22 July 2020");
         for($ev = 1; $ev <= $numPosts; $ev++){
+            $timestamp = mt_rand($start, $end);
             $aditionalDataEvento = new AdditionalDataCls();
-            $aditionalDataEvento->setInfoEvent(['responsable' => $faker->name]);
+            $aditionalDataEvento->setInfoEvent([
+                'responsable' => $faker->name,
+                "range_date" => [
+                    'start_date' => date("Y-m-d", $timestamp),
+                    'end_date' => date("Y-m-d",strtotime(date("Y-m-d", $timestamp)."+ 1 week")),
+                    'start_time' => date("H:i:s", $timestamp),
+                    'end_time' => date("H:i:s", strtotime('+3 hours', strtotime(date("H:i:s", $timestamp)))) 
+                ]
+            ]);
             $user = User::orderBy(DB::raw('RAND()'))->take(1)->first();
             $intervalDays = rand(2, 15);
             $initialDate =  CarbonImmutable::now();

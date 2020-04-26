@@ -7,7 +7,6 @@ use App\User;
 
 class MembershipRequest extends Model
 {
-    //
     protected $table = "membership_requests";
     public $timestamps = true;
 

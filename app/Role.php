@@ -8,7 +8,6 @@ use App\Permission;
 use App\RoleUser;
 
 class Role extends Model {
-	//
     protected $table = "roles";
     public $timestamps = true;
 

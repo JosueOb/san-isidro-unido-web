@@ -7,7 +7,6 @@ use App\User;
 
 class Reaction extends Model
 {
-    //Nombre de la Tabla
     protected $table = "reactions";
     public $timestamps = true;
     

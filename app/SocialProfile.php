@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class SocialProfile extends Model
 {
-    //
     protected $table = "social_profiles";
     public $timestamps = true;
 

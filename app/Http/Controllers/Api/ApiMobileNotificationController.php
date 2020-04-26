@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\ApiBaseController;
 use App\MobileNotification;
 use App\User;
 use Exception;
+use Illuminate\Http\Request;
 
 class ApiMobileNotificationController extends ApiBaseController
 {
@@ -16,21 +17,16 @@ class ApiMobileNotificationController extends ApiBaseController
      *
      * @return array
      */
-    public function getNotificationsUser($user_id) {
+    public function getNotificationsUser(Request $request, $user_id) {
         try {
-            // return $this->sendResponse(200, 'success', []);
             //Verificar si existe el usuario
             $user = User::findById($user_id)->first();
+            $filterSize =  ($request->get('size')) ? intval($request->get('size')): 20;
             if (is_null($user)) {
                 return $this->sendError(404, 'no existe el usuario', ['notifications' => 'no existe el usuario']);
             }
-            $string_notifications = json_encode($user->notifications);
-            $mobileNotifications = json_decode($string_notifications);
-            if (is_null($mobileNotifications)) {
-                return $this->sendError(404, 'no existen notificationes', ['notifications' => 'no existen notificationes']);
-            } 
-            //Si no es nulo, retornar las notificaciones
-            return $this->sendResponse(200, 'success', $mobileNotifications);
+            $notifications = $user->notifications()->simplePaginate($filterSize)->toArray();
+            return $this->sendPaginateResponse(200, 'Notificaciones obtenidas correctamente', $notifications);
         } catch (Exception $e) {
             return $this->sendError(500, "error", ['server_error' => $e->getMessage()]);
         }

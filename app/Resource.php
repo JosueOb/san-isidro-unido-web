@@ -21,11 +21,9 @@ class Resource extends Model
     */
     protected $fillable = ['url', 'post_id', 'type'];
 
-    //Add Extra Attributes
+    /*Add Extra Attributes*/
 
     /*AGREGAR RESOURCE LINK ATTRIBUTE */
-    // public $url_link = '';
-    // protected $attributes = ['url_link'];
     protected $appends = ['url_link'];
     public function getUrlLinkAttribute(){
         return $this->getApiLink();

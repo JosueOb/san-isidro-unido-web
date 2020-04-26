@@ -44,11 +44,7 @@ class CategoryController extends Controller
      */
     public function update(CategoryRequest $request, Category $category)
     {
-        $validated = $request->validated();
-
-        // $slug = $this->returnSlug($validated['name']);
-        // $category->slug = $slug;
-        
+        $validated = $request->validated();        
         $category->name = $validated['name'];
         $category->description = $validated['description'];
         

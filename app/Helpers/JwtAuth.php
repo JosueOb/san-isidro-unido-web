@@ -1,5 +1,4 @@
 <?php
-//mi archivo de php
 namespace App\Helpers;
 
 use App\User;
@@ -39,9 +38,6 @@ class JwtAuth {
      */
 	public function singIn($email, $passOrToken, $provider) {
 		$validCredentials = false;
-		// $user = User::all()->get();
-		// $user = User::where('email', $email)->first();
-		// $user = User::email($email)->rolActive()->first();
 		$user = User::email($email)->rolActive()->with("roles")->first();
 
 		if (!is_null($user)) {

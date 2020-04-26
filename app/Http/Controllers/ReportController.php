@@ -66,10 +66,6 @@ class ReportController extends Controller
         // if($request['images']){
         if($request->file('images')){
             foreach($request->file('images') as $image){
-                // Image::create([
-                //     'url'=> $image->store('images_reports', 'public'),
-                //     'post_id' => $report->id,
-                // ]);
                 Resource::create([
                     'url'=> $image->store('report_images', 'public'),
                     'post_id' => $report->id,
@@ -204,10 +200,6 @@ class ReportController extends Controller
         // //Se guardan las nuevas imágenes  seleccionadas por el usuario
         if($request->file('images')){
             foreach($request->file('images') as $image){
-                // Image::create([
-                //     'url'=> $image->store('images_reports', 'public'),
-                //     'post_id' => $report->id,
-                // ]);
                 Resource::create([
                     'url'=> $image->store('report_images', 'public'),
                     'post_id' => $report->id,
@@ -264,10 +256,6 @@ class ReportController extends Controller
         foreach($array as $image){
             if($image === $search){
                 $imageIsDeleted = false;
-                // echo "son iguales \n";
-                // echo $image."\n";
-                // echo $search."\n";
-                // break;
             }
         }
         return $imageIsDeleted;

@@ -9,7 +9,6 @@ use App\Reaction;
 class Post extends Model
 {
     use Notifiable;
-    // use Filterable;
 
     /**
      * The table associated with the model.
@@ -106,19 +105,6 @@ class Post extends Model
     public function subcategory(){
         return $this->belongsTo(Subcategory::class);
     }
-     /**
-     * Get the first image belonging to a post
-     */
-    // public function getFirstImage(){
-    //     $image = $this->images()->first();
-    //     if($image){
-    //         $image_url = $image["url"];
-    //     }else{
-    //         //en caso de no tener imagen se retorna una por defecto
-    //         $image_url = "images_reports/image-default.jpg";
-    //     }
-    //     return  \Storage::disk('public')->url($image_url);
-    // }
     /**
      * A post can have many resources
      */
@@ -148,8 +134,7 @@ class Post extends Model
         if($image){
             $image_url = $image["url"];
         }else{
-            //en caso de no tener imagen se retorna una por defecto
-            // $image_url = "images_reports/image-default.jpg";
+            /*en caso de no tener imagen se retorna una por defecto*/
             $image_url = env('REPORT_IMAGE_DEFAULT');
         }
         return  \Storage::disk('public')->url($image_url);

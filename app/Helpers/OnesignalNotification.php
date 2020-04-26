@@ -9,7 +9,6 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7;
 use Exception;
 use App\Device;
-// Exception
 
 class OnesignalNotification
 {
@@ -45,7 +44,6 @@ class OnesignalNotification
         } catch (RequestException $e) {
             echo 'Excepción capturada: ', Psr7\str($e->getRequest());
             if ($e->hasResponse()) {
-                // echo Psr7\str($e->getResponse());
                 throw new Exception($e->getResponse());
             }
         }
@@ -90,16 +88,12 @@ class OnesignalNotification
             ],
             "include_player_ids" => $specificIDs,
         ];
-        // if(!$aditionalData){
-        //     $bodyPeticionOnesignal['data'] = (object)[];
-        // }
         
         try {
             $request = self::sendPushNotification($bodyPeticionOnesignal);
             $response = $request->getBody();
             return ['content' => $response->getContents(), 'status' => $request->getStatusCode()];
         } catch (Exception $e) {
-            // echo 'Excepción capturada: ', $e->getMessage(), "\n";
             return $e->getMessage();
         }
     }
@@ -134,7 +128,6 @@ class OnesignalNotification
             $response = $request->getBody();
             return ['content' => $response->getContents(), 'status' => $request->getStatusCode()];
         } catch (Exception $e) {
-            // echo 'Excepción capturada: ', $e->getMessage(), "\n";
             return ['errors' => $e->getMessage(), 'status' => 500];
         }
 
