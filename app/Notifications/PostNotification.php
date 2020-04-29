@@ -13,16 +13,20 @@ class PostNotification extends Notification
     use Queueable;
 
     public $post;
+    public $titleNotification;
+    public $messageNotification;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(Post $post)
+    public function __construct(Post $post, $titleNotification='Titulo de la Notificacion', $messageNotification = 'Contenido de la Notificacion')
     {
         //
        $this->post = $post;
+       $this->titleNotification = $titleNotification;
+       $this->messageNotification = $messageNotification;
     }
 
     /**
@@ -59,14 +63,20 @@ class PostNotification extends Notification
     public function toArray($notifiable)
     {
         $post =  Post::findById($this->post->id)->with(["category", "subcategory"])->first();
-        $title_noti = $post->user->first_name . " ha reportado una emergencia";
-        $description_noti = "Se reporto la emergencia " . substr($post->title, 30);
-        // $description_noti = "Se reporto la emergencia " . substr($post->title, 25);
-        return [
+        $title_noti = $this->titleNotification;
+        // $title_noti = $post->user->first_name . " ha reportado una emergencia";
+        // $description_noti = "Se reporto la emergencia " . substr($post->title, 30);
+        $description_noti = $this->messageNotification;
+        // dd($this->post, $this->titleNotification, $this->messageNotification);
+        // die();
+        $notificationArray = [
             "title" => $title_noti,
             "message" => $description_noti,
             "notification_user" => $notifiable, //el usuario al que le voy a enviar 
             "post" => $post,
         ];
+        // dd($notificationArray);
+        // die();
+        return $notificationArray;
     }
 }

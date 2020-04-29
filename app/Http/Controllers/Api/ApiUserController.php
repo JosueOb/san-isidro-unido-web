@@ -279,6 +279,11 @@ class ApiUserController extends ApiBaseController
                                     (array_key_exists("phone_platform",$device)) ? $device['phone_platform']: 'Modelo Generico',
                                     (array_key_exists("description",$device)) ? $device['description']: '', $user->id);
                             }
+                            //Guardar red social
+                            if($requestData['provider'] != 'formulario'){
+                                $this->createUserSocial($requestData['social_id'], $user->id, $requestData['provider']);
+                            }
+                            //Retornar Token
                             $token = $jwtAuth->getToken($requestData['email'], $returnDataOrToken);    
                             return $this->sendResponse(200, "Login Correcto", $token);
                         }else{     

@@ -84,49 +84,42 @@ class ApiPostController extends ApiBaseController
 
             $queryset = Post::with(['resources', 'category', 'user', 'subcategory', 'reactions']);
             //FILTROS PERMITIDOS
-            $filterCategory = ($request->get('category')) ? $request->get('category'): '';
-            $filterSubcategory = ($request->get('subcategory')) ? $request->get('subcategory'): '';
-            $filterUser = ($request->get('user')) ? intval($request->get('user')): '';
+            $filterCategory = ($request->get('category')) ? $request->get('category'): -1;
+            $filterSubcategory = ($request->get('subcategory')) ? $request->get('subcategory'): -1;
+            $filterUser = ($request->get('user')) ? intval($request->get('user')): -1;
             $filterByTitle = ($request->get('title')) ? $request->get('title'): '';
-            $filterByPolice = ($request->get('police')) ? intval($request->get('police')): '';
+            $filterByPolice = ($request->get('police')) ? intval($request->get('police')): -1;
+            $filterIsAttended = ($request->get('is_attended') != null) ? intval($request->get('is_attended')): -1;
             $filterSize =  ($request->get('size')) ? intval($request->get('size')): 20;
-            //BUSQUEDAS HECHAS
-            $category = Category::slug($filterCategory)->first();
-            $subcategory = Subcategory::slug($filterSubcategory)->first();
-            $user = User::findById($filterUser)->first();
-            //LANZAR ERRORES EN CASO FILTROS NO VALIDOS
-            if($filterCategory && !$category){
-                return $this->sendError(404, 'No existe la categoria solicitada', ['category' => 'No existe']);
-            }          
-            if($filterSubcategory && !$subcategory){
-                return $this->sendError(404, 'No existe la subcategoria solicitada', ['subcategory' => 'No existe']);
-            }    
-            if($filterUser && !$user){
-                return $this->sendError(404, 'No existe el usuario', ['user' => 'No existe']);
-            }
             //APLICAR FILTROS
-            if($category){
-                $queryset = $queryset->categoryId($category->id);
+            if($filterCategory != -1){
+                $category = Category::slug($filterCategory)->first();
+                $queryset = $queryset->categoryId(($category) ? $category->id: -1);
             }
             
-            if($subcategory){
-                $queryset = $queryset->subCategoryId($subcategory->id);
+            if($filterSubcategory != -1){
+                $subcategory = Subcategory::slug($filterSubcategory)->first();
+                $queryset = $queryset->subCategoryId(($subcategory) ? $subcategory->id: -1);
             }
     
-            if($user){
-                $queryset = $queryset->userId($user->id);
+            if($filterUser != -1){
+                $queryset = $queryset->userId($filterUser);
             }
 
-            if($filterByPolice){
+            if($filterByPolice != -1){
                 $queryset = $queryset->where('additional_data->info_emergency->attended_by->id', $filterByPolice);
             }
 
-            if($filterByTitle){
+            if($filterIsAttended != -1){
+                $queryset = $queryset->where('is_attended', $filterIsAttended);
+            }
+
+            if($filterByTitle != ''){
                 $queryset = $queryset->where('title', 'LIKE', "%$filterByTitle%");
             }
             //Retornar Paginacion y datos ordenados descendentemente para devolver los mas nuevos primero
             $posts = $queryset->orderBy('created_at', 'DESC')->simplePaginate($filterSize)->toArray();
-            return $this->sendPaginateResponse(200, 'Publicaciones obtenidas correctamente', $posts);         
+            return $this->sendPaginateResponse(200, 'Datos Obtenidos', $posts);         
         } catch (Exception $e) {
             return $this->sendError(500, "error", ['server_error' => $e->getMessage()]);
         }
@@ -184,10 +177,9 @@ class ApiPostController extends ApiBaseController
         //Notificar al usuario que creo el post sobre quien lo va a atender
         $user = User::findById($emergencia->user_id)->first();
         if(!is_null($user)){
-            //$user->notify(new PostNotification($emergencia));
             $user_devices = OnesignalNotification::getUserDevices($emergencia->user_id);
             if(!is_null($user_devices) && count($user_devices) > 0){
-                //Enviar notification a todos
+                //Enviar notification al usuario en especifico
                OnesignalNotification::sendNotificationByPlayersID(
                    $title_noti = "Tu solicitud de emergencia fue aceptada", 
                    $description_noti = "El policia " . $user->first_name . " ha aceptado atender tu emergencia", 
@@ -317,36 +309,49 @@ class ApiPostController extends ApiBaseController
                 }
 
                 //Enviar notificaciones a moderadores
-                $rolModerador = Role::where('slug', 'moderador')->first();
                 $rolPolicia = Role::where('slug', 'policia')->first();
-
-                $moderadores = $rolModerador->users()->get();
                 $policias = $rolPolicia->users()->get();
 
                 $new_post = Post::findById($post->id)->with(["category", "subcategory", 'resources', 'reactions'])->first();
-                //Notificar Moderadores
-                // foreach($moderadores as $moderador){
-                    // $devices_ids = OnesignalNotification::getUserDevices($moderador->id);
-                    // $moderador->notify(new PostNotification($new_post));
-                    // foreach($devices_ids as $device_id){
-                    //     array_push($usersDevicesIds, $device_id);
-                    // }
-                // }
-                //Notificar Policias
+                //Notificar Emergencia a los Policias
+                $title_notification_policia = "Nueva emergencia reportada";
+                $description_notification_policia = "El usuario " . $new_post->user->first_name . " ha reportado una emergencia";
+
                 foreach($policias as $policia){
-                    $policia->notify(new PostNotification($new_post));
+                    $policia->notify(new PostNotification($new_post, $title_notification_policia, $description_notification_policia));
+
+                    $user_devices_policia = OnesignalNotification::getUserDevices($policia->id);
+                    if(!is_null($user_devices_policia) && count($user_devices_policia) > 0){
+                        //Enviar notification al usuario en especifico
+                        OnesignalNotification::sendNotificationByPlayersID(
+                            [
+                                "title" => $title_notification_policia,
+                                "message" => $description_notification_policia,
+                                "post" => $new_post
+                            ],
+                            $user_devices_policia
+                        );
+                    }
                 }
-                //Enviar notification a todos
-                $title_noti = $new_post->user->first_name . " ha reportado una emergencia";
-                $description_noti = "Se reporto la emergencia " . substr($new_post->title, 30);
-                OnesignalNotification::sendNotificationBySegments(
-                    $title = $title_noti, 
-                    $description = $description_noti, 
-                    $aditionalData = [
-                        "title" => $title,
-                        "message" => $description,
-                        "post" => $new_post
-                ]);
+                //Enviar notification al usuario que creo la emergencia
+                $title_notification_user = "Tu emergencia fue reportada correctamente";
+                $description_notification_user = "Cuando un policia atienda tu reporte, seras notificado inmediatamente";
+
+                $new_post->user->notify(new PostNotification($new_post, $title_notification_user, $description_notification_user));
+
+                $user_devices_emergencia = OnesignalNotification::getUserDevices($new_post->user->id);
+                if(!is_null($user_devices_emergencia) && count($user_devices_emergencia) > 0){
+                    OnesignalNotification::sendNotificationByPlayersID(
+                        $title_notification_user, 
+                        $description_notification_user, 
+                        [
+                            "title" => $title_notification_user,
+                            "message" => $description_notification_user,
+                            "post" => $new_post
+                        ],
+                        $user_devices_emergencia
+                    );
+                }
                 //Respuesta Api
                 return $this->sendResponse(200, "Emergency Created", $new_post);
             }
@@ -410,6 +415,52 @@ class ApiPostController extends ApiBaseController
                         $resource->post_id = $post->id;
                         $resource->save();
                     }
+                }
+                 //Enviar notificaciones a moderadores
+                 $rolModerador = Role::where('slug', 'moderador')->first();
+                 $rolPolicia = Role::where('slug', 'policia')->first();
+ 
+                 $moderadores = $rolModerador->users()->get();
+                 $policias = $rolPolicia->users()->get();
+ 
+                 $new_post = Post::findById($post->id)->with(["category", "subcategory", 'resources', 'reactions'])->first();
+                 $title_notification_moderador = 'Un nuevo problema social ha sido reportado';
+                 $description_notification_moderador = 'El usuario ' . $new_post->user->first_name . ' ha reportado un problema social';
+                 //Notificar Moderadores
+                 foreach($moderadores as $moderador){
+                     $moderador->notify(new PostNotification($new_post, $title_notification_moderador, $description_notification_moderador));
+
+                     $user_devices_moderador= OnesignalNotification::getUserDevices($moderador->id);
+                    if(!is_null($user_devices_moderador) && count($user_devices_moderador) > 0){
+                        //Enviar notification al usuario en especifico
+                        OnesignalNotification::sendNotificationByPlayersID(
+                            [
+                                "title" => $title_notification_moderador,
+                                "message" => $description_notification_moderador,
+                                "post" => $post
+                            ],
+                            $user_devices_moderador
+                        );
+                    }
+                 }
+                  //Enviar notification al usuario que creo el problema social
+                $title_notification_user = "Tu problema social fue reportado correctamente";
+                $description_notification_user = "Cuando tu publicación sea aprobada, seras notificado inmediatamente";
+
+                $post->user->notify(new PostNotification($post, $title_notification_user, $description_notification_user));
+
+                $user_devices_problema_social = OnesignalNotification::getUserDevices($new_post->user->id);
+                if(!is_null($user_devices_problema_social) && count($user_devices_problema_social) > 0){
+                    OnesignalNotification::sendNotificationByPlayersID(
+                        $title_notification_user, 
+                        $description_notification_user, 
+                        [
+                            "title" => $title_notification_user,
+                            "message" => $description_notification_user,
+                            "post" => $post
+                        ],
+                        $user_devices_problema_social
+                    );
                 }
                 return $this->sendResponse(200, "Social Problem Created", $post);
             }
