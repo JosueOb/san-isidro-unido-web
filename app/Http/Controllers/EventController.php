@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\Helpers\OnesignalNotification;
 use App\Http\Requests\EventRequest;
 use App\Phone;
 use App\Post;
@@ -10,6 +11,7 @@ use App\Resource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\HelpersClass\AdditionalData as AdditionalDataCls;
+use App\Notifications\PostNotification;
 
 class EventController extends Controller
 {
@@ -119,6 +121,13 @@ class EventController extends Controller
                 ]);
             }
         }
+        //Notificar a todos los usuarios afiliados de la aplicación móvil
+        //Notificar Emergencia a los Policias
+        $title_notification_event = $event->title;
+        $description_notification_event = "El usuario " . $request->user()->getFullName() . " ha reportado un evento";
+        $request->user()->notify(new PostNotification($event, $title_notification_event, $description_notification_event));
+        OnesignalNotification::sendNotificationBySegments($title_notification_event, $description_notification_event, $event);
+
 
         session()->flash('success', 'Servicio público registrado con éxito');
         return response()->json(['success'=>'Datos recibidos correctamente']);
