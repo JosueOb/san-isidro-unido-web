@@ -38,12 +38,18 @@ Route::get('logout', function () {
 
 //RUTAS PRIVADAS
 //Se debe autenticar el usuario para ingresar a las siguientes rutas
-Route::middleware(['auth','verified', 'logout'])->group(function(){
+// Route::middleware(['auth','verified', 'logout', 'test'])->group(function(){
+Route::middleware(['auth','verified'])->group(function(){
     //ROLES
     Route::get('roles', 'RoleController@index')->name('roles.index')->middleware('can:roles.index');
+    // Route::get('roles', 'RoleController@index')->name('roles.index')->middleware('permission:roles.index');
+
+
+
     Route::get('roles/{role}', 'RoleController@show')->name('roles.show')->middleware('can:roles.show');
     Route::get('roles/{role}/edit', 'RoleController@edit')->name('roles.edit')->middleware('can:roles.edit');
     Route::put('roles/{role}', 'RoleController@update')->name('roles.update')->middleware('can:roles.edit');
+
     //DIRECTIVA
     Route::get('members', 'DirectiveController@index')->name('members.index')->middleware('can:members.index');
     Route::get('members/create', 'DirectiveController@create')->name('members.create')->middleware('can:members.create');
@@ -54,6 +60,7 @@ Route::middleware(['auth','verified', 'logout'])->group(function(){
     Route::delete('members/{user}', 'DirectiveController@destroy')->name('members.destroy')->middleware('can:members.destroy');
     Route::get('members/filters/{option}', 'DirectiveController@filters')->name('members.filters')->middleware('can:members.index');
     Route::get('search/members','SearchController@searchMembers')->name('search.members')->middleware('can:members.index');
+    
     //CARGOS
     Route::get('positions', 'PositionController@index')->name('positions.index')->middleware('can:positions.index');
     Route::get('positions/create', 'PositionController@create')->name('positions.create')->middleware('can:positions.create');
@@ -78,26 +85,6 @@ Route::middleware(['auth','verified', 'logout'])->group(function(){
     Route::get('profile/password', function () {
         return abort(404);
     });
-    //VECINOS-MORADORES
-    Route::get('neighbors', 'NeighborController@index')->name('neighbors.index')->middleware('can:neighbors.index');
-    Route::get('neighbors/create', 'NeighborController@create')->name('neighbors.create')->middleware('can:neighbors.create');
-    Route::post('neighbors/store', 'NeighborController@store')->name('neighbors.store')->middleware('can:neighbors.create');
-    Route::get('neighbors/{user}', 'NeighborController@show')->name('neighbors.show')->middleware('can:neighbors.show');
-    Route::get('neighbors/{user}/edit', 'NeighborController@edit')->name('neighbors.edit')->middleware('can:neighbors.edit');
-    Route::put('neighbors/{user}', 'NeighborController@update')->name('neighbors.update')->middleware('can:neighbors.edit');
-    Route::delete('neighbors/{user}', 'NeighborController@destroy')->name('neighbors.destroy')->middleware('can:neighbors.destroy');
-    Route::get('neighbors/filters/{option}', 'NeighborController@filters')->name('neighbors.filters')->middleware('can:neighbors.index');
-    Route::get('search/neighbors','SearchController@searchNeighbors')->name('search.neighbors')->middleware('can:neighbors.index');
-    //INFORMES
-    Route::get('reports','ReportController@index')->name('reports.index')->middleware('can:reports.index');
-    Route::get('reports/create','ReportController@create')->name('reports.create')->middleware('can:reports.create');
-    Route::post('reports/store', 'ReportController@store')->name('reports.store')->middleware('can:reports.create');
-    Route::get('reports/{report}', 'ReportController@show')->name('reports.show')->middleware('can:reports.show');
-    Route::get('reports/{report}/edit', 'ReportController@edit')->name('reports.edit')->middleware('can:reports.edit');
-    Route::put('reports/{report}', 'ReportController@update')->name('reports.update')->middleware('can:reports.edit');
-    Route::delete('reports/{report}', 'ReportController@destroy')->name('reports.destroy')->middleware('can:reports.destroy');
-    Route::get('reports/filters/{option}', 'ReportController@filters')->name('reports.filters')->middleware('can:reports.index');
-    Route::get('search/reports','SearchController@searchReports')->name('search.reports')->middleware('can:reports.index');
 
     //CATEGORIA
     Route::get('category', 'CategoryController@index')->name('categories.index')->middleware('can:categories.index');
@@ -121,33 +108,58 @@ Route::middleware(['auth','verified', 'logout'])->group(function(){
         return abort(404);
     });
     
-    //SERVICIOS PUBLICOS
-    Route::get('public-service', 'PublicServiceController@index')->name('publicServices.index')->middleware('can:publicServices.index');
-    Route::get('public-service/create', 'PublicServiceController@create')->name('publicServices.create')->middleware('can:publicServices.create');
-    Route::post('public-service/store', 'PublicServiceController@store')->name('publicServices.store')->middleware('can:publicServices.create');
-    Route::get('public-service/{publicService}', 'PublicServiceController@show')->name('publicServices.show')->middleware('can:publicServices.show');
-    Route::get('public-service/{publicService}/edit', 'PublicServiceController@edit')->name('publicServices.edit')->middleware('can:publicServices.edit');
-    Route::put('public-service/{publicService}', 'PublicServiceController@update')->name('publicServices.update')->middleware('can:publicServices.edit');
-    Route::delete('public-service/{publicService}', 'PublicServiceController@destroy')->name('publicServices.destroy')->middleware('can:publicServices.destroy');
+    // Route::middleware(['checkRoleState:directivo'])->group(function(){
+        //VECINOS-MORADORES
+        Route::get('neighbors', 'NeighborController@index')->name('neighbors.index')->middleware('can:neighbors.index');
+        Route::get('neighbors/create', 'NeighborController@create')->name('neighbors.create')->middleware('can:neighbors.create');
+        Route::post('neighbors/store', 'NeighborController@store')->name('neighbors.store')->middleware('can:neighbors.create');
+        Route::get('neighbors/{user}', 'NeighborController@show')->name('neighbors.show')->middleware('can:neighbors.show');
+        Route::get('neighbors/{user}/edit', 'NeighborController@edit')->name('neighbors.edit')->middleware('can:neighbors.edit');
+        Route::put('neighbors/{user}', 'NeighborController@update')->name('neighbors.update')->middleware('can:neighbors.edit');
+        Route::delete('neighbors/{user}', 'NeighborController@destroy')->name('neighbors.destroy')->middleware('can:neighbors.destroy');
+        Route::get('neighbors/filters/{option}', 'NeighborController@filters')->name('neighbors.filters')->middleware('can:neighbors.index');
+        Route::get('search/neighbors','SearchController@searchNeighbors')->name('search.neighbors')->middleware('can:neighbors.index');
 
-    //EVENTOS
-    Route::get('events', 'EventController@index')->name('events.index')->middleware('can:events.index');
-    Route::get('events/create', 'EventController@create')->name('events.create')->middleware('can:events.create');
-    Route::post('events/store', 'EventController@store')->name('events.store')->middleware('can:events.create');
-    Route::get('events/{event}', 'EventController@show')->name('events.show')->middleware('can:events.show');
-    Route::get('events/{event}/edit', 'EventController@edit')->name('events.edit')->middleware('can:events.edit');
-    Route::put('events/{event}', 'EventController@update')->name('events.update')->middleware('can:events.edit');
-    Route::delete('events/{event}', 'EventController@destroy')->name('events.destroy')->middleware('can:events.destroy');
+        //INFORMES
+        Route::get('reports','ReportController@index')->name('reports.index')->middleware('can:reports.index');
+        Route::get('reports/create','ReportController@create')->name('reports.create')->middleware('can:reports.create');
+        Route::post('reports/store', 'ReportController@store')->name('reports.store')->middleware('can:reports.create');
+        Route::get('reports/{report}', 'ReportController@show')->name('reports.show')->middleware('can:reports.show');
+        Route::get('reports/{report}/edit', 'ReportController@edit')->name('reports.edit')->middleware('can:reports.edit');
+        Route::put('reports/{report}', 'ReportController@update')->name('reports.update')->middleware('can:reports.edit');
+        Route::delete('reports/{report}', 'ReportController@destroy')->name('reports.destroy')->middleware('can:reports.destroy');
+        Route::get('reports/filters/{option}', 'ReportController@filters')->name('reports.filters')->middleware('can:reports.index');
+        Route::get('search/reports','SearchController@searchReports')->name('search.reports')->middleware('can:reports.index');
 
-    //MODERADOR
-    Route::get('moderators/create', 'ModeratorController@create')->name('moderators.create')->middleware('can:moderators.create');
-    Route::get('moderators/{user}/create', 'ModeratorController@store')->name('moderators.store')->middleware('can:moderators.create');
-    Route::get('moderators', 'ModeratorController@index')->name('moderators.index')->middleware('can:moderators.index');
-    Route::delete('moderators/{user}', 'ModeratorController@destroy')->name('moderators.destroy')->middleware('can:moderators.destroy');
-    Route::get('moderators/{user}', 'ModeratorController@show')->name('moderators.show')->middleware('can:moderators.show');
+        //SERVICIOS PUBLICOS
+        Route::get('public-service', 'PublicServiceController@index')->name('publicServices.index')->middleware('can:publicServices.index');
+        Route::get('public-service/create', 'PublicServiceController@create')->name('publicServices.create')->middleware('can:publicServices.create');
+        Route::post('public-service/store', 'PublicServiceController@store')->name('publicServices.store')->middleware('can:publicServices.create');
+        Route::get('public-service/{publicService}', 'PublicServiceController@show')->name('publicServices.show')->middleware('can:publicServices.show');
+        Route::get('public-service/{publicService}/edit', 'PublicServiceController@edit')->name('publicServices.edit')->middleware('can:publicServices.edit');
+        Route::put('public-service/{publicService}', 'PublicServiceController@update')->name('publicServices.update')->middleware('can:publicServices.edit');
+        Route::delete('public-service/{publicService}', 'PublicServiceController@destroy')->name('publicServices.destroy')->middleware('can:publicServices.destroy');
+
+        //EVENTOS
+        // Route::get('events', 'EventController@index')->name('events.index')->middleware('can:events.index');
+        Route::get('events', 'EventController@index')->name('events.index')->middleware('permission:events.index');
+        Route::get('events/create', 'EventController@create')->name('events.create')->middleware('permission:events.create');
+        Route::post('events/store', 'EventController@store')->name('events.store')->middleware('permission:events.create');
+        Route::get('events/{event}', 'EventController@show')->name('events.show')->middleware('permission:events.show');
+        Route::get('events/{event}/edit', 'EventController@edit')->name('events.edit')->middleware('permission:events.edit');
+        Route::put('events/{event}', 'EventController@update')->name('events.update')->middleware('permission:events.edit');
+        Route::delete('events/{event}', 'EventController@destroy')->name('events.destroy')->middleware('permission:events.destroy');
+
+        //MODERADOR
+        Route::get('moderators/create', 'ModeratorController@create')->name('moderators.create')->middleware('can:moderators.create');
+        Route::get('moderators/{user}/create', 'ModeratorController@store')->name('moderators.store')->middleware('can:moderators.create');
+        Route::get('moderators', 'ModeratorController@index')->name('moderators.index')->middleware('can:moderators.index');
+        Route::delete('moderators/{user}', 'ModeratorController@destroy')->name('moderators.destroy')->middleware('can:moderators.destroy');
+        Route::get('moderators/{user}', 'ModeratorController@show')->name('moderators.show')->middleware('can:moderators.show');
+    // });
 
 
-    Route::middleware(['checkRoleState:moderador'])->group(function(){
+    // Route::middleware(['checkRoleState:moderador'])->group(function(){
         //POLICIA
         Route::get('policemen', 'PoliceController@index')->name('policemen.index')->middleware('can:policemen.index');
         Route::get('policemen/create', 'PoliceController@create')->name('policemen.create')->middleware('can:policemen.create');
@@ -156,6 +168,18 @@ Route::middleware(['auth','verified', 'logout'])->group(function(){
         Route::get('policemen/{user}/edit', 'PoliceController@edit')->name('policemen.edit')->middleware('can:policemen.edit');
         Route::put('policemen/{user}', 'PoliceController@update')->name('policemen.update')->middleware('can:policemen.edit');
         Route::delete('policemen/{user}', 'PoliceController@destroy')->name('policemen.destroy')->middleware('can:policemen.destroy');
-    });
+    // });
+
+    // // Route::middleware(['checkRoleState:moderador'])->group(function(){
+    //     //EVENTOS
+    //     Route::get('events', 'EventController@index')->name('events.index')->middleware('can:events.index');
+    //     Route::get('events/create', 'EventController@create')->name('events.create')->middleware('can:events.create');
+    //     Route::post('events/store', 'EventController@store')->name('events.store')->middleware('can:events.create');
+    //     Route::get('events/{event}', 'EventController@show')->name('events.show')->middleware('can:events.show');
+    //     Route::get('events/{event}/edit', 'EventController@edit')->name('events.edit')->middleware('can:events.edit');
+    //     Route::put('events/{event}', 'EventController@update')->name('events.update')->middleware('can:events.edit');
+    //     Route::delete('events/{event}', 'EventController@destroy')->name('events.destroy')->middleware('can:events.destroy');
+    // // });
+
 
 });
