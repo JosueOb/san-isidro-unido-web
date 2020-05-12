@@ -61,8 +61,8 @@ class Ubication
         return 
         [
             'address'   => $this->getAddress(),
-            'lat' => $this->getLatitude(),
-            'lng' => $this->getLongitude(),
+            'latitude' => $this->getLatitude(),
+            'longitude' => $this->getLongitude(),
             'description' => $this->getDescription(),
         ];
     }

@@ -17,13 +17,13 @@ async function loadMap(){
                                         console.log('geolocationPosition', errs);
                                     });
     currentLocation = {
-        'lat': geolocationPosition ? geolocationPosition.coords.latitude: null, 
-        lng: geolocationPosition ? geolocationPosition.coords.longitude : null,
+        latitude: geolocationPosition ? geolocationPosition.coords.latitude: null, 
+        longitude: geolocationPosition ? geolocationPosition.coords.longitude : null,
     };
     var address = await getAddress(currentLocation);
     currentLocation.address = address ? address : null;
 
-    if(currentLocation.lat && currentLocation.lng && currentLocation.address ){
+    if(currentLocation.latitude && currentLocation.longitude && currentLocation.address ){
         setPosition(currentLocation);
     }
     

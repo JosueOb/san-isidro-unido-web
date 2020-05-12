@@ -153,8 +153,8 @@
                                 </span>
                                 <div id="map" class="map">
                                     <div id="info" class="info text-muted">
-                                        Latitud:  <span id='lat'>{{$ubication['lat']}}</span><br>
-                                        Longitud: <span id='lng'>{{$ubication['lng']}}</span><br>
+                                        Latitud:  <span id='latitude'>{{$ubication['latitude']}}</span><br>
+                                        Longitud: <span id='longitude'>{{$ubication['longitude']}}</span><br>
                                         Dirección: <span id='address'>{{$ubication['address']}}</span><br>
                                         </span>
                                     </div>
