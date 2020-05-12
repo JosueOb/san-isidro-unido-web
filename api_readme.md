@@ -44,41 +44,6 @@ php artisan db:seed --class=ApiMobileNotificationsSeeder
 "./vendor/bin/phpunit" --filter ApiNotificationlModuleTest
 ```
 
-## Swagger
-
-php artisan l5-swagger:generate
-
-**Anotaciones**
-
-```php
-/**
-     * @OA\Get(
-     *     path="/api/v1/servicios-publicos/{id}",
-     *     summary="Detalle de un servicio público",
-     *      tags={"Servicios Publicos(Detalle)"},
-     *   description="Obtener el detalle de un servicio público existente",
-     *   @OA\Parameter(name="filter",in="query", @OA\JsonContent(
-     *      @OA\Property(property="type", type="string"),
-     *      @OA\Property(property="color", type="string"),
-     *   )),
-     *   @OA\Parameter(
-     *         description="ID del servicio público a retornar",
-     *         in="path",
-     *         name="id",
-     *         required=true,
-     *         @OA\Schema(
-     *           type="integer",
-     *           format="int64"
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Listado de todos los servicios públicos."
-     *     ),
-     *     @OA\Response(response="default", description="Ha ocurrido un error.")
-     * )
-```
-
 ## Remover Whoops y Añadir Ignition
 
 composer remove filp/whoops --dev

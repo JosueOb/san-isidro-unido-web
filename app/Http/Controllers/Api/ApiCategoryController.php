@@ -11,17 +11,6 @@ use App\Subcategory;
 class ApiCategoryController extends ApiBaseController {
 	
 	/**
-     * @OA\Get(
-     *     path="/api/v1/categorias",
-     *     summary="Listado de categorias",
-     *     tags={"Categorias"},
-     *   description="Obtener el listado de categorias",
-     *     @OA\Response(
-     *         response=200,
-     *         description="Listado de todas las categorias."
-     *     ),
-     *     @OA\Response(response="default", description="Ha ocurrido un error.")
-     * )
 	 * Retornar el listado de categorias
 	 *
 	 * @return array
@@ -41,27 +30,7 @@ class ApiCategoryController extends ApiBaseController {
 	}
 
 	/**
-     * @OA\Get(
-     *     path="/api/v1/categorias/{id}",
-     *     summary="Detalle de una categoría",
-     *     tags={"Categorias"},
-     *   description="Obtener el detalle de una categoría",
-     *   @OA\Parameter(
-     *         description="ID de la categoría a retornar",
-     *         in="path",
-     *         name="id",
-     *         required=true,
-     *         @OA\Schema(
-     *           type="integer",
-     *           format="int64"
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Detalle de una categoría"
-     *     ),
-     *     @OA\Response(response="default", description="Ha ocurrido un error.")
-     * )
+     *
 	 * Retornar el detalle de una categoría
 	 * @param integer $id
 	 *
@@ -80,27 +49,6 @@ class ApiCategoryController extends ApiBaseController {
 	}
 
 	/**
-     * @OA\Get(
-     *     path="/api/v1/categorias/{slug}",
-     *     summary="Categorias de acuerdo a su slug",
-     *     tags={"Categorias"},
-     *   description="Obtener el listado de categorias de acuerdo al slug",
-     *   @OA\Parameter(
-     *         description="Slug de la categoria a retornar",
-     *         in="path",
-     *         name="slug",
-     *         required=true,
-     *         @OA\Schema(
-     *           type="string",
-     *           format="int64"
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Listado de Categorias de acuerdo al slug solicitado"
-     *     ),
-     *     @OA\Response(response="default", description="Ha ocurrido un error.")
-     * )
 	 * Retornar el detalle de una categoria y permite incluir las subcategorias relacionadas
 	 * @param string $slug
 	 *
@@ -123,27 +71,6 @@ class ApiCategoryController extends ApiBaseController {
     }
     
     /**
-     * @OA\Get(
-     *     path="/api/v1/categorias/{slug}/subcategorias",
-     *     summary="Listado de Subcategorias de una categoria",
-     *     tags={"Categorias"},
-     *   description="Obtener el listado de subcategorias de una categoria de acuerdo al slug",
-     *   @OA\Parameter(
-     *         description="Slug de la categoria a retornar",
-     *         in="path",
-     *         name="slug",
-     *         required=true,
-     *         @OA\Schema(
-     *           type="string",
-     *           format="int64"
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Listado de Subcategorias de una categoria de acuerdo al slug solicitado"
-     *     ),
-     *     @OA\Response(response="default", description="Ha ocurrido un error.")
-     * )
 	 * Retornar las subcategorias de una categoria
 	 * @param string $slug
 	 *

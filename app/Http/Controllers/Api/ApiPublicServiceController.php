@@ -13,19 +13,6 @@ class ApiPublicServiceController extends ApiBaseController
 {
 
     /**
-     * @OA\Get(
-     *     path="/api/v1/servicios-publicos",
-     *     summary="Listado de servicios públicos",
-     *     tags={"Servicios Públicos"},
-     *   description="Obtener el listado de servicios públicos existentes",
-     *     @OA\Response(
-     *         response=200,
-     *         description="Listado de todos los servicios públicos."
-     *     ),
-     *     @OA\Response(response="default", description="Ha ocurrido un error.")
-     * )
-     * Retorna el listado de servicios públicos
-     *
      * @return array
      */
     public function index()
@@ -39,27 +26,6 @@ class ApiPublicServiceController extends ApiBaseController
     }
 
     /**
-     * @OA\Get(
-     *     path="/api/v1/servicios-publicos/{id}",
-     *     summary="Detalle de un servicio público",
-     *     tags={"Servicios Públicos"},
-     *   description="Obtener el detalle de un servicio público existente",
-     *   @OA\Parameter(
-     *         description="ID del servicio público a retornar",
-     *         in="path",
-     *         name="id",
-     *         required=true,
-     *         @OA\Schema(
-     *           type="integer",
-     *           format="int64"
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Detalle de un servicio público"
-     *     ),
-     *     @OA\Response(response="default", description="Ha ocurrido un error.")
-     * )
      * Retorna el detalle de un servicio publico
      * @param int $id;
      *
@@ -85,17 +51,7 @@ class ApiPublicServiceController extends ApiBaseController
     }
 
     /**
-     * @OA\Get(
-     *     path="/api/v1/servicios-publicos/categorias",
-     *     summary="Listado de Categorias de los servicios públicos",
-     *     tags={"Servicios Públicos"},
-     *   description="Obtener el listado de categorias de los servicios públicos",
-     *     @OA\Response(
-     *         response=200,
-     *         description="Listado de Categorias de los servicios públicos."
-     *     ),
-     *     @OA\Response(response="default", description="Ha ocurrido un error.")
-     * )
+     *Retornar el listado de categorias
      * */
     public function getCategories()
     {
