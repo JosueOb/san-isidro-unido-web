@@ -19,6 +19,8 @@ class CreatePhonesTable extends Migration
             $table->unsignedBigInteger('phoneable_id');
             $table->string('phoneable_type');
             $table->timestamps();
+            $table->engine = 'InnoDB';
+            $table->charset = 'utf8mb4';
         });
     }
 

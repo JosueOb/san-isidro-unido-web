@@ -49,8 +49,6 @@ class PublicServiceController extends Controller
         $ubication = json_decode($validated['ubication'], true);
         //Se le agrega al arreglo el detalle de la descripción de ubicación
         $ubication['description'] = $validated['ubication-description'];
-        // dd($ubication);
-
         $publicService = new PublicService();
         $publicService->name = $validated['name'];
         $publicService->description = $validated['description'];
@@ -78,6 +76,9 @@ class PublicServiceController extends Controller
     public function show(PublicService $publicService)
     {
         $ubication = json_decode($publicService->ubication, true);
+        $phones = $publicService->phones()->get();
+        $ubication = $publicService->ubication;
+        // $ubication = json_decode($publicService->ubication, true);
         return view('public-services.show', [
             'publicService'=>$publicService,
             'ubication'=>$ubication,
@@ -119,8 +120,6 @@ class PublicServiceController extends Controller
         $ubication = json_decode($validated['ubication'], true);
         //Se le agrega al arreglo el detalle de la descripción de ubicación
         $ubication['description'] = $validated['ubication-description'];
-        // dd($ubication);
-
         $publicService->name = $validated['name'];
         $publicService->description = $validated['description'];
         $publicService->ubication = json_encode($ubication);//Se devuelve una representación de un JSON

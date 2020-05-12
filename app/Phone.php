@@ -6,12 +6,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class Phone extends Model
 {
+    protected $table = "phones";
+    public $timestamps = true;
+   
     /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'phones';
+	 *Filtra un detalle por el Id
+	 *
+	 * @param  mixed $query
+	 * @param  integer $id
+	 * @return mixed
+	 */
+    public function scopeFindById($query, $id)
+    {
+        return $query->where('id', $id);
+    }
+    
     /**
     * The attributes that are mass assignable.
     *

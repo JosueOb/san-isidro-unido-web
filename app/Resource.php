@@ -2,7 +2,9 @@
 
 namespace App;
 
+use App\Helpers\ApiImages;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Config;
 
 class Resource extends Model
 {
@@ -19,6 +21,14 @@ class Resource extends Model
     */
     protected $fillable = ['url', 'post_id', 'type'];
 
+    /*Add Extra Attributes*/
+
+    /*AGREGAR RESOURCE LINK ATTRIBUTE */
+    protected $appends = ['url_link'];
+    public function getUrlLinkAttribute(){
+        return $this->getApiLink();
+    }
+
     /**
     * A resource belongs to a post
     */
@@ -30,6 +40,14 @@ class Resource extends Model
     */
     public function getLink(){
         return \Storage::disk('public')->url($this->url);
+    }
+
+    /**
+    * get resource api link
+    */
+    public function getApiLink(){
+        $imageApi = new ApiImages();
+        return $imageApi->getApiUrlLink($this->url);
     }
 
 }

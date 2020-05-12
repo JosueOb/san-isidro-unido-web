@@ -23,7 +23,6 @@ class ReportRequest extends FormRequest
      */
     public function rules()
     {
-        // dd($this->isMethod('PUT'));
         $rules = [
             'title'=>'required|regex:/^[[:alpha:][:space:](0-9)(,;.áéíóúÁÉÍÓÚÑñ)]+$/|min:3|max:255',
             'description'=> 'required|regex:/^[[:alpha:][:space:](0-9)(,;.áéíóúÁÉÍÓÚÑñ)]+$/',
@@ -47,7 +46,6 @@ class ReportRequest extends FormRequest
             //Se verifica si el campo contiene contiene un valor, ya que no se recibe un array
             $numberOfOldDocument = $this->has('old_document') ? 1 : 0;
             $totalDocuments = $numberOfNewDocument + $numberOfOldDocument;
-            // dd($totalDocuments);
 
             if($totalImages > env('NUMBER_IMAGES_ALLOWED')){
                 $rules += [

@@ -74,6 +74,39 @@ class SubcategoriesTableSeeder extends Seeder
             'category_id'=>$event->id,
             'icon'=> env('SUBCATEGORY_ICON_DEFAULT'),
         ]);
-        
+        //Subcategorías de Problemas
+        $problem = Category::where('slug', 'problema')->first();
+        Subcategory::create([
+            'name'=>'Transporte y Transito',
+            'slug'=>'transporte_transito',
+            'description'=>'SubCat Transporte Transito',
+            'category_id'=>$problem->id,
+            // 'icon'=> env('SUBCATEGORY_ICON_DEFAULT'),
+            'icon'=> 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/car.svg?sanitize=true',
+        ]);
+        Subcategory::create([
+            'name'=>'Espacios Verdes',
+            'slug'=>'espacios_verdes',
+            'description'=>'SubCat Espacios Verdes',
+            'category_id'=>$problem->id,
+            // 'icon'=> env('SUBCATEGORY_ICON_DEFAULT'),
+            'icon'=> 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/sprout.svg?sanitize=true',
+        ]);
+        Subcategory::create([
+            'name'=>'Seguridad',
+            'slug'=>'seguridad',
+            'description'=>'SubCat Seguridad',
+            'category_id'=>$problem->id,
+            // 'icon'=> env('SUBCATEGORY_ICON_DEFAULT'),
+            'icon'=> 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/shield.svg?sanitize=true',
+        ]);
+        Subcategory::create([
+            'name'=>'Proteccion Animal',
+            'slug'=>'proteccion_animal',
+            'description'=>'SubCat Protección Animal',
+            'category_id'=>$problem->id,
+            // 'icon'=> env('SUBCATEGORY_ICON_DEFAULT'),
+            'icon'=> 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/veterinary.svg?sanitize=true',
+        ]);
     }
 }

@@ -41,8 +41,6 @@ class NeighborController extends Controller
         })->whereDoesntHave('roles', function (Builder $query) {
             $query->where('slug', 'admin');
         })->select('*',DB::raw('@rownum := @rownum + 1 as rownum'))->paginate();
-        // dd($neighbors);
-
         return view('neighbors.index',[
             'neighbors'=>$neighbors,
         ]);

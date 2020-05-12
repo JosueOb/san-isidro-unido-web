@@ -62,7 +62,7 @@
                                         <td>{{ $event->id}}</td>
                                         <td>{{ $event->title}}</td>
                                         <td>{{ $event->description ?: 'Sin descripción'}}</td>
-                                        <td>{{ $event->subcategory->name }}</td>
+                                        {{-- <td>{{ $event->subcategory->name }}</td> --}}
                                         <td>{{ $event->state ? 'Activo': 'Inactivo'}}</td>
 
                                         @can('events.show')

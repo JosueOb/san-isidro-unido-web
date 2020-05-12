@@ -106,9 +106,6 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::get('category/{category}', function () {
         return abort(404);
     });
-    // Route::get('category/create', 'CategoryController@create')->name('categories.create');
-    // Route::post('category/store', 'CategoryController@store')->name('categories.store');
-    // Route::delete('category/{category}', 'CategoryController@destroy')->name('categories.destroy')->middleware('can:positions.destroy');
 
     //SUBCATEGORIA
     Route::get('subcategory', 'SubcategoryController@index')->name('subcategories.index')->middleware('can:subcategories.index');

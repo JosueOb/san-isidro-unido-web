@@ -9,9 +9,16 @@ use App\Post;
 use App\Resource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\HelpersClass\AdditionalData as AdditionalDataCls;
 
 class EventController extends Controller
 {
+    protected $additionalData;
+
+    public function __construct()
+    {
+        $this->additionalData = new AdditionalDataCls();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -61,17 +68,26 @@ class EventController extends Controller
         //Se le agrega al arreglo el detalle de la descripción de ubicación
         $ubication['description'] = $validated['ubication-description'];
 
-        $additional_data = [
-            'event'=>[
-                'responsible'=> $validated['responsible'],
-                'range_date' => [
-                    'start_date' => $validated['start-date'],
+        $this->additionalData->setInfoEvent([
+            'responsible' => $validated['responsible'],
+            "range_date" => [
+                'start_date' => $validated['start-date'],
                     'end_date' => $validated['end-date'],
                     'start_time' => $validated['start-time'],
                     'end_time' => $validated['end-time'],
-                ]
             ]
-        ];
+        ]);
+        // $additional_data = [
+        //     'event'=>[
+        //         'responsible'=> $validated['responsible'],
+        //         'range_date' => [
+        //             'start_date' => $validated['start-date'],
+        //             'end_date' => $validated['end-date'],
+        //             'start_time' => $validated['start-time'],
+        //             'end_time' => $validated['end-time'],
+        //         ]
+        //     ]
+        // ];
 
         $event = new Post();
         $event->title = $validated['title'];
@@ -79,11 +95,13 @@ class EventController extends Controller
         $event->state = true;
         $event->date = $date;
         $event->time = $time;
-        $event->ubication = json_encode($ubication);//Se devuelve una representación de un JSON;
+        // $event->ubication = json_encode($ubication);//Se devuelve una representación de un JSON;
+        $event->ubication = $ubication;//Se devuelve una representación de un JSON;
         $event->user_id = $request->user()->id;
         $event->category_id = $category_event->id;
         $event->subcategory_id = $validated['id'];
-        $event->additional_data = json_encode($additional_data);
+        // $event->additional_data = json_encode($additional_data);
+        $event->additional_data = $this->additionalData->getAll();
         $event->save();
 
         $phones = $validated['phone_numbers'];
@@ -114,10 +132,13 @@ class EventController extends Controller
      */
     public function show(Post $event)
     {
-        $additional_data = json_decode($event->additional_data, true);
+        // $additional_data = json_decode($event->additional_data, true);
+        $additional_data = $event->additional_data;
+        // dd($additional_data);
         $event_range_date = $additional_data['event']['range_date'];
         $event_responsible = $additional_data['event']['responsible'];
-        $ubication = json_decode($event->ubication, true);
+        // $ubication = json_decode($event->ubication, true);
+        $ubication = $event->ubication;
         $images = $event->resources()->where('type', 'image')->get();
         return view('events.show', [
             'event' => $event,
