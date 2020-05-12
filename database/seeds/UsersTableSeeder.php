@@ -4,7 +4,6 @@ use App\Position;
 use Illuminate\Database\Seeder;
 use App\User;
 use Caffeinated\Shinobi\Models\Role;
-use Faker\Factory;
 
 class UsersTableSeeder extends Seeder
 {
@@ -35,7 +34,7 @@ class UsersTableSeeder extends Seeder
         
         $roleDirective = Role::where('name','Directivo')->first();
         $positions = Position::all();
-        $members = Factory(User::class,5)->create();
+        $members = \Factory(User::class,5)->create();
         $members->each(function(User $user)use($roleDirective, $roleGuest,$positions){
             $user->avatar = 'https://ui-avatars.com/api/?name='.
             substr($user->first_name,0,1).'+'.substr($user->last_name,0,1).
