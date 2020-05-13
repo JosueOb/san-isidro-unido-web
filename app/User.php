@@ -121,4 +121,52 @@ class User extends Authenticatable implements MustVerifyEmail
     public function posts(){
         return $this->hasMany(Post::class);
     }
+    /**
+     * The mothergoose check. Runs through each scenario provided
+     * by Shinobi - checking for special flags, role permissions, and
+     * individual user permissions; in that order.
+     * 
+     * @param  Permission  $permission
+     * @return boolean
+     */
+    //Se sobrescribe la funciones del paquete shinobi
+    public function hasPermissionTo($permission): bool
+    {
+        //Se obtiene los roles que tiene el permiso
+        $permission_roles = $permission->roles;
+        //USUARIO
+        //Se obtiene al usuario que está realizando la petición
+        $user = $this;
+        //Se obtiene los roles que tiene el usuario
+        $user_roles = $user->roles;
+        //Se obtienen los roles tanto del usuario y permiso que tienen en común
+        $common_roles = $permission_roles->intersect($user_roles);
+        if($this->checkRoleState($common_roles, $user)){
+            // Check role flags
+            if ($this->hasPermissionFlags()) {
+                return $this->hasPermissionThroughFlag();
+            }
+
+            // Check role permissions
+            if ($this->hasPermissionThroughRole($permission)) {
+                return true;
+            }
+
+            // Check user permission
+            if ($this->hasPermission($permission)) {
+                return true;
+            }
+        }
+        return false;
+    }
+     //Se verifica que de los roles obtenidos, uno de ellos tenga el usuario activado en su relación de rol y usuario
+     private function checkRoleState($roles, $user){
+        $state = false;
+        foreach($roles as $role){
+            if($user->getRelationshipStateRolesUsers($role->slug)){
+                $state = true;
+            }
+        }
+        return $state;
+    }
 }

@@ -21,6 +21,7 @@ class Logout
 
         if(!$getUser->hasSomeActiveWebSystemRole()){
             Auth::logout();
+            return redirect('login');
         }
 
         return $next($request);
