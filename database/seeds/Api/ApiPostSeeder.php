@@ -54,7 +54,7 @@ class ApiPostSeeder extends Seeder
             ]);
             for($img = 1; $img <= 3; $img++){
                 DB::table('resources')->insert([
-                    'url' => $faker->imageUrl(800, 480),
+                    'url' => "https://loremflickr.com/250/250?random=$em",
                     'post_id' => $idPostEmergencia,
                     'type' => "image",
                     'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
@@ -69,7 +69,6 @@ class ApiPostSeeder extends Seeder
                 $query->where('slug','directivo');
             })->orderBy(DB::raw('RAND()'))->first();
             $initialDate =  CarbonImmutable::now();
-            // $subcategory = Subcategory::where('category_id', $categoriaProblemasSociales->id)->orderBy(DB::raw('RAND()'))->take(1)->first();
             $subcategory = Subcategory::where('category_id', $categoriaProblemasSociales->id)->orderBy(DB::raw('RAND()'))->first();
             $ubicationData = new UbicationCls($faker->address, $faker->latitude,$faker->longitude, 'lorem description');
             $idPostProblemaSocial = DB::table('posts')->insertGetId([
@@ -88,7 +87,7 @@ class ApiPostSeeder extends Seeder
             ]);
             for($img_sp = 1; $img_sp <= 3; $img_sp++){
                 DB::table('resources')->insert([
-                    'url' => $faker->imageUrl(800, 480),
+                    'url' => "https://loremflickr.com/250/250?random=$sp",
                     'post_id' => $idPostProblemaSocial,
                     'type' => "image",
                     'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
@@ -140,7 +139,7 @@ class ApiPostSeeder extends Seeder
             ]);
             for($iev = 1; $iev <= 3; $iev++){
                 DB::table('resources')->insert([
-                    'url' => $faker->imageUrl(800, 480),
+                    'url' => "https://loremflickr.com/250/250?random=$ev",
                     'post_id' => $idPostEvento,
                     "type" => "image",
                     'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
@@ -174,13 +173,13 @@ class ApiPostSeeder extends Seeder
             ]);
             for($irp = 1; $irp <= 3; $irp++){
                 DB::table('resources')->insert([
-                    'url' => $faker->imageUrl(800, 480),
+                    'url' => "https://loremflickr.com/250/250?random=$rp",
                     'post_id' => $idPostReporte,
                     "type" => 'image',
                     'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
                 ]);
             }
-            for($irp = 1; $irp <= 3; $irp++){
+            for($irp = 1; $irp <= 2; $irp++){
                 DB::table('resources')->insert([
                     'url' => 'https://siu-dev97-sd.s3-sa-east-1.amazonaws.com/CursoPugDesdeCero.pdf',
                     'post_id' => $idPostReporte,

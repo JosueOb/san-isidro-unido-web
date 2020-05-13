@@ -184,13 +184,11 @@ class ApiImages
 
     public function getApiUrlLink($value){
         $diskname = \Config::get('siu_config.API_IMAGES_DISK');
+        // dd($value, $diskname, \Storage::disk($diskname)->url($value));
         if($this->checkURLValid($value)){
             return $value;
         }
-        if (\Storage::disk($diskname)->exists($value)) {
-            return \Storage::disk($diskname)->url($value);
-        }
-        return "https://ui-avatars.com/api/?name=Siu+Subcategoria";
+        return \Storage::disk($diskname)->url($value);
     }
 
     public function checkURLValid($url){

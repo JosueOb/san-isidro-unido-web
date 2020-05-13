@@ -73,6 +73,6 @@ class Category extends Model
     */
     public function getApiLink(){
         $imageApi = new ApiImages();
-        return $imageApi->getApiUrlLink($this->image);
+        return $imageApi->getApiUrlLink($this->icon);
     }
 }
