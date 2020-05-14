@@ -127,8 +127,6 @@ class EventController extends Controller
         $description_notification_event = "El usuario " . $request->user()->getFullName() . " ha reportado un evento";
         $request->user()->notify(new PostNotification($event, $title_notification_event, $description_notification_event));
         OnesignalNotification::sendNotificationBySegments($title_notification_event, $description_notification_event, [
-            "title" => $title_notification_event,
-            "message" => $description_notification_event,
             "post" => $event
         ]);
 

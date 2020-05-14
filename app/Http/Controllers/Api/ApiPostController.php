@@ -184,8 +184,6 @@ class ApiPostController extends ApiBaseController
                    $title_noti = "Tu solicitud de emergencia fue aceptada", 
                    $description_noti = "El policia " . $user->first_name . " ha aceptado atender tu emergencia", 
                    [
-                       "title" => $title_noti,
-                       "message" => $description_noti,
                        "post" => $emergencia
                    ],
                    $user_devices
@@ -325,8 +323,6 @@ class ApiPostController extends ApiBaseController
                         //Enviar notification al usuario en especifico
                         OnesignalNotification::sendNotificationByPlayersID(
                             [
-                                "title" => $title_notification_policia,
-                                "message" => $description_notification_policia,
                                 "post" => $new_post
                             ],
                             $user_devices_policia
@@ -345,8 +341,6 @@ class ApiPostController extends ApiBaseController
                         $title_notification_user, 
                         $description_notification_user, 
                         [
-                            "title" => $title_notification_user,
-                            "message" => $description_notification_user,
                             "post" => $new_post
                         ],
                         $user_devices_emergencia
@@ -435,8 +429,6 @@ class ApiPostController extends ApiBaseController
                         //Enviar notification al usuario en especifico
                         OnesignalNotification::sendNotificationByPlayersID(
                             [
-                                "title" => $title_notification_moderador,
-                                "message" => $description_notification_moderador,
                                 "post" => $post
                             ],
                             $user_devices_moderador
@@ -455,8 +447,6 @@ class ApiPostController extends ApiBaseController
                         $title_notification_user, 
                         $description_notification_user, 
                         [
-                            "title" => $title_notification_user,
-                            "message" => $description_notification_user,
                             "post" => $post
                         ],
                         $user_devices_problema_social
