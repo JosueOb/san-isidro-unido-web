@@ -116,7 +116,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="ubication-description">Detalle <span class="text-muted">(opcional)</span></label>
+                                <label for="ubication-description">Referencia <span class="text-muted">(opcional)</span></label>
                                 <input id="ubication-description" type="text" class="form-control" name="ubication-description" value="{{ old('ubication-description') ?: $ubication['description']}}" maxlength="255">
                                 <small id="categoryHelp" class="form-text text-muted">
                                     Puedes agregar detalles sobre la ubicación
