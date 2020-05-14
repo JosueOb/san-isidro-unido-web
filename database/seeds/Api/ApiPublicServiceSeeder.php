@@ -33,7 +33,7 @@ class ApiPublicServiceSeeder extends Seeder
                 $indexRandom = rand(0, count($directions) - 1);
                 DB::table('public_services')->insertGetId([
                     'name' => $name,
-                    'description' => "$name con la mejor atención al mejor precio",
+                    // 'description' => "$name con la mejor atención al mejor precio",
                     "email" => $faker->email,
                     'ubication' => json_encode([
                         "latitude" => $directions[$indexRandom]['latitude'],
