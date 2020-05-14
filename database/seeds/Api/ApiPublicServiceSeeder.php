@@ -34,6 +34,10 @@ class ApiPublicServiceSeeder extends Seeder
                 DB::table('public_services')->insertGetId([
                     'name' => $name,
                     // 'description' => "$name con la mejor atención al mejor precio",
+                    'public_opening'=>json_encode([
+                        'open-time'=>'7:00',
+                        'close-time'=>'16:00'
+                    ]),
                     "email" => $faker->email,
                     'ubication' => json_encode([
                         "latitude" => $directions[$indexRandom]['latitude'],
