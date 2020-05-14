@@ -70332,7 +70332,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _map__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./map */ "./resources/js/map.js");
 /* harmony import */ var _phone_numbers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./phone_numbers */ "./resources/js/phone_numbers.js");
 /* harmony import */ var _image_gallery__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./image-gallery */ "./resources/js/image-gallery.js");
-/* harmony import */ var _time_date__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./time-date */ "./resources/js/time-date.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -70343,7 +70342,7 @@ var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/di
 
 
 
-
+ // import{getCurrentDate} from './time-date';
 
 var phone_numbers = _phone_numbers__WEBPACK_IMPORTED_MODULE_2__["phone_array"];
 var images = _image_gallery__WEBPACK_IMPORTED_MODULE_3__["newImages"];
@@ -70400,7 +70399,7 @@ function _loadMap() {
 
 $(document).ready(function () {
   if ($('#map').length != 0 && $('#event-create').length != 0) {
-    Object(_time_date__WEBPACK_IMPORTED_MODULE_4__["getCurrentDate"])();
+    // getCurrentDate();
     loadMap();
     Object(_image_gallery__WEBPACK_IMPORTED_MODULE_3__["resetNumberOfImagesAllowed"])(3);
   }
@@ -71440,6 +71439,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
 
 
+ // import{getCurrentDate} from './time-date';
 
 var phone_numbers = _phone_numbers__WEBPACK_IMPORTED_MODULE_2__["phone_array"];
 var currentLocation = _map__WEBPACK_IMPORTED_MODULE_1__["location"];
@@ -71495,6 +71495,7 @@ function _loadMap() {
 
 $(document).ready(function () {
   if ($('#map').length != 0 && $('#public-service-create').length != 0) {
+    // getCurrentDate();
     loadMap();
   } //AJAX
 
@@ -71890,12 +71891,9 @@ $(document).ready(function () {
 /*!***********************************!*\
   !*** ./resources/js/time-date.js ***!
   \***********************************/
-/*! exports provided: getCurrentDate */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCurrentDate", function() { return getCurrentDate; });
 var flatpickr = __webpack_require__(/*! flatpickr */ "./node_modules/flatpickr/dist/flatpickr.js");
 
 __webpack_require__(/*! flatpickr/dist/themes/light.css */ "./node_modules/flatpickr/dist/themes/light.css");
@@ -71914,7 +71912,7 @@ var configDate = {
     weekdays: weekdays,
     months: months
   },
-  // minDate: "today",
+  minDate: "today",
   dateFormat: "Y-m-d",
   allowInput: true,
   altInput: true,
@@ -71925,34 +71923,34 @@ var configTime = {
   enableTime: true,
   noCalendar: true,
   dateFormat: "H:i",
-  disableMobile: true
+  disableMobile: true // allowInput: true,
+  // altInput: true,
+
 };
 var inputStartDate = flatpickr('#start-date', configDate);
 var inputEndtDate = flatpickr('#end-date', configDate);
 var inputStartTime = flatpickr('#start-time', configTime);
 var inputEndTime = flatpickr('#end-time', configTime);
-
-function getCurrentDate() {
-  var today = new Date();
-  var day = today.getDate();
-  var month = today.getMonth() + 1;
-  var year = today.getFullYear();
-
-  if (day < 10) {
-    day = '0' + day;
-  }
-
-  if (month < 10) {
-    month = '0' + month;
-  }
-
-  today = year + '-' + month + '-' + day;
-  $('#start-date').val(today);
-}
+var inputOpenTime = flatpickr('#open-time', configTime);
+var inputCloseTime = flatpickr('#close-time', configTime); // async function getCurrentDate() {
+//     let today = new Date();
+//     let day = today.getDate();
+//     let month = today.getMonth() + 1;
+//     let year = today.getFullYear();
+//     if (day < 10) {
+//         day = '0' + day;
+//     }
+//     if (month < 10) {
+//         month = '0' + month;
+//     }
+//     today = year+'-'+month+'-'+day;
+//     $('#start-date').val(today);
+// }
 
 $('#start-time').removeAttr('readonly');
 $('#end-time').removeAttr('readonly');
-
+$('#open-time').removeAttr('readonly');
+$('#close-time').removeAttr('readonly'); // export{getCurrentDate}
 
 /***/ }),
 

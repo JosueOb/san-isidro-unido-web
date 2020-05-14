@@ -3,7 +3,7 @@ const Swal = require('sweetalert2')
 import {getCurrentLocation, getAddress, locateMarker, setPosition, location} from './map';
 import{phone_array} from './phone_numbers';
 import{newImages, resetNumberOfImagesAllowed} from './image-gallery';
-import{getCurrentDate} from './time-date';
+// import{getCurrentDate} from './time-date';
 
 var phone_numbers = phone_array;
 var images = newImages;
@@ -33,7 +33,7 @@ async function loadMap(){
 $(document).ready(function () {
 
     if($('#map').length != 0 && $('#event-create').length != 0){
-        getCurrentDate();
+        // getCurrentDate();
         loadMap();
         resetNumberOfImagesAllowed(3);
     }

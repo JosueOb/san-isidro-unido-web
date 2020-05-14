@@ -2,6 +2,7 @@ const Swal = require('sweetalert2')
 
 import {getCurrentLocation, getAddress, locateMarker, setPosition, location} from './map';
 import{phone_array} from './phone_numbers';
+// import{getCurrentDate} from './time-date';
 
 var phone_numbers = phone_array;
 var currentLocation = location;
@@ -28,6 +29,7 @@ async function loadMap(){
 $(document).ready(function () {
 
     if($('#map').length != 0 && $('#public-service-create').length != 0){
+        // getCurrentDate();
         loadMap();
     }
     //AJAX

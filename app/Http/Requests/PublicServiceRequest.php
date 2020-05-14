@@ -32,8 +32,15 @@ class PublicServiceRequest extends FormRequest
          }
         return [
             'name'=>'required|regex:/^[[:alpha:][:space:](áéíóúÁÉÍÓÚ)]+$/|min:3|max:45',
-            'description'=> 'nullable|regex:/^[[:alpha:][:space:](0-9)(,;.áéíóúÁÉÍÓÚÑñ)]+$/|max:255',
             'subcategory'=>'required|exists:subcategories,id',
+            'open-time'=>[
+                'required',
+                'regex:/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/m'
+            ],
+            'close-time'=>[
+                'required',
+                'regex:/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/m'
+            ],
             'phone_numbers'=>'required|array|max:3',
             "phone_numbers.*" => array("required","regex:/(^(09)[0-9]{8})+$|(^(02)[0-9]{7})+$/"),
             'email'=>'nullable|email|'.$uniqueEmail,
@@ -53,12 +60,14 @@ class PublicServiceRequest extends FormRequest
             'name.max'=>'El :attribute no debe ser mayor a 25 caracteres',
             'name.regex'=>'El :attribute debe estar conformado por caracteres alfabéticos, no se admiten signos de puntuación ni caracteres especiales',
             
-            'description.required'=>'El campo :attribute es obligatorio',
-            'description.max'=>'La :attribute no debe ser mayor a 255 caracteres',
-            'description.regex'=>'La :attribute  debe estar conformado por caracteres alfabéticos, no se admiten caracteres especiales',
-            
             'subcategory.required'=>'El campo :attribute es obligatorio',
             'subcategory.exists'=>'La :attribute seleccionada no existe',
+
+            'open-time.required'=>'El campo :attribute es obligatorio',
+            'open-time.regex'=>'La :attribute es inválida',
+
+            'close-time.required'=>'El campo :attribute es obligatorio',
+            'close-time.regex'=>'La :attribute es inválida',
             
             'phone_numbers.required'=>'El campo :attribute es obligatorio',
             'phone_numbers.max'=> 'Solo se permiten 3 números telefónicos',
@@ -86,8 +95,9 @@ class PublicServiceRequest extends FormRequest
     {
         return [
             'name' => 'nombre',
-            'description' => 'descripción',
             'subcategory' => 'categoría',
+            'open-time' => 'hora de apertura',
+            'close-time' => 'hora de cierre',
             'phone_numbers' => 'teléfonos',
             'email'=>'correo electrónico',
             'ubication' => 'ubicación',
