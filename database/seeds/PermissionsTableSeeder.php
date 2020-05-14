@@ -20,12 +20,6 @@ class PermissionsTableSeeder extends Seeder
             'private'=>true,
             'group'=>'roles',
         ]);
-        // Permission::create([
-        //     'name'=>'Crear roles',
-        //     'slug'=>'roles.create',
-        //     'description'=>'Crear los roles del sistema',
-        //     'private'=>true,
-        // ]);
         Permission::create([
             'name'=>'Ver detalle de rol',
             'slug'=>'roles.show',
@@ -40,12 +34,6 @@ class PermissionsTableSeeder extends Seeder
             'private'=>true,
             'group'=>'roles',
         ]);
-        // Permission::create([
-        //     'name'=>'Eliminar roles',
-        //     'slug'=>'roles.destroy',
-        //     'description'=>'Eliminar registros de roles',
-        //     'private'=>true,
-        // ]);
         //Permisos sobre el módulo de directiva
         Permission::create([
             'name'=>'Listar miembros de la directiva',
@@ -87,34 +75,28 @@ class PermissionsTableSeeder extends Seeder
             'name'=>'Listar cargos de la directiva',
             'slug'=>'positions.index',
             'description'=>'Lista los cargos de los miembros de la directiva',
-            'private'=>false,
+            'private'=>true,
             'group'=>'cargo',
         ]);
         Permission::create([
             'name'=>'Crear cargo',
             'slug'=>'positions.create',
             'description'=>'Registrar los cargos de la directiva',
-            'private'=>false,
+            'private'=>true,
             'group'=>'cargo',
         ]);
-        // Permission::create([
-        //     'name'=>'Ver detalle de los cragos de la directiva',
-        //     'slug'=>'positions.show',
-        //     'description'=>'Ver en detalle cada uno de los cargos de la directiva',
-        //     'private'=>false,
-        // ]);
         Permission::create([
             'name'=>'Editar cargos de la directiva',
             'slug'=>'positions.edit',
             'description'=>'Editar registros de cargos de la directiva',
-            'private'=>false,
+            'private'=>true,
             'group'=>'cargo',
         ]);
         Permission::create([
             'name'=>'Eliminar cargos de la directiva',
             'slug'=>'positions.destroy',
             'description'=>'Eliminar registros de los cargos de la directiva',
-            'private'=>false,
+            'private'=>true,
             'group'=>'cargo',
         ]);
         //Permisos sobre el módulo de morador - vecino
@@ -333,6 +315,42 @@ class PermissionsTableSeeder extends Seeder
             'description'=>'Eliminar los registros de moderadores',
             'private'=>false,
             'group'=>'moderador',
+        ]);
+        //Permisos sobre el módulo de policía
+        Permission::create([
+            'name'=>'Listar a los policías del barrio',
+            'slug'=>'policemen.index',
+            'description'=>'Lista a los policías registrados',
+            'private'=>false,
+            'group'=>'policia',
+        ]);
+        Permission::create([
+            'name'=>'Crear policía del barrio',
+            'slug'=>'policemen.create',
+            'description'=>'Registrar a los policías del barrio',
+            'private'=>false,
+            'group'=>'policia',
+        ]);
+        Permission::create([
+            'name'=>'Ver detalle de los policías del barrio',
+            'slug'=>'policemen.show',
+            'description'=>'Ver en detalle cada uno de policías del barrio registrados',
+            'private'=>false,
+            'group'=>'policia',
+        ]);
+        Permission::create([
+            'name'=>'Editar policías del barrio',
+            'slug'=>'policemen.edit',
+            'description'=>'Editar registros de los policía del barrio',
+            'private'=>false,
+            'group'=>'policia',
+        ]);
+        Permission::create([
+            'name'=>'Eliminar policías del barrio',
+            'slug'=>'policemen.destroy',
+            'description'=>'Eliminar registros de los policías del barrio',
+            'private'=>false,
+            'group'=>'policia',
         ]);
     }
 }

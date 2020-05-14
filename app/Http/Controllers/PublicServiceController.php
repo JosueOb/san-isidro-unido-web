@@ -49,11 +49,16 @@ class PublicServiceController extends Controller
         $ubication = json_decode($validated['ubication'], true);
         //Se le agrega al arreglo el detalle de la descripción de ubicación
         $ubication['description'] = $validated['ubication-description'];
+        $public_opening = [
+            'open_time' => $validated['open-time'],
+            'close_time' => $validated['close-time'],
+        ];
+
         $publicService = new PublicService();
         $publicService->name = $validated['name'];
-        $publicService->description = $validated['description'];
         $publicService->ubication = json_encode($ubication);//Se devuelve una representación de un JSON
         $publicService->subcategory_id = $validated['subcategory'];
+        $publicService->public_opening = json_encode($public_opening);
         $publicService->email = $validated['email'];
         $publicService->save();
 
@@ -76,12 +81,11 @@ class PublicServiceController extends Controller
     public function show(PublicService $publicService)
     {
         $ubication = json_decode($publicService->ubication, true);
-        $phones = $publicService->phones()->get();
-        $ubication = $publicService->ubication;
-        // $ubication = json_decode($publicService->ubication, true);
+        $public_opening = json_decode($publicService->public_opening, true);
         return view('public-services.show', [
             'publicService'=>$publicService,
             'ubication'=>$ubication,
+            'publicOpening'=>$public_opening,
         ]);
     }
 
@@ -95,12 +99,12 @@ class PublicServiceController extends Controller
     {
         $category = Category::where('slug', 'servicio-publico')->first();
         $subcategories = $category->subcategories()->get();
-        // $phones = $publicService->phones()->get();
+        $public_opening = json_decode($publicService->public_opening, true);
         $ubication = json_decode($publicService->ubication, true);
         return view('public-services.edit', [
             'publicService'=>$publicService,
             'subcategories'=>$subcategories,
-            // 'phones'=>$phones,
+            'publicOpening'=>$public_opening,
             'ubication'=> $ubication,
         ]);
     }
@@ -120,10 +124,15 @@ class PublicServiceController extends Controller
         $ubication = json_decode($validated['ubication'], true);
         //Se le agrega al arreglo el detalle de la descripción de ubicación
         $ubication['description'] = $validated['ubication-description'];
+        $public_opening = [
+            'open_time' => $validated['open-time'],
+            'close_time' => $validated['close-time'],
+        ];
+
         $publicService->name = $validated['name'];
-        $publicService->description = $validated['description'];
         $publicService->ubication = json_encode($ubication);//Se devuelve una representación de un JSON
         $publicService->subcategory_id = $validated['subcategory'];
+        $publicService->public_opening = json_encode($public_opening);
         $publicService->email = $validated['email'];
         $publicService->save();
 

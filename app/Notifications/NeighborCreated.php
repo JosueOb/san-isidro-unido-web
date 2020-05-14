@@ -12,15 +12,17 @@ class NeighborCreated extends VerifyEmailBase
 {
     use Queueable;
     protected $password;
+    protected $roleName;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($passwordRecieved)
+    public function __construct($passwordRecieved, $roleNameRecieved)
     {
         $this->password = $passwordRecieved;
+        $this->roleName = $roleNameRecieved;
     }
 
     /**
@@ -50,7 +52,7 @@ class NeighborCreated extends VerifyEmailBase
         return (new MailMessage)
                     ->subject('Bienvanida a '.env('APP_NAME'))
                     ->greeting('Hola, '.$notifiable->getFullName())
-                    ->line('Has sido registrado/a en nuestro sistema como morador del barrio San Isidro de Puengasí')
+                    ->line('Has sido registrado/a en nuestro sistema como '.strtolower($this->roleName).' del barrio San Isidro de Puengasí')
                     ->line('Esta es la información para acceder en nuestra aplicación móvil:')
                     ->line('Correo: '.$notifiable->email)
                     ->line('Contraseña: '.$this->password)

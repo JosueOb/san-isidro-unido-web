@@ -40,8 +40,10 @@
                 <div class="row">
                     <div class="col-12 col-md-6">
                         <p><strong>Nombre:</strong> {{$publicService->name}}</p>
-                        <p><strong>Descripción:</strong> {{$publicService->description ?: 'sin descripción'}}</p>
                         <p><strong>Categoría:</strong> {{ strtolower($publicService->subcategory->name)}}</p>
+                        <p><strong>Hora de apertura:</strong> {{$publicOpening['open_time']}}</p>
+                        <p><strong>Hora de cierre:</strong> {{$publicOpening['close_time'] ?: 'no definida'}}</p>
+                        
                         <p><strong>Teléfonos:</strong><br>
                             @if (count($publicService->phones) > 0)
                                 @foreach ($publicService->phones as $phone)

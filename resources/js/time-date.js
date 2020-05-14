@@ -15,7 +15,7 @@ let configDate = {
         weekdays: weekdays,
         months: months,
     },
-    // minDate: "today",
+    minDate: "today",
     dateFormat: "Y-m-d",
     allowInput: true,
     altInput: true,
@@ -27,6 +27,8 @@ let configTime = {
     noCalendar: true,
     dateFormat: "H:i",
     disableMobile: true,
+    // allowInput: true,
+    // altInput: true,
 };
 
 var inputStartDate = flatpickr('#start-date', configDate);
@@ -35,26 +37,32 @@ var inputEndtDate = flatpickr('#end-date', configDate);
 var inputStartTime = flatpickr('#start-time', configTime);
 var inputEndTime = flatpickr('#end-time', configTime);
 
-function getCurrentDate() {
-    let today = new Date();
-    let day = today.getDate();
-    let month = today.getMonth() + 1;
-    let year = today.getFullYear();
+var inputOpenTime = flatpickr('#open-time', configTime);
+var inputCloseTime = flatpickr('#close-time', configTime);
 
-    if (day < 10) {
-        day = '0' + day;
-    }
-    if (month < 10) {
-        month = '0' + month;
-    }
+// async function getCurrentDate() {
+//     let today = new Date();
+//     let day = today.getDate();
+//     let month = today.getMonth() + 1;
+//     let year = today.getFullYear();
 
-    today = year+'-'+month+'-'+day;
+//     if (day < 10) {
+//         day = '0' + day;
+//     }
+//     if (month < 10) {
+//         month = '0' + month;
+//     }
 
-    $('#start-date').val(today);
-}
+//     today = year+'-'+month+'-'+day;
+
+//     $('#start-date').val(today);
+// }
 
 
 $('#start-time').removeAttr('readonly');
 $('#end-time').removeAttr('readonly');
 
-export{getCurrentDate}
+$('#open-time').removeAttr('readonly');
+$('#close-time').removeAttr('readonly');
+
+// export{getCurrentDate}

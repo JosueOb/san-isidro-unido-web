@@ -14,7 +14,7 @@ class ModeratorController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(ProtectedDirectiveUsers::class)->only('store', 'show', 'destroy');
+        // $this->middleware(ProtectedDirectiveUsers::class)->only('store', 'show', 'destroy');
     }
     /**
      * Display a listing of the resource.
@@ -49,7 +49,8 @@ class ModeratorController extends Controller
         
         
         $role_neighbor = ModelsRole::where('slug', 'morador')->first();
-        $neighbors = $role_neighbor->users()->whereNull('position_id')->paginate();
+        $neighbors = $role_neighbor->users()->paginate();
+        // $neighbors = $role_neighbor->users()->whereNull('position_id')->paginate();
         
         
         // dd($neighbors);

@@ -44,7 +44,7 @@ class CategoryController extends Controller
      */
     public function update(CategoryRequest $request, Category $category)
     {
-        $validated = $request->validated();        
+        $validated = $request->validated();
         $category->name = $validated['name'];
         $category->description = $validated['description'];
         

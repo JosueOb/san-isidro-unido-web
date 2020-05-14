@@ -1,17 +1,17 @@
 @extends('layouts.dashboard')
 @section('page-subtitle')
-    Módulo Vecinos
+    Módulo Policía
 @endsection
 @section('page-header')
-    Registrar nuevo morador
+    Registrar nuevo policía
 @endsection
-@section('item-neighbor')
+@section('item-police')
     active
 @endsection
-@section('item-neighbor-collapse')
+@section('item-police-collapse')
     show
 @endsection
-@section('item-neighbor-create')
+@section('item-police-create')
     active
 @endsection
 @section('content')
@@ -24,7 +24,7 @@
     <div class="col">
         <div class="card card-primary">
             <div class="card-body">
-                <form action="{{route('neighbors.store')}}" method="POST">
+                <form action="{{route("policemen.store")}}" method="POST">
                     @csrf
                     <div class="row">
                         <div class="form-group col-12 col-md-6">
@@ -58,7 +58,7 @@
                         </div>
                         <div class="form-group col-12 col-md-6">
                             <label for="number_phone">Celular <span class="text-muted">(opcional)</span></label>
-                            <input id="number_phone" type="text" class="form-control @error('number_phone') is-invalid @enderror" name="number_phone" value="{{old('number_phone')}}" maxlength="10" pattern="(09)[0-9]{8}" title="Recuerda que se admiten solo 10 dígitos y anteponer el código 09 al ingresar tu número telefónico" required>
+                            <input id="number_phone" type="text" class="form-control @error('number_phone') is-invalid @enderror" name="number_phone" value="{{old('number_phone')}}" maxlength="10" pattern="(09)[0-9]{8}" title="Recuerda que se admiten solo 10 dígitos y anteponer el código 09 al ingresar tu número telefónico">
                             <small id="number_phoneHelp" class="form-text text-muted">
                                 Recuerda anteponer el 09 al ingresar tu número telefónico
                             </small>
