@@ -62,6 +62,8 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'has.role' => \Caffeinated\Shinobi\Middleware\UserHasRole::class,
+        'api.user_auth' => \App\Http\Middleware\ApiAuthUserMiddleware::class,
+        'base64Image' => \App\Http\Middleware\ConvertBase64ToImage::class,
         'logout'=> \App\Http\Middleware\Logout::class,
     ];
 
