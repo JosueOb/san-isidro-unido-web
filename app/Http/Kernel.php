@@ -65,6 +65,7 @@ class Kernel extends HttpKernel
         'api.user_auth' => \App\Http\Middleware\ApiAuthUserMiddleware::class,
         'base64Image' => \App\Http\Middleware\ConvertBase64ToImage::class,
         'logout'=> \App\Http\Middleware\Logout::class,
+        'api.user_exists' => \App\Http\Middleware\ApiUserNotRegister::class
     ];
 
     /**

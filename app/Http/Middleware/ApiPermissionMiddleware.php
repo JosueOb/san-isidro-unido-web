@@ -30,11 +30,7 @@ class ApiPermissionMiddleware {
 		}
 		
 		foreach ($roles as $rol) {
-			// if ($request->user()->getTipoUsuario($request->user()->tipo_usuario_id)->getNombreTipoUsuario() == $rol) {
-			// 	return $next($request);
-			// }
-			$userRol = User::findById($token_decoded->user->id)->first();
-	
+			$userRol = User::findById($token_decoded->user->id)->first();	
 			if(!$userRol){			
 				return $this->sendForbiddenResponse();
 			}

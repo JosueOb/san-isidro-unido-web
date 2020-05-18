@@ -75,6 +75,7 @@ class JwtAuth {
 			"sub" => $user['id'],
 			"iat" => time(),
 			"exp" => time() + $this->timeExpiration,
+			'aud' => self::Aud(),
 			"user" => $user,
 		];
 		//Codificar y Decodificar información
@@ -106,7 +107,12 @@ class JwtAuth {
         $auth = false;
         $decoded = null;
 		try {
-            $decoded = JWT::decode($jwt, $this->key, [$this->algoritmoCifrado]);
+			$decoded = JWT::decode($jwt, $this->key, [$this->algoritmoCifrado]);
+			if($decode->aud !== self::Aud())
+			{
+				// throw new Exception("Invalid user logged in.");
+				$auth = false;
+			}
 		} catch (\UnexpectedValueException $e) {
 			$auth = false;
 		} catch (\DomainException $e) {
@@ -148,5 +154,23 @@ class JwtAuth {
 		}
 		return $hasRole;
 	}
+
+	private static function Aud()
+    {
+        $aud = '';
+
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            $aud = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $aud = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else {
+            $aud = $_SERVER['REMOTE_ADDR'];
+        }
+
+        $aud .= @$_SERVER['HTTP_USER_AGENT'];
+        $aud .= gethostname();
+
+        return sha1($aud);
+    }
 
 }

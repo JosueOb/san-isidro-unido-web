@@ -43,29 +43,13 @@ class ApiDeviceController extends ApiBaseController
             $phone_model = $request->get('phone_model');
             $phone_platform = $request->get('phone_platform', '');
             $device_description = $request->get('description', '');
-
+            //Guardar Dispositivo
             $this->saveDevice($phone_id, $phone_model, $phone_platform, $description, $user_id);
             $deviceVerify = Device::phoneId($phone_id)->first();
-
-
             //Si no existe el dispositivo lo agregamos
             if (is_null($deviceVerify)) {
-                // $device = new Device();
-                // $device->phone_id = $phone_id;
-                // $device->phone_model = $phone_model;
-                // $device->phone_platform = $phone_platform;
-                // $device->description = $device_description;
-                // $device->user_id = $user_id;
-                // $device->save();
                 return $this->sendResponse(200, "Dispositivo añadido correctamente", []);
             } else {
-                // $device_info = [
-                //     "phone_id" => $phone_id,
-                //     "phone_model" => $phone_model,
-                //     "description" => $device_description,
-                //     "user_id" => $user_id,
-                // ];
-                // $deviceVerify->update($device_info);
                 return $this->sendResponse(200, "Dispositivo actualizado correctamente", []);
             }
         } catch (Exception $e) {
@@ -84,8 +68,7 @@ class ApiDeviceController extends ApiBaseController
             $device->phone_platform = $phone_platform;
             $device->description = $description;
             $device->user_id = $user_id;
-            $device->save();
-            // return $this->sendResponse(200, "Dispositivo añadido correctamente", []);
+            return $device->save();
         } else {
             $device_info = [
                 "phone_id" => $phone_id,
@@ -93,8 +76,7 @@ class ApiDeviceController extends ApiBaseController
                 "description" => $description,
                 "user_id" => $user_id,
             ];
-            $deviceVerify->update($device_info);
-            // return $this->sendResponse(200, "Dispositivo actualizado correctamente", []);
+            return $deviceVerify->update($device_info);
         }
     }
 

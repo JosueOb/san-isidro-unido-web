@@ -32,4 +32,26 @@ class SocialProfile extends Model
     public function scopeUserId($query, string $userId) {
         return $query->where('user_id', $userId);
     }
+
+    /**
+	 *Filtra un Perfil Social por el SocialID
+	 *
+	 * @param  mixed $query
+	 * @param  string $social_id
+	 * @return mixed
+	 */
+    public function scopeSocialId($query, string $social_id) {
+        return $query->where('social_id', $social_id);
+    }
+
+    /**
+	 *Filtra un Perfil Social por el Provider
+	 *
+	 * @param  mixed $query
+	 * @param  string $provider
+	 * @return mixed
+	 */
+    public function scopeProvider($query, string $provider) {
+        return $query->where('provider', $provider);
+    }
 }
