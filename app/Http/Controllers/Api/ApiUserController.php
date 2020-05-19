@@ -86,7 +86,8 @@ class ApiUserController extends ApiBaseController
         try {
             $user = User::findById($id)->first();
             //Validar si el usuario existe
-            if (!is_null($user)) {;
+            if (!is_null($user)) {
+                ;
                 return $this->sendResponse(200, 'success', $user);
             }
             //Si no existe envio error
@@ -548,25 +549,75 @@ class ApiUserController extends ApiBaseController
     }
 
 
-     /**
-     * Retorna las notificaciones de un usuario
-     * @param integer $user_id
-     *
-     * @return array
-     */
-    public function getNotificationsUser(Request $request, $user_id) {
+    /**
+    * Retorna las notificaciones de un usuario
+    * @param integer $user_id
+    *
+    * @return array
+    */
+    public function getNotificationsUser(Request $request, $user_id)
+    {
         try {
             //Verificar si existe el usuario
             $user = User::findById($user_id)->first();
             $filterSize =  ($request->get('size')) ? intval($request->get('size')): 20;
+            $filterByTitle = ($request->get('title')) ? $request->get('title'): '';
+            $filterUnreaded = $request->get('unreaded') ?? '';
+
             if (is_null($user)) {
                 return $this->sendError(404, 'no existe el usuario', ['notifications' => 'no existe el usuario']);
             }
-            $notifications = $user->notifications()->simplePaginate($filterSize)->toArray();
+
+            $queryset = $user->notifications();
+            
+            if ($filterByTitle != '') {
+                $notifications_queryset = $notifications_queryset->where('data->title', 'LIKE', "%$filterByTitle%");
+            }
+
+            if ($filterUnreaded != '') {                
+                if($filterUnreaded == "1"){
+                    $queryset = $queryset->whereRaw('read_at is not null');
+                }else{
+                    $queryset = $queryset->whereRaw('read_at is null');
+                }
+            }
+            $notifications = $queryset->simplePaginate($filterSize)->toArray();
             return $this->sendPaginateResponse(200, 'Notificaciones obtenidas correctamente', $notifications);
         } catch (Exception $e) {
             return $this->sendError(500, "error", ['server_error' => $e->getMessage()]);
         }
     }
 
+    /**
+     * Marcar una notificacion como leida
+     * @param integer $user_id
+     *
+     * @return array
+     */
+    public function markReadNotificationsUser(Request $request, $user_id)
+    {
+        try {
+            $validatorNotifications = Validator::make($request->all(), [
+                "notification_id" => ['required', 'string'],
+            ]);
+            if ($validatorNotifications->fails()) {
+                return $this->sendError(400, "Datos no válidos", $validatorNotifications->messages());
+            }
+            $user = User::findById($user_id)->first();
+            if (is_null($user)) {
+                return $this->sendError(404, 'no existe el usuario', ['notifications' => 'no existe el usuario']);
+            }
+            // dd($user);
+            $notification = $user->notifications()->find($request->notification_id);
+            if ($notification) {
+                $notification->read_at = date('Y-m-d H:i:s');
+                $notification->save();
+                return $this->sendResponse(204, 'Notificaciones obtenidas correctamente', []);
+            }else{
+                return $this->sendError(404, 'no existe la notificacion', ['notifications' => 'no existe la notificacion']);
+            }
+        } catch (Exception $e) {
+            return $this->sendError(500, "error", ['server_error' => $e->getMessage()]);
+        }
+    }
 }

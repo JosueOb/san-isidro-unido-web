@@ -103,6 +103,8 @@ Route::group(['prefix' => "v1"], function () {
             ->middleware(['api.user_auth']);
         Route::delete('/dispositivos/logout/{device_phone_id}', "Api\ApiDeviceController@deleteByPhoneId")
             ->middleware(['api.user_auth']);
+        Route::delete('/{id}/notificaciones', 'Api\ApiUserController@markReadNotificationsUser')
+        ->middleware(['api.user_auth']);
     });
 });
 
