@@ -571,7 +571,7 @@ class ApiUserController extends ApiBaseController
             $queryset = $user->notifications();
             
             if ($filterByTitle != '') {
-                $notifications_queryset = $notifications_queryset->where('data->title', 'LIKE', "%$filterByTitle%");
+                $queryset = $queryset->where('data->title', 'LIKE', "%$filterByTitle%");
             }
 
             if ($filterUnreaded != '') {                
@@ -581,7 +581,7 @@ class ApiUserController extends ApiBaseController
                     $queryset = $queryset->whereRaw('read_at is null');
                 }
             }
-            $notifications = $queryset->simplePaginate($filterSize)->toArray();
+            $notifications = $queryset->orderBy('created_at', 'DESC')->simplePaginate($filterSize)->toArray();
             return $this->sendPaginateResponse(200, 'Notificaciones obtenidas correctamente', $notifications);
         } catch (Exception $e) {
             return $this->sendError(500, "error", ['server_error' => $e->getMessage()]);
