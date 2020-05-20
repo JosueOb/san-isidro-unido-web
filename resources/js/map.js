@@ -33,8 +33,8 @@ async function getAddress(location){
         format: "json",
         zoom: "18",
         addressdetails: "0",
-        latitude: location.latitude,
-        longitude: location.longitude,
+        lat: location.latitude,
+        lon: location.longitude,
     };
     try {
         const getAddress = await axios

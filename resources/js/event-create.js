@@ -1,8 +1,8 @@
 const Swal = require('sweetalert2')
 
-import {getCurrentLocation, getAddress, locateMarker, setPosition, location} from './map';
-import{phone_array} from './phone_numbers';
-import{newImages, resetNumberOfImagesAllowed} from './image-gallery';
+import { getCurrentLocation, getAddress, locateMarker, setPosition, location } from './map';
+import { phone_array } from './phone_numbers';
+import { newImages, resetNumberOfImagesAllowed } from './image-gallery';
 // import{getCurrentDate} from './time-date';
 
 var phone_numbers = phone_array;
@@ -10,29 +10,31 @@ var images = newImages;
 
 var currentLocation = location;
 
-async function loadMap(){
+async function loadMap() {
     var geolocationPosition = await getCurrentLocation()
-                                    .then(coordinates => coordinates)
-                                    .catch(errs =>{
-                                        console.log('geolocationPosition', errs);
-                                    });
+        .then(coordinates => coordinates)
+        .catch(errs => {
+            console.log('geolocationPosition', errs);
+        });
     currentLocation = {
-        latitude: geolocationPosition ? geolocationPosition.coords.latitude: null, 
+        latitude: geolocationPosition ? geolocationPosition.coords.latitude : null,
         longitude: geolocationPosition ? geolocationPosition.coords.longitude : null,
     };
     var address = await getAddress(currentLocation);
     currentLocation.address = address ? address : null;
-
-    if(currentLocation.latitude && currentLocation.longitude && currentLocation.address ){
+    console.log({
+        currentLocation, address
+    })
+    if (currentLocation.latitude && currentLocation.longitude && currentLocation.address) {
         setPosition(currentLocation);
     }
-    
+
     locateMarker('map');
 }
 
 $(document).ready(function () {
 
-    if($('#map').length != 0 && $('#event-create').length != 0){
+    if ($('#map').length != 0 && $('#event-create').length != 0) {
         // getCurrentDate();
         loadMap();
         resetNumberOfImagesAllowed(3);
@@ -44,12 +46,12 @@ $(document).ready(function () {
         var formData = new FormData(this);
 
         formData.append('ubication', JSON.stringify(location));
-        
+
         formData.delete('new_images[]');
         images.forEach(function (image) {
             formData.append('new_images[]', image);
         });
-        
+
         formData.delete('phone_numbers');
         phone_numbers.forEach(function (phone) {
             formData.append('phone_numbers[]', phone);
@@ -91,7 +93,7 @@ $(document).ready(function () {
                     $('#phone_numbers').removeClass('is-invalid');
                     $('#ubication-description').removeClass('is-invalid');
                     $('#images').removeClass('is-invalid');
-                    
+
                     Swal.fire({
                         position: 'top-end',
                         type: 'success',
@@ -106,7 +108,7 @@ $(document).ready(function () {
                     $('#send-data').addClass("btn-success");
 
                     // funciona como una redirección HTTP
-                    setTimeout(function(){ 
+                    setTimeout(function () {
                         window.location.replace('../events');
                     }, 1000);
                 }
@@ -115,7 +117,7 @@ $(document).ready(function () {
                 console.log(jqXHR.responseText);
                 var getErrors = jqXHR.responseJSON ? jqXHR.responseJSON : null;
                 //
-                if(getErrors){
+                if (getErrors) {
                     //Se obtienen los error de validación por parte de Laravel
                     var validationErrors = getErrors.errors ? getErrors.errors : null;
                     if (validationErrors) {

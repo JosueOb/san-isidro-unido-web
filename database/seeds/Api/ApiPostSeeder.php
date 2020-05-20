@@ -19,7 +19,7 @@ class ApiPostSeeder extends Seeder
      */
     public function run()
     {
-        $numPosts = 12;
+        $numPosts = 25;
         $faker = \Faker\Factory::create();
         $categoriaEventos = Category::where('slug', 'evento')->first();
         $categoriaProblemasSociales = Category::where('slug', 'problema')->first();
@@ -36,18 +36,22 @@ class ApiPostSeeder extends Seeder
                 'rechazed_by' => null,
                 'rechazed_reason' => null
             ]);
+            $aditionalData->setInfoPost([
+                "approved_by" => null, 
+                "status_attendance" => $faker->randomElement(['pendiente', 'atendido', 'rechazado'],1)
+            ]);
             $initialDate =  CarbonImmutable::now();
             $ubicationData = new UbicationCls($faker->address, $faker->latitude,$faker->longitude, 'lorem description');
             $idPostEmergencia = DB::table('posts')->insertGetId([
                 'title' => $faker->realText(50,2),
                 'description' =>  $faker->realText(200,2),
-                'date' => $initialDate->toDateString(),
-                'time' => $initialDate->toTimeString(),
+                // 'date' => $initialDate->toDateString(),
+                // 'time' => $initialDate->toTimeString(),
                 "ubication" => json_encode($ubicationData->getAll()),
                 'additional_data' => json_encode($aditionalData->getAll()),
                 "user_id" => $user->id,
                 'state'=>true,
-                "is_attended" => rand(0, 1),
+                // "is_attended" => rand(0, 1),
                 "category_id" =>  $categoriaEmergencias->id,
                 "subcategory_id" => null,
                 'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
@@ -65,6 +69,10 @@ class ApiPostSeeder extends Seeder
         //Problemas Sociales
         for($sp = 1; $sp <= $numPosts; $sp++){
             $aditionalData = new AdditionalDataCls();
+            $aditionalData->setInfoPost([
+                "approved_by" => null, 
+                "status_attendance" => $faker->randomElement(['pendiente', 'atendido', 'rechazado'],1)
+            ]);
             $user = User::whereHas('roles',function(Builder $query){
                 $query->where('slug','directivo');
             })->orderBy(DB::raw('RAND()'))->first();
@@ -74,11 +82,11 @@ class ApiPostSeeder extends Seeder
             $idPostProblemaSocial = DB::table('posts')->insertGetId([
                 'title' => $faker->realText(50,2),
                 'description' =>  $faker->realText(200,2),
-                'date' => $initialDate->toDateString(),
-                'time' => $initialDate->toTimeString(),
+                // 'date' => $initialDate->toDateString(),
+                // 'time' => $initialDate->toTimeString(),
                 "ubication" => json_encode($ubicationData->getAll()),
                 'additional_data' => json_encode($aditionalData->getAll()),
-                "is_attended" => rand(0, 1),
+                // "is_attended" => rand(0, 1),
                 "user_id" => $user->id,
                 'state'=>true,
                 "category_id" => $categoriaProblemasSociales->id,
@@ -118,6 +126,10 @@ class ApiPostSeeder extends Seeder
                     'end_time' => date("H:i:s", strtotime('+3 hours', strtotime(date("H:i:s", $timestamp)))) 
                 ]
             ]);
+            $aditionalData->setInfoPost([
+                "approved_by" => null, 
+                "status_attendance" => $faker->randomElement(['pendiente', 'atendido', 'rechazado'],1)
+            ]);
             $user = User::orderBy(DB::raw('RAND()'))->take(1)->first();
             $subcategoryEvents = $categoriaEventos->subcategories()->orderBy(DB::raw('RAND()'))->first();
             $intervalDays = rand(2, 15);
@@ -127,8 +139,8 @@ class ApiPostSeeder extends Seeder
             $idPostEvento = DB::table('posts')->insertGetId([
                 'title' => $faker->realText(50,2),
                 'description' =>  $faker->realText(200,2),
-                'date' => $initialDate->toDateString(),
-                'time' => $initialDate->toTimeString(),
+                // 'date' => $initialDate->toDateString(),
+                // 'time' => $initialDate->toTimeString(),
                 'state'=>true,
                 'additional_data' => json_encode($aditionalDataEvento->getAll()),
                 "ubication" => json_encode($ubicationData->getAll()),
@@ -155,14 +167,18 @@ class ApiPostSeeder extends Seeder
         //Crear Actividades Barriales
         for($rp = 1; $rp <= $numPosts; $rp++){
             $aditionalData = new AdditionalDataCls();
+            $aditionalData->setInfoPost([
+                "approved_by" => null, 
+                "status_attendance" => $faker->randomElement(['pendiente', 'atendido', 'rechazado'],1)
+            ]);
             $user = User::orderBy(DB::raw('RAND()'))->take(1)->first();
             $initialDate =  CarbonImmutable::now();
             $ubicationData = new UbicationCls($faker->address, $faker->latitude,$faker->longitude, 'lorem description');
             $idPostReporte = DB::table('posts')->insertGetId([
                 'title' => $faker->realText(50,2),
                 'description' =>  $faker->realText(200,2),
-                'date' => $initialDate->toDateString(),
-                'time' => $initialDate->toTimeString(),
+                // 'date' => $initialDate->toDateString(),
+                // 'time' => $initialDate->toTimeString(),
                 "ubication" => json_encode($ubicationData->getAll()),
                 'additional_data' => json_encode($aditionalData->getAll()),
                 "user_id" => $user->id,

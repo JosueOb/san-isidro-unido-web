@@ -57,7 +57,7 @@ class ApiPostController extends ApiBaseController
             $filterUser = ($request->get('user')) ? intval($request->get('user')): -1;
             $filterByTitle = ($request->get('title')) ? $request->get('title'): '';
             $filterByPolice = ($request->get('police')) ? intval($request->get('police')): -1;
-            $filterIsAttended = ($request->get('is_attended') != null) ? intval($request->get('is_attended')): -1;
+            $filterStatusAttendance = ($request->get('status_attendance') != null) ? $request->get('status_attendance'): '';
             $filterSize =  ($request->get('size')) ? intval($request->get('size')): 20;
             //APLICAR FILTROS
             if ($filterCategory != -1) {
@@ -76,14 +76,14 @@ class ApiPostController extends ApiBaseController
 
             if ($filterByPolice != -1) {
                 $queryset = $queryset->where('additional_data->info_emergency->attended_by->id', $filterByPolice);
-            }
-
-            if ($filterIsAttended != -1) {
-                $queryset = $queryset->where('is_attended', $filterIsAttended);
-            }
+            }           
 
             if ($filterByTitle != '') {
                 $queryset = $queryset->where('title', 'LIKE', "%$filterByTitle%");
+            }
+            // dd($filterStatusAttendance);
+            if ($filterStatusAttendance != '') {
+                $queryset = $queryset->where('additional_data->post->status_attendance', $filterStatusAttendance);
             }
             //Retornar Paginacion y datos ordenados descendentemente para devolver los mas nuevos primero
             $posts = $queryset->orderBy('created_at', 'DESC')->simplePaginate($filterSize)->toArray();
@@ -246,8 +246,8 @@ class ApiPostController extends ApiBaseController
             $post->description = $request->description;
             $post->user_id = $token_decoded->user->id;
             $post->category_id = $category->id;
-            $post->date = date("Y-m-d");
-            $post->time = date("H:i:s");
+            // $post->date = date("Y-m-d");
+            // $post->time = date("H:i:s");
             $post->state = 1;
             $post->ubication = $request->ubication;
 
@@ -335,8 +335,8 @@ class ApiPostController extends ApiBaseController
             $post->subcategory_id = $request->subcategory_id;
             $post->category_id = $category->id;
             
-            $post->date = date("Y-m-d");
-            $post->time = date("H:i:s");
+            // $post->date = date("Y-m-d");
+            // $post->time = date("H:i:s");
             $post->state = 1;
             $post->ubication = $request->ubication;
             $post->save();

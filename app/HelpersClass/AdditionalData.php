@@ -29,7 +29,8 @@ class AdditionalData
         $this->problem = null;
         $this->activity = null;
         $this->post = [
-            "approved_by" => null
+            "approved_by" => null, 
+            "status_attendance" => 'pendiente' //atendido, rechazado, pendiente
         ];
     }
     
