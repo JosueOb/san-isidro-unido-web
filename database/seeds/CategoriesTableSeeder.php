@@ -16,31 +16,31 @@ class CategoriesTableSeeder extends Seeder
             'name'=>'Informe',
             'slug'=>'informe',
             'description'=>'Informe de las actividades realizadas por la directiva del barrio',
-            'icon'=>env('CATEGORY_REPORT_ICON_DEFAULT')
+            'icon'=>'https://siu-resources-s3.s3.us-east-2.amazonaws.com/default_images/category_icons/report_icon_default.jpg'
         ]);
         Category::create([
             'name'=>'Servicio público',
             'slug'=>'servicio-publico',
             'description'=>'Categoría de servicios públicos',
-            'icon'=>env('CATEGORY_PUBLIC_SERVICE_ICON_DEFAULT')
+            'icon'=>'https://siu-resources-s3.s3.us-east-2.amazonaws.com/default_images/category_icons/public_service_icon_default.jpg'
         ]);
         Category::create([
             'name'=>'Evento',
             'slug'=>'evento',
             'description'=>'Categoría de eventos',
-            'icon'=>env('CATEGORY_EVENT_ICON_DEFAULT')
+            'icon'=>'https://siu-resources-s3.s3.us-east-2.amazonaws.com/default_images/category_icons/event_icon_default.jpg'
         ]);
         Category::create([
             'name'=>'Emergencia',
             'slug'=>'emergencia',
             'description'=>'Categoría de emergencias',
-            'icon'=>env('CATEGORY_EMERGENCY_ICON_DEFAULT')
+            'icon'=>'https://siu-resources-s3.s3.us-east-2.amazonaws.com/default_images/category_icons/emergency_icon_default.jpg'
         ]);
         Category::create([
             'name'=>'Problema',
             'slug'=>'problema',
             'description'=>'Categoría de problemas',
-            'icon'=>env('CATEGORY_PROBLEM_ICON_DEFAULT')
+            'icon'=>'https://siu-resources-s3.s3.us-east-2.amazonaws.com/default_images/category_icons/problem_icon_default.png'
         ]);
         
     }

@@ -28,6 +28,10 @@ class Category extends Model
     * get resoruce link
     */
     public function getLink(){
-        return \Storage::disk('public')->url($this->icon);
+        $icon = $this->icon;
+        if(!$icon || starts_with($icon,'http')){
+            return $icon;
+        }
+        return \Storage::disk('s3')->url($this->icon);
     }
 }
