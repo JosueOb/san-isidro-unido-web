@@ -17,7 +17,8 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <!-- Icon-->
-    <link rel="icon" type="image/png" href="{{asset('storage/img/logo.png')}}">
+    {{-- <link rel="icon" type="image/png" href="{{asset('storage/img/logo.png')}}"> --}}
+    <link rel="icon" type="image/png" href="https://siu-resources-s3.s3.us-east-2.amazonaws.com/default_images/logos/logo.png">
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
