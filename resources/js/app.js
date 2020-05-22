@@ -34,7 +34,7 @@ window.Vue = require('vue');
 require('./dropdown');
 require('./imagename');
 require('./icon-image');
-// require('./report-create');
+require('./report-create');
 // require('./report-update');
 require('./image-gallery');
 require('./map');

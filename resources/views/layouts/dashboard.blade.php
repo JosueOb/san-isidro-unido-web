@@ -274,10 +274,9 @@
                     <nav class="navbar align-items-stretch navbar-light p-0 justify-content-end flex-md-nowrap">
                     <!--<nav class="navbar align-items-stretch navbar-light flex-md-nowrap p-0 justify-content-end">-->
                         <ul class="navbar-nav flex-row">
-
                             <li class="nav-item dropdown user-options m-0">
                                 <a href="#" class="nav-link dropdown-toggle px-3 text-nowrap" data-toggle="dropdown" id="dropdownMenuUser" role="button" aria-haspopup="true" aria-expanded="false">
-                                    <img src="{{ Auth::user()->getAvatar()}}" alt="user avatar" class="user-avatar rounded-circle mr-2">
+                                    <img src="{{ Auth::user()->getAvatar()}}" alt="user avatar" class="user-avatar">
                                     <span class="d-none d-lg-inline-block">{{ Auth::user()->getFullName() }}</span>
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby='dropdownNotifications'>

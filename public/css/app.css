@@ -16648,6 +16648,7 @@ h6 {
 .main-navbar .navbar .nav-link {
   border-left: #e1e5eb solid 0.05px;
   min-width: 3.75rem;
+  height: 3.75rem;
 }
 
 @media (max-width: 767.98px) {
@@ -16737,7 +16738,12 @@ h6 {
 }
 
 .main-navbar .navbar .user-options .user-avatar {
-  max-width: 2.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  box-shadow: 0 0.125rem 0.6825rem rgba(90, 97, 105, 0.3);
+  border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 
 .main-navbar .navbar .user-options .dropdown-menu {
@@ -17276,5 +17282,37 @@ h6 {
   margin-left: 2.5px;
   color: red;
   cursor: pointer;
+}
+
+.user_avatar {
+  display: block;
+  width: 10rem;
+  height: 10rem;
+  box-shadow: 0 0.125rem 0.6825rem rgba(90, 97, 105, 0.3);
+  border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  margin: 0 auto;
+}
+
+@media (max-width: 767.98px) {
+  .user_avatar {
+    width: 5.5rem;
+    height: 5.5rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .user_avatar {
+    width: 5rem;
+    height: 5rem;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  .user_avatar {
+    width: 6.5rem;
+    height: 6.5rem;
+  }
 }
 

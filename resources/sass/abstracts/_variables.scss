@@ -61,7 +61,9 @@ $notification-category-color:$fiord-blue !default;
 $notification-category-letter-spacing: 0.0938rem !default;
 
 //Main Navabar -> avatar
-$user-avatar-max-width: 2.5rem !default;
+$user-avatar-max-width: 2.5rem!default;
+$user-avatar-max-height: 2.5rem !default;
+$user-avatar-box-shadow: $main-navbar-box-shadow;
 
 
 // Main sidebar

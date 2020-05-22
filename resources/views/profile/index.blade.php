@@ -21,7 +21,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12 col-md-6 col-lg-12 col-xl-5">
-                            <img src="{{Auth::user()->getAvatar()}}" alt="avatar" class="rounded-circle d-block mr-auto ml-auto w-50">
+                                <img src="{{Auth::user()->getAvatar()}}" alt="avatar" class="user_avatar mb-3">
                         </div>
                         <div class="col-12 col-md-6 col-lg-12 col-xl-7 pl-0">
                         
@@ -30,7 +30,6 @@
                                 @method('put')
 
                                 <div class="form-group">
-                                    <label for="avatar">Imagen</label>
                                     <div class="custom-file">
                                         <input type="file" class="custom-file-input @error('avatar') is-invalid @enderror" id="image" name="avatar" required>
                                         <label class="custom-file-label" for="avatar" data-browse="Cambiar"></label>
