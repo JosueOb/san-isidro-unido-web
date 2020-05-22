@@ -5,6 +5,7 @@
     .nav-link{
         border-left: $main-navbar-nav-border-color;
         min-width: $main-navbar-nav-link-min-width;
+        height: $main-navbar-height;
     }
 
     // Notificaciones
@@ -98,10 +99,14 @@
     }
 
     .user-options{
-
         .user-avatar{
-            max-width: $user-avatar-max-width;
+            width: $user-avatar-max-width;
+            height: $user-avatar-max-height;
+            box-shadow: $user-avatar-box-shadow;
+            border-radius: 50%;
+            object-fit: cover;
         }
+
         .dropdown-menu{
             left: auto;
             padding: 0;

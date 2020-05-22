@@ -24,13 +24,13 @@ class ProfileController extends Controller
         //Se obtene a la imagen subida desde el formulario
         $newAvatar = $validated['avatar'];
         //Se procede a guardar el nuevo avatar en el usuario que realizó la petición
-        $user->avatar = $newAvatar->store('avatars', 'public');
+        $user->avatar = $newAvatar->store('user_avatars', 's3');
         $user->save();
 
         //En caso de que el usuario tenga una imagen en el directorio avatars se procede 
         //a eliminarla
-        if(Storage::disk('public')->exists($oldAvatar)){
-            Storage::disk('public')->delete($oldAvatar);
+        if(Storage::disk('s3')->exists($oldAvatar)){
+            Storage::disk('s3')->delete($oldAvatar);
         }
 
         return redirect()->route('profile')->with('success', 'Avatar actualizado');

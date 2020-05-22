@@ -25,7 +25,7 @@ class AvatarUserRequest extends FormRequest
     {
         //el tamaño esta dado en kilobytes y equivale a 1MB
         return [
-            'avatar'=>'required|image|mimes:jpeg,png|max:1000',
+            'avatar'=>'required|image|mimes:jpeg,png|max:1024',
         ];
     }
     /**
