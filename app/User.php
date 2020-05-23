@@ -51,8 +51,11 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
     ];
 
     /*AGREGAR RESOURCE LINK ATTRIBUTE */
-    protected $appends = ['avatar_link', 'fullname'];
+    protected $appends = ['avatar_link', 'fullname', 'basic_service_image_link'];
     public function getAvatarLinkAttribute(){
+        return $this->getApiLink();
+    }
+    public function getBasicServiceImageLinkAttribute(){
         return $this->getApiLink();
     }
     public function getFullNameAttribute(){

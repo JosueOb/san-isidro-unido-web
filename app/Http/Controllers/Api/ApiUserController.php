@@ -311,7 +311,7 @@ class ApiUserController extends ApiBaseController
                 //Validar si existe el usuario
                 if (!is_null($user)) {
                     $imageApi = new ApiImages();
-                    $image_name = $imageApi->saveAfiliationFileImageApi($request->basic_service_image);
+                    $image_name = $imageApi->saveAfiliationImageApi($request->basic_service_image);
                     $user->basic_service_image = $image_name;
                     $user->save();
                     //Guardar solicitud de afiliación
@@ -428,7 +428,7 @@ class ApiUserController extends ApiBaseController
                 //Validar si el usuario existe
                 if (!is_null($user)) {
                     $imageApi = new ApiImages();
-                    $image_name = $imageApi->saveAfiliationFileImageApi($request->avatar, null, 'avatar_usuario');
+                    $image_name = $imageApi->saveUserImageApi($request->avatar, null, 'avatar_usuario');
                     $user->avatar = $image_name;
                     $user->save();
                     $token = $jwtAuth->getToken($user->email);
