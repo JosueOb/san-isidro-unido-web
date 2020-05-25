@@ -70,12 +70,11 @@ class DirectiveController extends Controller
 
         //Se obtiene el cargo que fue seleccionado para el registro
         $getPosition = Position::find($validated['position']);
-        // dd($getPosition->name);
         //Se verifica si la asignación del cargo es de one-person (solo para una persona)
         if($getPosition->allocation === 'one-person'){
             //Se procede a verificar por cada usuario con el cargo seleccionado, si se encuentra activo como directivo
             if($this->checkMemberPosition($getPosition)){
-                // dd($getPosition->name);
+                
                 //En caso de encuentrar un miembro de la directiva activo con el cargo seleccionado se retorna
                 //a la misma devuelve a la vista en la que se encontraba el usuario con los datos del formulario y un mensaje de error
                 return back()->withInput()->with('observations',[
