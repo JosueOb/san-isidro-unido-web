@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Middleware\MemberIsActive;
 use App\Http\Middleware\PreventMakingChangesToYourself;
 use App\Http\Middleware\ProtectedAdminUsers;
+use App\Http\Middleware\ProtectedNeighborUsers;
 use App\Http\Requests\DirectiveRequest;
 use App\Notifications\UserCreated;
 use App\Position;
@@ -22,8 +23,9 @@ class DirectiveController extends Controller
     public function __construct()
     {
         $this->middleware(ProtectedAdminUsers::class)->only('show','edit','update','destroy');
-        $this->middleware(MemberIsActive::class)->only('edit','update');
+        $this->middleware(MemberIsActive::class)->only('edit','update','destroy');
         $this->middleware(PreventMakingChangesToYourself::class)->only('edit','update','destroy');
+        $this->middleware(ProtectedNeighborUsers::class)->only('show','edit','update','destroy');
     }
     /**
      * Display a listing of the resource.
