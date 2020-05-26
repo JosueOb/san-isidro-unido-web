@@ -1,8 +1,8 @@
 const Swal = require('sweetalert2')
 
 let numberOfImagesAllowed = 5;
-// let size = 1048576;//equivale a 1MB
-let size = 5242880;;//equivale a 1MB
+let size = 1048576;//equivale a 1MB
+// let size = 5242880;;//equivale a 1MB
 
 var oldImages = [];
 var newImages = [];
