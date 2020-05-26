@@ -6,10 +6,15 @@ use App\Category;
 use App\Http\Requests\ReportRequest;
 use App\Post;
 use App\Resource;
+use App\Http\Middleware\PotectedEventPosts;
 use Illuminate\Support\Facades\Storage;
 
 class ReportController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(PotectedEventPosts::class)->only('show', 'edit', 'update', 'destroy');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -86,14 +91,14 @@ class ReportController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Post $report)
+    public function show(Post $post)
     {
         // $images= $report->images()->get();
-        $images = $report->resources()->where('type', 'image')->get();
-        $documents = $report->resources()->where('type', 'document')->get();
+        $images = $post->resources()->where('type', 'image')->get();
+        $documents = $post->resources()->where('type', 'document')->get();
         
         return view('reports.show',[
-            'report'=>$report,
+            'report'=>$post,
             'images'=>$images,
             'documents'=>$documents,
         ]);
@@ -105,13 +110,13 @@ class ReportController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Post $report)
+    public function edit(Post $post)
     {
         // $images = $report->images()->get();
-        $images = $report->resources()->where('type', 'image')->get();
-        $documents = $report->resources()->where('type', 'document')->get();
+        $images = $post->resources()->where('type', 'image')->get();
+        $documents = $post->resources()->where('type', 'document')->get();
         return view('reports.edit', [
-            'report'=>$report,
+            'report'=>$post,
             'images'=>$images,
             'documents'=>$documents,
         ]);
@@ -125,19 +130,19 @@ class ReportController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ReportRequest $request, Post $report)
+    public function update(ReportRequest $request, Post $post)
     {
         $validated = $request->validated();
 
          //Se actualiza al reporte
-         $report->title = $validated['title'];
-         $report->description = $validated['description'];
+         $post->title = $validated['title'];
+         $post->description = $validated['description'];
          //Se mantiene el id del usuario que publicó el informe
-         $report->save();
+         $post->save();
 
          //Se verifica si alguna imagen del reporte registrado anteriormenete, haya sido eliminada
         $oldReportImages = $request['old_images'];
-        $oldCollectionReportImages = $report->resources()->where('type', 'image')->get();
+        $oldCollectionReportImages = $post->resources()->where('type', 'image')->get();
 
         if($oldReportImages){
             foreach($oldCollectionReportImages as $oldImageReport){
@@ -145,7 +150,7 @@ class ReportController extends Controller
 
                 if($this->searchDeletedImages($oldImageUrl, $oldReportImages)){
                     //Eliminar a la imagen de la bdd y del local storage
-                    $report->resources()->where('type', 'image')
+                    $post->resources()->where('type', 'image')
                                         ->where('url', $oldImageUrl)->delete();
                     if(Storage::disk('s3')->exists($oldImageUrl)){
                         Storage::disk('s3')->delete($oldImageUrl);
@@ -163,7 +168,7 @@ class ReportController extends Controller
                         Storage::disk('s3')->delete($oldImageUrl);
                     }
                 }
-                $report->resources()->where('type', 'image')->delete();
+                $post->resources()->where('type', 'image')->delete();
             }
         }
 
@@ -172,7 +177,7 @@ class ReportController extends Controller
 
                 Resource::create([
                     'url'=> $image->store('report_images', 's3'),
-                    'post_id' => $report->id,
+                    'post_id' => $post->id,
                     'type'=>'image',
                 ]);
             }
@@ -180,7 +185,7 @@ class ReportController extends Controller
 
          //Se verifica si algún documento del reporte registrado anteriormenete, haya sido eliminado
          $oldReportDocuments = $request['old_documents'];
-         $oldCollectionReportDocuments = $report->resources()->where('type', 'document')->get();
+         $oldCollectionReportDocuments = $post->resources()->where('type', 'document')->get();
 
          if($oldReportDocuments){
             foreach($oldCollectionReportDocuments as $oldDocumentReport){
@@ -188,7 +193,7 @@ class ReportController extends Controller
 
                 if($this->searchDeletedDocuments($oldDocumentUrl, $oldReportDocuments)){
                     //Eliminar al documento de la bdd y del storage
-                    $report->resources()->where('type', 'document')
+                    $post->resources()->where('type', 'document')
                                         ->where('url', $oldDocumentUrl)->delete();
                     if(Storage::disk('s3')->exists($oldDocumentUrl)){
                         Storage::disk('s3')->delete($oldDocumentUrl);
@@ -206,7 +211,7 @@ class ReportController extends Controller
                         Storage::disk('s3')->delete($oldDocumentUrl);
                     }
                 }
-                $report->resources()->where('type', 'document')->delete();
+                $post->resources()->where('type', 'document')->delete();
             }
         }
         if($request->file('new_documents')){
@@ -214,7 +219,7 @@ class ReportController extends Controller
 
                 Resource::create([
                     'url'=> $document->store('report_documents', 's3'),
-                    'post_id' => $report->id,
+                    'post_id' => $post->id,
                     'type'=>'document',
                 ]);
             }
@@ -233,17 +238,17 @@ class ReportController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Post $report)
+    public function destroy(Post $post)
     {
         $message = '';
-        if($report->state){
-            $report->state = false;
+        if($post->state){
+            $post->state = false;
             $message='desactivado';
         }else{
-            $report->state = true;
+            $post->state = true;
             $message='activado';
         }
-        $report->save();
+        $post->save();
 
         return back()->with('success', "Informe $message con éxito");
     }
