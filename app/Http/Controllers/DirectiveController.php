@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Middleware\MemberIsActive;
 use App\Http\Middleware\PreventMakingChangesToYourself;
 use App\Http\Middleware\ProtectedAdminUsers;
+use App\Http\Middleware\ProtectedNeighborUsers;
 use App\Http\Requests\DirectiveRequest;
 use App\Notifications\UserCreated;
 use App\Position;
@@ -22,8 +23,9 @@ class DirectiveController extends Controller
     public function __construct()
     {
         $this->middleware(ProtectedAdminUsers::class)->only('show','edit','update','destroy');
-        $this->middleware(MemberIsActive::class)->only('edit','update');
+        $this->middleware(MemberIsActive::class)->only('edit','update','destroy');
         $this->middleware(PreventMakingChangesToYourself::class)->only('edit','update','destroy');
+        $this->middleware(ProtectedNeighborUsers::class)->only('show','edit','update','destroy');
     }
     /**
      * Display a listing of the resource.
@@ -70,12 +72,11 @@ class DirectiveController extends Controller
 
         //Se obtiene el cargo que fue seleccionado para el registro
         $getPosition = Position::find($validated['position']);
-        // dd($getPosition->name);
         //Se verifica si la asignación del cargo es de one-person (solo para una persona)
         if($getPosition->allocation === 'one-person'){
             //Se procede a verificar por cada usuario con el cargo seleccionado, si se encuentra activo como directivo
             if($this->checkMemberPosition($getPosition)){
-                // dd($getPosition->name);
+                
                 //En caso de encuentrar un miembro de la directiva activo con el cargo seleccionado se retorna
                 //a la misma devuelve a la vista en la que se encontraba el usuario con los datos del formulario y un mensaje de error
                 return back()->withInput()->with('observations',[

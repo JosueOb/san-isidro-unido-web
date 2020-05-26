@@ -15,7 +15,7 @@ let configDate = {
         weekdays: weekdays,
         months: months,
     },
-    minDate: "today",
+    // minDate: "today",
     dateFormat: "Y-m-d",
     allowInput: true,
     altInput: true,
@@ -31,8 +31,11 @@ let configTime = {
     // altInput: true,
 };
 
-var inputStartDate = flatpickr('#start-date', configDate);
-var inputEndtDate = flatpickr('#end-date', configDate);
+var inputStartDate = flatpickr('#start-date', {...configDate, minDate:'today'});
+var inputEndtDate = flatpickr('#end-date', {...configDate, minDate:'today'});
+
+var inputStartDate = flatpickr('#start-date-update', configDate);
+var inputEndtDate = flatpickr('#end-date-update', configDate);
 
 var inputStartTime = flatpickr('#start-time', configTime);
 var inputEndTime = flatpickr('#end-time', configTime);
@@ -61,6 +64,9 @@ var inputCloseTime = flatpickr('#close-time', configTime);
 
 $('#start-time').removeAttr('readonly');
 $('#end-time').removeAttr('readonly');
+
+$('#start-time-update').removeAttr('readonly');
+$('#end-time-update').removeAttr('readonly');
 
 $('#open-time').removeAttr('readonly');
 $('#close-time').removeAttr('readonly');

@@ -6,10 +6,15 @@ use App\Category;
 use App\Http\Requests\ReportRequest;
 use App\Post;
 use App\Resource;
+use App\Http\Middleware\PotectedEventPosts;
 use Illuminate\Support\Facades\Storage;
 
 class ReportController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(PotectedEventPosts::class)->only('show', 'edit', 'update', 'destroy');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -45,48 +50,39 @@ class ReportController extends Controller
     {
         $validated = $request->validated();
 
-        //Se obtiene la fecha y hora del sistema
-        $dateTime = now();
-        $date = $dateTime->toDateString(); 
-        $time = $dateTime->toTimeString();
         //Se obtiene a la categoría de informe
         $category = Category::where('slug', 'informe')->first();
         //Se crea un nuevo objeto Post
         $report = new Post();
-        $report->title = $request['title'];
-        $report->description = $request['description'];
-        $report->date = $date;
-        $report->time = $time;
+        $report->title = $validated['title'];
+        $report->description = $validated['description'];
         $report->state = true;
         $report->user_id = $request->user()->id;
         $report->category_id = $category->id;
         $report->save();
 
         //Se guardan la imagenes del post, en caso de que se hayan selecionado
-        // if($request['images']){
-        if($request->file('images')){
-            foreach($request->file('images') as $image){
-                // Image::create([
-                //     'url'=> $image->store('images_reports', 'public'),
-                //     'post_id' => $report->id,
-                // ]);
+        if($request->file('new_images')){
+            foreach($request->file('new_images') as $image){
                 Resource::create([
-                    'url'=> $image->store('report_images', 'public'),
+                    'url'=> $image->store('report_images', 's3'),
                     'post_id' => $report->id,
                     'type'=>'image',
                 ]);
             }
         }
-        if($request->file('document')){
-            Resource::create([
-                'url'=> $request->file('document')->store('report_documents', 'public'),
-                'post_id' => $report->id,
-                'type'=>'document',
-            ]);
+        if($request->file('new_documents')){
+            foreach($request->file('new_documents') as $document){
+                Resource::create([
+                    'url'=> $document->store('report_documents', 's3'),
+                    'post_id' => $report->id,
+                    'type'=>'document',
+                ]);
+            }
         }
 
         session()->flash('success', 'Informe registrado con éxito');
-        return response()->json(['success'=>'Datos recibidos correctamente']);
+        return response()->json(['success'=>'Datos recibidos correctamente', 'data'=>$validated]);
     }
 
     /**
@@ -95,15 +91,16 @@ class ReportController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Post $report)
+    public function show(Post $post)
     {
         // $images= $report->images()->get();
-        $images = $report->resources()->where('type', 'image')->get();
-        $document = $report->resources()->where('type', 'document')->get();
+        $images = $post->resources()->where('type', 'image')->get();
+        $documents = $post->resources()->where('type', 'document')->get();
+        
         return view('reports.show',[
-            'report'=>$report,
+            'report'=>$post,
             'images'=>$images,
-            'resource'=>$document,
+            'documents'=>$documents,
         ]);
     }
 
@@ -113,15 +110,15 @@ class ReportController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Post $report)
+    public function edit(Post $post)
     {
         // $images = $report->images()->get();
-        $images = $report->resources()->where('type', 'image')->get();
-        $document = $report->resources()->where('type', 'document')->get();
+        $images = $post->resources()->where('type', 'image')->get();
+        $documents = $post->resources()->where('type', 'document')->get();
         return view('reports.edit', [
-            'report'=>$report,
+            'report'=>$post,
             'images'=>$images,
-            'resource'=>$document,
+            'documents'=>$documents,
         ]);
     }
 
@@ -133,97 +130,100 @@ class ReportController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ReportRequest $request, Post $report)
+    public function update(ReportRequest $request, Post $post)
     {
         $validated = $request->validated();
 
-         //Se obtiene la fecha y hora del sistema
-         $dateTime = now();
-         $date = $dateTime->toDateString(); 
-         $time = $dateTime->toTimeString();
-
          //Se actualiza al reporte
-         $report->title = $validated['title'];
-         $report->description = $validated['description'];
-         $report->date = $date;
-         $report->time = $time;
+         $post->title = $validated['title'];
+         $post->description = $validated['description'];
          //Se mantiene el id del usuario que publicó el informe
-         $report->save();
+         $post->save();
 
-        //Se verifica si alguna imagen del reporte se mantiene o fue eliminada
-        $newImagesReport = $request['images_report'];
-        // $collectionImageReport = $report->images()->get();
-        $collectionImageReport = $report->resources()->where('type', 'image')->get();
-        
-        //Se obtienen los documentos antiguos
-        $oldDocument = $request['old_document'];
-        $collectionDocument = $report->resources()->where('type', 'document')->first();
-        
-        if($newImagesReport){
+         //Se verifica si alguna imagen del reporte registrado anteriormenete, haya sido eliminada
+        $oldReportImages = $request['old_images'];
+        $oldCollectionReportImages = $post->resources()->where('type', 'image')->get();
 
-            foreach($collectionImageReport as $oldImageReport){
+        if($oldReportImages){
+            foreach($oldCollectionReportImages as $oldImageReport){
                 $oldImageUrl = $oldImageReport->url;
-                // echo $oldImageUrl."\n";
-                if($this->searchDeletedImages($oldImageUrl, $newImagesReport)){
-                    // echo $oldImageUrl."\n";
+
+                if($this->searchDeletedImages($oldImageUrl, $oldReportImages)){
                     //Eliminar a la imagen de la bdd y del local storage
-                    // Image::where('url', $oldImageUrl)->first()->delete();
-                    // $report->images()->where('url', $oldImageUrl)->delete();
-                    $report->resources()->where('type', 'image')
+                    $post->resources()->where('type', 'image')
                                         ->where('url', $oldImageUrl)->delete();
-                    if(Storage::disk('public')->exists($oldImageUrl)){
-                        Storage::disk('public')->delete($oldImageUrl);
+                    if(Storage::disk('s3')->exists($oldImageUrl)){
+                        Storage::disk('s3')->delete($oldImageUrl);
                     }
                 }
             }
         }else{
             //En caso no recibir el arreglo de las imagenes registradas con el reporte,
             //se verifica si el reporte contiene imágenes
-            if(count($collectionImageReport) > 0){
+            if(count($oldCollectionReportImages) > 0){
                 //Si el reporte contiene imágenes, se procede a eliminar todas las imágenes
-                foreach ($collectionImageReport as $oldImageReport) {
-                    $oldImageUrl = $oldImageReport->url;
-                    if(Storage::disk('public')->exists($oldImageUrl)){
-                        Storage::disk('public')->delete($oldImageUrl);
+                foreach ($oldCollectionReportImages as $oldImage) {
+                    $oldImageUrl = $oldImage->url;
+                    if(Storage::disk('s3')->exists($oldImageUrl)){
+                        Storage::disk('s3')->delete($oldImageUrl);
                     }
                 }
-                // $report->images()->delete();
-                $report->resources()->where('type', 'image')->delete();
+                $post->resources()->where('type', 'image')->delete();
             }
         }
 
-        //Se verifica si no se recibe un documento por parte del formulario, pero 
-        //tiene documentos registrados en la BDD y en el disco
-        if(!$oldDocument && $collectionDocument){
-            $oldDocumentUrl = $collectionDocument->url;
-            if(Storage::disk('public')->exists($oldDocumentUrl)){
-                Storage::disk('public')->delete($oldDocumentUrl);
-            }
-            $report->resources()->where('type', 'document')->delete();
-        }
+        if($request->file('new_images')){
+            foreach($request->file('new_images') as $image){
 
-        // //Se guardan las nuevas imágenes  seleccionadas por el usuario
-        if($request->file('images')){
-            foreach($request->file('images') as $image){
-                // Image::create([
-                //     'url'=> $image->store('images_reports', 'public'),
-                //     'post_id' => $report->id,
-                // ]);
                 Resource::create([
-                    'url'=> $image->store('report_images', 'public'),
-                    'post_id' => $report->id,
+                    'url'=> $image->store('report_images', 's3'),
+                    'post_id' => $post->id,
                     'type'=>'image',
                 ]);
             }
         }
-        if($request->file('document')){
-            Resource::create([
-                'url'=> $request->file('document')->store('report_documents', 'public'),
-                'post_id' => $report->id,
-                'type'=>'document',
-            ]);
-        }
 
+         //Se verifica si algún documento del reporte registrado anteriormenete, haya sido eliminado
+         $oldReportDocuments = $request['old_documents'];
+         $oldCollectionReportDocuments = $post->resources()->where('type', 'document')->get();
+
+         if($oldReportDocuments){
+            foreach($oldCollectionReportDocuments as $oldDocumentReport){
+                $oldDocumentUrl = $oldDocumentReport->url;
+
+                if($this->searchDeletedDocuments($oldDocumentUrl, $oldReportDocuments)){
+                    //Eliminar al documento de la bdd y del storage
+                    $post->resources()->where('type', 'document')
+                                        ->where('url', $oldDocumentUrl)->delete();
+                    if(Storage::disk('s3')->exists($oldDocumentUrl)){
+                        Storage::disk('s3')->delete($oldDocumentUrl);
+                    }
+                }
+            }
+        }else{
+            //En caso no recibir el arreglo de los documentos registradas con el reporte,
+            //se verifica si el reporte contiene documentos
+            if(count($oldCollectionReportDocuments) > 0){
+                //Si el reporte contiene documentos, se procede a eliminar todas los documentos
+                foreach ($oldCollectionReportDocuments as $oldDocument) {
+                    $oldDocumentUrl = $oldDocument->url;
+                    if(Storage::disk('s3')->exists($oldDocumentUrl)){
+                        Storage::disk('s3')->delete($oldDocumentUrl);
+                    }
+                }
+                $post->resources()->where('type', 'document')->delete();
+            }
+        }
+        if($request->file('new_documents')){
+            foreach($request->file('new_documents') as $document){
+
+                Resource::create([
+                    'url'=> $document->store('report_documents', 's3'),
+                    'post_id' => $post->id,
+                    'type'=>'document',
+                ]);
+            }
+        }
 
         session()->flash('success', 'Informe actualizado con éxito');
 
@@ -238,18 +238,18 @@ class ReportController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Post $report)
+    public function destroy(Post $post)
     {
         $message = '';
-        if($report->state){
-            $report->state = false;
+        if($post->state){
+            $post->state = false;
             $message='desactivado';
         }else{
-            $report->state = true;
+            $post->state = true;
             $message='activado';
         }
-        $report->save();
-        
+        $post->save();
+
         return back()->with('success', "Informe $message con éxito");
     }
     /**
@@ -265,13 +265,26 @@ class ReportController extends Controller
         foreach($array as $image){
             if($image === $search){
                 $imageIsDeleted = false;
-                // echo "son iguales \n";
-                // echo $image."\n";
-                // echo $search."\n";
-                // break;
             }
         }
         return $imageIsDeleted;
+    }
+    /**
+     * Check if any documents were deleted
+     *
+     * @param  string  $search
+     * @param  array  $array
+     * @return boolean $imageIsDeleted
+     */
+
+    public function searchDeletedDocuments($search, $array){
+        $documentIsDeleted = true;
+        foreach($array as $document){
+            if($document === $search){
+                $documentIsDeleted = false;
+            }
+        }
+        return $documentIsDeleted;
     }
     /**
      * filtros para listar informes activo o inactivo

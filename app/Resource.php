@@ -29,7 +29,11 @@ class Resource extends Model
     * get resoruce link
     */
     public function getLink(){
-        return \Storage::disk('public')->url($this->url);
+        $url = $this->url;
+        if(!$url || \starts_with($url,'http')){
+            return $url;
+        }
+        return \Storage::disk('s3')->url($url);
     }
 
 }

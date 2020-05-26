@@ -31,7 +31,6 @@ class SubcategoryController extends Controller
     public function create()
     {
         //Se consultan a todas las categorías registradas
-        // $categories = Category::all();
         $categories = Category::whereNotIn('slug', ['informe', 'emergencia'])->get();
         return view('subcategories.create', [
             'categories'=>$categories,
@@ -125,7 +124,9 @@ class SubcategoryController extends Controller
      */
     public function destroy(Subcategory $subcategory)
     {
+        //Se verifica si la subcatoría tiene un post (problema o evento) asignado
         $hasPots = $subcategory->posts()->first();
+        //Se verifica que la subcategoría tiene una servicio público asignado
         $hasPublicServices = $subcategory->publicServices()->first();
 
         if(!$hasPots && !$hasPublicServices){

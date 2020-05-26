@@ -32,10 +32,11 @@
                         <p><strong>Id:</strong> {{$report->id}}</p>
                         <p><strong>Título:</strong> {{$report->title}}</p>
                         <p><strong>Descripción:</strong> {{$report->description}}</p>
+                        <p><strong>Fecha:</strong> {{$report->created_at}}</p>
                         <p><strong>Estado:</strong> {{$report->state ? 'Activo': 'Inactivo'}}</p>
 
                         
-                        @if ($images)
+                        @if (count($images))
                         <p><strong>Imágenes:</strong></p>
                         <div class="gallery-images">
                             {{-- Se presentan las imágenes seleccionadas por el usuario --}}
@@ -48,10 +49,10 @@
                         @endif
 
                         {{-- Se presentan el documento seleccionado por el usuario --}}
-                        @if ($resource)
+                        @if (count($documents))
                         <p><strong>Documento:</strong></p>
-                        <div class="gallery-document">
-                            @foreach ($resource as $document)
+                        <div class="gallery-documents">
+                            @foreach ($documents as $document)
                             <div class="gallery-item">
                                 
                                 <i class="fas fa-file-pdf image-document"></i>

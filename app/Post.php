@@ -70,13 +70,12 @@ class Post extends Model
         $image = $this->resources()->where('type','image')->first();
         
         if($image){
-            $image_url = $image["url"];
+            $image_url = $image->getLink();
         }else{
             //en caso de no tener imagen se retorna una por defecto
-            // $image_url = "images_reports/image-default.jpg";
-            $image_url = env('REPORT_IMAGE_DEFAULT');
+            $image_url = 'https://siu-resources-s3.s3.us-east-2.amazonaws.com/default_images/report_image_default/report_default.jpg';
         }
-        return  \Storage::disk('public')->url($image_url);
+        return $image_url;
     }
 
     /**

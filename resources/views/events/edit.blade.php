@@ -87,13 +87,13 @@
                             <div class="form-row">
                                 <div class="form-group col-md-12 col-lg-6">
                                     <label for="start-date">Fecha de inicio</label>
-                                    <input id="start-date" type="date" class="form-control" name="start-date" value="{{ old('start-date') ?: $event_range_date['start_date']}}" placeholder="Comienza" required>
+                                    <input id="start-date-update" type="date" class="form-control" name="start-date" value="{{ old('start-date') ?: $event_range_date['start_date']}}" placeholder="Comienza" required>
                                     <span class="invalid-feedback" role="alert">
                                     </span>
                                 </div>
                                 <div class="form-group col-md-12 col-lg-6 mt-md-0 mt-sm-3 mt-3">
                                     <label for="end-date">Fecha de cierre <span class="text-muted">(opcional)</span></label>
-                                    <input id="end-date" type="date" class="form-control" name="end-date" value="{{ old('end-date') ?: $event_range_date['end_date'] }}" placeholder="Termina">
+                                    <input id="end-date-update" type="date" class="form-control" name="end-date" value="{{ old('end-date') ?: $event_range_date['end_date'] }}" placeholder="Termina">
                                     <span class="invalid-feedback" role="alert">
                                     </span>
                                 </div>

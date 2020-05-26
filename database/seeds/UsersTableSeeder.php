@@ -27,22 +27,31 @@ class UsersTableSeeder extends Seeder
             'state'=>true,
             'email_verified_at'=> now(),
         ]);
-        $roleAdmin = Role::where('name', 'Administrador')->first();
-        $roleGuest = Role::where('name', 'Morador')->first();
+        $roleAdmin = Role::where('slug', 'admin')->first();
+        $roleGuest = Role::where('slug', 'morador')->first();
         //Se le asigna el rol de aministrador al usuario
         $userAdmin->roles()->attach([$roleAdmin->id, $roleGuest->id],['state'=>true]);
         
-        $roleDirective = Role::where('name','Directivo')->first();
+        $roleDirective = Role::where('slug','directivo')->first();
         $positions = Position::all();
         $members = factory(User::class,5)->create();
         $members->each(function(User $user)use($roleDirective, $roleGuest,$positions){
             $user->avatar = 'https://ui-avatars.com/api/?name='.
             substr($user->first_name,0,1).'+'.substr($user->last_name,0,1).
-            '&size=255';
+            '&size=250';
             //se resta uno, debido a que el primer usurio administardor tiene el id = 1
             $user->position_id = $positions->where('id', $user->id-1)->first()->id;
             $user->save();
             $user->roles()->attach([$roleDirective->id, $roleGuest->id],['state'=>true]);
+        });
+        $roleNeighbor = Role::where('slug', 'morador')->first();
+        $neighbors = factory(User::class, 50)->create();
+        $neighbors->each(function(User $neighbor)use($roleNeighbor){
+            $neighbor->avatar = 'https://ui-avatars.com/api/?name='.
+            substr($neighbor->first_name,0,1).'+'.substr($neighbor->last_name,0,1).
+            '&size=250';
+            $neighbor->save();
+            $neighbor->roles()->attach([$roleNeighbor->id],['state'=>true]);
         });
     }
 }

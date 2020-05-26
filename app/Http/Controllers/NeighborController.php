@@ -23,8 +23,7 @@ class NeighborController extends Controller
     {
         $this->middleware(ProtectedAdminUsers::class)->only('show','edit','update','destroy');
         $this->middleware(ProtectedDirectiveUsers::class)->only('edit','update');
-        $this->middleware(NeighborIsActive::class)->only('edit','update');
-        $this->middleware(PreventMakingChangesToYourself::class)->only('destroy');
+        $this->middleware(NeighborIsActive::class)->only('edit','update','destroy');
     }
     /**
      * Display a listing of the resource.
