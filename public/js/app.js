@@ -71143,10 +71143,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "oldImages", function() { return oldImages; });
 var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
 
-var numberOfImagesAllowed = 5; // let size = 1048576;//equivale a 1MB
-
-var size = 5242880;
-; //equivale a 1MB
+var numberOfImagesAllowed = 5;
+var size = 1048576; //equivale a 1MB
 
 var oldImages = [];
 var newImages = [];
