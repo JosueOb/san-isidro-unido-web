@@ -130,7 +130,7 @@ class EventRequest extends FormRequest
             'new_images.max'=> 'Solo se permite(n) '.env('NUMBER_EVENT_IMAGES_ALLOWED').' imágenes',
             'new_images.*.image'=>'Solo se admiten :attribute en formato jpeg y png',
             'new_images.*.mimes'=>'Los formatos permitidos son jpeg y png',
-            'new_images.*.max'=>'El tamaño máximo para las :attribute es '.env('SIZE_IMAGES_ALLOWED').' KB',
+            'new_images.*.max'=>'El tamaño máximo para las :attribute es '.env('SIZE_IMAGES_ALLOWED').' kilobytes',
 
             'images_allowed.required'=>'Solo se permiten '.env('NUMBER_EVENT_IMAGES_ALLOWED').' imágenes',
         ];

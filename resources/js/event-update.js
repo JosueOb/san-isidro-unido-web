@@ -34,7 +34,7 @@ function updatePhones() {
 }
 
 function updateImages() {
-    resetNumberOfImagesAllowed(3);
+    resetNumberOfImagesAllowed(8);
     resetImages();
 }
 
@@ -190,22 +190,30 @@ $(document).ready(function () {
                                 text: 'Debe haber seleccionado una ubicación en el mapa',
                             })
                         }
-                        if (validationErrors.hasOwnProperty('images')) {
+                        if (validationErrors.hasOwnProperty('new_images')) {
                             $('#images').addClass('is-invalid');
-                            $('#images').siblings('.invalid-feedback').html('<strong>' + validationErrors['images'][0] + '</strong>');
+                            $('#images').siblings('.invalid-feedback').html('<strong>' + validationErrors['new_images'][0] + '</strong>');
                         } else {
-                            if (validationErrors.hasOwnProperty('images.0')) {
+                            if (validationErrors.hasOwnProperty('images_allowed')) {
                                 $('#images').addClass('is-invalid');
-                                $('#images').siblings('.invalid-feedback').html('<strong>' + validationErrors['images.0'][0] + '</strong>');
+                                $('#images').siblings('.invalid-feedback').html('<strong>' + validationErrors['images_allowed'][0] + '</strong>');
                             } else {
-                                $('#images').removeClass('is-invalid');
+                                let thereIsValidation = false;
+                                let value = 0;
+                                for (let index = 0; index < newEventImages.length; index++) {
+                                    if (validationErrors.hasOwnProperty('new_images.'+index)) {
+                                        thereIsValidation = true;
+                                        value = index;
+                                        break;
+                                    }
+                                }
+                                if (thereIsValidation) {
+                                    $('#images').addClass('is-invalid');
+                                    $('#images').siblings('.invalid-feedback').html('<strong>' + validationErrors['new_images.'+value][0] + '</strong>');
+                                }else {
+                                    $('#images').removeClass('is-invalid');
+                                }
                             }
-                        }
-                        if (validationErrors.hasOwnProperty('images_allowed')) {
-                            $('#images').addClass('is-invalid');
-                            $('#images').siblings('.invalid-feedback').html('<strong>' + validationErrors['images_allowed'][0] + '</strong>');
-                        } else {
-                            $('#images').removeClass('is-invalid');
                         }
                     }
                 }

@@ -89,10 +89,19 @@ $(document).ready(function () {
                             $('#images').addClass('is-invalid');
                             $('#images').siblings('.invalid-feedback').html('<strong>' + validationErrors['new_images'][0] + '</strong>');
                         } else {
-                            if (validationErrors.hasOwnProperty('new_images.0')) {
+                            let thereIsValidation = false;
+                            let value = 0;
+                            for (let index = 0; index < images.length; index++) {
+                                if (validationErrors.hasOwnProperty('new_images.'+index)) {
+                                    thereIsValidation = true;
+                                    value = index;
+                                    break;
+                                }
+                            }
+                            if (thereIsValidation) {
                                 $('#images').addClass('is-invalid');
-                                $('#images').siblings('.invalid-feedback').html('<strong>' + validationErrors['new_images.0'][0] + '</strong>');
-                            } else {
+                                $('#images').siblings('.invalid-feedback').html('<strong>' + validationErrors['new_images.'+value][0] + '</strong>');
+                            }else {
                                 $('#images').removeClass('is-invalid');
                             }
                         }
@@ -100,10 +109,19 @@ $(document).ready(function () {
                             $('#documents').addClass('is-invalid');
                             $('#documents').siblings('.invalid-feedback').html('<strong>' + validationErrors['new_documents'][0] + '</strong>');
                         } else {
-                            if (validationErrors.hasOwnProperty('new_documents.0')) {
+                            let thereIsValidation = false;
+                            let value = 0;
+                            for (let index = 0; index < documents.length; index++) {
+                                if (validationErrors.hasOwnProperty('new_documents.'+index)) {
+                                    thereIsValidation = true;
+                                    value = index;
+                                    break;
+                                }
+                            }
+                                if (thereIsValidation) {
                                 $('#documents').addClass('is-invalid');
-                                $('#documents').siblings('.invalid-feedback').html('<strong>' + validationErrors['new_documents.0'][0] + '</strong>');
-                            } else {
+                                $('#documents').siblings('.invalid-feedback').html('<strong>' + validationErrors['new_documents.'+value][0] + '</strong>');
+                            }else {
                                 $('#documents').removeClass('is-invalid');
                             }
                         }

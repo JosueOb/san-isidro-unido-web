@@ -48,11 +48,6 @@ class EventController extends Controller
      */
     public function store(EventRequest $request)
     {
-        //Se obtiene la fecha y hora del sistema
-        $dateTime = now();
-        $date = $dateTime->toDateString(); 
-        $time = $dateTime->toTimeString();
-
         $category_event = Category::where('slug', 'evento')->first();
 
         $validated = $request->validated();
@@ -77,8 +72,6 @@ class EventController extends Controller
         $event->title = $validated['title'];
         $event->description = $validated['description'];
         $event->state = true;
-        $event->date = $date;
-        $event->time = $time;
         $event->ubication = json_encode($ubication);//Se devuelve una representación de un JSON;
         $event->user_id = $request->user()->id;
         $event->category_id = $category_event->id;
@@ -95,7 +88,7 @@ class EventController extends Controller
         if($request->file('new_images')){
             foreach($request->file('new_images') as $image){
                 Resource::create([
-                    'url'=> $image->store('event_images', 'public'),
+                    'url'=> $image->store('event_images', 's3'),
                     'post_id' => $event->id,
                     'type'=>'image',
                 ]);
@@ -209,8 +202,8 @@ class EventController extends Controller
                     //Eliminar a la imagen de la bdd y del local storage
                     $event->resources()->where('type', 'image')
                                         ->where('url', $oldImageUrl)->delete();
-                    if(Storage::disk('public')->exists($oldImageUrl)){
-                        Storage::disk('public')->delete($oldImageUrl);
+                    if(Storage::disk('s3')->exists($oldImageUrl)){
+                        Storage::disk('s3')->delete($oldImageUrl);
                     }
                 }
             }
@@ -221,8 +214,8 @@ class EventController extends Controller
                 //Si el reporte contiene imágenes, se procede a eliminar todas las imágenes
                 foreach ($oldCollectionEventImages as $oldImage) {
                     $oldImageUrl = $oldImage->url;
-                    if(Storage::disk('public')->exists($oldImageUrl)){
-                        Storage::disk('public')->delete($oldImageUrl);
+                    if(Storage::disk('s3')->exists($oldImageUrl)){
+                        Storage::disk('s3')->delete($oldImageUrl);
                     }
                 }
 
@@ -234,7 +227,7 @@ class EventController extends Controller
             foreach($request->file('new_images') as $image){
 
                 Resource::create([
-                    'url'=> $image->store('event_images', 'public'),
+                    'url'=> $image->store('event_images', 's3'),
                     'post_id' => $event->id,
                     'type'=>'image',
                 ]);

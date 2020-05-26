@@ -70363,8 +70363,8 @@ $('#documents').on('change', function (event) {
         } else {
           Swal.fire({
             type: 'error',
-            title: 'Fuera del límite de 5MB',
-            text: 'El documento ' + file.name + ' pesa ' + (file.size / size).toFixed(2) + 'MB'
+            title: 'Fuera del límite de ' + size / 1048576 + 'MB',
+            text: 'El documento ' + file.name + ' pesa ' + (file.size / 1048576).toFixed(2) + 'MB'
           });
         }
       } else {
@@ -70535,7 +70535,7 @@ $(document).ready(function () {
   if ($('#map').length != 0 && $('#event-create').length != 0) {
     // getCurrentDate();
     loadMap();
-    Object(_image_gallery__WEBPACK_IMPORTED_MODULE_3__["resetNumberOfImagesAllowed"])(3);
+    Object(_image_gallery__WEBPACK_IMPORTED_MODULE_3__["resetNumberOfImagesAllowed"])(8);
   }
 
   $('#event-create').on('submit', function (event) {
@@ -70696,13 +70696,24 @@ $(document).ready(function () {
               });
             }
 
-            if (validationErrors.hasOwnProperty('images')) {
+            if (validationErrors.hasOwnProperty('new_images')) {
               $('#images').addClass('is-invalid');
-              $('#images').siblings('.invalid-feedback').html('<strong>' + validationErrors['images'][0] + '</strong>');
+              $('#images').siblings('.invalid-feedback').html('<strong>' + validationErrors['new_images'][0] + '</strong>');
             } else {
-              if (validationErrors.hasOwnProperty('images.0')) {
+              var thereIsValidation = false;
+              var value = 0;
+
+              for (var index = 0; index < images.length; index++) {
+                if (validationErrors.hasOwnProperty('new_images.' + index)) {
+                  thereIsValidation = true;
+                  value = index;
+                  break;
+                }
+              }
+
+              if (thereIsValidation) {
                 $('#images').addClass('is-invalid');
-                $('#images').siblings('.invalid-feedback').html('<strong>' + validationErrors['images.0'][0] + '</strong>');
+                $('#images').siblings('.invalid-feedback').html('<strong>' + validationErrors['new_images.' + value][0] + '</strong>');
               } else {
                 $('#images').removeClass('is-invalid');
               }
@@ -70857,7 +70868,7 @@ function updatePhones() {
 }
 
 function updateImages() {
-  Object(_image_gallery__WEBPACK_IMPORTED_MODULE_3__["resetNumberOfImagesAllowed"])(3);
+  Object(_image_gallery__WEBPACK_IMPORTED_MODULE_3__["resetNumberOfImagesAllowed"])(8);
   Object(_image_gallery__WEBPACK_IMPORTED_MODULE_3__["resetImages"])();
 }
 
@@ -71018,23 +71029,32 @@ $(document).ready(function () {
               });
             }
 
-            if (validationErrors.hasOwnProperty('images')) {
+            if (validationErrors.hasOwnProperty('new_images')) {
               $('#images').addClass('is-invalid');
-              $('#images').siblings('.invalid-feedback').html('<strong>' + validationErrors['images'][0] + '</strong>');
+              $('#images').siblings('.invalid-feedback').html('<strong>' + validationErrors['new_images'][0] + '</strong>');
             } else {
-              if (validationErrors.hasOwnProperty('images.0')) {
+              if (validationErrors.hasOwnProperty('images_allowed')) {
                 $('#images').addClass('is-invalid');
-                $('#images').siblings('.invalid-feedback').html('<strong>' + validationErrors['images.0'][0] + '</strong>');
+                $('#images').siblings('.invalid-feedback').html('<strong>' + validationErrors['images_allowed'][0] + '</strong>');
               } else {
-                $('#images').removeClass('is-invalid');
-              }
-            }
+                var thereIsValidation = false;
+                var value = 0;
 
-            if (validationErrors.hasOwnProperty('images_allowed')) {
-              $('#images').addClass('is-invalid');
-              $('#images').siblings('.invalid-feedback').html('<strong>' + validationErrors['images_allowed'][0] + '</strong>');
-            } else {
-              $('#images').removeClass('is-invalid');
+                for (var index = 0; index < newEventImages.length; index++) {
+                  if (validationErrors.hasOwnProperty('new_images.' + index)) {
+                    thereIsValidation = true;
+                    value = index;
+                    break;
+                  }
+                }
+
+                if (thereIsValidation) {
+                  $('#images').addClass('is-invalid');
+                  $('#images').siblings('.invalid-feedback').html('<strong>' + validationErrors['new_images.' + value][0] + '</strong>');
+                } else {
+                  $('#images').removeClass('is-invalid');
+                }
+              }
             }
           }
         }
@@ -71123,8 +71143,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "oldImages", function() { return oldImages; });
 var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
 
-var numberOfImagesAllowed = 5;
-var size = 1048576; //equivale a 1MB
+var numberOfImagesAllowed = 5; // let size = 1048576;//equivale a 1MB
+
+var size = 5242880;
+; //equivale a 1MB
 
 var oldImages = [];
 var newImages = [];
@@ -71190,8 +71212,8 @@ $('#images').on('change', function (event) {
         } else {
           Swal.fire({
             type: 'error',
-            title: 'Fuera del límite de 1MB',
-            text: 'La imagen ' + file.name + ' pesa ' + (file.size / size).toFixed(2) + 'MB'
+            title: 'Fuera del límite de ' + size / 1048576 + 'MB',
+            text: 'La imagen ' + file.name + ' pesa ' + (file.size / 1048576).toFixed(2) + 'MB'
           });
         }
       } else {
@@ -72116,9 +72138,20 @@ $(document).ready(function () {
               $('#images').addClass('is-invalid');
               $('#images').siblings('.invalid-feedback').html('<strong>' + validationErrors['new_images'][0] + '</strong>');
             } else {
-              if (validationErrors.hasOwnProperty('new_images.0')) {
+              var thereIsValidation = false;
+              var value = 0;
+
+              for (var index = 0; index < images.length; index++) {
+                if (validationErrors.hasOwnProperty('new_images.' + index)) {
+                  thereIsValidation = true;
+                  value = index;
+                  break;
+                }
+              }
+
+              if (thereIsValidation) {
                 $('#images').addClass('is-invalid');
-                $('#images').siblings('.invalid-feedback').html('<strong>' + validationErrors['new_images.0'][0] + '</strong>');
+                $('#images').siblings('.invalid-feedback').html('<strong>' + validationErrors['new_images.' + value][0] + '</strong>');
               } else {
                 $('#images').removeClass('is-invalid');
               }
@@ -72128,9 +72161,20 @@ $(document).ready(function () {
               $('#documents').addClass('is-invalid');
               $('#documents').siblings('.invalid-feedback').html('<strong>' + validationErrors['new_documents'][0] + '</strong>');
             } else {
-              if (validationErrors.hasOwnProperty('new_documents.0')) {
+              var _thereIsValidation = false;
+              var _value = 0;
+
+              for (var _index = 0; _index < documents.length; _index++) {
+                if (validationErrors.hasOwnProperty('new_documents.' + _index)) {
+                  _thereIsValidation = true;
+                  _value = _index;
+                  break;
+                }
+              }
+
+              if (_thereIsValidation) {
                 $('#documents').addClass('is-invalid');
-                $('#documents').siblings('.invalid-feedback').html('<strong>' + validationErrors['new_documents.0'][0] + '</strong>');
+                $('#documents').siblings('.invalid-feedback').html('<strong>' + validationErrors['new_documents.' + _value][0] + '</strong>');
               } else {
                 $('#documents').removeClass('is-invalid');
               }

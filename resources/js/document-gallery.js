@@ -84,8 +84,8 @@ $('#documents').on('change', function(event){
                 } else {
                     Swal.fire({
                         type: 'error',
-                        title: 'Fuera del límite de 5MB',
-                        text: 'El documento ' + file.name + ' pesa ' + (file.size / size).toFixed(2) + 'MB',
+                        title: 'Fuera del límite de '+ ( size / 1048576) +'MB',
+                        text: 'El documento ' + file.name + ' pesa ' + (file.size / 1048576).toFixed(2) + 'MB',
                     })
                 }
             } else {
