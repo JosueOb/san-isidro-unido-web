@@ -39,7 +39,7 @@ const previewImages = arrayImages => {
 }
 
 $('#images').on('change', function(event){
-    $('#inputImages').removeClass('is-invalid');
+    $('#images').removeClass('is-invalid');
 
      //Se obtiene las imagenes del input
      var files = event.target.files;
@@ -84,8 +84,8 @@ $('#images').on('change', function(event){
                 }
             } else {
                 console.log('Archivo no permitidos');
-                $('#inputImages').addClass('is-invalid');
-                $('#inputImages').siblings('.invalid-feedback').html('<strong> Archivo no permitido </strong>');
+                $('#images').addClass('is-invalid');
+                $('#images').siblings('.invalid-feedback').html('<strong> Archivo no permitido </strong>');
             }
         });
     }

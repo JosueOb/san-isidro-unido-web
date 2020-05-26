@@ -114,7 +114,7 @@
                                         </span>
                                         {{-- <a href="#" class="card-post__category badge badge-pill badge-info">Activo</a> --}}
                                         <small class=" card-post__name">Escrito por {{$report->user->getFullName()}}</small>
-                                        <small class="card-post__date">{{$report->date}}</small>
+                                        <small class="card-post__date">{{$report->created_at}}</small>
                                         <div class="card-post__author">
                                             <img class="card-post__author-avatar"  src="{{$report->user->getAvatar()}}" alt="">
                                             {{-- <a href="#" class="card-post__author-avatar" style="background-image: url('images/avatars/0.jpg');"></a> --}}

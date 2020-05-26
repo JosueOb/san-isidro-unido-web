@@ -18,8 +18,8 @@ class CreatePostsTable extends Migration
             $table->string('title',45);
             $table->string('description');
             $table->boolean('state');
-            $table->date('date');
-            $table->time('time');
+            // $table->date('date');
+            // $table->time('time');
             $table->json('ubication')->nullable();
             $table->boolean('is_attended')->default(false);
             $table->unsignedBigInteger('user_id')->index();

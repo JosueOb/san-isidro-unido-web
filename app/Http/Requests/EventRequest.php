@@ -56,8 +56,8 @@ class EventRequest extends FormRequest
 
         if($this->isMethod('POST')){
             $rules += [
-                "new_images" => "nullable|array|max:".env('NUMBER_IMAGES_EVENTS_ALLOWED'),
-                "new_images.*" => "nullable|image|mimes:jpeg,jpg,png|max:1024",//el tamaño esta expresado en kilibytes, equivale a 1MB
+                "new_images" => "nullable|array|max:".env('NUMBER_EVENT_IMAGES_ALLOWED'),
+                "new_images.*" => "nullable|image|mimes:jpeg,jpg,png|max:".env('SIZE_IMAGES_ALLOWED'),//el tamaño esta expresado en kilibytes, equivale a 1MB
             ];
         }
         if($this->isMethod('PUT')){
@@ -66,7 +66,7 @@ class EventRequest extends FormRequest
              $numberOfOldImages = $this->has('old_images') ? count($this->get('old_images')) : 0;
              $totalImages = $numberOfNewImages + $numberOfOldImages;
 
-             if($totalImages > env('NUMBER_IMAGES_EVENTS_ALLOWED')){
+             if($totalImages > env('NUMBER_EVENT_IMAGES_ALLOWED')){
                 $rules += [
                     'images_allowed'=>'required',
                 ];
@@ -74,7 +74,7 @@ class EventRequest extends FormRequest
                 $rules += [
                     "new_images" => "nullable|array",
                     'old_images'=>'nullable|array',
-                    "new_images.*" => "nullable|image|mimes:jpeg,jpg,png|max:1024",//el tamaño esta expresado en kilibytes, equivale a 1MB
+                    "new_images.*" => "nullable|image|mimes:jpeg,jpg,png|max:".env('SIZE_IMAGES_ALLOWED'),//el tamaño esta expresado en kilibytes, equivale a 1MB
                 ];
             }
         }
@@ -127,12 +127,12 @@ class EventRequest extends FormRequest
             'ubication-description.max'=>'El :attribute no debe ser mayor a 255 caracteres',
             'ubication-description.regex'=>'El :attribute  debe estar conformado por caracteres alfabéticos, no se admiten caracteres especiales',
 
-            'new_images.max'=> 'Solo se permiten '.env('NUMBER_IMAGES_EVENTS_ALLOWED').' imágenes',
+            'new_images.max'=> 'Solo se permite(n) '.env('NUMBER_EVENT_IMAGES_ALLOWED').' imágenes',
             'new_images.*.image'=>'Solo se admiten :attribute en formato jpeg y png',
             'new_images.*.mimes'=>'Los formatos permitidos son jpeg y png',
-            'new_images.*.max'=>'El tamaño máximo para la :attribute es 1MB',
+            'new_images.*.max'=>'El tamaño máximo para las :attribute es '.env('SIZE_IMAGES_ALLOWED').' KB',
 
-            'images_allowed.required'=>'Solo se permiten '.env('NUMBER_IMAGES_EVENTS_ALLOWED').' imágenes',
+            'images_allowed.required'=>'Solo se permiten '.env('NUMBER_EVENT_IMAGES_ALLOWED').' imágenes',
         ];
     }
     /**

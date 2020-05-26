@@ -23,7 +23,7 @@
 
     {{-- <form class="row" action="{{ route('reports.store') }}" method="POST"  enctype="multipart/form-data"> --}}
     {{-- <form class="row" id="post" enctype="multipart/form-data" action="{{route('reports.store')}}" method="POST"> --}}
-    <form class="row" id="report-post" enctype="multipart/form-data">
+    <form class="row" id="report-create" enctype="multipart/form-data">
         @csrf
         <div class="col-12 col-sm-7 col-md-7 col-lg-8">
             <div class="card card-primary">
@@ -70,7 +70,7 @@
                     <div class="form-group">
                         <label for="images">Imágenes <span class="text-muted">(opcional)</span></label>
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input @error('images') is-invalid @enderror" id="images" name="images[]" accept="image/png, .jpeg, .jpg"  multiple>
+                            <input type="file" class="custom-file-input" id="images" name="new_images[]" accept="image/png, .jpeg, .jpg"  multiple>
                             <label class="custom-file-label" id='imagesLabel' for="images" data-browse="Agregar"></label>
                             <span class="invalid-feedback" role="alert">
                             
@@ -93,7 +93,7 @@
                         <label for="document">Documento <span class="text-muted">(opcional)</span></label>
                         <div class="custom-file">
                             {{-- <input type="file" class="custom-file-input @error('images') is-invalid @enderror" id="images" name="images[]" accept="image/jpeg,image/png"  multiple> --}}
-                            <input type="file" class="custom-file-input" id="document" name="document" accept=".pdf">
+                            <input type="file" class="custom-file-input" id="documents" name="new_documents[]" accept=".pdf">
                             <label class="custom-file-label" id='imagesLabel' for="document" data-browse="Agregar"></label>
                             <span class="invalid-feedback" role="alert">
                                 
@@ -102,7 +102,7 @@
                         <small id="documentHelp" class="form-text text-muted">
                             Puedes adjuntar un documento PDF máximo de 5MB
                         </small>
-                        <div class="gallery-document" id="gallery-document">
+                        <div class="gallery-documents" id="gallery-documents">
                             {{-- Se presentan el documento seleccionado por el usuario --}}
                         </div>
                     </div>

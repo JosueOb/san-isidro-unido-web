@@ -17162,7 +17162,7 @@ h6 {
   }
 }
 
-.gallery-document .gallery-item {
+.gallery-documents .gallery-item {
   margin: 2.5% auto;
   width: 6rem;
   height: 6rem;
@@ -17171,7 +17171,7 @@ h6 {
   position: relative;
 }
 
-.gallery-document .gallery-item .image-document {
+.gallery-documents .gallery-item .image-document {
   font-size: 2.5rem;
   display: flex;
   justify-content: center;
@@ -17181,14 +17181,14 @@ h6 {
   color: rgba(255, 0, 0, 0.8);
 }
 
-.gallery-document .gallery-item .document-name {
+.gallery-documents .gallery-item .document-name {
   font-size: 10px;
   margin: 0.355rem 0.255rem;
   text-align: center;
 }
 
-.gallery-document .gallery-item .image-cancel,
-.gallery-document .gallery-item .link-document {
+.gallery-documents .gallery-item .image-cancel,
+.gallery-documents .gallery-item .link-document {
   display: flex;
   position: absolute;
   width: inherit;
@@ -17196,7 +17196,7 @@ h6 {
   cursor: pointer;
 }
 
-.gallery-document .gallery-item .image-cancel {
+.gallery-documents .gallery-item .image-cancel {
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
   background-color: rgba(0, 0, 0, 0.25);
@@ -17206,11 +17206,11 @@ h6 {
   bottom: 0;
 }
 
-.gallery-document .gallery-item .image-cancel:hover {
+.gallery-documents .gallery-item .image-cancel:hover {
   background-color: rgba(255, 0, 0, 0.7);
 }
 
-.gallery-document .gallery-item .link-document {
+.gallery-documents .gallery-item .link-document {
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   height: 4.5rem;
@@ -17219,35 +17219,35 @@ h6 {
   bottom: 1.5rem;
 }
 
-.gallery-document .gallery-item .link-document .fas {
+.gallery-documents .gallery-item .link-document .fas {
   margin: 0.75rem;
   color: rgba(0, 0, 0, 0.65);
   font-size: 1.5em;
 }
 
-.gallery-document .gallery-item .link-document:hover {
+.gallery-documents .gallery-item .link-document:hover {
   background-color: rgba(21, 81, 138, 0.35);
 }
 
-.gallery-document .gallery-item .link-document:hover .fas {
+.gallery-documents .gallery-item .link-document:hover .fas {
   color: white;
 }
 
 @media (max-width: 767.98px) {
-  .gallery-document .gallery-item {
+  .gallery-documents .gallery-item {
     width: 4rem;
     height: 4rem;
   }
 
-  .gallery-document .gallery-item .image-document {
+  .gallery-documents .gallery-item .image-document {
     font-size: 1.5rem;
   }
 
-  .gallery-document .gallery-item .link-document {
+  .gallery-documents .gallery-item .link-document {
     height: 2.5rem;
   }
 
-  .gallery-document .gallery-item .link-document .fas {
+  .gallery-documents .gallery-item .link-document .fas {
     margin: 0.55rem;
     font-size: 1rem;
   }
