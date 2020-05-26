@@ -50,7 +50,7 @@
 
                                 @if (count($subcategories) > 0)
 
-                                <select class="form-control @error('subcategory') is-invalid @enderror" id="subcategory" name="subcategory" required>
+                                <select class="form-control @error('id') is-invalid @enderror" id="subcategory" name="id" required>
                                     <option value="">Seleccione una opción</option>
                                     @foreach ($subcategories as $subcategory)
                                         <option value="{{$subcategory->id}}" {{old('subcategory')==$subcategory->id ? 'selected':''}}>{{$subcategory->name}}</option>

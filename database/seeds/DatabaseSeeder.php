@@ -22,7 +22,11 @@ class DatabaseSeeder extends Seeder
         $this->call(UsersTableSeeder::class);
         //LLamado al seeder CategoriesTableSeeder
         $this->call(CategoriesTableSeeder::class);
-        //Llamando al seeder de SubcategoriesTableSeefer
+        //Llamando al seeder de SubcategoriesTableSeeder
         $this->call(SubcategoriesTableSeeder::class);
+        //Llamando al seeder de PostsTableSeeder
+        $this->call(PostsTableSeeder::class);
+        //Llamando al seeder de PublicServicesTableSeeder
+        $this->call(PublicServicesTableSeeder::class);
     }
 }

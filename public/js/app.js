@@ -70574,7 +70574,7 @@ $(document).ready(function () {
         if (data.success) {
           $('#title').removeClass('is-invalid');
           $('#description').removeClass('is-invalid');
-          $('#id').removeClass('is-invalid');
+          $('#subcategory').removeClass('is-invalid');
           $('#start-time').removeClass('is-invalid');
           $('#end-time').removeClass('is-invalid');
           $('#start-date').removeClass('is-invalid');
@@ -70907,7 +70907,7 @@ $(document).ready(function () {
           // console.log(data.success);
           $('#title').removeClass('is-invalid');
           $('#description').removeClass('is-invalid');
-          $('#id').removeClass('is-invalid');
+          $('#subcategory').removeClass('is-invalid');
           $('#start-time').removeClass('is-invalid');
           $('#end-time').removeClass('is-invalid');
           $('#start-date').removeClass('is-invalid');
@@ -71728,9 +71728,9 @@ $(document).ready(function () {
               $('#description').removeClass('is-invalid');
             }
 
-            if (validationErrors.hasOwnProperty('subcategory')) {
+            if (validationErrors.hasOwnProperty('id')) {
               $('#subcategory').addClass('is-invalid');
-              $('#subcategory').siblings('.invalid-feedback').html('<strong>' + validationErrors['subcategory'][0] + '</strong>');
+              $('#subcategory').siblings('.invalid-feedback').html('<strong>' + validationErrors['id'][0] + '</strong>');
             } else {
               $('#subcategory').removeClass('is-invalid');
             }
@@ -71993,9 +71993,9 @@ $(document).ready(function () {
               $('#description').removeClass('is-invalid');
             }
 
-            if (validationErrors.hasOwnProperty('subcategory')) {
+            if (validationErrors.hasOwnProperty('id')) {
               $('#subcategory').addClass('is-invalid');
-              $('#subcategory').siblings('.invalid-feedback').html('<strong>' + validationErrors['subcategory'][0] + '</strong>');
+              $('#subcategory').siblings('.invalid-feedback').html('<strong>' + validationErrors['id'][0] + '</strong>');
             } else {
               $('#subcategory').removeClass('is-invalid');
             }
@@ -72361,6 +72361,12 @@ $(document).ready(function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { keys.push.apply(keys, Object.getOwnPropertySymbols(object)); } if (enumerableOnly) keys = keys.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var flatpickr = __webpack_require__(/*! flatpickr */ "./node_modules/flatpickr/dist/flatpickr.js");
 
 __webpack_require__(/*! flatpickr/dist/themes/light.css */ "./node_modules/flatpickr/dist/themes/light.css");
@@ -72379,7 +72385,7 @@ var configDate = {
     weekdays: weekdays,
     months: months
   },
-  minDate: "today",
+  // minDate: "today",
   dateFormat: "Y-m-d",
   allowInput: true,
   altInput: true,
@@ -72394,8 +72400,14 @@ var configTime = {
   // altInput: true,
 
 };
-var inputStartDate = flatpickr('#start-date', configDate);
-var inputEndtDate = flatpickr('#end-date', configDate);
+var inputStartDate = flatpickr('#start-date', _objectSpread({}, configDate, {
+  minDate: 'today'
+}));
+var inputEndtDate = flatpickr('#end-date', _objectSpread({}, configDate, {
+  minDate: 'today'
+}));
+var inputStartDate = flatpickr('#start-date-update', configDate);
+var inputEndtDate = flatpickr('#end-date-update', configDate);
 var inputStartTime = flatpickr('#start-time', configTime);
 var inputEndTime = flatpickr('#end-time', configTime);
 var inputOpenTime = flatpickr('#open-time', configTime);
@@ -72416,6 +72428,8 @@ var inputCloseTime = flatpickr('#close-time', configTime); // async function get
 
 $('#start-time').removeAttr('readonly');
 $('#end-time').removeAttr('readonly');
+$('#start-time-update').removeAttr('readonly');
+$('#end-time-update').removeAttr('readonly');
 $('#open-time').removeAttr('readonly');
 $('#close-time').removeAttr('readonly'); // export{getCurrentDate}
 

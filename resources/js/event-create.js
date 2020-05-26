@@ -82,7 +82,7 @@ $(document).ready(function () {
                 if (data.success) {
                     $('#title').removeClass('is-invalid');
                     $('#description').removeClass('is-invalid');
-                    $('#id').removeClass('is-invalid');
+                    $('#subcategory').removeClass('is-invalid');
                     $('#start-time').removeClass('is-invalid');
                     $('#end-time').removeClass('is-invalid');
                     $('#start-date').removeClass('is-invalid');
