@@ -70905,6 +70905,7 @@ $(document).ready(function () {
       success: function success(data) {
         if (data.success) {
           // console.log(data.success);
+<<<<<<< HEAD
           $('#title').removeClass('is-invalid');
           $('#description').removeClass('is-invalid');
           $('#subcategory').removeClass('is-invalid');
@@ -70934,6 +70935,35 @@ $(document).ready(function () {
             // window.location.replace(data.redirect);
             window.location = data.redirect;
           }, 1000);
+=======
+          // $('#title').removeClass('is-invalid');
+          // $('#description').removeClass('is-invalid');
+          // $('#subcategory').removeClass('is-invalid');
+          // $('#start-time').removeClass('is-invalid');
+          // $('#end-time').removeClass('is-invalid');
+          // $('#start-date').removeClass('is-invalid');
+          // $('#end-date').removeClass('is-invalid');
+          // $('#responsible').removeClass('is-invalid');
+          // $('#phone_numbers').removeClass('is-invalid');
+          // $('#ubication-description').removeClass('is-invalid');
+          // $('#images').removeClass('is-invalid');
+          // Swal.fire({
+          //     position: 'top-end',
+          //     type: 'success',
+          //     title: 'Evento actualizado',
+          //     showConfirmButton: false,
+          //     timer: 1500,
+          //     allowOutsideClick: true,
+          // })
+          // // Se deshabilita el botón enviar
+          // $('#send-data').prop("disabled", true);
+          // $('#send-data').removeClass("btn-primary");
+          // $('#send-data').addClass("btn-success");
+          console.log(data.redirect); // funciona como una redirección HTTP
+          // setTimeout(function(){ 
+          //     window.location.replace(data.redirect);
+          // }, 1000);
+>>>>>>> fba490a30180964bf6bc87f28706e98f0ff354fb
         }
       },
       error: function error(jqXHR, textStatus, errorThrown) {
