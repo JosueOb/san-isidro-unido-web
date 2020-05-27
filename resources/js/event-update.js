@@ -106,7 +106,7 @@ $(document).ready(function () {
                     // funciona como una redirección HTTPS
                     setTimeout(function(){ 
                         // window.location.replace(data.redirect);
-                        //loading another URL
+                        // loading another URL
                         window.location = data.redirect
                     }, 1000);
                 }

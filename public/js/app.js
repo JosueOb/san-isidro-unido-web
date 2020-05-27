@@ -70932,7 +70932,11 @@ $(document).ready(function () {
 
           setTimeout(function () {
             // window.location.replace(data.redirect);
+<<<<<<< HEAD
             //loading another URL
+=======
+            // loading another URL
+>>>>>>> development
             window.location = data.redirect;
           }, 1000);
         }
@@ -71940,11 +71944,9 @@ $(document).ready(function () {
       processData: false,
       dataType: 'JSON',
       success: function success(data) {
-        console.log(data);
-
         if (data.success) {
-          console.log(data.success); //Se eliminan los mensajes de validación
-
+          // console.log(data);
+          //Se eliminan los mensajes de validación
           $('#name').removeClass('is-invalid');
           $('#description').removeClass('is-invalid');
           $('#subcategory').removeClass('is-invalid');
@@ -71962,10 +71964,12 @@ $(document).ready(function () {
 
           $('#send-data').prop("disabled", true);
           $('#send-data').removeClass("btn-primary");
-          $('#send-data').addClass("btn-success"); // funciona como una redirección HTTP
+          $('#send-data').addClass("btn-success"); // console.log(data.redirect);
+          // funciona como una redirección HTTP
 
           setTimeout(function () {
-            window.location.replace('../');
+            // loading another URL
+            window.location = data.redirect;
           }, 1000);
         }
       },
@@ -72243,7 +72247,7 @@ $(document).ready(function () {
       dataType: 'JSON',
       success: function success(data) {
         if (data.success) {
-          console.log(data);
+          // console.log(data);
           $('#title').removeClass('is-invalid');
           $('#description').removeClass('is-invalid');
           $('#images').removeClass('is-invalid');
@@ -72259,10 +72263,12 @@ $(document).ready(function () {
 
           $('#send-data').prop("disabled", true);
           $('#send-data').removeClass("btn-primary");
-          $('#send-data').addClass("btn-success"); // funciona como una redirección HTTP
+          $('#send-data').addClass("btn-success"); // console.log(data.redirect);
+          // funciona como una redirección HTTP
 
           setTimeout(function () {
-            window.location.replace('../');
+            // loading another URL
+            window.location = data.redirect;
           }, 1000);
         }
       },
