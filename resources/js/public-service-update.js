@@ -57,10 +57,9 @@ $(document).ready( function () {
             processData: false,
             dataType: 'JSON',
             success: function (data) {
-                console.log(data);
                 
                 if (data.success) {
-                    console.log(data.success);
+                    // console.log(data);
                     //Se eliminan los mensajes de validación
                     $('#name').removeClass('is-invalid');
                     $('#description').removeClass('is-invalid');
@@ -82,9 +81,11 @@ $(document).ready( function () {
                     $('#send-data').removeClass("btn-primary");
                     $('#send-data').addClass("btn-success");
 
+                    // console.log(data.redirect);
                     // funciona como una redirección HTTP
                     setTimeout(function(){ 
-                        window.location.replace('../');
+                        // loading another URL
+                        window.location = data.redirect;
                     }, 1000);
                 }
             },

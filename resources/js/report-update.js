@@ -50,7 +50,7 @@ $(document).ready(function () {
             success: function (data) {
 
                 if (data.success) {
-                    console.log(data);
+                    // console.log(data);
                     $('#title').removeClass('is-invalid');
                     $('#description').removeClass('is-invalid');
                     $('#images').removeClass('is-invalid');
@@ -67,9 +67,11 @@ $(document).ready(function () {
                     $('#send-data').prop("disabled", true);
                     $('#send-data').removeClass("btn-primary");
                     $('#send-data').addClass("btn-success");
+                    // console.log(data.redirect);
                     // funciona como una redirección HTTP
                     setTimeout(function () {
-                        window.location.replace('../');
+                        // loading another URL
+                        window.location = data.redirect;
                     }, 1000);
                 }
             },

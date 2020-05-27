@@ -229,6 +229,7 @@ class ReportController extends Controller
 
         return response()->json([
             'success'=>'Reporte actualizado con exito',
+            'redirect'=>route('reports.index'),
         ]);
     }
 
