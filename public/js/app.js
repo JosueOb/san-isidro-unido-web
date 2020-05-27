@@ -70929,10 +70929,9 @@ $(document).ready(function () {
           $('#send-data').removeClass("btn-primary");
           $('#send-data').addClass("btn-success");
           console.log(data.redirect); // funciona como una redirección HTTP
-
-          setTimeout(function () {
-            window.location.replace(data.redirect);
-          }, 1000);
+          // setTimeout(function(){ 
+          //     window.location.replace(data.redirect);
+          // }, 1000);
         }
       },
       error: function error(jqXHR, textStatus, errorThrown) {
