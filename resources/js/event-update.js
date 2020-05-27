@@ -104,9 +104,9 @@ $(document).ready(function () {
 
                     console.log(data.redirect);
                     // funciona como una redirección HTTP
-                    setTimeout(function(){ 
-                        window.location.replace(data.redirect);
-                    }, 1000);
+                    // setTimeout(function(){ 
+                    //     window.location.replace(data.redirect);
+                    // }, 1000);
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
