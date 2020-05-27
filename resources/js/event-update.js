@@ -102,9 +102,10 @@ $(document).ready(function () {
                     $('#send-data').removeClass("btn-primary");
                     $('#send-data').addClass("btn-success");
 
+                    // console.log(data.redirect);
                     // funciona como una redirección HTTP
                     setTimeout(function(){ 
-                        window.location.replace('../');
+                        window.location.replace(data.redirect);
                     }, 1000);
                 }
             },
