@@ -70927,8 +70927,8 @@ $(document).ready(function () {
 
           $('#send-data').prop("disabled", true);
           $('#send-data').removeClass("btn-primary");
-          $('#send-data').addClass("btn-success"); // console.log(data.redirect);
-          // funciona como una redirección HTTP
+          $('#send-data').addClass("btn-success");
+          console.log(data.redirect); // funciona como una redirección HTTP
 
           setTimeout(function () {
             window.location.replace(data.redirect);
@@ -71146,10 +71146,6 @@ var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/di
 
 var numberOfImagesAllowed = 5;
 var size = 1048576; //equivale a 1MB
-<<<<<<< HEAD
-=======
-// let size = 5242880;;//equivale a 1MB
->>>>>>> development
 
 var oldImages = [];
 var newImages = [];
