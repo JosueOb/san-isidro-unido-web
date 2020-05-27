@@ -240,7 +240,7 @@ class EventController extends Controller
         }
 
         session()->flash('success', 'Servicio público actualizado con éxito');
-        return response()->json(['success'=>'Datos recibidos correctamente']);
+        return response()->json(['success'=>'Datos recibidos correctamente', 'redirect'=>route('events.index')]);
     }
 
     /**

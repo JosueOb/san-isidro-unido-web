@@ -70927,10 +70927,11 @@ $(document).ready(function () {
 
           $('#send-data').prop("disabled", true);
           $('#send-data').removeClass("btn-primary");
-          $('#send-data').addClass("btn-success"); // funciona como una redirección HTTP
+          $('#send-data').addClass("btn-success"); // console.log(data.redirect);
+          // funciona como una redirección HTTP
 
           setTimeout(function () {
-            window.location.replace('../');
+            window.location.replace(data.redirect);
           }, 1000);
         }
       },
