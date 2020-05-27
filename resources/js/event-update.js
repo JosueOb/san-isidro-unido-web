@@ -77,30 +77,30 @@ $(document).ready(function () {
 
                 if (data.success) {
                     // console.log(data.success);
-                    $('#title').removeClass('is-invalid');
-                    $('#description').removeClass('is-invalid');
-                    $('#subcategory').removeClass('is-invalid');
-                    $('#start-time').removeClass('is-invalid');
-                    $('#end-time').removeClass('is-invalid');
-                    $('#start-date').removeClass('is-invalid');
-                    $('#end-date').removeClass('is-invalid');
-                    $('#responsible').removeClass('is-invalid');
-                    $('#phone_numbers').removeClass('is-invalid');
-                    $('#ubication-description').removeClass('is-invalid');
-                    $('#images').removeClass('is-invalid');
+                    // $('#title').removeClass('is-invalid');
+                    // $('#description').removeClass('is-invalid');
+                    // $('#subcategory').removeClass('is-invalid');
+                    // $('#start-time').removeClass('is-invalid');
+                    // $('#end-time').removeClass('is-invalid');
+                    // $('#start-date').removeClass('is-invalid');
+                    // $('#end-date').removeClass('is-invalid');
+                    // $('#responsible').removeClass('is-invalid');
+                    // $('#phone_numbers').removeClass('is-invalid');
+                    // $('#ubication-description').removeClass('is-invalid');
+                    // $('#images').removeClass('is-invalid');
                     
-                    Swal.fire({
-                        position: 'top-end',
-                        type: 'success',
-                        title: 'Evento actualizado',
-                        showConfirmButton: false,
-                        timer: 1500,
-                        allowOutsideClick: true,
-                    })
-                    // Se deshabilita el botón enviar
-                    $('#send-data').prop("disabled", true);
-                    $('#send-data').removeClass("btn-primary");
-                    $('#send-data').addClass("btn-success");
+                    // Swal.fire({
+                    //     position: 'top-end',
+                    //     type: 'success',
+                    //     title: 'Evento actualizado',
+                    //     showConfirmButton: false,
+                    //     timer: 1500,
+                    //     allowOutsideClick: true,
+                    // })
+                    // // Se deshabilita el botón enviar
+                    // $('#send-data').prop("disabled", true);
+                    // $('#send-data').removeClass("btn-primary");
+                    // $('#send-data').addClass("btn-success");
 
                     console.log(data.redirect);
                     // funciona como una redirección HTTP
