@@ -70932,11 +70932,7 @@ $(document).ready(function () {
 
           setTimeout(function () {
             // window.location.replace(data.redirect);
-<<<<<<< HEAD
-            //loading another URL
-=======
             // loading another URL
->>>>>>> development
             window.location = data.redirect;
           }, 1000);
         }
