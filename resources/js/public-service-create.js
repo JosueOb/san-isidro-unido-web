@@ -103,9 +103,9 @@ $(document).ready(function () {
                         } else {
                             $('#description').removeClass('is-invalid');
                         }
-                        if (validationErrors.hasOwnProperty('subcategory')) {
+                        if (validationErrors.hasOwnProperty('id')) {
                             $('#subcategory').addClass('is-invalid');
-                            $('#subcategory').siblings('.invalid-feedback').html('<strong>' + validationErrors['subcategory'][0] + '</strong>');
+                            $('#subcategory').siblings('.invalid-feedback').html('<strong>' + validationErrors['id'][0] + '</strong>');
                         } else {
                             $('#subcategory').removeClass('is-invalid');
                         }

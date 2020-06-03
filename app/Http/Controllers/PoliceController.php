@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Middleware\PoliceIsActive;
 use App\Http\Middleware\ProtectedAdminUsers;
 use App\Http\Middleware\ProtectedDirectiveUsers;
+use App\Http\Middleware\ProtectedNeighborUsers;
 use App\Http\Requests\NeighborRequest;
 use App\Notifications\NeighborCreated;
 use App\User;
@@ -19,6 +20,7 @@ class PoliceController extends Controller
         $this->middleware(ProtectedAdminUsers::class)->only('show','edit','update','destroy');
         $this->middleware(ProtectedDirectiveUsers::class)->only('show','edit','update','destroy');
         $this->middleware(PoliceIsActive::class)->only('edit','update');
+        $this->middleware(ProtectedNeighborUsers::class)->only('show','edit','update','destroy');
     }
     /**
      * Display a listing of the resource.
@@ -57,7 +59,7 @@ class PoliceController extends Controller
 
         $password = Str::random(8);
         $avatar  = 'https://ui-avatars.com/api/?name='.
-        substr($validated['first_name'],0,1).'+'.substr($validated['last_name'],0,1).
+        mb_substr($validated['first_name'],0,1).'+'.mb_substr($validated['last_name'],0,1).
         '&size=255';
         $rolePolice = ModelsRole::where('slug', 'policia')->first();
 

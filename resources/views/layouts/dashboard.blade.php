@@ -17,7 +17,8 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     
     <!-- Icon-->
-    <link rel="icon" type="image/png" href="{{asset('storage/img/logo.png')}}">
+    {{-- <link rel="icon" type="image/png" href="{{asset('storage/img/logo.png')}}"> --}}
+    <link rel="icon" type="image/png" href="https://siu-resources-s3.s3.us-east-2.amazonaws.com/default_images/logos/logo.png">
 
     <!-- Styles -->
     {{-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> --}}
@@ -41,7 +42,8 @@
                     <nav class="navbar align-items-stretch navbar-light flex-md-nowrap border-bottom p-0">
                         <a class="navbar-brand w-100 mr-0" href="{{ route('login')}}">
                             <div class="d-table m-auto">
-                                <img src="{{ asset('storage/img/logo.png') }}" class="brand-logo d-inline-block align-top mr-1">
+                                {{-- <img src="{{ asset('storage/img/logo.png') }}" class="brand-logo d-inline-block align-top mr-1"> --}}
+                                <img src="https://siu-resources-s3.s3.us-east-2.amazonaws.com/default_images/logos/logo.png" class="brand-logo d-inline-block align-top mr-1">
                                 <span class="d-none d-md-inline d-lg-none d-xl-inline ml-1 brand-name">San Isidro Unido</span>
                             </div>
                         </a>
@@ -272,10 +274,9 @@
                     <nav class="navbar align-items-stretch navbar-light p-0 justify-content-end flex-md-nowrap">
                     <!--<nav class="navbar align-items-stretch navbar-light flex-md-nowrap p-0 justify-content-end">-->
                         <ul class="navbar-nav flex-row">
-
                             <li class="nav-item dropdown user-options m-0">
                                 <a href="#" class="nav-link dropdown-toggle px-3 text-nowrap" data-toggle="dropdown" id="dropdownMenuUser" role="button" aria-haspopup="true" aria-expanded="false">
-                                    <img src="{{ Auth::user()->getAvatar()}}" alt="user avatar" class="user-avatar rounded-circle mr-2">
+                                    <img src="{{ Auth::user()->getAvatar()}}" alt="user avatar" class="user-avatar">
                                     <span class="d-none d-lg-inline-block">{{ Auth::user()->getFullName() }}</span>
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby='dropdownNotifications'>

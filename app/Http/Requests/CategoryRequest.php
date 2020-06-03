@@ -25,7 +25,7 @@ class CategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'description'=> 'nullable|regex:/^[[:alpha:][:space:](,;.áéíóúÁÉÍÓÚ)]+$/|max:255',
+            'description'=> 'nullable|regex:/^[[:alpha:][:space:](,;.áéíóúñÁÉÍÓÚÑ)]+$/|max:255',
             'icon' => "nullable|image|mimes:jpeg,png|max:1024",//el tamaño esta expresado en kilibytes, equivale a 1MB
         ];
     }

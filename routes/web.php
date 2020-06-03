@@ -141,10 +141,10 @@ Route::middleware(['auth','verified', 'logout'])->group(function(){
         Route::get('reports','ReportController@index')->name('reports.index')->middleware('can:reports.index');
         Route::get('reports/create','ReportController@create')->name('reports.create')->middleware('can:reports.create');
         Route::post('reports/store', 'ReportController@store')->name('reports.store')->middleware('can:reports.create');
-        Route::get('reports/{report}', 'ReportController@show')->name('reports.show')->middleware('can:reports.show');
-        Route::get('reports/{report}/edit', 'ReportController@edit')->name('reports.edit')->middleware('can:reports.edit');
-        Route::put('reports/{report}', 'ReportController@update')->name('reports.update')->middleware('can:reports.edit');
-        Route::delete('reports/{report}', 'ReportController@destroy')->name('reports.destroy')->middleware('can:reports.destroy');
+        Route::get('reports/{post}', 'ReportController@show')->name('reports.show')->middleware('can:reports.show');
+        Route::get('reports/{post}/edit', 'ReportController@edit')->name('reports.edit')->middleware('can:reports.edit');
+        Route::put('reports/{post}', 'ReportController@update')->name('reports.update')->middleware('can:reports.edit');
+        Route::delete('reports/{post}', 'ReportController@destroy')->name('reports.destroy')->middleware('can:reports.destroy');
         Route::get('reports/filters/{option}', 'ReportController@filters')->name('reports.filters')->middleware('can:reports.index');
         Route::get('search/reports','SearchController@searchReports')->name('search.reports')->middleware('can:reports.index');
 
@@ -161,10 +161,10 @@ Route::middleware(['auth','verified', 'logout'])->group(function(){
         Route::get('events', 'EventController@index')->name('events.index')->middleware('can:events.index');
         Route::get('events/create', 'EventController@create')->name('events.create')->middleware('can:events.create');
         Route::post('events/store', 'EventController@store')->name('events.store')->middleware('can:events.create');
-        Route::get('events/{event}', 'EventController@show')->name('events.show')->middleware('can:events.show');
-        Route::get('events/{event}/edit', 'EventController@edit')->name('events.edit')->middleware('can:events.edit');
-        Route::put('events/{event}', 'EventController@update')->name('events.update')->middleware('can:events.edit');
-        Route::delete('events/{event}', 'EventController@destroy')->name('events.destroy')->middleware('can:events.destroy');
+        Route::get('events/{post}', 'EventController@show')->name('events.show')->middleware('can:events.show');
+        Route::get('events/{post}/edit', 'EventController@edit')->name('events.edit')->middleware('can:events.edit');
+        Route::put('events/{post}', 'EventController@update')->name('events.update')->middleware('can:events.edit');
+        Route::delete('events/{post}', 'EventController@destroy')->name('events.destroy')->middleware('can:events.destroy');
 
         //MODERADOR
         Route::get('moderators/create', 'ModeratorController@create')->name('moderators.create')->middleware('can:moderators.create');

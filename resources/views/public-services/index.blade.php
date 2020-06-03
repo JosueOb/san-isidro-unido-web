@@ -61,7 +61,6 @@
                                         <td>{{$publicService->id}}</td>
                                         <td>{{$publicService->name}}</td>
                                         <td>{{$publicService->subcategory->name}}</td>
-                                        <td>{{$publicService->description ?: 'Sin descripción'}}</td>
 
                                         @can('publicServices.show')
                                         <td width='10px'>

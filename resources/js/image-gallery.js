@@ -2,6 +2,7 @@ const Swal = require('sweetalert2')
 
 let numberOfImagesAllowed = 5;
 let size = 1048576;//equivale a 1MB
+// let size = 5242880;;//equivale a 1MB
 
 var oldImages = [];
 var newImages = [];
@@ -39,7 +40,7 @@ const previewImages = arrayImages => {
 }
 
 $('#images').on('change', function(event){
-    $('#inputImages').removeClass('is-invalid');
+    $('#images').removeClass('is-invalid');
 
      //Se obtiene las imagenes del input
      var files = event.target.files;
@@ -78,14 +79,14 @@ $('#images').on('change', function(event){
                 } else {
                     Swal.fire({
                         type: 'error',
-                        title: 'Fuera del límite de 1MB',
-                        text: 'La imagen ' + file.name + ' pesa ' + (file.size / size).toFixed(2) + 'MB',
+                        title: 'Fuera del límite de '+ ( size / 1048576) +'MB',
+                        text: 'La imagen ' + file.name + ' pesa ' + (file.size / 1048576).toFixed(2) + 'MB',
                     })
                 }
             } else {
                 console.log('Archivo no permitidos');
-                $('#inputImages').addClass('is-invalid');
-                $('#inputImages').siblings('.invalid-feedback').html('<strong> Archivo no permitido </strong>');
+                $('#images').addClass('is-invalid');
+                $('#images').siblings('.invalid-feedback').html('<strong> Archivo no permitido </strong>');
             }
         });
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\IsModerator;
 use App\Http\Middleware\ProtectedDirectiveUsers;
 use App\Notifications\ModeratorCreated;
 use App\User;
@@ -14,7 +15,7 @@ class ModeratorController extends Controller
 {
     public function __construct()
     {
-        // $this->middleware(ProtectedDirectiveUsers::class)->only('store', 'show', 'destroy');
+        $this->middleware(IsModerator::class)->only('show');
     }
     /**
      * Display a listing of the resource.

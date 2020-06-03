@@ -24,8 +24,8 @@ class DataUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'first_name'=>'required|regex:/^[[:alpha:][:space:](áéíóúÁÉÍÓÚ)]+$/|min:3|max:25',
-            'last_name'=>'required|regex:/^[[:alpha:][:space:](áéíóúÁÉÍÓÚ)]+$/|min:5|max:25',
+            'first_name'=>'required|regex:/^[[:alpha:][:space:](áéíóúñÁÉÍÓÚÑ)]+$/|min:3|max:25',
+            'last_name'=>'required|regex:/^[[:alpha:][:space:](áéíóúñÁÉÍÓÚÑ)]+$/|min:5|max:25',
             'number_phone'=>'nullable|numeric|digits:10|regex:/^(09)[0-9]{8}+$/'
         ];
     }

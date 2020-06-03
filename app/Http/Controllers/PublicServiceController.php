@@ -57,7 +57,7 @@ class PublicServiceController extends Controller
         $publicService = new PublicService();
         $publicService->name = $validated['name'];
         $publicService->ubication = json_encode($ubication);//Se devuelve una representación de un JSON
-        $publicService->subcategory_id = $validated['subcategory'];
+        $publicService->subcategory_id = $validated['id'];
         $publicService->public_opening = json_encode($public_opening);
         $publicService->email = $validated['email'];
         $publicService->save();
@@ -131,7 +131,7 @@ class PublicServiceController extends Controller
 
         $publicService->name = $validated['name'];
         $publicService->ubication = json_encode($ubication);//Se devuelve una representación de un JSON
-        $publicService->subcategory_id = $validated['subcategory'];
+        $publicService->subcategory_id = $validated['id'];
         $publicService->public_opening = json_encode($public_opening);
         $publicService->email = $validated['email'];
         $publicService->save();
@@ -143,7 +143,10 @@ class PublicServiceController extends Controller
         $this->saveNewPhones($newPhones, $oldPhones, $publicService);
 
         session()->flash('success', 'Servicio público actualizado con éxito');
-        return response()->json(['success'=>'Datos recibidos correctamente']);
+        return response()->json([
+            'success'=>'Datos recibidos correctamente',
+            'redirect'=>route('publicServices.index'),
+            ]);
     }
 
     /**

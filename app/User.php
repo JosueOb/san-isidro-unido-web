@@ -204,7 +204,7 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
         if(!$avatar || \starts_with($avatar,'http')){
             return $avatar;
         }
-        return \Storage::disk('public')->url($avatar);
+        return \Storage::disk('s3')->url($avatar);
     }
 
     public function getFullName(){

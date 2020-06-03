@@ -26,8 +26,8 @@ class DirectiveRequest extends FormRequest
         $rules = [];
         if($this->method() === 'POST'){
             $rules = [
-                'first_name'=>'required|regex:/^[[:alpha:][:space:](áéíóúÁÉÍÓÚ)]+$/|min:3|max:25',
-                'last_name'=>'required|regex:/^[[:alpha:][:space:](áéíóúÁÉÍÓÚ)]+$/|min:5|max:25',
+                'first_name'=>'required|regex:/^[[:alpha:][:space:](áéíóúñÁÉÍÓÚÑ)]+$/|min:3|max:25',
+                'last_name'=>'required|regex:/^[[:alpha:][:space:](áéíóúñÁÉÍÓÚÑ)]+$/|min:5|max:25',
                 'email'=>'required|email|unique:users,email',
                 'position'=>'required|exists:positions,id'
             ];

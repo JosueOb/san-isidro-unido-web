@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Category;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class PublicServiceRequest extends FormRequest
 {
@@ -23,6 +25,7 @@ class PublicServiceRequest extends FormRequest
      */
     public function rules()
     {
+        $categoryPublicService = Category::where('slug', 'servicio-publico')->first();
         $uniqueEmail = null;
          if($this->method() === 'POST'){
             $uniqueEmail = 'unique:public_services,email';
@@ -31,8 +34,15 @@ class PublicServiceRequest extends FormRequest
             $uniqueEmail = 'unique:public_services,email,'.$this->route('publicService')->id;
          }
         return [
-            'name'=>'required|regex:/^[[:alpha:][:space:](áéíóúÁÉÍÓÚ)]+$/|min:3|max:45',
-            'subcategory'=>'required|exists:subcategories,id',
+            'name'=>'required|regex:/^[[:alpha:][:space:](áéíóúñÁÉÍÓÚÑ)]+$/|min:3|max:45',
+            //se recibe el id de la subcategoría
+            'id'=>[
+                'required',
+                //Se verifica que el id se la subacategoría perteneczan solo a la categoría evento
+                Rule::exists('subcategories')->where(function($query) use ($categoryPublicService){
+                    $query->where('category_id', $categoryPublicService->id);
+                }),
+            ],
             'open-time'=>[
                 'required',
                 'regex:/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/m'
@@ -60,8 +70,8 @@ class PublicServiceRequest extends FormRequest
             'name.max'=>'El :attribute no debe ser mayor a 25 caracteres',
             'name.regex'=>'El :attribute debe estar conformado por caracteres alfabéticos, no se admiten signos de puntuación ni caracteres especiales',
             
-            'subcategory.required'=>'El campo :attribute es obligatorio',
-            'subcategory.exists'=>'La :attribute seleccionada no existe',
+            'id.required'=>'El campo :attribute es obligatorio',
+            'id.exists'=>'La :attribute seleccionada no existe',
 
             'open-time.required'=>'El campo :attribute es obligatorio',
             'open-time.regex'=>'La :attribute es inválida',
@@ -95,7 +105,7 @@ class PublicServiceRequest extends FormRequest
     {
         return [
             'name' => 'nombre',
-            'subcategory' => 'categoría',
+            'id' => 'categoría',
             'open-time' => 'hora de apertura',
             'close-time' => 'hora de cierre',
             'phone_numbers' => 'teléfonos',

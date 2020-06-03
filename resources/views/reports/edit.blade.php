@@ -69,7 +69,7 @@
                     <div class="form-group">
                         <label for="images">Imágenes <span class="text-muted">(opcional)</span></label>
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="inputImages" name="images[]" accept="image/png, .jpeg, .jpg"  multiple>
+                            <input type="file" class="custom-file-input" id="images" name="new_images[]" accept="image/png, .jpeg, .jpg"  multiple>
                             <label class="custom-file-label" id='imagesLabel' for="images" data-browse="Agregar"></label>
                             <span class="invalid-feedback" role="alert">
                             
@@ -79,9 +79,9 @@
                                 Puedes subir hasta 5 imágenes de 1MB cada una
                         </small>
 
-                        <div class="gallery-images" id="gallery-update">
+                        <div class="gallery-images" id="gallery-images">
                             {{-- Se presentan las imágenes seleccionadas por el usuario --}}
-                            @if ($images)
+                            @if (count($images))
                                 @foreach ($images as $image)
                                 <div class="gallery-item">
                                     <div class="image-cancel"><i class="fas fa-trash-alt"></i></div>
@@ -96,8 +96,8 @@
                         <label for="document">Documento <span class="text-muted">(opcional)</span></label>
                         <div class="custom-file">
 
-                            <input type="file" class="custom-file-input" id="inputDocument" name="document" accept=".pdf">
-                            <label class="custom-file-label" id='imagesLabel' for="document" data-browse="Agregar"></label>
+                            <input type="file" class="custom-file-input" id="documents" name="new_documents[]" accept=".pdf">
+                            <label class="custom-file-label" id='imagesLabel' for="documents" data-browse="Agregar"></label>
                             <span class="invalid-feedback" role="alert">
                                 
                             </span>
@@ -105,16 +105,13 @@
                         <small id="documentHelp" class="form-text text-muted">
                             Puedes adjuntar un documento PDF máximo de 5MB
                         </small>
-                        <div class="gallery-document" id="gallery-document-update">
+                        <div class="gallery-documents" id="gallery-documents">
                             {{-- Se presentan el documento seleccionado por el usuario --}}
-                            @if ($resource)
-                                @foreach ($resource as $document)
+                            @if (count($documents))
+                                @foreach ($documents as $document)
                                 <div class="gallery-item">
-                                    {{-- <div class="image-cancel"><i class="fas fa-trash-alt"></i></div>
-                                    <img src={{$document->getLink()}} alt='image_{{$document->id}}' data-image="{{$image->url}}"> --}}
-
+                                
                                     <i class="fas fa-file-pdf image-document"></i>
-                                    {{-- <p class="document-name">{{$document->getLink()}}</p> --}}
                                     <a href="{{$document->getLink()}}" class="link-document" target="_blank" data-document="{{$document->url}}">
                                         <i class="fas fa-eye"></i>
                                     </a>

@@ -8,6 +8,7 @@ use App\Http\Requests\EventRequest;
 use App\Phone;
 use App\Post;
 use App\Resource;
+use App\Http\Middleware\PotectedReportPosts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\HelpersClass\AdditionalData as AdditionalDataCls;
@@ -20,7 +21,9 @@ class EventController extends Controller
     public function __construct()
     {
         $this->additionalData = new AdditionalDataCls();
+        $this->middleware(PotectedReportPosts::class)->only('show','edit','update','destroy');
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -57,11 +60,6 @@ class EventController extends Controller
      */
     public function store(EventRequest $request)
     {
-        //Se obtiene la fecha y hora del sistema
-        $dateTime = now();
-        $date = $dateTime->toDateString(); 
-        $time = $dateTime->toTimeString();
-
         $category_event = Category::where('slug', 'evento')->first();
 
         $validated = $request->validated();
@@ -79,26 +77,12 @@ class EventController extends Controller
                     'end_time' => $validated['end-time'],
             ]
         ]);
-        // $additional_data = [
-        //     'event'=>[
-        //         'responsible'=> $validated['responsible'],
-        //         'range_date' => [
-        //             'start_date' => $validated['start-date'],
-        //             'end_date' => $validated['end-date'],
-        //             'start_time' => $validated['start-time'],
-        //             'end_time' => $validated['end-time'],
-        //         ]
-        //     ]
-        // ];
 
         $event = new Post();
         $event->title = $validated['title'];
         $event->description = $validated['description'];
         $event->state = true;
-        $event->date = $date;
-        $event->time = $time;
-        // $event->ubication = json_encode($ubication);//Se devuelve una representación de un JSON;
-        $event->ubication = $ubication;//Se devuelve una representación de un JSON;
+        $event->ubication = json_encode($ubication);//Se devuelve una representación de un JSON;
         $event->user_id = $request->user()->id;
         $event->category_id = $category_event->id;
         $event->subcategory_id = $validated['id'];
@@ -115,7 +99,7 @@ class EventController extends Controller
         if($request->file('new_images')){
             foreach($request->file('new_images') as $image){
                 Resource::create([
-                    'url'=> $image->store('event_images', 'public'),
+                    'url'=> $image->store('event_images', 's3'),
                     'post_id' => $event->id,
                     'type'=>'image',
                 ]);
@@ -140,18 +124,15 @@ class EventController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Post $event)
+    public function show(Post $post)
     {
-        // $additional_data = json_decode($event->additional_data, true);
-        $additional_data = $event->additional_data;
-        // dd($additional_data);
+        $additional_data = json_decode($post->additional_data, true);
         $event_range_date = $additional_data['event']['range_date'];
         $event_responsible = $additional_data['event']['responsible'];
-        // $ubication = json_decode($event->ubication, true);
-        $ubication = $event->ubication;
-        $images = $event->resources()->where('type', 'image')->get();
+        $ubication = json_decode($post->ubication, true);
+        $images = $post->resources()->where('type', 'image')->get();
         return view('events.show', [
-            'event' => $event,
+            'event' => $post,
             'event_range_date' => $event_range_date,
             'event_responsible' => $event_responsible,
             'ubication' => $ubication,
@@ -165,17 +146,17 @@ class EventController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Post $event)
+    public function edit(Post $post)
     {
         $category = Category::where('slug', 'evento')->first();
         $subcategories = $category->subcategories()->get();
-        $additional_data = json_decode($event->additional_data, true);
+        $additional_data = json_decode($post->additional_data, true);
         $event_range_date = $additional_data['event']['range_date'];
         $event_responsible = $additional_data['event']['responsible'];
-        $ubication = json_decode($event->ubication, true);
-        $images = $event->resources()->where('type', 'image')->get();
+        $ubication = json_decode($post->ubication, true);
+        $images = $post->resources()->where('type', 'image')->get();
         return view('events.edit',[
-            'event'=>$event,
+            'event'=>$post,
             'subcategories'=>$subcategories,
             'event_range_date' => $event_range_date,
             'event_responsible' => $event_responsible,
@@ -191,7 +172,7 @@ class EventController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(EventRequest $request, Post $event)
+    public function update(EventRequest $request, Post $post)
     {
         // $category_event = Category::where('slug', 'evento')->first();
 
@@ -213,24 +194,24 @@ class EventController extends Controller
             ]
         ];
 
-        $event->title = $validated['title'];
-        $event->description = $validated['description'];
-        $event->ubication = json_encode($ubication);//Se devuelve una representación de un JSON;
+        $post->title = $validated['title'];
+        $post->description = $validated['description'];
+        $post->ubication = json_encode($ubication);//Se devuelve una representación de un JSON;
         // $event->user_id = $request->user()->id;
         // $event->category_id = $category_event->id;
-        $event->subcategory_id = $validated['id'];
-        $event->additional_data = json_encode($additional_data);
-        $event->save();
+        $post->subcategory_id = $validated['id'];
+        $post->additional_data = json_encode($additional_data);
+        $post->save();
 
         $newPhones = $validated['phone_numbers'];
-        $oldPhones = $event->phones;
+        $oldPhones = $post->phones;
 
         $this->deleteOldPhones($oldPhones, $newPhones);
-        $this->saveNewPhones($newPhones, $oldPhones, $event);
+        $this->saveNewPhones($newPhones, $oldPhones, $post);
 
         //Se verifica si alguna imagen del envento registrado anteriormenete, haya sido eliminada
         $oldEventImages = $request['old_images'];
-        $oldCollectionEventImages = $event->resources()->where('type', 'image')->get();
+        $oldCollectionEventImages = $post->resources()->where('type', 'image')->get();
 
         if($oldEventImages){
             foreach($oldCollectionEventImages as $oldImageEvent){
@@ -238,10 +219,10 @@ class EventController extends Controller
 
                 if($this->searchDeletedImages($oldImageUrl, $oldEventImages)){
                     //Eliminar a la imagen de la bdd y del local storage
-                    $event->resources()->where('type', 'image')
+                    $post->resources()->where('type', 'image')
                                         ->where('url', $oldImageUrl)->delete();
-                    if(Storage::disk('public')->exists($oldImageUrl)){
-                        Storage::disk('public')->delete($oldImageUrl);
+                    if(Storage::disk('s3')->exists($oldImageUrl)){
+                        Storage::disk('s3')->delete($oldImageUrl);
                     }
                 }
             }
@@ -252,12 +233,12 @@ class EventController extends Controller
                 //Si el reporte contiene imágenes, se procede a eliminar todas las imágenes
                 foreach ($oldCollectionEventImages as $oldImage) {
                     $oldImageUrl = $oldImage->url;
-                    if(Storage::disk('public')->exists($oldImageUrl)){
-                        Storage::disk('public')->delete($oldImageUrl);
+                    if(Storage::disk('s3')->exists($oldImageUrl)){
+                        Storage::disk('s3')->delete($oldImageUrl);
                     }
                 }
 
-                $event->resources()->where('type', 'image')->delete();
+                $post->resources()->where('type', 'image')->delete();
             }
         }
 
@@ -265,15 +246,18 @@ class EventController extends Controller
             foreach($request->file('new_images') as $image){
 
                 Resource::create([
-                    'url'=> $image->store('event_images', 'public'),
-                    'post_id' => $event->id,
+                    'url'=> $image->store('event_images', 's3'),
+                    'post_id' => $post->id,
                     'type'=>'image',
                 ]);
             }
         }
 
         session()->flash('success', 'Servicio público actualizado con éxito');
-        return response()->json(['success'=>'Datos recibidos correctamente']);
+        return response()->json([
+            'success'=>'Datos recibidos correctamente', 
+            'redirect'=>route('events.index'),
+            ]);
     }
 
     /**
@@ -282,17 +266,17 @@ class EventController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Post $event)
+    public function destroy(Post $post)
     {
         $message = '';
-        if($event->state){
-            $event->state = false;
+        if($post->state){
+            $post->state = false;
             $message='desactivado';
         }else{
-            $event->state = true;
+            $post->state = true;
             $message='activado';
         }
-        $event->save();
+        $post->save();
         
         return back()->with('success', "Evento $message con éxito");
     }

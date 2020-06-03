@@ -45,16 +45,16 @@ class CategoryController extends Controller
     public function update(CategoryRequest $request, Category $category)
     {
         $validated = $request->validated();
-        $category->name = $validated['name'];
         $category->description = $validated['description'];
         
         $icon = $request->file('icon');
+        
         if($icon){
-            //Se elimina la imagen del storage de laravel
-            if(Storage::disk('public')->exists($category->icon)){
-                Storage::disk('public')->delete($category->icon);
+            // Se elimina la imagen del storage
+            if(Storage::disk('s3')->exists($category->icon)){
+                Storage::disk('s3')->delete($category->icon);
             }
-            $category->icon = $icon->store('images_default', 'public');
+            $category->icon = $icon->store('category_icons', 's3');
         }
 
         $category->save();

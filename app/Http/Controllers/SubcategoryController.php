@@ -31,7 +31,6 @@ class SubcategoryController extends Controller
     public function create()
     {
         //Se consultan a todas las categorías registradas
-        // $categories = Category::all();
         $categories = Category::whereNotIn('slug', ['informe', 'emergencia'])->get();
         return view('subcategories.create', [
             'categories'=>$categories,
@@ -58,9 +57,9 @@ class SubcategoryController extends Controller
         $subcategory->category_id = $validated['category'];
 
         if($icon){
-            $subcategory->icon = $icon->store('subcategory_icons', 'public');
+            $subcategory->icon = $icon->store('subcategory_icons', 's3');
         }else{
-            $subcategory->icon = env('SUBCATEGORY_ICON_DEFAULT');
+            $subcategory->icon = 'https://siu-resources-s3.s3.us-east-2.amazonaws.com/default_images/subcategory_icons/subcategory_icon_default.jpg';
         }
 
         $subcategory->save();
@@ -105,17 +104,11 @@ class SubcategoryController extends Controller
 
         if($icon){
 
-            $icon_default = env('SUBCATEGORY_ICON_DEFAULT');
-            $subcategory_icon = $subcategory->icon;
-
-            //Se verifica que el ícono por defecto de subcategorías sea diferecte al ícono registrados,
-            //esto se realiza con la finalidad de no eliminar la imagen por defecto dentro del almacenamiento de laravel
-            if($icon_default !== $subcategory_icon){
-                if(Storage::disk('public')->exists($subcategory_icon)){
-                    Storage::disk('public')->delete($subcategory_icon);
-                }
+            //Se elimina al ícono antiguo
+            if(Storage::disk('s3')->exists($subcategory->icon)){
+                Storage::disk('s3')->delete($subcategory->icon);
             }
-            $subcategory->icon = $icon->store('subcategory_icons', 'public');
+            $subcategory->icon = $icon->store('subcategory_icons', 's3');
         }
 
         $subcategory->save();
@@ -131,7 +124,9 @@ class SubcategoryController extends Controller
      */
     public function destroy(Subcategory $subcategory)
     {
+        //Se verifica si la subcatoría tiene un post (problema o evento) asignado
         $hasPots = $subcategory->posts()->first();
+        //Se verifica que la subcategoría tiene una servicio público asignado
         $hasPublicServices = $subcategory->publicServices()->first();
 
         if(!$hasPots && !$hasPublicServices){

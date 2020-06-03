@@ -1,0 +1,27 @@
+.user_avatar{
+    display: block;
+    width: 10rem;
+    height: 10rem;
+    box-shadow: $user-avatar-box-shadow;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto;
+}
+@media(max-width:767.98px){
+    .user_avatar{
+        width: 5.5rem;
+        height: 5.5rem;
+    }
+}
+@media (min-width: 1200px) {
+    .user_avatar{
+        width: 5rem;
+        height: 5rem;
+    }
+}
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .user_avatar{
+        width: 6.5rem;
+        height: 6.5rem;
+    }
+}

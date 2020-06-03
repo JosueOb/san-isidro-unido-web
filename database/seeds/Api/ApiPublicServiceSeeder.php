@@ -44,7 +44,7 @@ class ApiPublicServiceSeeder extends Seeder
                         "longitude" => $directions[$indexRandom]['longitude'],
                         "address" => $faker->address
                     ]),
-                    'category_id' => $publicServicesCategories->id,
+                    'subcategory_id' => $publicServicesCategories->id,
                     'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
                 ]);
             }
