@@ -70884,7 +70884,7 @@ $(document).ready(function () {
   if ($('#map').length != 0 && $('#event-create').length != 0) {
     // getCurrentDate();
     loadMap();
-    Object(_image_gallery__WEBPACK_IMPORTED_MODULE_3__["resetNumberOfImagesAllowed"])(8);
+    Object(_image_gallery__WEBPACK_IMPORTED_MODULE_3__["resetNumberOfImagesAllowed"])(3);
   }
 
   $('#event-create').on('submit', function (event) {
@@ -71213,7 +71213,7 @@ function updatePhones() {
 }
 
 function updateImages() {
-  Object(_image_gallery__WEBPACK_IMPORTED_MODULE_3__["resetNumberOfImagesAllowed"])(8);
+  Object(_image_gallery__WEBPACK_IMPORTED_MODULE_3__["resetNumberOfImagesAllowed"])(3);
   Object(_image_gallery__WEBPACK_IMPORTED_MODULE_3__["resetImages"])();
 }
 

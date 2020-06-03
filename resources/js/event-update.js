@@ -34,7 +34,7 @@ function updatePhones() {
 }
 
 function updateImages() {
-    resetNumberOfImagesAllowed(8);
+    resetNumberOfImagesAllowed(3);
     resetImages();
 }
 
