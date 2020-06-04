@@ -22,9 +22,9 @@ async function loadMap() {
     };
     var address = await getAddress(currentLocation);
     currentLocation.address = address ? address : null;
-    console.log({
-        currentLocation, address
-    })
+    // console.log({
+    //     currentLocation, address
+    // })
     if (currentLocation.latitude && currentLocation.longitude && currentLocation.address) {
         setPosition(currentLocation);
     }

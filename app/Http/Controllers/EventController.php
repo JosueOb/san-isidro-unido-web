@@ -82,7 +82,7 @@ class EventController extends Controller
         $event->title = $validated['title'];
         $event->description = $validated['description'];
         $event->state = true;
-        $event->ubication = json_encode($ubication);//Se devuelve una representación de un JSON;
+        $event->ubication = $ubication;
         $event->user_id = $request->user()->id;
         $event->category_id = $category_event->id;
         $event->subcategory_id = $validated['id'];
@@ -106,10 +106,9 @@ class EventController extends Controller
             }
         }
         //Notificar a todos los usuarios afiliados de la aplicación móvil
-        //Notificar Emergencia a los Policias
         $title_notification_event = $event->title;
         $description_notification_event = "El usuario " . $request->user()->getFullName() . " ha reportado un evento";
-        $request->user()->notify(new PostNotification($event, $title_notification_event, $description_notification_event));
+        // $request->user()->notify(new PostNotification($event, $title_notification_event, $description_notification_event));
         OnesignalNotification::sendNotificationBySegments($title_notification_event, $description_notification_event, [
             "post" => $event
         ]);
@@ -126,10 +125,10 @@ class EventController extends Controller
      */
     public function show(Post $post)
     {
-        $additional_data = json_decode($post->additional_data, true);
+        $additional_data = $post->additional_data;
         $event_range_date = $additional_data['event']['range_date'];
         $event_responsible = $additional_data['event']['responsible'];
-        $ubication = json_decode($post->ubication, true);
+        $ubication = $post->ubication;
         $images = $post->resources()->where('type', 'image')->get();
         return view('events.show', [
             'event' => $post,
@@ -150,10 +149,10 @@ class EventController extends Controller
     {
         $category = Category::where('slug', 'evento')->first();
         $subcategories = $category->subcategories()->get();
-        $additional_data = json_decode($post->additional_data, true);
+        $additional_data = $post->additional_data;
         $event_range_date = $additional_data['event']['range_date'];
         $event_responsible = $additional_data['event']['responsible'];
-        $ubication = json_decode($post->ubication, true);
+        $ubication = $post->ubication;
         $images = $post->resources()->where('type', 'image')->get();
         return view('events.edit',[
             'event'=>$post,
@@ -174,8 +173,6 @@ class EventController extends Controller
      */
     public function update(EventRequest $request, Post $post)
     {
-        // $category_event = Category::where('slug', 'evento')->first();
-
         $validated = $request->validated();
         //se decodifica un string JSON en un array recursivo
         $ubication = json_decode($validated['ubication'], true);
@@ -196,11 +193,9 @@ class EventController extends Controller
 
         $post->title = $validated['title'];
         $post->description = $validated['description'];
-        $post->ubication = json_encode($ubication);//Se devuelve una representación de un JSON;
-        // $event->user_id = $request->user()->id;
-        // $event->category_id = $category_event->id;
+        $post->ubication = $ubication;//Se devuelve una representación de un JSON;
         $post->subcategory_id = $validated['id'];
-        $post->additional_data = json_encode($additional_data);
+        $post->additional_data = $additional_data;
         $post->save();
 
         $newPhones = $validated['phone_numbers'];
@@ -252,6 +247,14 @@ class EventController extends Controller
                 ]);
             }
         }
+
+        //Notificar a todos los usuarios afiliados de la aplicación móvil
+        $title_notification_event = $post->title;
+        $description_notification_event = "Evento actualizado!";
+        // $request->user()->notify(new PostNotification($post, $title_notification_event, $description_notification_event));
+        OnesignalNotification::sendNotificationBySegments($title_notification_event, $description_notification_event, [
+            "post" => $post
+        ]);
 
         session()->flash('success', 'Servicio público actualizado con éxito');
         return response()->json([

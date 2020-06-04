@@ -23,16 +23,11 @@
 
 <div class="row">
     <div class="col">
-       <p>Listar eventos</p>
-    </div>
-</div>
-<div class="row">
-    <div class="col">
         <div class="card card-primary">
             <div class="card-header">
                 <div class="row">
                     <div class="col">
-                        <h4 class="d-inline">Servicios públicos</h4>
+                        <h4 class="d-inline">Eventos</h4>
                         @can('events.create')
                         <a href="{{route('events.create')}}" class="btn btn-primary float-right">Nuevo</a>
                         @endcan

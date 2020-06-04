@@ -27,9 +27,9 @@
                     <div class="row">
                         <div class="col">
                             <h4  class="d-inline">Detalle del policía</h4>
-                            @can('policemen.edit')
+                            {{-- @can('policemen.edit')
                                 <a href="{{route('policemen.edit', $police->id)}}" class="btn btn-primary float-right">Editar</a>
-                            @endcan
+                            @endcan --}}
                         </div>
                     </div>
             </div>

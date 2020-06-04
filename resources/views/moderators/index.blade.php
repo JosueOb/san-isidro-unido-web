@@ -75,7 +75,7 @@
                         <h4 class="d-inline">Moderadores asignados</h4>
 
                         @can('moderators.create')
-                        <a href="{{route('moderators.create')}}" class="btn btn-primary float-right">Agregar</a>
+                        <a href="{{route('moderators.create')}}" class="btn btn-primary float-right">Asignar</a>
                         @endcan
 
                     </div>

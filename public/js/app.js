@@ -70858,11 +70858,9 @@ function _loadMap() {
 
           case 6:
             address = _context.sent;
-            currentLocation.address = address ? address : null;
-            console.log({
-              currentLocation: currentLocation,
-              address: address
-            });
+            currentLocation.address = address ? address : null; // console.log({
+            //     currentLocation, address
+            // })
 
             if (currentLocation.latitude && currentLocation.longitude && currentLocation.address) {
               Object(_map__WEBPACK_IMPORTED_MODULE_1__["setPosition"])(currentLocation);
@@ -70870,7 +70868,7 @@ function _loadMap() {
 
             Object(_map__WEBPACK_IMPORTED_MODULE_1__["locateMarker"])('map');
 
-          case 11:
+          case 10:
           case "end":
             return _context.stop();
         }
@@ -71710,6 +71708,8 @@ function _getAddress() {
       while (1) {
         switch (_context3.prev = _context3.next) {
           case 0:
+            // console.log(location);
+            // console.log(location);
             parameters = {
               format: "json",
               zoom: "18",
@@ -71773,7 +71773,7 @@ function locateMarker(containerMap) {
     //Se permite el poder mover el marcador
     marker.on('dragend', /*#__PURE__*/function () {
       var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(e) {
-        var newLocation, newAddress;
+        var newLocation, newLocationFormatted, newAddress;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -71783,17 +71783,22 @@ function locateMarker(containerMap) {
 
               case 2:
                 newLocation = _context.sent;
-                _context.next = 5;
-                return getAddress(newLocation);
+                // console.log(newLocation);
+                newLocationFormatted = {
+                  latitude: newLocation.lat,
+                  longitude: newLocation.lng
+                };
+                _context.next = 6;
+                return getAddress(newLocationFormatted);
 
-              case 5:
+              case 6:
                 newAddress = _context.sent;
-                location.latitude = newLocation.latitude;
-                location.longitude = newLocation.longitude;
+                location.latitude = newLocation.lat;
+                location.longitude = newLocation.lng;
                 location.address = newAddress ? newAddress : null;
                 marker.bindPopup(location.address).openPopup();
 
-              case 10:
+              case 11:
               case "end":
                 return _context.stop();
             }
@@ -71962,7 +71967,8 @@ function _loadMap() {
             currentLocation = {
               latitude: geolocationPosition ? geolocationPosition.coords.latitude : null,
               longitude: geolocationPosition ? geolocationPosition.coords.longitude : null
-            };
+            }; // console.log(currentLocation);
+
             _context.next = 6;
             return Object(_map__WEBPACK_IMPORTED_MODULE_1__["getAddress"])(currentLocation);
 
@@ -72011,8 +72017,7 @@ $(document).ready(function () {
       processData: false,
       dataType: 'JSON',
       success: function success(data) {
-        console.log(data);
-
+        // console.log(data);
         if (data.success) {
           console.log(data.success); //Se eliminan los mensajes de validación
 

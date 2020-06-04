@@ -29,6 +29,8 @@ async function getCurrentLocation(){
 
 //Se obtiene la dirección a partir de su positión longitude y latitude
 async function getAddress(location){
+    // console.log(location);
+    // console.log(location);
     const parameters = {
         format: "json",
         zoom: "18",
@@ -41,6 +43,7 @@ async function getAddress(location){
         .get(REVERSE_GEOCODING_ENDPOINT, {
             params: parameters
         });
+        // console.log(getAddress);
         return getAddress.data.display_name;
     } catch (error) {
         console.log('getAddress', error);
@@ -83,9 +86,14 @@ function locateMarker(containerMap, showMarker = true){
         //Se permite el poder mover el marcador
         marker.on('dragend', async e =>{
             const newLocation = await e.target.getLatLng();
-            const newAddress = await getAddress(newLocation);
-            location.latitude = newLocation.latitude;
-            location.longitude = newLocation.longitude;
+            // console.log(newLocation);
+            var newLocationFormatted = {
+                latitude: newLocation.lat,
+                longitude: newLocation.lng
+            }
+            const newAddress = await getAddress(newLocationFormatted);
+            location.latitude = newLocation.lat;
+            location.longitude = newLocation.lng;
             location.address = newAddress ? newAddress : null;
             marker.bindPopup(location.address).openPopup();
         });

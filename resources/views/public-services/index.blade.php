@@ -23,11 +23,6 @@
 
 <div class="row">
     <div class="col">
-       <p>Listar servicios públicos</p>
-    </div>
-</div>
-<div class="row">
-    <div class="col">
         <div class="card card-primary">
             <div class="card-header">
                 <div class="row">

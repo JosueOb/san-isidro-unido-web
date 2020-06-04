@@ -68,14 +68,14 @@ class PostsTableSeeder extends Seeder
                             ]
                         ];
                         $ubication = [
-                            'lat'=>$faker->latitude($min = -90, $max = 90),
-                            'lng'=>$faker->longitude($min = -180, $max = 180),
+                            'latitude'=>$faker->latitude($min = -90, $max = 90),
+                            'longitude'=>$faker->longitude($min = -180, $max = 180),
                             'address'=>$faker->address,
                             'description'=>$faker->text($maxNbChars = 30),
                         ];
 
-                        $post->additional_data = json_encode($additional_data);
-                        $post->ubication = json_encode($ubication);
+                        $post->additional_data = $additional_data;
+                        $post->ubication = $ubication;
                         $post->save();
 
                         for ($i=0; $i < rand(1, 3) ; $i++) {

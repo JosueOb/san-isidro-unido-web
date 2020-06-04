@@ -75,7 +75,7 @@
                         <h4 class="d-inline">Moradores registrados</h4>
 
                         @can('neighbors.create')
-                        <a href="{{route('neighbors.create')}}" class="btn btn-primary float-right">Agregar</a>
+                        <a href="{{route('neighbors.create')}}" class="btn btn-primary float-right">Registrar</a>
                         @endcan
 
                     </div>

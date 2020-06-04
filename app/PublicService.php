@@ -49,12 +49,10 @@ class PublicService extends Model
         return $query->where('category_id', $category_id);
     }
 
-    /**
-	 *Relacion de Pertenencia Uno a Uno con la Tabla Categories
-	 *
-	 * @return mixed
-	 */
+   /**
+     * A public service belongs to a category
+     */
     public function subcategory(){
-        return $this->belongsTo(SubCategory::class, "category_id")->orderBy('id','DESC');
+        return $this->belongsTo(Subcategory::class);
     }
 }

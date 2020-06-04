@@ -14,9 +14,11 @@ async function loadMap(){
                                         console.log('geolocationPosition', errs);
                                     });
     currentLocation = {
+        
         latitude: geolocationPosition ? geolocationPosition.coords.latitude: null, 
         longitude: geolocationPosition ? geolocationPosition.coords.longitude : null,
     };
+    // console.log(currentLocation);
     var address = await getAddress(currentLocation);
     currentLocation.address = address ? address : null;
 
@@ -53,7 +55,7 @@ $(document).ready(function () {
             processData: false,
             dataType: 'JSON',
             success: function (data) {
-                console.log(data);
+                // console.log(data);
                 if (data.success) {
                     console.log(data.success);
                     //Se eliminan los mensajes de validación

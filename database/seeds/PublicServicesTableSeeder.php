@@ -24,8 +24,8 @@ class PublicServicesTableSeeder extends Seeder
                 $publicService->subcategory_id = $subcategory_public_service->id;
 
                 $ubication = [
-                    'lat' => $faker->latitude($min = -90, $max = 90),
-                    'lng' => $faker->longitude($min = -180, $max = 180),
+                    'latitude' => $faker->latitude($min = -90, $max = 90),
+                    'longitude' => $faker->longitude($min = -180, $max = 180),
                     'address' => $faker->address,
                     'description' => $faker->text($maxNbChars = 30),
                 ];
@@ -35,8 +35,8 @@ class PublicServicesTableSeeder extends Seeder
                     'close_time' =>  $faker->time($format = 'H:i', $max = 'now'),
                 ];
 
-                $publicService->ubication = json_encode($ubication);
-                $publicService->public_opening = json_encode($public_opening);
+                $publicService->ubication = $ubication;
+                $publicService->public_opening = $public_opening;
 
                 $publicService->save();
 

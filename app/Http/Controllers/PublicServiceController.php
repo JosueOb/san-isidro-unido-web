@@ -47,6 +47,7 @@ class PublicServiceController extends Controller
         $validated = $request->validated();
         //se decodifica un string JSON en un array recursivo
         $ubication = json_decode($validated['ubication'], true);
+
         //Se le agrega al arreglo el detalle de la descripción de ubicación
         $ubication['description'] = $validated['ubication-description'];
         $public_opening = [
@@ -56,9 +57,9 @@ class PublicServiceController extends Controller
 
         $publicService = new PublicService();
         $publicService->name = $validated['name'];
-        $publicService->ubication = json_encode($ubication);//Se devuelve una representación de un JSON
+        $publicService->ubication = $ubication;//Se devuelve una representación de un JSON
         $publicService->subcategory_id = $validated['id'];
-        $publicService->public_opening = json_encode($public_opening);
+        $publicService->public_opening = $public_opening;
         $publicService->email = $validated['email'];
         $publicService->save();
 
@@ -69,7 +70,7 @@ class PublicServiceController extends Controller
         }
         
         session()->flash('success', 'Servicio público registrado con éxito');
-        return response()->json(['success'=>'Datos recibidos correctamente']);
+        return response()->json(['success'=>'Datos recibidos correctamente','data' => $request->all()]);
     }
 
     /**
@@ -80,8 +81,8 @@ class PublicServiceController extends Controller
      */
     public function show(PublicService $publicService)
     {
-        $ubication = json_decode($publicService->ubication, true);
-        $public_opening = json_decode($publicService->public_opening, true);
+        $ubication = $publicService->ubication;
+        $public_opening = $publicService->public_opening;
         return view('public-services.show', [
             'publicService'=>$publicService,
             'ubication'=>$ubication,
@@ -99,8 +100,8 @@ class PublicServiceController extends Controller
     {
         $category = Category::where('slug', 'servicio-publico')->first();
         $subcategories = $category->subcategories()->get();
-        $public_opening = json_decode($publicService->public_opening, true);
-        $ubication = json_decode($publicService->ubication, true);
+        $public_opening = $publicService->public_opening;
+        $ubication = $publicService->ubication;
         return view('public-services.edit', [
             'publicService'=>$publicService,
             'subcategories'=>$subcategories,
@@ -130,9 +131,9 @@ class PublicServiceController extends Controller
         ];
 
         $publicService->name = $validated['name'];
-        $publicService->ubication = json_encode($ubication);//Se devuelve una representación de un JSON
+        $publicService->ubication = $ubication;//Se devuelve una representación de un JSON
         $publicService->subcategory_id = $validated['id'];
-        $publicService->public_opening = json_encode($public_opening);
+        $publicService->public_opening = $public_opening;
         $publicService->email = $validated['email'];
         $publicService->save();
 
