@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\Helpers\OnesignalNotification;
 use App\Http\Requests\ReportRequest;
 use App\Post;
 use App\Resource;
@@ -80,6 +81,12 @@ class ReportController extends Controller
                 ]);
             }
         }
+
+        //Notificar a todos usuarios de la aplicación móvil
+        $n_title = $report->title;
+        $n_description = 'Escrito por: '.$request->user()->getFullName();
+        OnesignalNotification::sendNotificationBySegments($n_title, $n_description, [ 'post'=> $report]);
+
         session()->flash('success', 'Informe registrado con éxito');
         return response()->json(['success'=>'Datos recibidos correctamente', 'data'=>$validated]);
     }
