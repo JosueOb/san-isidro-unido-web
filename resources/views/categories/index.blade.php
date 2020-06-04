@@ -26,10 +26,7 @@
             <div class="card-header">
                 <div class="row">
                     <div class="col">
-                        <h4 class="d-inline">Categorías</h4>
-                        {{-- @can('categories.create')
-                        <a href="{{route('categories.create')}}" class="btn btn-primary float-right">Nuevo</a>
-                        @endcan --}}
+                        <h4>Categorías</h4>
                     </div>
                 </div>
             </div>
@@ -43,6 +40,7 @@
                                     <th width='10px'>Id</th>
                                     <th>Nombre</th>
                                     <th>Descripción</th>
+                                    <th>Icono</th>
                                     @can(['categories.edit'])
                                     <th>Opción</th>
                                     @endcan
@@ -53,8 +51,8 @@
                                     <tr>
                                         <td>{{$category->id}}</td>
                                         <td>{{$category->name}}</td>
-                                        <td>{{$category->description ?? 'Sin descripción'}}</td>
-                                        
+                                        <td>{{$category->description ?: 'Sin descripción'}}</td>
+                                        <td class="w-25"><img class="w-25 rounded " src={{$category->getLink()}}></td>
                                         @can('categories.edit')
                                         <td width='10px'>
                                             <a href="{{route('categories.edit', $category->id)}}" class="btn btn-secondary"> Editar</a>

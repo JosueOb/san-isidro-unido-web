@@ -5,7 +5,8 @@ return [
         'emergencias' => 'emergencia',
         'reportes' => 'informe',
         'eventos' => 'evento',
-        'problemas_sociales' => 'problema_social'
+        'problemas_sociales' => 'problema',
+        'servicios_publicos' => 'servicio-publico'
     ],
     "overwrite_user_images" => true,
     'roles' => [

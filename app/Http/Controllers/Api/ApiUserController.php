@@ -20,6 +20,9 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Api\ApiDeviceController;
 
+use App\Http\Requests\Api\ApiUserProviderRequest;
+use App\Http\Requests\Api\ApiEditUserProfile;
+
 class ApiUserController extends ApiBaseController
 {
     // Variables Clase
@@ -28,30 +31,33 @@ class ApiUserController extends ApiBaseController
     public $validacionesDevice;
     public $rolInvitado;
     // Constructor de la Clase
+
     public function __construct()
     {
         $this->validacionesFormRegistro = [
-            'first_name' => "required|string|max:255",
-            'last_name' => "required|string|max:255",
-            "email" => "required|email|max:255|unique:users,email"
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'device' => 'nullable',
+            'email' => 'required|email|max:255',
+            'device.description' => 'string|sometimes|required',
+            'device.phone_id' => 'string|sometimes|required|max:100',
+            'device.phone_model' => 'string|sometimes|required|max:100'
         ];
         $this->validacionesFormLogin = [
-            "email" => 'email|required|max:255',
+            'email' => 'email|required|max:255',
+            'device' => 'nullable',
+            'device.description' => 'string|sometimes|required',
+            'device.phone_id' => 'string|sometimes|required|max:100',
+            'device.phone_model' => 'string|sometimes|required|max:100'
         ];
-        $this->validacionesDevice = [
-            "description" => 'string|required',
-            "phone_id" => 'string|required|max:100',
-            "phone_model" => 'string|required|max:100',
-        ];
-        $this->roles = Config::get('siu_config.roles');
-        $this->categories = Config::get('siu_config.categorias');
     }
 
     /**
-     * Retorna el listado de Usuarios
-     *
-     * @return array
-     */
+    * Retorna el listado de Usuarios
+    *
+    * @return array
+    */
+
     public function index(Request $request)
     {
         try {
@@ -64,90 +70,95 @@ class ApiUserController extends ApiBaseController
 
             return $this->sendResponse(200, 'success', $users);
         } catch (Exception $e) {
-            return $this->sendError(500, "error", ['server_error' => $e->getMessage()]);
+            return $this->sendError(500, 'error', ['server_error' => $e->getMessage()]);
         }
     }
 
-    /**
-     * Setea el proveedor en las validaciones de formulario
-     * @param string $provider
-     * @param array $form
-     *
-     * @return void
-     */
-    public function checkProviderValidation($provider, $form)
-    {
-        $fieldSecureToCheck = ($provider === "formulario") ? "password" : "social_id";
-        switch ($form) {
-            case 'login':
-                $this->validacionesFormLogin[$fieldSecureToCheck] = "required|string";
-                break;
-            case 'register':
-                $this->validacionesFormRegistro[$fieldSecureToCheck] = "required|string";
-                break;
-            default:
-                break;
-        }
-    }
 
     /**
-     * Registra a un usuario y retorna el token del usuario
-     * @param \Illuminate\Http\Request $request
+     * Retorna el detalle de un Usuario
+     * @param integer $id
      *
      * @return array
      */
-    public function register(Request $request)
+    public function detail($id)
+    {
+        try {
+            $user = User::findById($id)->first();
+            //Validar si el usuario existe
+            if (!is_null($user)) {
+                ;
+                return $this->sendResponse(200, 'success', $user);
+            }
+            //Si no existe envio error
+            return $this->sendError(404, 'usuario no existe', ['user' => 'usuario no existe']);
+        } catch (Exception $e) {
+            return $this->sendError(500, "error", ['server_error' => $e->getMessage()]);
+        }
+    }
+    
+
+    /**
+    * Registra a un usuario y retorna el token del usuario
+    * @param \Illuminate\Http\Request $request
+    *
+    * @return array
+    */
+
+    public function register(ApiUserProviderRequest $request)
     {
         $utils = new Utils();
         try {
-            // Crear el validador del proveedor de datos esta presente y es de los permitidos
-            $validatorProvider = Validator::make($request->all(), [
-                "provider" => ['required', 'string', new ProviderData],
-            ]);
-            $rolInvitado = Role::slug($this->roles['invitado'])->first();
-            //Recoger los datos de la peticion
-            $inputRegister = $request->all();
-            // Verificar si fallo la validacion del proveedor de datos
-            if (!$validatorProvider->fails()) {
-                // Agregar validacion dependiendo del proveedor de datos
-                $this->checkProviderValidation($inputRegister['provider'], 'register');
-                //Crear el validador de los datos necesarios para guardar el usuario
-                $validatorJSONData = Validator::make($request->all(), $this->validacionesFormRegistro);
-                //Verificar si fallo la validacion de los datos necesarios para guardar el usuario                     
-                if (!$validatorJSONData->fails()) {
-                    //Validar dispositivo
-                    $device = $request->get('device', null);
-                    if($device){
-                        $validatorDevice = Validator::make($device, $this->validacionesDevice);
-                        if($validatorDevice->fails()){
-                            $device = null;
-                        }
-                    }
-
-                    return $this->createUser(
-                        $inputRegister['first_name'] ?? '',
-                        $inputRegister['last_name'] ?? '',
-                        $inputRegister['email'] ?? '',
-                        $inputRegister['provider'] ?? '',
-                        $inputRegister['password'] ?? '',
-                        $inputRegister['social_id'] ?? '',
-                        $inputRegister['avatar'] ?? '',
-                        $inputRegister['device'] ?? null);
-                }
-                //Enviar error datos enviados
-                // $mensajesError = $validatorJSONData->messages();
-                $firstError = $validatorJSONData->errors()->first();
-                return $this->sendError(400, $firstError,$validatorJSONData->messages());
+            $validated = $request->validated();
+            // Verificar si usuario a loguearse existe
+            if ($request->user_exists) {
+                return $this->sendError(400, 'Usuario ya existe', ['user' => 'Usuario existente, por favor inicie sesión']);
             }
-            //Enviar error proveedor invalido
-            return $this->sendError(400, "Proveedor Inválido", $validatorProvider->messages());
+            // Agregar validacion dependiendo del proveedor de datos
+            $this->validacionesFormLogin[$request->providerKey] = 'required|string';
+            $registervalidator = Validator::make($request->all(), $this->validacionesFormRegistro);
+            //Verificar si fallo la validacion de los datos necesarios para guardar el usuario
+            if (!$registervalidator->fails()) {
+                //Validar dispositivo
+                $device = $request->get('device', null);
+                //Crear Usuario
+                $user = $this->registerNormalUser(
+                    $request->first_name ?? '',
+                    $request->last_name ?? '',
+                    $request->email ?? '',
+                    $request->provider ?? '',
+                    $request->password ?? '',
+                    $request->avatar ?? '',
+                    $device
+                );
+                //
+                if ($request->provider != 'formulario') {
+                    // Verificar si debe guardar el perfil social
+                    $socialProfileExists = $utils->socialProfileExists($request->provider, $request->email);
+                    //Agregar perfil Social
+                    if (!$socialProfileExists) {
+                        $this->createUserSocial($request->social_id, $user->id, $request->provider);
+                    }
+                }
+                $jwtAuth = new JwtAuth();
+                $token = $jwtAuth->getToken($request->email, null);
+                return $this->sendResponse(200, 'Usuario Registrado Correctamente', $token);
+            }
+            //Enviar error datos enviados
+            $firstError = $registervalidator->errors()->first();
+            return $this->sendError(400, $firstError, $registervalidator->messages());
         } catch (Exception $e) {
-            return $this->sendError(500, "Error en el Servidor", ['server_error' => $e->getMessage()]);
+            return $this->sendError(500, 'Error en el Servidor', ['server_error' => $e->getMessage()]);
         }
     }
 
-    private function registerNormalUser($first_name, $last_name, $email, $provider, $password, $avatar, $device = null) {
-        $rolInvitado = Role::slug($this->roles['invitado'])->first();
+    private function registerNormalUser($first_name, $last_name, $email, $provider, $password, $avatar, $device = null)
+    {
+        $userExists = User::email($email)->first();
+        if ($userExists) {
+            return $userExists;
+        }
+        $rolInvitado = Role::slug(Config::get('siu_config.roles')['invitado'])->first();
         $user = new User();
         $user->first_name = $first_name;
         $user->last_name = $last_name;
@@ -157,57 +168,24 @@ class ApiUserController extends ApiBaseController
         $user->avatar = $avatar;
         $user->save();
         $user->roles()->attach($rolInvitado->id, [
-            'state' => 1,
-        ]);
-        if($device){
+                'state' => 1,
+            ]);
+        if ($device) {
             $apiDeviceController = new ApiDeviceController;
             $apiDeviceController->saveDevice(
-                (array_key_exists("phone_id",$device)) ? $device['phone_id']: '', 
-                (array_key_exists("phone_model",$device)) ? $device['phone_model']: '', 
-                (array_key_exists("phone_platform",$device)) ? $device['phone_platform']: 'Modelo Generico',
-                (array_key_exists("description",$device)) ? $device['description']: '', $user->id);
+                (array_key_exists('phone_id', $device)) ? $device['phone_id']: '',
+                (array_key_exists('phone_model', $device)) ? $device['phone_model']: '',
+                (array_key_exists('phone_platform', $device)) ? $device['phone_platform']: 'Modelo Generico',
+                (array_key_exists('description', $device)) ? $device['description']: '',
+                $user->id
+            );
         }
         return $user;
     }
-    /*CREAR USUARIO EN EL API */
-    public function createUser($first_name, $last_name, $email, $provider, $password, $social_id, $avatar, $device = null) {
-        $utils = new Utils();
-        //Crear usuario normal
-        if ($provider == 'formulario') {
-            $this->registerNormalUser(
-                $first_name,$last_name,$email,$provider,$password, $avatar, $device);
-        } else {
-            //Crear usuario social
-            $userExist = User::email($email)->first();
-            if (!$userExist) {
-               
-                $user = $this->registerNormalUser($first_name,$last_name,$email,$provider,$password, $avatar, $device);
-            } else {
-                $user = User::email($email)->first();
-                if($device){
-                    $apiDeviceController = new ApiDeviceController;
-                    $apiDeviceController->saveDevice(
-                        (array_key_exists("phone_id",$device)) ? $device['phone_id']: '', 
-                        (array_key_exists("phone_model",$device)) ? $device['phone_model']: '', 
-                        (array_key_exists("phone_platform",$device)) ? $device['phone_platform']: 'Modelo Generico',
-                        (array_key_exists("description",$device)) ? $device['description']: '', $user->id);
-                }
-            }
-            // Verificar si debe guardar el perfil social
-            $socialProfileExists = $utils->socialProfileExists($provider, $email);
-            //Agregar perfil Social
-            if (!$socialProfileExists) {
-                $this->createUserSocial($social_id, $user->id, $provider);
-            }
-        }
-        //Obtener usuario para enviarlo de vuelta al FrontEnd
-        $jwtAuth = new JwtAuth();
-        $token = $jwtAuth->getToken($email, null);
-        return $this->sendResponse(200, "Usuario Registrado Correctamente", $token);
-    }
+
     /*
     Función para crear un perfil social a un usuario
-     */
+    */
     public function createUserSocial($socialID, $user_id, $provider)
     {
         $socialProfile = new SocialProfile();
@@ -218,107 +196,78 @@ class ApiUserController extends ApiBaseController
     }
 
     /**
-     * Loguea a un usuario en la API y retorna el token del usuario
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return array
-     */
-    public function login(Request $request)
+    * Loguea a un usuario en la API y retorna el token del usuario
+    * @param \Illuminate\Http\Request $request
+    *
+    * @return array
+    */
+
+    public function login(ApiUserProviderRequest $request)
     {
         try {
-            //Recoger los datos de la peticion
-            $requestData = $request->all();
-            // VALIDAR PROVEEDOR DATOS
-            $validatorProvider = Validator::make($request->all(), [
-                "provider" => ['required', 'string', new ProviderData],
-            ]);
-            // Verificar si el validador falla
-            if (!$validatorProvider->fails()) {
-                //VALIDAR CAMPOS REQUEST
-                $this->checkProviderValidation($requestData['provider'], 'login');
-                $validatorJSONData = Validator::make($requestData, $this->validacionesFormLogin);
-                // SI VALIDACION FALLA, MANDAR ERROR
-                if (!$validatorJSONData->fails()) {
-                    //Devolver Token o datos
-                    $jwtAuth = new JwtAuth();
-                    
-                    //Validar dispositivo
-                    $device = $request->get('device', null);
-                    if($device){
-                        $validatorDevice = Validator::make($device, $this->validacionesDevice);
-                        if($validatorDevice->fails()){
-                            $device = null;
+            $validated = $request->validated();
+            // Verificar si usuario a loguearse existe
+            if (!$request->user_exists) {
+                return $this->register($request);
+            }
+            //Validar Body Login
+            $this->validacionesFormLogin[$request->providerKey] = 'required|string';
+            $loginvalidator = Validator::make($request->all(), $this->validacionesFormLogin);
+            //Manejar login cuando paso validacion
+            if (!$loginvalidator->fails()) {
+                $jwtAuth = new JwtAuth();
+                $device = $request->get('device', null);
+                $returnDataOrToken = ($request->has('getToken')) ? true : null;
+                $userExist = User::where('email', $request->email)->first();
+                //Verificar si credenciales son validas
+                if ($jwtAuth->singIn($request->email, $request->providerValue, $request->provider)) {
+                    //guardar device si existe
+                    $user = User::email($request->email)->first();
+                    if ($device) {
+                        $deviceExists = $user->devices()->findByPhoneId($device['phone_id'])->first();
+                        if ($deviceExists) {
+                            $apiDeviceController = new ApiDeviceController;
+                            $apiDeviceController->saveDevice(
+                                (array_key_exists('phone_id', $device)) ? $device['phone_id']: '',
+                                (array_key_exists('phone_model', $device)) ? $device['phone_model']: '',
+                                (array_key_exists('phone_platform', $device)) ? $device['phone_platform']: 'Modelo Generico',
+                                (array_key_exists('description', $device)) ? $device['description']: '',
+                                $user->id
+                            );
                         }
                     }
-                    //Verificar si se quiere obtener los datos del Token
-                    $returnDataOrToken = ($request->has('getToken')) ? true : null;
-                    //Mandar Pass or SocialID dependiendo Proveedor Login
-                    $passOrSocialID = ($requestData['provider'] === 'formulario') ? $requestData['password'] : $requestData['social_id'];
-                    $userExist = User::where('email', $requestData['email'])->first();
-                    //Si usuario no existe, creo el usuario
-                    if (!$userExist && $requestData['provider'] = 'formulario') {
-                        return $this->createUser(
-                            $requestData['first_name'] ?? '',
-                            $requestData['last_name'] ?? '',
-                            $requestData['email'] ?? '',
-                            $requestData['provider'] ?? '',
-                            $requestData['password'] ?? '',
-                            $requestData['social_id'] ?? '',
-                            $requestData['avatar'] ?? '',
-                            $device);
-                    }else{
-                        //Verificar si credenciales son validas
-                        if ($jwtAuth->singIn($requestData['email'], $passOrSocialID, $requestData['provider'])) {
-                            //guardar device si existe
-                            $user = User::email($requestData['email'])->first();
-                            if($device){
-                                $apiDeviceController = new ApiDeviceController;
-                                $apiDeviceController->saveDevice(
-                                    (array_key_exists("phone_id",$device)) ? $device['phone_id']: '', 
-                                    (array_key_exists("phone_model",$device)) ? $device['phone_model']: '', 
-                                    (array_key_exists("phone_platform",$device)) ? $device['phone_platform']: 'Modelo Generico',
-                                    (array_key_exists("description",$device)) ? $device['description']: '', $user->id);
-                            }
-                            //Guardar red social
-                            if($requestData['provider'] != 'formulario'){
-                                $this->createUserSocial($requestData['social_id'], $user->id, $requestData['provider']);
-                            }
-                            //Retornar Token
-                            $token = $jwtAuth->getToken($requestData['email'], $returnDataOrToken);    
-                            return $this->sendResponse(200, "Login Correcto", $token);
-                        }else{     
-                            //Si falla login retorno error
-                            switch (strtolower($requestData['provider'])) {
-                                case 'facebook':
-                                    return $this->sendError(400, "No has asociado tu cuenta de facebook, registrate por favor", ['user' => 'No has asociado tu cuenta de facebook, registrate por favor']);
-                                    break;
-                                case 'google':
-                                    return $this->sendError(400, "No has asociado tu cuenta de google, registrate por favor", ['user' => 'No has asociado tu cuenta de google, registrate por favor']);
-                                    break;
-                                default:
-                                    return $this->sendError(400, "Usuario y/o Contraseña Inválida", ['user' => 'Usuario y/o Contraseña Incorrecto']);
-                                    break;
-                            }
-                        }
-                    }
+                    //Retornar Token
+                    $token = $jwtAuth->getToken($request->email, $returnDataOrToken);
+                    return $this->sendResponse(200, 'Login Correcto', $token);
+                } else {
+                    //Si falla login retorno error
+                    switch (strtolower($request->provider)) {
+                                            case 'facebook':
+                                            return $this->sendError(400, 'No has asociado tu cuenta de facebook, registrate por favor', ['user' => 'No has asociado tu cuenta de facebook, registrate por favor']);
+                                            break;
+                                            case 'google':
+                                            return $this->sendError(400, 'No has asociado tu cuenta de google, registrate por favor', ['user' => 'No has asociado tu cuenta de google, registrate por favor']);
+                                            break;
+                                            default:
+                                            return $this->sendError(400, 'Usuario o Contraseña Inválida', ['user' => 'Usuario o Contraseña Inválida']);
+                                            break;
+                                        }
                 }
-                // $firstError = $validatorJSONData->errors()->first();
-                //Si validador falla retorno error
-                return $this->sendError(400, $firstError->errors()->first(), $validatorJSONData->messages());
             }
             //Si validador falla retorno error
-            return $this->sendError(400, "Proveedor no válido", $validatorProvider->messages());
+            return $this->sendError(400, $loginvalidator->errors()->first(), $loginvalidator->messages());
         } catch (Exception $e) {
-            return $this->sendError(500, "Error en el Servidor", ['server_error' => $e->getMessage()]);
+            return $this->sendError(500, 'Error en el Servidor', ['server_error' => $e->getMessage()]);
         }
     }
 
     /**
-     * Verica la validez de un token
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return array
-     */
+    * Verifica la validez de un token
+    * @param \Illuminate\Http\Request $request
+    *
+    * @return array
+    */
+
     public function checkToken(Request $request)
     {
         try {
@@ -333,29 +282,28 @@ class ApiUserController extends ApiBaseController
                 $tokenResponse['token'] = 'invalid';
             }
             //Retornar token valido o invalido
-            return $this->sendResponse(200, "error", $tokenResponse);
+            return $this->sendResponse(200, 'error', $tokenResponse);
         } catch (Exception $e) {
-            return $this->sendError(500, "error", ['server_error' => $e->getMessage()]);
+            return $this->sendError(500, 'error', ['server_error' => $e->getMessage()]);
         }
     }
 
     /**
-     * Crea una solicitud de afiliación
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return array
-     */
+    * Crea una solicitud de afiliación
+    * @param \Illuminate\Http\Request $request
+    *
+    * @return array
+    */
+
     public function requestAfiliation(Request $request)
     {
         $utils = new Utils();
         $jwtAuth = new JwtAuth();
         $token_decoded = $request->token;
         try {
-           
-            //password_confirmation
             $validatorAfiliation = Validator::make($request->all(), [
-                "basic_service_image" => ['required', 'mimes:png,jpeg,jpg'],
-            ]);
+                                    'basic_service_image' => ['required', 'mimes:png,jpeg,jpg'],
+                                ]);
             $image_service_b64 = $request->get('basic_service_image');
             // Verificar si el validador falla
             if (!$validatorAfiliation->fails()) {
@@ -363,7 +311,7 @@ class ApiUserController extends ApiBaseController
                 //Validar si existe el usuario
                 if (!is_null($user)) {
                     $imageApi = new ApiImages();
-                    $image_name = $imageApi->saveAfiliationFileImageApi($request->basic_service_image);
+                    $image_name = $imageApi->saveAfiliationImageApi($request->basic_service_image);
                     $user->basic_service_image = $image_name;
                     $user->save();
                     //Guardar solicitud de afiliación
@@ -374,24 +322,25 @@ class ApiUserController extends ApiBaseController
                     $request->save();
                     //Retornar Token
                     $token = $jwtAuth->getToken($user->email);
-                    return $this->sendResponse(200, "Afiliacion Solicitada Correctamente", ['token' => $token]);
+                    return $this->sendResponse(200, 'Afiliacion Solicitada Correctamente', ['token' => $token]);
                 }
                 //Si no existe envio error
-                return $this->sendError(404, "Usuario no existe", ['user' => "usuario no existe"]);
+                return $this->sendError(404, 'Usuario no existe', ['user' => 'usuario no existe']);
             }
             //Si validacion falla envio error
-            return $this->sendError(400, "Los datos enviados no son válidos", $validatorAfiliation->messages());
+            return $this->sendError(400, 'Los datos enviados no son válidos', $validatorAfiliation->messages());
         } catch (Exception $e) {
-            return $this->sendError(500, "error", ['server_error' => $e->getMessage()]);
+            return $this->sendError(500, 'error', ['server_error' => $e->getMessage()]);
         }
     }
 
     /**
-     * Actualiza la contraseña de un usuario
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return array
-     */
+    * Actualiza la contraseña de un usuario
+    * @param \Illuminate\Http\Request $request
+    *
+    * @return array
+    */
+
     public function changePassword(Request $request)
     {
         $jwtAuth = new JwtAuth();
@@ -399,8 +348,8 @@ class ApiUserController extends ApiBaseController
         try {
             // Obtener los datos de la request
             $validatorPassword = Validator::make($request->all(), [
-                "password" => 'required|confirmed',
-            ]);
+                                    'password' => 'required|confirmed',
+                                ]);
             // Verificar si el validador falla
             if (!$validatorPassword->fails()) {
                 $passwordNew = $request->get('password');
@@ -410,30 +359,31 @@ class ApiUserController extends ApiBaseController
                     $user->password = password_hash($passwordNew, PASSWORD_BCRYPT);
                     $user->save();
                     $token = $jwtAuth->getToken($user->email);
-                    return $this->sendResponse(200, "Credenciales Actualizadas", ['token' => $token]);
+                    return $this->sendResponse(200, 'Credenciales Actualizadas', ['token' => $token]);
                 }
                 //Si no existe envio un error
-                return $this->sendError(404, "Usuario no existe", ['user' => "usuario no existe"]);
+                return $this->sendError(404, 'Usuario no existe', ['user' => 'usuario no existe']);
             }
             //Si falla el validador envio error
-            return $this->sendError(404, "Usuario no existe", ['user' => "usuario no existe"]);
+            return $this->sendError(404, 'Usuario no existe', ['user' => 'usuario no existe']);
         } catch (Exception $e) {
-            return $this->sendError(500, "error", ['server_error' => $e->getMessage()]);
+            return $this->sendError(500, 'error', ['server_error' => $e->getMessage()]);
         }
     }
 
     /**
-     * Retorna el listado de emergencias de un usuario
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return array
-     */
+    * Retorna el listado de emergencias de un usuario
+    * @param \Illuminate\Http\Request $request
+    *
+    * @return array
+    */
+
     public function getEmergenciesByUser($user_id)
     {
         try {
             //TODO: php artisan config:clear
             $user = User::findById($user_id)->first();
-            $category = Category::slug($this->categories['emergencias'])->first();
+            $category = Category::slug(Config::get('siu_config.categorias')['emergencias'])->first();
             //Verifico si existe el usuario
             if (is_null($user)) {
                 return $this->sendError(404, 'no existe el usuario', ['user' => 'no existe la emergencia']);
@@ -444,22 +394,23 @@ class ApiUserController extends ApiBaseController
             }
             //Si existe retorno el listado de emergencias
             $social_problems = Post::categoryId($category->id)
-                ->userId($user_id)
-                ->orderBy('id', 'desc')
-                ->with(['resources', 'category', 'subcategory', 'reactions', 'user'])
-                ->simplePaginate(10);
+                                ->userId($user_id)
+                                ->orderBy('id', 'desc')
+                                ->with(['resources', 'category', 'subcategory', 'reactions', 'user'])
+                                ->simplePaginate(10);
             return $this->sendPaginateResponse(200, 'success', $social_problems->toArray());
         } catch (Exception $e) {
-            return $this->sendError(500, "error", ['server_error' => $e->getMessage()]);
+            return $this->sendError(500, 'error', ['server_error' => $e->getMessage()]);
         }
     }
 
     /**
-     * Actualiza el Avatar de un Usuario
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return array
-     */
+    * Actualiza el Avatar de un Usuario
+    * @param \Illuminate\Http\Request $request
+    *
+    * @return array
+    */
+
     public function changeAvatar(Request $request)
     {
         try {
@@ -468,8 +419,8 @@ class ApiUserController extends ApiBaseController
             $token_decoded = $request->get('token');
             // Verificar que me llegue imagen del avatar
             $validatorAvatar = Validator::make($request->all(), [
-                "avatar" => ['required','mimes:png,jpeg,jpg'],
-            ]);
+                                    'avatar' => ['required','image', 'mimes:png,jpeg,jpg'],
+                                ]);
             // Verificar si el validador falla
             if (!$validatorAvatar->fails()) {
                 // Obtener los datos de la request
@@ -477,113 +428,62 @@ class ApiUserController extends ApiBaseController
                 //Validar si el usuario existe
                 if (!is_null($user)) {
                     $imageApi = new ApiImages();
-                    $image_name = $imageApi->saveAfiliationFileImageApi($request->avatar, null, 'avatar_usuario');
+                    $image_name = $imageApi->saveUserImageApi($request->avatar, null, 'avatar_usuario');
                     $user->avatar = $image_name;
                     $user->save();
                     $token = $jwtAuth->getToken($user->email);
-                    return $this->sendResponse(200, "Avatar Actualizado", ['token' => $token]);
+                    return $this->sendResponse(200, 'Avatar Actualizado', ['token' => $token]);
                 }
                 //si no existe el usuario envio error
-                return $this->sendError(404, "Usuario no existe", ['user' => "usuario no existe"]);
+                return $this->sendError(404, 'Usuario no existe', ['user' => 'usuario no existe']);
             }
             //Si validacion falla envio error
-            return $this->sendError(400, "Datos no Válidos", $validatorAvatar->messages());
+            return $this->sendError(400, 'Datos no Válidos', $validatorAvatar->messages());
         } catch (Exception $e) {
-            return $this->sendError(500, "error", ['server_error' => $e->getMessage()]);
+            return $this->sendError(500, 'error', ['server_error' => $e->getMessage()]);
         }
     }
 
-    // /**
-    //  * Actualiza el Avatar de un Usuario
-    //  * @param \Illuminate\Http\Request $request
-    //  *
-    //  * @return array
-    //  */
-    // public function changeAvatar(Request $request)
-    // {
-    //     try {
-    //         $utils = new Utils();
-    //         $jwtAuth = new JwtAuth();
-    //         $token_decoded = $request->get('token');
-    //         // Verificar que me llegue imagen del avatar
-    //         $validatorPassword = Validator::make($request->all(), [
-    //             "avatar" => ['required', 'string', new Base64FormatImage],
-    //         ]);
-    //         // Verificar si el validador falla
-    //         if (!$validatorPassword->fails()) {
-    //             // Obtener los datos de la request
-    //             $image_avatar_b64 = $request->get('avatar');
-    //             $user = User::findById($token_decoded->user->id)->first();
-    //             //Validar si el usuario existe
-    //             if (!is_null($user)) {
-    //                 $imageApi = new ApiImages();
-    //                 $image_name = $imageApi->saveAfiliationImageApi($image_avatar_b64);
-    //                 $user->avatar = $image_name;
-    //                 $user->save();
-    //                 $token = $jwtAuth->getToken($user->email);
-    //                 return $this->sendResponse(200, "Avatar Actualizado", ['token' => $token]);
-    //             }
-    //             //si no existe el usuario envio error
-    //             return $this->sendError(404, "Usuario no existe", ['user' => "usuario no existe"]);
-    //         }
-    //         //Si validacion falla envio error
-    //         return $this->sendError(400, "Datos no Válidos", $validatorPassword->messages());
-    //     } catch (Exception $e) {
-    //         return $this->sendError(500, "error", ['server_error' => $e->getMessage()]);
-    //     }
-    // }
-
     /**
-     * Edita el Perfil Social de un Usuario
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return array
-     */
-    public function editProfile(Request $request)
-    {
-        $jwtAuth = new JwtAuth();
-        $token_decoded = $request->get('token');
+    * Edita el Perfil Social de un Usuario
+    * @param \Illuminate\Http\Request $request
+    *
+    * @return array
+    */
 
+    public function editProfile(ApiEditUserProfile $request)
+    {
         try {
             // Obtener los datos de la request
-            $validatorEditProfile = Validator::make($request->all(), [
-                "first_name" => 'required|string',
-                "last_name" => 'required|string',
-                "email" => 'required|string|email',
-                "number_phone" => 'nullable|string',
-            ]);
-            // Verificar si el validador falla
-            if (!$validatorEditProfile->fails()) {
-                $user_update = [
-                    "first_name" => $request->get('first_name'),
-                    "last_name" => $request->get('last_name'),
-                    "email" => $request->get('email'),
-                    "number_phone" => $request->get('number_phone'), //debe ir tal cual la request para que actualice correctamente
-                ];
-                // return $this->sendDebugResponse([[$user_update], [$request->all()]]);
-                $user = User::findById($token_decoded->user->id)->first();
-                //Validar si el usuario existe
-                if (!is_null($user)) {
-                    $user->update($user_update);
-                    $token = $jwtAuth->getToken($user_update['email']);
-                    return $this->sendResponse(200, "Usuario Actualizado", ['token' => $token]);
-                }
-                //Si no existe envio error
-                return $this->sendError(404, "Usuario no existe", ['user' => "usuario no existe"]);
+            $jwtAuth = new JwtAuth();
+            $token_decoded = $request->get('token');
+            $validated = $request->validated();
+            $user = User::findById($token_decoded->user->id)->first();
+            //Validar si el usuario existe
+            if (!is_null($user)) {
+                $user->update([
+                        'first_name' => $request->first_name,
+                        'last_name' => $request->last_name,
+                        'email' => $request->email,
+                        'number_phone' => $request->number_phone
+                    ]);
+                $token = $jwtAuth->getToken($request->email);
+                return $this->sendResponse(200, 'Usuario Actualizado', ['token' => $token]);
             }
-            //Si falla la validacion envio un error
-            return $this->sendError(400, "Datos no válidos", $validatorEditProfile->messages());
+            //Si no existe envio error
+            return $this->sendError(404, 'Usuario no existe', ['user' => 'usuario no existe']);
         } catch (Exception $e) {
-            return $this->sendError(500, "error", ['server_error' => $e->getMessage()]);
+            return $this->sendError(500, 'error', ['server_error' => $e->getMessage()]);
         }
     }
 
     /**
-     * Retorna el listado de dispositivos de un usuario
-     * @param integer $id
-     *
-     * @return array
-     */
+    * Retorna el listado de dispositivos de un usuario
+    * @param integer $id
+    *
+    * @return array
+    */
+
     public function devicesXUser($id)
     {
         try {
@@ -596,16 +496,17 @@ class ApiUserController extends ApiBaseController
             //Si no tiene mandar error
             return $this->sendError(404, 'usuario no existe', ['user' => 'usuario no existe']);
         } catch (Exception $e) {
-            return $this->sendError(500, "error", ['server_error' => $e->getMessage()]);
+            return $this->sendError(500, 'error', ['server_error' => $e->getMessage()]);
         }
     }
 
     /**
-     * Retorna el listado de Perfiles Sociales de un Usuario
-     * @param integer $id
-     *
-     * @return array
-     */
+    * Retorna el listado de Perfiles Sociales de un Usuario
+    * @param integer $id
+    *
+    * @return array
+    */
+
     public function socialProfilesXUser($id)
     {
         try {
@@ -618,21 +519,23 @@ class ApiUserController extends ApiBaseController
             //Si no existe enviar un error
             return $this->sendError(404, 'usuario no encontrado', ['user' => 'usuario no encontrado']);
         } catch (Exception $e) {
-            return $this->sendError(500, "error", ['server_error' => $e->getMessage()]);
+            return $this->sendError(500, 'error', ['server_error' => $e->getMessage()]);
         }
     }
 
     /**
-     * Retorna el listado de directivos
-     *
-     * @return array
-     */
+    * Retorna el listado de directivos
+    *
+    * @return array
+    */
+
     public function getDirectives()
     {
         try {
             $users = User::rolDirectivo()->with(['roles' => function ($query) {
                 $query->where('slug', 'directivo');
-            }, 'position'])->get();
+            }
+                                , 'position'])->get();
             $users = $users->makeHidden('password');
             //Verificar si existen directivos
             if (!is_null($users)) {
@@ -640,6 +543,79 @@ class ApiUserController extends ApiBaseController
             }
             //Si no existe enviar mensaje error
             return $this->sendError(404, 'no existen directivos', ['category' => 'no existen directivos']);
+        } catch (Exception $e) {
+            return $this->sendError(500, 'error', ['server_error' => $e->getMessage()]);
+        }
+    }
+
+
+    /**
+    * Retorna las notificaciones de un usuario
+    * @param integer $user_id
+    *
+    * @return array
+    */
+    public function getNotificationsUser(Request $request, $user_id)
+    {
+        try {
+            //Verificar si existe el usuario
+            $user = User::findById($user_id)->first();
+            $filterSize =  ($request->get('size')) ? intval($request->get('size')): 20;
+            $filterByTitle = ($request->get('title')) ? $request->get('title'): '';
+            $filterUnreaded = $request->get('unreaded') ?? '';
+
+            if (is_null($user)) {
+                return $this->sendError(404, 'no existe el usuario', ['notifications' => 'no existe el usuario']);
+            }
+
+            $queryset = $user->notifications();
+            
+            if ($filterByTitle != '') {
+                $queryset = $queryset->where('data->title', 'LIKE', "%$filterByTitle%");
+            }
+
+            if ($filterUnreaded != '') {                
+                if($filterUnreaded == "1"){
+                    $queryset = $queryset->whereRaw('read_at is not null');
+                }else{
+                    $queryset = $queryset->whereRaw('read_at is null');
+                }
+            }
+            $notifications = $queryset->orderBy('created_at', 'DESC')->simplePaginate($filterSize)->toArray();
+            return $this->sendPaginateResponse(200, 'Notificaciones obtenidas correctamente', $notifications);
+        } catch (Exception $e) {
+            return $this->sendError(500, "error", ['server_error' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * Marcar una notificacion como leida
+     * @param integer $user_id
+     *
+     * @return array
+     */
+    public function markReadNotificationsUser(Request $request, $user_id)
+    {
+        try {
+            $validatorNotifications = Validator::make($request->all(), [
+                "notification_id" => ['required', 'string'],
+            ]);
+            if ($validatorNotifications->fails()) {
+                return $this->sendError(400, "Datos no válidos", $validatorNotifications->messages());
+            }
+            $user = User::findById($user_id)->first();
+            if (is_null($user)) {
+                return $this->sendError(404, 'no existe el usuario', ['notifications' => 'no existe el usuario']);
+            }
+            // dd($user);
+            $notification = $user->notifications()->find($request->notification_id);
+            if ($notification) {
+                $notification->read_at = date('Y-m-d H:i:s');
+                $notification->save();
+                return $this->sendResponse(204, 'Notificaciones obtenidas correctamente', []);
+            }else{
+                return $this->sendError(404, 'no existe la notificacion', ['notifications' => 'no existe la notificacion']);
+            }
         } catch (Exception $e) {
             return $this->sendError(500, "error", ['server_error' => $e->getMessage()]);
         }

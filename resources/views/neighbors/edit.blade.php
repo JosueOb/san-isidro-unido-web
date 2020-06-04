@@ -49,7 +49,7 @@
                         </div>
                         <div class="form-group col-12 col-md-6">
                             <label for="number_phone">Celular <span class="text-muted">(opcional)</span></label>
-                            <input id="number_phone" type="text" class="form-control @error('number_phone') is-invalid @enderror" name="number_phone" value="{{old('number_phone') ?: $neighbor->number_phone}}" maxlength="10" pattern="(09)[0-9]{8}" title="Recuerda que se admiten solo 10 dígitos y anteponer el código 09 al ingresar tu número telefónico">
+                            <input id="number_phone" type="text" class="form-control @error('number_phone') is-invalid @enderror" name="number_phone" value="{{old('number_phone') ?: $neighbor->number_phone}}" maxlength="10" pattern="(09)[0-9]{8}" title="Recuerda que se admiten solo 10 dígitos y anteponer el código 09 al ingresar tu número telefónico" required>
                             <small id="number_phoneHelp" class="form-text text-muted">
                                 Recuerda anteponer el código 08 o 09 al ingresar tu número telefónico
                             </small>

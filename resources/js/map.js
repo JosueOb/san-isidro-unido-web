@@ -1,11 +1,11 @@
 const L = require('leaflet');
 
 let location = {
-    lat: -0.24320783421726888,
-    lng: -78.49732162261353,
+    latitude: -0.24320783421726888,
+    longitude: -78.49732162261353,
     address: "Casa barrial San Isidro de Puengasí, Quito, Pichincha, Ecuador"
 };
-//URL PARA OBTENER LA DIRECCION ENVIANDO COMO PARAMETROS LA (LAT, LNG) DE LAS COORDENADAS
+//URL PARA OBTENER LA DIRECCION ENVIANDO COMO PARAMETROS LA (LATITUDE, LONGITUDE) DE LAS COORDENADAS
 const REVERSE_GEOCODING_ENDPOINT =
   "https://nominatim.openstreetmap.org/reverse";
 
@@ -27,14 +27,14 @@ async function getCurrentLocation(){
     }
 }
 
-//Se obtiene la dirección a partir de su positión long y lat
+//Se obtiene la dirección a partir de su positión longitude y latitude
 async function getAddress(location){
     const parameters = {
         format: "json",
         zoom: "18",
         addressdetails: "0",
-        lat: location.lat,
-        lon: location.lng,
+        lat: location.latitude,
+        lon: location.longitude,
     };
     try {
         const getAddress = await axios
@@ -59,8 +59,8 @@ function locateMarker(containerMap, showMarker = true){
         zoomControl: true,
         attributionControl: true,
         center: [
-            location.lat,
-            location.lng
+            location.latitude,
+            location.longitude
         ],
         zoom: 17
     };
@@ -75,8 +75,8 @@ function locateMarker(containerMap, showMarker = true){
     }).addTo(map);
 
     var marker = L.marker([
-        location.lat,
-        location.lng
+        location.latitude,
+        location.longitude
     ], markerOptions).addTo(map);
 
     if(showMarker){
@@ -84,8 +84,8 @@ function locateMarker(containerMap, showMarker = true){
         marker.on('dragend', async e =>{
             const newLocation = await e.target.getLatLng();
             const newAddress = await getAddress(newLocation);
-            location.lat = newLocation.lat;
-            location.lng = newLocation.lng;
+            location.latitude = newLocation.latitude;
+            location.longitude = newLocation.longitude;
             location.address = newAddress ? newAddress : null;
             marker.bindPopup(location.address).openPopup();
         });

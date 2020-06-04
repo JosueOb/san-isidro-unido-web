@@ -31,7 +31,8 @@ class SubcategoryController extends Controller
     public function create()
     {
         //Se consultan a todas las categorías registradas
-        $categories = Category::all();
+        // $categories = Category::all();
+        $categories = Category::whereNotIn('slug', ['informe', 'emergencia'])->get();
         return view('subcategories.create', [
             'categories'=>$categories,
         ]);
@@ -76,7 +77,7 @@ class SubcategoryController extends Controller
     public function edit(Subcategory $subcategory)
     {
          //Se consultan a todas las categorías registradas
-         $categories = Category::all();
+         $categories = Category::whereNotIn('slug', ['informe', 'emergencia'])->get();
         return view('subcategories.edit',[
             'subcategory'=>$subcategory,
             'categories'=>$categories,

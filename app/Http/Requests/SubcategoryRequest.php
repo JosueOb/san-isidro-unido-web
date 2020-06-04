@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class SubcategoryRequest extends FormRequest
 {
@@ -31,11 +32,16 @@ class SubcategoryRequest extends FormRequest
         if($this->method() === 'PUT'){
             $uniqueName = 'unique:subcategories,name,'.$this->route('subcategory')->id;
         }
-        
+
         return [
             'name'=>'required|regex:/^[[:alpha:][:space:](áéíóúÁÉÍÓÚ)]+$/|min:3|max:25|'.$uniqueName,
             'description'=> 'nullable|regex:/^[[:alpha:][:space:](,;.áéíóúÁÉÍÓÚ)]+$/|max:255',
-            'category'=>'required|exists:categories,id',
+            'category'=>[
+                'required',
+                Rule::exists('categories', 'id')->where(function($query){
+                    $query->whereNotIn('slug', ['informe', 'emergencia']);
+                }),
+            ],
             'icon' => "nullable|image|mimes:jpeg,png|max:1024",//el tamaño esta expresado en kilibytes, equivale a 1MB
         ];
     }

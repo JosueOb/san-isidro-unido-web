@@ -18,7 +18,7 @@ class ApiPublicServiceSeeder extends Seeder
     {
         $faker = \Faker\Factory::create();
         $faker->addProvider(new Faker\Provider\Internet($faker) );
-        $publicServicesCategories = Category::slug('servicio-publico')->get();
+        $publicServicesCategories = Category::slug('servicio-publico')->first();
         $numServices = 5;
         $directions = [
             ["latitude" => -0.139413, "longitude" => -78.472171],
@@ -27,23 +27,27 @@ class ApiPublicServiceSeeder extends Seeder
             [ "latitude" => -0.219476, "longitude" => -78.520626]
         ];
 
-        foreach ($publicServicesCategories as $category) {
+        // foreach ($publicServicesCategories as $category) {
             for($i = 0; $i < $numServices; $i++){
                 $name = $faker->citySuffix;
                 $indexRandom = rand(0, count($directions) - 1);
                 DB::table('public_services')->insertGetId([
                     'name' => $name,
-                    'description' => "$name con la mejor atención al mejor precio",
+                    // 'description' => "$name con la mejor atención al mejor precio",
+                    'public_opening'=>json_encode([
+                        'open-time'=>'7:00',
+                        'close-time'=>'16:00'
+                    ]),
                     "email" => $faker->email,
                     'ubication' => json_encode([
                         "latitude" => $directions[$indexRandom]['latitude'],
                         "longitude" => $directions[$indexRandom]['longitude'],
                         "address" => $faker->address
                     ]),
-                    'category_id' => $category->id,
+                    'category_id' => $publicServicesCategories->id,
                     'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
                 ]);
             }
-        }
+        // }
     }
 }

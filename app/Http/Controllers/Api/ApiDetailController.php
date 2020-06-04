@@ -47,7 +47,6 @@ class ApiReactionController extends ApiBaseController
             //Verificar si Existe el Detalle
             $count_detail = Reaction::userId($token_decoded->user->id)->type($type)->postId($post_id)->count();
             if ($count_detail > 0) {
-                // return $this->sendError(400, "El $type ya existe", ['detail' => "El Detalle de tipo $type no existe"]);
                 return $this->sendResponse(200, "Detalle No Modificado", []);
             }
             //Crear un nuevo Detalle
@@ -65,7 +64,6 @@ class ApiReactionController extends ApiBaseController
         }
     }
 
-    // Eliminar el detalle de una publicación
      /**
      * Elimina el detalle de una Publicacion en la API
      * @param integer $id
@@ -83,7 +81,6 @@ class ApiReactionController extends ApiBaseController
                 return $this->sendResponse(200, "Detalle Eliminado Correctamente",["reactions"=> $reactions]);
             } 
             return $this->sendResponse(200, "Detalle No Modificado", []);
-            // return $this->sendResponse(400, "El detalle no existe", ['server_error' => 'Detalle no existe']);
         } catch (Exception $e) {
             return $this->sendError(500, "Error en el Servidor", ['server_error' => $e->getMessage()]);
         }

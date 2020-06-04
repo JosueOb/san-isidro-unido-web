@@ -140,4 +140,12 @@ class Post extends Model
         return  \Storage::disk('public')->url($image_url);
     }
 
+    /**
+    * Get all of the public service's phones.
+    */
+    public function phones()
+    {
+        return $this->morphMany(Phone::class, 'phoneable');
+    }
+
 }

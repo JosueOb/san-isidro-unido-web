@@ -6,20 +6,23 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Auth\Notifications\VerifyEmail as VerifyEmailBase;
 
-class NeighborCreated extends Notification
+class NeighborCreated extends VerifyEmailBase
 {
     use Queueable;
     protected $password;
+    protected $roleName;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($passwordRecieved)
+    public function __construct($passwordRecieved, $roleNameRecieved)
     {
         $this->password = $passwordRecieved;
+        $this->roleName = $roleNameRecieved;
     }
 
     /**
@@ -41,13 +44,19 @@ class NeighborCreated extends Notification
      */
     public function toMail($notifiable)
     {
+        $verificationUrl = $this->verificationUrl($notifiable);
+
+        if (static::$toMailCallback) {
+            return call_user_func(static::$toMailCallback, $notifiable, $verificationUrl);
+        }
         return (new MailMessage)
                     ->subject('Bienvanida a '.env('APP_NAME'))
                     ->greeting('Hola, '.$notifiable->getFullName())
-                    ->line('Has sido registrado/a en nuestro sistema como morador del barrio San Isidro de Puengasí')
+                    ->line('Has sido registrado/a en nuestro sistema como '.strtolower($this->roleName).' del barrio San Isidro de Puengasí')
                     ->line('Esta es la información para acceder en nuestra aplicación móvil:')
                     ->line('Correo: '.$notifiable->email)
                     ->line('Contraseña: '.$this->password)
+                    ->action('Verificar correo electrónico', $verificationUrl)
                     ->line('Recuerda cambiar tu contraseña una vez ingreses a la app')
                     ->salutation('Saludos');
     }

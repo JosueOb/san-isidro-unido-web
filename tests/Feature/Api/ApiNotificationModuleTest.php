@@ -38,7 +38,6 @@ class ApiNotificationlModuleTest extends TestCase
     {
         $user = User::orderBy(DB::raw('RAND()'))->take(1)->first();
         $devices = OnesignalNotification::getUserDevices($user->id);
-        // $url = $this->baseUrl . '/publicacis';
         $this->assertEquals(200, 200);
     }
 

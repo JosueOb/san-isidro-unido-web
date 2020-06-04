@@ -8,6 +8,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\VerifiesEmails;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
 
 class VerificationController extends Controller
 {
@@ -78,7 +79,15 @@ class VerificationController extends Controller
                 $searchUser->save();
             }
 
-            return redirect()->route('login');
+            if($searchUser->hasSomeActiveWebSystemRole()){
+                return redirect()->route('login');
+            }else{
+                $temporaryURL = URL::temporarySignedRoute(
+                    'verifiedMail', now()->addMinutes(15),
+                    ['id' => $searchUser->id]);
+                // return 
+                return redirect($temporaryURL);
+            }
 
         }
 

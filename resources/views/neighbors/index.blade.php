@@ -72,7 +72,7 @@
             <div class="card-header">
                 <div class="row">
                     <div class="col">
-                        <h4 class="d-inline">Miembros de la directiva registrados</h4>
+                        <h4 class="d-inline">Moradores registrados</h4>
 
                         @can('neighbors.create')
                         <a href="{{route('neighbors.create')}}" class="btn btn-primary float-right">Agregar</a>

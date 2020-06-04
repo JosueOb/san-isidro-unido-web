@@ -34,7 +34,7 @@ php artisan db:seed --class=ApiMobileNotificationsSeeder
 ## Pruebas
 
 ```cmd
-"./vendor/bin/phpunit" ./tests/Feature/Api/
+"./vendor/bin/phpunit" ./tests/Feature/Api/ --debug
 "./vendor/bin/phpunit" --filter ApiPostModuleTest
 "./vendor/bin/phpunit" --filter ApiGeneralModuleTest
 "./vendor/bin/phpunit" --filter ApiPublicServiceModuleTest
@@ -43,7 +43,6 @@ php artisan db:seed --class=ApiMobileNotificationsSeeder
 "./vendor/bin/phpunit" --filter ApiImageModuleTest
 "./vendor/bin/phpunit" --filter ApiNotificationlModuleTest
 ```
-
 ## Remover Whoops y Añadir Ignition
 
 composer remove filp/whoops --dev

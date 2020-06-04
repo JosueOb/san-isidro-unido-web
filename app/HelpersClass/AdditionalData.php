@@ -4,21 +4,21 @@ namespace App\HelpersClass;
 
 class AdditionalData 
 {
-    protected $info_emergency;
-    protected $info_event;
-    protected $info_social_problem;
-    protected $info_activity;
-    protected $info_post;
+    protected $emergency;
+    protected $event;
+    protected $problem;
+    protected $activity;
+    protected $post;
    
     public function __construct() 
     {
-        $this->info_emergency = [
+        $this->emergency = [
             "attended_by" => null,
             'rechazed_by' => null,
             'rechazed_reason' => null
         ];
-        $this->info_event = [
-            "responsable" => null,
+        $this->event = [
+            "responsible" => null,
             "range_date" => [
                 'start_date' => date("Y-m-d"),
                 'end_date' => date("Y-m-d",strtotime(date("Y-m-d")."+ 1 week")),
@@ -26,72 +26,73 @@ class AdditionalData
                 'end_time' => date("H:i:s", strtotime('+3 hours', strtotime(date("H:i:s")))) 
             ]
         ];
-        $this->info_social_problem = null;
-        $this->info_activity = null;
-        $this->info_post = [
-            "approved_by" => null
+        $this->problem = null;
+        $this->activity = null;
+        $this->post = [
+            "approved_by" => null, 
+            "status_attendance" => 'pendiente' //atendido, rechazado, pendiente
         ];
     }
     
     public function getInfoEmergency() 
     {
-        return $this->info_emergency;
+        return $this->emergency;
     }
 
     public function setInfoEmergency($info_emergency) 
     {
-        $this->info_emergency = $info_emergency;
+        $this->emergency = $info_emergency;
     }
     
     public function getInfoEvent() 
     {
-        return $this->info_event;
+        return $this->event;
     }
 
     public function setInfoEvent($info_event) 
     {
-        $this->info_event = $info_event;
+        $this->event = $info_event;
     }
 
     public function getInfoSocialProblem() 
     {
-        return $this->info_social_problem;
+        return $this->problem;
     }
 
     public function setInfoSocialProblem($info_social_problem) 
     {
-        $this->info_social_problem = $info_social_problem;
+        $this->problem = $info_social_problem;
     }
 
     public function getInfoActivity() 
     {
-        return $this->info_activity;
+        return $this->activity;
     }
 
     public function setInfoActivity($info_activity) 
     {
-        $this->info_activity = $info_activity;
+        $this->activity = $info_activity;
     }
 
     public function getInfoPost() 
     {
-        return $this->info_post;
+        return $this->post;
     }
 
     public function setInfoPost($info_post) 
     {
-        $this->info_post = $info_post;
+        $this->post = $info_post;
     }
 
     public function getAll()
     {
         return 
         [
-            'info_emergency'   => $this->getInfoEmergency(),
-            'info_event' => $this->getInfoEvent(),
-            'info_social_problem' => $this->getInfoSocialProblem(),
-            'info_activity' => $this->getInfoActivity(),
-            'info_post' => $this->getInfoPost(),
+            'emergency'   => $this->getInfoEmergency(),
+            'event' => $this->getInfoEvent(),
+            'problem' => $this->getInfoSocialProblem(),
+            'activity' => $this->getInfoActivity(),
+            'post' => $this->getInfoPost(),
         ];
     }
 }

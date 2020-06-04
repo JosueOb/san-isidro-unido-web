@@ -63,8 +63,10 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'has.role' => \Caffeinated\Shinobi\Middleware\UserHasRole::class,
         'api.user_auth' => \App\Http\Middleware\ApiAuthUserMiddleware::class,
-        "api.permission" => \App\Http\Middleware\ApiPermissionMiddleware::class,
-        'base64Image' => \App\Http\Middleware\ConvertBase64ToImage::class
+        'base64Image' => \App\Http\Middleware\ConvertBase64ToImage::class,
+        'logout'=> \App\Http\Middleware\Logout::class,
+        'api.user_exists' => \App\Http\Middleware\ApiUserNotRegister::class,
+        'api.user_active' => \App\Http\Middleware\ApiUserActiveMiddleware::class,
     ];
 
     /**

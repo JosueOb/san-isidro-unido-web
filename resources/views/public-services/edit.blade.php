@@ -38,13 +38,6 @@
                                 <span class="invalid-feedback" role="alert">
                                 </span>
                             </div>
-                            
-                            <div class="form-group">
-                                <label for="description">Descripción <span class="text-muted">(opcional)</span></label>
-                                <input id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" value="{{ old('description') ?: $publicService->description}}" maxlength="255">
-                                <span class="invalid-feedback" role="alert">
-                                </span>
-                            </div>
 
                             <div class="form-group">
                                 <label for="subcategory">Categoría </label>
@@ -65,11 +58,26 @@
 
                                 <select class="form-control" id="subcategory" name="subcategory" required disabled>
                                 </select>
-                                <p class="text-danger">No existen registos de categorías, porfavor comuniquese con el administrador</p>
+                                <p class="text-danger">No existen registos de categorías, por favor comuniquese con el administrador</p>
 
                                 @endif
                                 <span class="invalid-feedback" role="alert">
                                 </span>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-12 col-lg-6">
+                                    <label for="open-time">Hora de apertura</label>
+                                    <input id="open-time" type="time" class="form-control" name="open-time" value="{{ old('open-time') ?: $publicOpening['open_time']}}" placeholder="Apertura" required>
+                                    <span class="invalid-feedback" role="alert">
+                                    </span>
+                                </div>
+                                <div class="form-group col-md-12 col-lg-6 mt-md-0 mt-sm-3 mt-3">
+                                    <label for="close-time">Hora de cierre</span></label>
+                                    <input id="close-time" type="text" class="form-control" name="close-time" value="{{ old('close-time') ?: $publicOpening['close_time']}}" placeholder="Cierre" required>
+                                    <span class="invalid-feedback" role="alert">
+                                    </span>
+                                </div>
                             </div>
 
                             <div class="form-group">
@@ -78,8 +86,8 @@
                                 <div class="input-group">
                                    
                                     <div class="input-group-prepend" id='phone_group'>
-                                        @if ($phones)
-                                            @foreach ($phones as $phone)
+                                        @if (count($publicService->phones) > 0)
+                                            @foreach ($publicService->phones as $phone)
                                             <div  id='phone_item'>
                                                 <span class="input-group-text" id='phone_bagde'>
                                                     {{$phone->phone_number}}
@@ -108,7 +116,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="ubication-description">Detalle <span class="text-muted">(opcional)</span></label>
+                                <label for="ubication-description">Referencia <span class="text-muted">(opcional)</span></label>
                                 <input id="ubication-description" type="text" class="form-control" name="ubication-description" value="{{ old('ubication-description') ?: $ubication['description']}}" maxlength="255">
                                 <small id="categoryHelp" class="form-text text-muted">
                                     Puedes agregar detalles sobre la ubicación
@@ -124,8 +132,8 @@
                                 </span>
                                 <div id="map" class="map">
                                     <div id="info" class="info text-muted">
-                                        Latitud:  <span id='lat'>{{$ubication['lat']}}</span><br>
-                                        Longitud: <span id='lng'>{{$ubication['lng']}}</span><br>
+                                        Latitud:  <span id='latitude'>{{$ubication['latitude']}}</span><br>
+                                        Longitud: <span id='longitude'>{{$ubication['longitude']}}</span><br>
                                         Dirección: <span id='address'>{{$ubication['address']}}</span><br>
                                         </span>
                                     </div>

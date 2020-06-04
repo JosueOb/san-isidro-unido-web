@@ -31,16 +31,11 @@
                         <div class="col-12 col-md-6">
                             <div class="form-group">
                                 <label for="name">Nombre</label>
-                                <input id="name" type="text" class="form-control  @error('name') is-invalid @enderror" name="name" value="{{ old('name') ?: $category->name}}" maxlength="25" required autofocus>
-                                @error('name')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                <input id="name" type="text" class="form-control" name="name" value="{{ old('name') ?: $category->name}}" readonly >
                             </div>
                             <div class="form-group">
                                 <label for="description">Descripción <span class="text-muted">(opcional)</span></label>
-                                <textarea id="description" class="form-control @error('description') is-invalid @enderror" name="description" rows="5" maxlength="255">{{ old('description') ?: $category->description}}</textarea>
+                                <textarea id="description" class="form-control @error('description') is-invalid @enderror" name="description" rows="5" maxlength="255" autofocus>{{ old('description') ?: $category->description}}</textarea>
                                 @error('description')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>

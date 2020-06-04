@@ -28,9 +28,8 @@ class ApiAuthUserMiddleware{
 			return $this->sendTokenInvalidResponse();
 		} 
 
-    	$request->request->add(['token' => $tokenUserValid]);
-		return $next($request);
-		
+		$request->request->add(['token' => $tokenUserValid]);
+		return $next($request);		
 	}
 
 	public function sendTokenInvalidResponse(){
@@ -42,7 +41,7 @@ class ApiAuthUserMiddleware{
 
 	public function sendTokenRequiredResponse(){
 		return response()->json([
-			"message" => "Necesita una clave autorizada para realizar acciones en la API",
+			"message" => "Necesita una clave autorizada para realizar acciones en el API",
 			"errors" => ["Authorization" => "Necesita una clave de autorizacion"],
 		], 400);
 	}

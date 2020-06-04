@@ -1,5 +1,4 @@
-
-//Se almacenan los los  números telefónicos válidos
+//Se almacenan los números telefónicos válidos
 let phone_array = [];
 //Se establece la cantidad de teléfonos permitidos
 var numberOfPhonesAllowed = 3;
@@ -16,7 +15,7 @@ const print_phones = (array) => {
                   <i class="fas fa-minus-circle" id='delete_phone' data-no="${index}"></i>
                 </span>
               </div>
-      `;
+      `; 
     });
     $('#phone_group').html(print);
 };

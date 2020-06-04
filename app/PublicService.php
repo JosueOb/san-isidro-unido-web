@@ -11,10 +11,11 @@ class PublicService extends Model
     protected $table = "public_services";
     public $timestamps = true;
 
-    protected $fillable = ['name', 'description'];
+    protected $fillable = ['name', 'email', 'public_opening'];
     
     protected $casts = [
-        'ubication' => 'array'
+        'ubication' => 'array',
+        'public_opening' => 'array'
     ];
 
    /**
@@ -28,6 +29,13 @@ class PublicService extends Model
     {
         return $query->where('id', $id);
     }
+    /**
+    * Get all of the public service's phones.
+    */
+    public function phones()
+    {
+        return $this->morphMany(Phone::class, 'phoneable');
+    }
 
    /**
 	 *Filtra un servicio publico por el id de categoria
@@ -39,16 +47,6 @@ class PublicService extends Model
     public function scopeFindByCategoryId($query, $category_id)
     {
         return $query->where('category_id', $category_id);
-    }
-
-   /**
-	 *Relacion uno a muchos con la tabla Phones
-	 *
-	 * @return mixed
-	 */
-    public function phones()
-    {
-        return $this->hasMany(Phone::class);
     }
 
     /**

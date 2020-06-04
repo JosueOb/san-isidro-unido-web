@@ -44,6 +44,7 @@
                                     <th>Nombre</th>
                                     <th>Descripción</th>
                                     <th>Categoría</th>
+                                    <th>Icono</th>
                                     @canany(['subcategories.edit','subcategories.destroy'])
                                     <th>Opciones</th>
                                     @endcanany
@@ -54,8 +55,9 @@
                                     <tr>
                                         <td>{{$subcategory->id}}</td>
                                         <td>{{$subcategory->name}}</td>
-                                        <td>{{$subcategory->description ?? 'Sin descripción'}}</td>
+                                        <td>{{$subcategory->description ?: 'Sin descripción'}}</td>
                                         <td>{{$subcategory->category->name }}</td>
+                                        <td class="w-25"><img class="w-25 rounded " src={{$subcategory->getLink()}}></td>
                                         
                                         @can('subcategories.edit')
                                         <td width='10px'>

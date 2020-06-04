@@ -30,7 +30,6 @@ class ApiCategoryController extends ApiBaseController {
 	}
 
 	/**
-     *
 	 * Retornar el detalle de una categoría
 	 * @param integer $id
 	 *

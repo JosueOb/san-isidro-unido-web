@@ -18,12 +18,11 @@ class CreatePostsTable extends Migration
             $table->string('title', 150);
             $table->text('description');
             $table->boolean('state');
-            $table->date('date');
-            $table->time('time');
+            // $table->date('date');
+            // $table->time('time');
             $table->json('ubication')->nullable();
-            $table->json('additional_data')->nullable();
             //por ahora //event_responsible,moderator_aproval, policy_
-            $table->boolean('is_attended')->default(false);
+            // $table->boolean('is_attended')->default(false);
             $table->unsignedBigInteger('user_id')->index();
             // $table->unsignedBigInteger('police_id')->index()->nullable();
             //foreign

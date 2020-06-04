@@ -57,28 +57,14 @@ class ApiBaseController extends Controller {
         $responseApi["errors"] = $errors;
 		return response()->json($responseApi, $code);
     }
-    
+	
+	/**
+	 *Envia una respuesta de error de Debug en Formato JSON
+	 * @param array $data
+	 * @param integer $code
+	 * @return \Illuminate\Http\Response
+	 */
     public function sendDebugResponse($data = [], $code = 500){
         return response()->json($data, $code, [] ,JSON_UNESCAPED_UNICODE);
-	}
-	
-	public function checkReportPermisssion($token = null){		
-		$userRol = User::findById($token->user->id)->first();
-		//Verificar Usuario Rol
-		if(!$userRol){			
-			return $this->sendForbiddenResponse();
-		}
-		//Verificar Rol Morador
-		$hasRol = $userRol->hasRole('morador');
-		if(!$hasRol){			
-			return $this->sendForbiddenResponse();
-		}
-		return true;
-	}
-
-	public function sendForbiddenResponse(){
-		return response()->json([
-			"message" => "No tienes permiso para realizar esta acción"
-		], 403, [] ,JSON_UNESCAPED_UNICODE);
-	}
+	}	
 }

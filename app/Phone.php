@@ -26,11 +26,13 @@ class Phone extends Model
     *
     * @var array
     */
-    protected $fillable = ['phone_number', 'public_service_id'];
+    // protected $fillable = ['phone_number', 'public_service_id'];
+    protected $fillable = ['phone_number'];
     /**
-    * A phone belongs to a public service
+    * Get the owning phoneable model.
     */
-    public function publicService(){
-        return $this->belongsTo(PublicService::class);
+    public function phoneable()
+    {
+        return $this->morphTo();
     }
 }

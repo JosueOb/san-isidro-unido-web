@@ -29,13 +29,13 @@ class NeighborRequest extends FormRequest
                 'first_name'=>'required|regex:/^[[:alpha:][:space:](áéíóúÁÉÍÓÚ)]+$/|min:3|max:25',
                 'last_name'=>'required|regex:/^[[:alpha:][:space:](áéíóúÁÉÍÓÚ)]+$/|min:5|max:25',
                 'email'=>'required|email|unique:users,email',
-                'number_phone'=>'nullable|numeric|digits:10|regex:/^(09)[0-9]{8}+$/',
+                'number_phone'=>'required|numeric|digits:10|regex:/^(09)[0-9]{8}+$/',
             ];
         }
         if($this->method() === 'PUT'){
            $rules = [
                 'email'=>'required|email|unique:users,email,'.$this->route('user')->id,
-                'number_phone'=>'nullable|numeric|digits:10',
+                'number_phone'=>'required|numeric|digits:10',
            ];
         }
 
@@ -63,6 +63,7 @@ class NeighborRequest extends FormRequest
             'email.unique'=>'El :attribute ingresado ya existe',
 
             'number_phone.numeric'=>'El :attribute ingresado es inválido',
+            'number_phone.required'=>'El :attribute es obligatorio',
             'number_phone.digits'=>'El :attribute debe estar conformado por 10 dígitos',
             'number_phone.regex'=>'El :attribute no cumple con el formato solicitado',
         ];
