@@ -98,7 +98,7 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
     //Obtener el estado de la realción entre roles y usuarios
     //Se obtiene el valor de la columna state de la tabla pivote entre roles y usuarios
     public function getRelationshipStateRolesUsers($roleSlug){
-        $state = false;
+        $state = 0;
         $role = $this->roles()->where('slug', $roleSlug)->first();
         if($role){
             $state = $role->pivot->state;

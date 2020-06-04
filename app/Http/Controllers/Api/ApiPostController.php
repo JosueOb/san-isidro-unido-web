@@ -57,6 +57,7 @@ class ApiPostController extends ApiBaseController
             $filterUser = ($request->get('user')) ? intval($request->get('user')): -1;
             $filterByTitle = ($request->get('title')) ? $request->get('title'): '';
             $filterByPolice = ($request->get('police')) ? intval($request->get('police')): -1;
+            $filterActive = ($request->get('police')) ? intval($request->get('active')): -1;
             $filterStatusAttendance = ($request->get('status_attendance') != null) ? $request->get('status_attendance'): '';
             $filterSize =  ($request->get('size')) ? intval($request->get('size')): 20;
             //APLICAR FILTROS
@@ -72,6 +73,10 @@ class ApiPostController extends ApiBaseController
     
             if ($filterUser != -1) {
                 $queryset = $queryset->userId($filterUser);
+            }
+
+            if ($filterUser != -1) {
+                $queryset = $queryset->where('state', 1);
             }
 
             if ($filterByPolice != -1) {
@@ -284,7 +289,9 @@ class ApiPostController extends ApiBaseController
                 if (!is_null($user_devices_policia) && count($user_devices_policia) > 0) {
                     //Enviar notification al usuario en especifico
                     OnesignalNotification::sendNotificationByPlayersID(
-                        [
+                        $title_notification_policia,
+                        $description_notification_policia,
+                            [
                                 "post" => $new_post
                             ],
                         $user_devices_policia
@@ -370,6 +377,8 @@ class ApiPostController extends ApiBaseController
                 if (!is_null($user_devices_moderador) && count($user_devices_moderador) > 0) {
                     //Enviar notification al usuario en especifico
                     OnesignalNotification::sendNotificationByPlayersID(
+                        $title_notification_moderador,
+                        $description_notification_moderador,
                         ["post" => $post],
                         $user_devices_moderador
                     );

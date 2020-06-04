@@ -52,30 +52,30 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('verificar-token', "Api\ApiUserController@checkToken");
     // Crear una Emergencia
     Route::post('emergencias', "Api\ApiPostController@createEmergency")
-    ->middleware(['api.user_auth', 'base64Image']);
+    ->middleware(['api.user_auth', 'api.user_active', 'base64Image']);
     //Crear un Problema Social
-    Route::post('problemas-sociales', "Api\ApiPostController@createSocialProblem")->middleware(['api.user_auth', 'base64Image']);
+    Route::post('problemas-sociales', "Api\ApiPostController@createSocialProblem")->middleware(['api.user_auth', 'api.user_active', 'base64Image']);
     //Crear un detalle de tipo Likes, Asistencias
     Route::post('detalles', "Api\ApiReactionController@create")
-        ->middleware(['api.user_auth']);
+        ->middleware(['api.user_auth', 'api.user_active']);
     // Grupo Emergencias
     Route::group(['prefix' => 'emergencias'], function () {
         //Aceptar atender una emergencia
         Route::post('/atender', "Api\ApiPostController@atenderEmergencia")
-        ->middleware(['api.user_auth']);
+        ->middleware(['api.user_auth', 'api.user_active']);
         //Rechazar emergencia
         Route::post('/rechazar', "Api\ApiPostController@rechazarEmergencia")
-        ->middleware(['api.user_auth']);
+        ->middleware(['api.user_auth', 'api.user_active']);
     });
 
     // Grupo Usuarios
     Route::group(['prefix' => 'usuarios'], function () {
         Route::post('/cambiar-avatar', "Api\ApiUserController@changeAvatar")
-        ->middleware(['api.user_auth', 'base64Image']);
+        ->middleware(['api.user_auth', 'api.user_active', 'base64Image']);
         Route::post('/solicitar-afiliacion', "Api\ApiUserController@requestAfiliation")
-        ->middleware(['api.user_auth', 'base64Image']);
+        ->middleware(['api.user_auth', 'api.user_active', 'base64Image']);
         Route::post('/dispositivos', "Api\ApiDeviceController@save")
-        ->middleware(['api.user_auth']);
+        ->middleware(['api.user_auth', 'api.user_active']);
     });
 });
 
@@ -84,9 +84,9 @@ Route::group(['prefix' => 'v1'], function () {
     //Grupo de Usuarios
     Route::group(['prefix' => "usuarios"], function () {
         Route::patch('/cambiar-contrasenia', "Api\ApiUserController@changePassword")
-            ->middleware(['api.user_auth']);
+            ->middleware(['api.user_auth', 'api.user_active']);
         Route::patch('/editar', "Api\ApiUserController@editProfile")
-            ->middleware(['api.user_auth']);
+            ->middleware(['api.user_auth', 'api.user_active']);
     });
 });
 
@@ -94,17 +94,17 @@ Route::group(['prefix' => 'v1'], function () {
 Route::group(['prefix' => "v1"], function () {
     //Eliminar Detalle Publicacion
     Route::delete('detalles/{id}', "Api\ApiReactionController@delete")
-        ->middleware(['api.user_auth']);
+        ->middleware(['api.user_auth', 'api.user_active']);
     //Grupo Usuarios
     Route::group(['prefix' => "usuarios"], function () {
         Route::delete('/perfiles-sociales/{profile_id}', "Api\ApiSocialProfileController@delete")
-            ->middleware(['api.user_auth']);
+            ->middleware(['api.user_auth', 'api.user_active']);
         Route::delete('/dispositivos/{device_id}', "Api\ApiDeviceController@delete")
-            ->middleware(['api.user_auth']);
+            ->middleware(['api.user_auth', 'api.user_active']);
         Route::delete('/dispositivos/logout/{device_phone_id}', "Api\ApiDeviceController@deleteByPhoneId")
-            ->middleware(['api.user_auth']);
+            ->middleware(['api.user_auth', 'api.user_active']);
         Route::delete('/{id}/notificaciones', 'Api\ApiUserController@markReadNotificationsUser')
-        ->middleware(['api.user_auth']);
+        ->middleware(['api.user_auth', 'api.user_active']);
     });
 });
 

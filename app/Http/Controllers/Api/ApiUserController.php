@@ -419,7 +419,7 @@ class ApiUserController extends ApiBaseController
             $token_decoded = $request->get('token');
             // Verificar que me llegue imagen del avatar
             $validatorAvatar = Validator::make($request->all(), [
-                                    'avatar' => ['required', 'mimes:png,jpeg,jpg'],
+                                    'avatar' => ['required','image', 'mimes:png,jpeg,jpg'],
                                 ]);
             // Verificar si el validador falla
             if (!$validatorAvatar->fails()) {

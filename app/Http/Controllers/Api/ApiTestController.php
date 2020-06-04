@@ -184,10 +184,7 @@ class ApiTestController extends ApiBaseController
         ];
 
         try {
-            // $content_request = OnesignalNotification::sendOnesignalNotification($bodyUniqueNoti);
             $content_request = OnesignalNotification::sendNotificationBySegments('Hola', 'Lorem Ipsum');
-            // dd($content_request);
-            // dd(['title' => $post->title, 'id' => $post->id]);
             return $this->sendDebugResponse(['title' => $post->title, 'id' => $post->id, 'content' => $content_request], 200);
         } catch (Exception $e) {
             // echo 'Excepción capturada: ', $e->getMessage(), "\n";

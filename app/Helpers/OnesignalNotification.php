@@ -122,6 +122,8 @@ class OnesignalNotification
         ];
         if(!$aditionalData){
             $bodyPeticionOnesignal['data'] = (object)[];
+        }else{
+            $bodyPeticionOnesignal['data'] = $aditionalData;
         }
         try {
             $request= self::sendPushNotification($bodyPeticionOnesignal);
