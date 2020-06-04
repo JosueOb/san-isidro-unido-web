@@ -195,14 +195,14 @@ class ApiPostSeeder extends Seeder
                     'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
                 ]);
             }
-            // for($irp = 1; $irp <= 2; $irp++){
-            //     DB::table('resources')->insert([
-            //         'url' => 'https://siu-dev97-sd.s3-sa-east-1.amazonaws.com/CursoPugDesdeCero.pdf',
-            //         'post_id' => $idPostReporte,
-            //         "type" => 'document',
-            //         'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
-            //     ]);
-            // }
+            for($irp = 1; $irp <= 2; $irp++){
+                DB::table('resources')->insert([
+                    'url' => 'https://siu-dev97-sd.s3-sa-east-1.amazonaws.com/CursoPugDesdeCero.pdf',
+                    'post_id' => $idPostReporte,
+                    "type" => 'document',
+                    'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
+                ]);
+            }
         }
     }
 }

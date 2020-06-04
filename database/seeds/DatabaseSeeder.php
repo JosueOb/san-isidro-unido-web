@@ -39,7 +39,7 @@ class DatabaseSeeder extends Seeder
         // $this->call(ApiSubCategorySeeder::class);
         //TODO: LLamado al seeder Post
         $this->call(ApiPostSeeder::class);
-        //TODO: LLamado al seeder Public Service 
+        //TODO: LLamado al seeder Public Service
         $this->call(ApiPublicServiceSeeder::class);
         //TODO: Llamado al Seeder Directives
         // $this->call(ApiDirectivesSeeder::class);
