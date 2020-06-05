@@ -206,8 +206,9 @@ class ApiUserController extends ApiBaseController
     {
         try {
             $validated = $request->validated();
+
             // Verificar si usuario a loguearse existe
-            if (!$request->user_exists) {
+            if (!$request->user_exists && $request->providerKey != 'password') {
                 return $this->register($request);
             }
             //Validar Body Login

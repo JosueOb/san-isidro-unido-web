@@ -151,7 +151,9 @@ class ApiPostController extends ApiBaseController
         $aditionalData->setInfoEmergency([
             'rechazed_by' => null,
             'attended_by' => $token_decoded->user,
-            'rechazed_reason' => null
+            'rechazed_reason' => null,
+            "approved_by" => null, 
+            "status_attendance" => 'atendido'
         ]);
         //Cambiar Campo isAttended
         $emergency->is_attended = 1;
@@ -209,7 +211,9 @@ class ApiPostController extends ApiBaseController
             $aditionalData->setInfoEmergency([
                 'attended_by' => null,
                 'rechazed_by' => $token_decoded->user,
-                'rechazed_reason' => $request->motivo
+                'rechazed_reason' => $request->motivo,
+                "approved_by" => null, 
+                "status_attendance" => 'rechazado'
                 ]);
             //Cambiar Campo isAttended
             $emergency->is_attended = 0;
@@ -254,8 +258,6 @@ class ApiPostController extends ApiBaseController
             $post->description = $request->description;
             $post->user_id = $token_decoded->user->id;
             $post->category_id = $category->id;
-            // $post->date = date("Y-m-d");
-            // $post->time = date("H:i:s");
             $post->state = 1;
             $post->ubication = $request->ubication;
 
