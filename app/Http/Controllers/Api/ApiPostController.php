@@ -70,10 +70,13 @@ class ApiPostController extends ApiBaseController
                 $subcategory = Subcategory::slug($filterSubcategory)->first();
                 $queryset = $queryset->subCategoryId(($subcategory) ? $subcategory->id: -1);
             }
+          
     
             if ($filterUser != -1) {
                 $queryset = $queryset->userId($filterUser);
             }
+
+            // dd($queryset->get());
 
             if ($filterUser != -1) {
                 $queryset = $queryset->where('state', 1);
@@ -152,7 +155,7 @@ class ApiPostController extends ApiBaseController
         ]);
         //Cambiar Campo isAttended
         $emergency->is_attended = 1;
-        $emergency->additional_data = array_merge($emergency->additional_data ?? [], $aditionalData->getAll());
+        $emergency->additional_data = array_merge($emergency->additional_data ?? [], $aditionalData->getEmergencyData());
         $emergency->save();
         //Notificar al usuario que creo el post sobre quien lo va a atender
         $title_noti = "Tu solicitud de emergencia fue aceptada";
@@ -210,7 +213,7 @@ class ApiPostController extends ApiBaseController
                 ]);
             //Cambiar Campo isAttended
             $emergency->is_attended = 0;
-            $emergency->additional_data = array_merge($emergency->additional_data ?? [], $aditionalData->getAll());
+            $emergency->additional_data = array_merge($emergency->additional_data ?? [], $aditionalData->getEmergencyData());
             $emergency->save();
             //Enviar Notificación
             $title_noti = "Tu solicitud de emergencia fue rechazada";
@@ -257,7 +260,7 @@ class ApiPostController extends ApiBaseController
             $post->ubication = $request->ubication;
 
             $aditionalData = new AdditionalDataCls();
-            $aditionalDataSave = (isset($post->additional_data)) ? $post->additional_data: $aditionalData->getAll();
+            $aditionalDataSave = (isset($post->additional_data)) ? $post->additional_data: $aditionalData->getEmergencyData();
             $post->additional_data = $aditionalDataSave;
             $post->save();
             //Guardar Resources

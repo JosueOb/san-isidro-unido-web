@@ -34,24 +34,19 @@ class ApiPostSeeder extends Seeder
             $aditionalData->setInfoEmergency([
                 "attended_by" => $user,
                 'rechazed_by' => null,
-                'rechazed_reason' => null
-            ]);
-            $aditionalData->setInfoPost([
+                'rechazed_reason' => null,
                 "approved_by" => null, 
-                "status_attendance" => $faker->randomElement(['pendiente', 'atendido', 'rechazado'],1)
+                "status_attendance" => $faker->randomElement(['pendiente'],1)
             ]);
             $initialDate =  CarbonImmutable::now();
             $ubicationData = new UbicationCls($faker->address, $faker->latitude,$faker->longitude, 'lorem description');
             $idPostEmergencia = DB::table('posts')->insertGetId([
                 'title' => $faker->realText(50,2),
                 'description' =>  $faker->realText(200,2),
-                // 'date' => $initialDate->toDateString(),
-                // 'time' => $initialDate->toTimeString(),
                 "ubication" => json_encode($ubicationData->getAll()),
-                'additional_data' => json_encode($aditionalData->getAll()),
+                'additional_data' => json_encode($aditionalData->getEmergencyData()),
                 "user_id" => $user->id,
                 'state'=>true,
-                // "is_attended" => rand(0, 1),
                 "category_id" =>  $categoriaEmergencias->id,
                 "subcategory_id" => null,
                 'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
@@ -69,9 +64,9 @@ class ApiPostSeeder extends Seeder
         //Problemas Sociales
         for($sp = 1; $sp <= $numPosts; $sp++){
             $aditionalData = new AdditionalDataCls();
-            $aditionalData->setInfoPost([
+            $aditionalData->setInfoSocialProblem([
                 "approved_by" => null, 
-                "status_attendance" => $faker->randomElement(['pendiente', 'atendido', 'rechazado'],1)
+                "status_attendance" => $faker->randomElement(['pendiente'],1)
             ]);
             $user = User::whereHas('roles',function(Builder $query){
                 $query->where('slug','directivo');
@@ -85,7 +80,7 @@ class ApiPostSeeder extends Seeder
                 // 'date' => $initialDate->toDateString(),
                 // 'time' => $initialDate->toTimeString(),
                 "ubication" => json_encode($ubicationData->getAll()),
-                'additional_data' => json_encode($aditionalData->getAll()),
+                'additional_data' => json_encode($aditionalData->getProblemData()),
                 // "is_attended" => rand(0, 1),
                 "user_id" => $user->id,
                 'state'=>true,
@@ -124,11 +119,9 @@ class ApiPostSeeder extends Seeder
                     'end_date' => date("Y-m-d",strtotime(date("Y-m-d", $timestamp)."+ 1 week")),
                     'start_time' => date("H:i:s", $timestamp),
                     'end_time' => date("H:i:s", strtotime('+3 hours', strtotime(date("H:i:s", $timestamp)))) 
-                ]
-            ]);
-            $aditionalData->setInfoPost([
+                ],
                 "approved_by" => null, 
-                "status_attendance" => $faker->randomElement(['pendiente', 'atendido', 'rechazado'],1)
+                "status_attendance" => $faker->randomElement(['pendiente'],1)
             ]);
             $user = User::orderBy(DB::raw('RAND()'))->take(1)->first();
             $subcategoryEvents = $categoriaEventos->subcategories()->orderBy(DB::raw('RAND()'))->first();
@@ -136,19 +129,19 @@ class ApiPostSeeder extends Seeder
             $initialDate =  CarbonImmutable::now();
             $ubicationData = new UbicationCls($faker->address, $faker->latitude,$faker->longitude, 'lorem description');
             $finalDate = $initialDate->add($intervalDays, 'day');
+           
             $idPostEvento = DB::table('posts')->insertGetId([
                 'title' => $faker->realText(50,2),
                 'description' =>  $faker->realText(200,2),
-                // 'date' => $initialDate->toDateString(),
-                // 'time' => $initialDate->toTimeString(),
                 'state'=>true,
-                'additional_data' => json_encode($aditionalDataEvento->getAll()),
+                'additional_data' => json_encode($aditionalDataEvento->getEventData()),
                 "ubication" => json_encode($ubicationData->getAll()),
                 "user_id" => $user->id,
                 "category_id" => $categoriaEventos->id,
                 "subcategory_id" => $subcategoryEvents->id,
                 'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
             ]);
+            // dd($aditionalDataEvento->getEventData(), $idPostEvento);
             for($iev = 1; $iev <= 3; $iev++){
                 DB::table('resources')->insert([
                     'url' => "https://loremflickr.com/250/250?random=$ev",
@@ -167,9 +160,9 @@ class ApiPostSeeder extends Seeder
         //Crear Actividades Barriales
         for($rp = 1; $rp <= $numPosts; $rp++){
             $aditionalData = new AdditionalDataCls();
-            $aditionalData->setInfoPost([
+            $aditionalData->setInfoActivity([
                 "approved_by" => null, 
-                "status_attendance" => $faker->randomElement(['pendiente', 'atendido', 'rechazado'],1)
+                "status_attendance" => $faker->randomElement(['pendiente'],1)
             ]);
             $user = User::orderBy(DB::raw('RAND()'))->take(1)->first();
             $initialDate =  CarbonImmutable::now();
@@ -177,10 +170,8 @@ class ApiPostSeeder extends Seeder
             $idPostReporte = DB::table('posts')->insertGetId([
                 'title' => $faker->realText(50,2),
                 'description' =>  $faker->realText(200,2),
-                // 'date' => $initialDate->toDateString(),
-                // 'time' => $initialDate->toTimeString(),
                 "ubication" => json_encode($ubicationData->getAll()),
-                'additional_data' => json_encode($aditionalData->getAll()),
+                'additional_data' => json_encode($aditionalData->getActivityData()),
                 "user_id" => $user->id,
                 'state'=>true,
                 "category_id" => $categoriaInformes->id,

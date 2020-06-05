@@ -78,7 +78,7 @@ class ApiPublicServiceController extends ApiBaseController
             if (is_null($subcategory)) {
                 return $this->sendError(404, 'No existe la categoria solicitada', []);
             }
-            $publicServices = PublicService::findByCategoryId($subcategory->id)
+            $publicServices = PublicService::findBySubCategoryId($subcategory->id)
                 ->with(['phones', 'subcategory'])
                 ->get();
             return $this->sendResponse(200, 'Recurso encontrado', $publicServices);

@@ -15,7 +15,9 @@ class AdditionalData
         $this->emergency = [
             "attended_by" => null,
             'rechazed_by' => null,
-            'rechazed_reason' => null
+            'rechazed_reason' => null,
+            "approved_by" => null, 
+            "status_attendance" => 'pendiente' //atendido, rechazado, pendiente
         ];
         $this->event = [
             "responsible" => null,
@@ -24,11 +26,15 @@ class AdditionalData
                 'end_date' => date("Y-m-d",strtotime(date("Y-m-d")."+ 1 week")),
                 'start_time' => date("H:i:s"),
                 'end_time' => date("H:i:s", strtotime('+3 hours', strtotime(date("H:i:s")))) 
-            ]
+            ],
+            "approved_by" => null, 
+            "status_attendance" => 'pendiente' //atendido, rechazado, pendiente
         ];
-        $this->problem = null;
-        $this->activity = null;
-        $this->post = [
+        $this->problem = [
+            "approved_by" => null, 
+            "status_attendance" => 'pendiente' //atendido, rechazado, pendiente
+        ];
+        $this->activity = [
             "approved_by" => null, 
             "status_attendance" => 'pendiente' //atendido, rechazado, pendiente
         ];
@@ -41,7 +47,7 @@ class AdditionalData
 
     public function setInfoEmergency($info_emergency) 
     {
-        $this->emergency = $info_emergency;
+        $this->emergency = array_merge($this->emergency, $info_emergency);
     }
     
     public function getInfoEvent() 
@@ -51,7 +57,7 @@ class AdditionalData
 
     public function setInfoEvent($info_event) 
     {
-        $this->event = $info_event;
+        $this->event = array_merge($this->event, $info_event);
     }
 
     public function getInfoSocialProblem() 
@@ -61,7 +67,7 @@ class AdditionalData
 
     public function setInfoSocialProblem($info_social_problem) 
     {
-        $this->problem = $info_social_problem;
+        $this->problem = array_merge($this->problem, $info_social_problem);
     }
 
     public function getInfoActivity() 
@@ -71,17 +77,7 @@ class AdditionalData
 
     public function setInfoActivity($info_activity) 
     {
-        $this->activity = $info_activity;
-    }
-
-    public function getInfoPost() 
-    {
-        return $this->post;
-    }
-
-    public function setInfoPost($info_post) 
-    {
-        $this->post = $info_post;
+        $this->activity = array_merge($this->activity, $info_activity);
     }
 
     public function getAll()
@@ -92,7 +88,38 @@ class AdditionalData
             'event' => $this->getInfoEvent(),
             'problem' => $this->getInfoSocialProblem(),
             'activity' => $this->getInfoActivity(),
-            'post' => $this->getInfoPost(),
+        ];
+    }
+
+    public function getEmergencyData()
+    {
+        return 
+        [
+            'emergency'   => $this->getInfoEmergency()
+        ];
+    }
+
+    public function getEventData()
+    {
+        return 
+        [
+            'event' => $this->getInfoEvent()
+        ];
+    }
+
+    public function getProblemData()
+    {
+        return 
+        [
+            'problem' => $this->getInfoSocialProblem()
+        ];
+    }
+
+    public function getActivityData()
+    {
+        return 
+        [
+            'activity' => $this->getInfoActivity(),
         ];
     }
 }

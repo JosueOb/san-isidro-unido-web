@@ -44,9 +44,9 @@ class PublicService extends Model
 	 * @param  integer $category_id
 	 * @return mixed
 	 */
-    public function scopeFindByCategoryId($query, $category_id)
+    public function scopeFindBySubCategoryId($query, $subcategory_id)
     {
-        return $query->where('category_id', $category_id);
+        return $query->where('subcategory_id', $subcategory_id);
     }
 
    /**
