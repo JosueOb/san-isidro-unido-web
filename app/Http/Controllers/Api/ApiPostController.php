@@ -83,7 +83,7 @@ class ApiPostController extends ApiBaseController
             }
 
             if ($filterByPolice != -1) {
-                $queryset = $queryset->where('additional_data->info_emergency->attended_by->id', $filterByPolice);
+                $queryset = $queryset->where('additional_data->attended_by->id', $filterByPolice);
             }           
 
             if ($filterByTitle != '') {
@@ -91,7 +91,7 @@ class ApiPostController extends ApiBaseController
             }
             // dd($filterStatusAttendance);
             if ($filterStatusAttendance != '') {
-                $queryset = $queryset->where('additional_data->post->status_attendance', $filterStatusAttendance);
+                $queryset = $queryset->where('additional_data->status_attendance', $filterStatusAttendance);
             }
             //Retornar Paginacion y datos ordenados descendentemente para devolver los mas nuevos primero
             $posts = $queryset->orderBy('created_at', 'DESC')->simplePaginate($filterSize)->toArray();

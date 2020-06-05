@@ -93,33 +93,21 @@ class AdditionalData
 
     public function getEmergencyData()
     {
-        return 
-        [
-            'emergency'   => $this->getInfoEmergency()
-        ];
+        return $this->getInfoEmergency();
     }
 
     public function getEventData()
     {
-        return 
-        [
-            'event' => $this->getInfoEvent()
-        ];
+        return $this->getInfoEvent();
     }
 
     public function getProblemData()
     {
-        return 
-        [
-            'problem' => $this->getInfoSocialProblem()
-        ];
+        return $this->getInfoSocialProblem();
     }
 
     public function getActivityData()
     {
-        return 
-        [
-            'activity' => $this->getInfoActivity(),
-        ];
+        return $this->getInfoActivity();
     }
 }
