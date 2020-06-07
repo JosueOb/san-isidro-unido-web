@@ -19,10 +19,7 @@ use Illuminate\Support\Facades\Route;
 | HomePage
 |--------------------------------------------------------------------------
 */
-Route::get('/', function () {
-    return view('welcome');
-});
-
+Route::get('/', 'LandingController@index')->name('landing');
 /*
 |--------------------------------------------------------------------------
 | Authentication
