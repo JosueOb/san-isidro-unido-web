@@ -14,7 +14,7 @@
 
     
     <!-- Icon-->
-    <link rel="icon" type="image/png" href="https://siu-resources-s3.s3.us-east-2.amazonaws.com/default_images/logos/logo.png">
+    <link rel="icon" type="image/svg+xml" href="https://siu-dev97-sd.s3-sa-east-1.amazonaws.com/recursos_publicos/logos/sanIsidroIconOnlyTransparent.svg" sizes='48x48'>
 
     <!-- Styles -->
     <link type="text/css" rel="stylesheet" href="{{ mix('css/styles.css') }}">
@@ -27,7 +27,7 @@
         <nav class="navbar navbar-expand-lg fixed-top" id="mainNav">
             <div class="container-fluid">
                 <a id="brand" class="navbar-brand js-scroll-trigger" href="#home">
-                    <img src="img/default_images/logos/sanIsidroIconOnlyTransparent.svg" alt="">
+                    <img src="https://siu-dev97-sd.s3-sa-east-1.amazonaws.com/recursos_publicos/logos/sanIsidroIconOnlyTransparent.svg" alt="">
                     <span>San Isidro Unido</span>
                 </a>
                 <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
@@ -66,7 +66,7 @@
                             <!-- Heading -->
                             <div class="title">
                                 <h2 class="text">SIU</h2>
-                                <img src="img/default_images/logos/sanIsidroIconOnlyTransparent.svg" alt="siu-logo"
+                                <img src="https://siu-dev97-sd.s3-sa-east-1.amazonaws.com/recursos_publicos/logos/sanIsidroIconOnlyTransparent.svg" alt="siu-logo"
                                     class="logo">
                             </div>
                             <!-- Divider -->
@@ -78,7 +78,7 @@
                             <div class="download">
                                 <a href="https://play.google.com/store/apps/details?id=com.stalinmaza.sanisidrounido"
                                     target="_blanck">
-                                    <img src="img/default_images/landing/google-es.png" alt="download">
+                                    <img src="https://siu-dev97-sd.s3-sa-east-1.amazonaws.com/recursos_publicos/landing/google-es.png" alt="download">
                                 </a>
                             </div>
                         </div>
@@ -149,6 +149,7 @@
                     </div>
 
                     <div class="row">
+                        @if (count($directiveMembers) > 0)
                         @foreach ($directiveMembers as $directive)
                         <div class="col-12 col-md-6">
                             <div class="directive-member">
@@ -169,6 +170,11 @@
                             </div>
                         </div>
                         @endforeach
+                        @else
+                            <div class="col">
+                                <p>No existen registros</p>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </section>
@@ -183,138 +189,86 @@
 
                     <div class="row">
                         <div class="col">
+                            @if (count($news) > 0)
                             <!-- <div id="news-carousel" class="carousel slide" data-ride="carousel"> -->
-                            <div id="news-carousel" class="carousel slide">
-                                <ol class="carousel-indicators">
-                                    <li data-target="#news-carousel" data-slide-to="0" class="active"></li>
-                                    <li data-target="#news-carousel" data-slide-to="1"></li>
-                                    <li data-target="#news-carousel" data-slide-to="2"></li>
-                                </ol>
-                                <div class="carousel-inner">
-                                    <div class="carousel-item active">
-                                        <img src="https://images.pexels.com/photos/445109/pexels-photo-445109.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-                                            alt="">
-                                        <div class="carousel-caption">
-                                            <h5>Fumigación de las calles principales del barrio</h5>
-
-                                            <p>Escrito por: Josué Cando</p>
-                                            <!-- Button trigger modal -->
-                                            <button type="button" class="btn btn-dark" data-toggle="modal"
-                                                data-target="#exampleModalScrollable">
-                                                Ver más información
-                                            </button>
+                                <div id="news-carousel" class="carousel slide">
+                                    <ol class="carousel-indicators">
+                                        @foreach ($news as $new)
+                                            <li data-target="#news-carousel" data-slide-to="{{$loop->iteration - 1}}"></li>
+                                        @endforeach
+                                    </ol>
+                                    <div class="carousel-inner">
+    
+                                        @foreach ($news as $new)
+                                        <div class="carousel-item">
+                                            <img src="{{$new->getFirstImage()}}"
+                                                alt="">
+                                            <div class="carousel-caption">
+                                                <h5>{{$new->title}}</h5>
+    
+                                                <p>Escrito por:  {{$new->user->getFullName()}}</p>
+                                                <!-- Button trigger modal -->
+                                                <button type="button" class="btn btn-dark" data-toggle="modal"
+                                                    data-target="#modalReport{{$new->id}}">
+                                                    Ver más información
+                                                </button>
+                                            </div>
                                         </div>
+                                        @endforeach
                                     </div>
-                                    <div class="carousel-item">
-                                        <img class="d-block w-100"
-                                            src="https://images.pexels.com/photos/1839564/pexels-photo-1839564.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-                                            alt="">
-                                        <div class="carousel-caption">
-                                            <h5>Title</h5>
-                                            <p>Text</p>
-                                        </div>
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img class="d-block w-100"
-                                            src="https://images.pexels.com/photos/3922221/pexels-photo-3922221.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-                                            alt="">
-                                        <div class="carousel-caption">
-                                            <h5>Title</h5>
-                                            <p>Text</p>
+    
+                                    <a class="carousel-control-prev" href="#news-carousel" role="button" data-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                    <a class="carousel-control-next" href="#news-carousel" role="button" data-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+                                </div>
+    
+                                @foreach ($news as $new)
+                                <!-- Modal -->
+                                <div class="modal fade" id="modalReport{{$new->id}}" tabindex="-1" role="dialog"
+                                    aria-labelledby="#modalReportTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-scrollable" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title text-uppercase font-weight-bold" id="#modalReportTitle">
+                                                    {{$new->title}}</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <span class="d-block text-left text-muted">Escrito por:  {{$new->user->getFullName()}}</span>
+                                                    </div>
+                                                    <div class="col">
+                                                        <span class="d-block text-right text-muted">{{$new->created_at}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col mt-3">
+                                                        <p class="text-justify">
+                                                           {{$new->description}}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">Cerrar</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-
-                                <a class="carousel-control-prev" href="#news-carousel" role="button" data-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="sr-only">Previous</span>
-                                </a>
-                                <a class="carousel-control-next" href="#news-carousel" role="button" data-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="sr-only">Next</span>
-                                </a>
-                            </div>
-
-
-                            <!-- Modal -->
-                            <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog"
-                                aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-scrollable" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalScrollableTitle">
-                                                Hola mundoHola mundoHola mundoHola mundoHola mundoHola mundoHola
-                                                mundoHola mundoHola mundoHola mundoHola mundoHola mundo</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-
-                                            <p class="text-right">Escrito por: Josué Cando</p>
-                                            <p class="text-justify">
-                                                Contrary to popular belief, Lorem Ipsum is not simply random text. It
-                                                has
-                                                roots in a piece of classical Latin literature from 45 BC, making it
-                                                over
-                                                2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney
-                                                College in Virginia, looked up one of the more obscure Latin words,
-                                                consectetur, from a Lorem Ipsum passage, and going through the cites of
-                                                the
-                                                word in classical literature, discovered the undoubtable source. Lorem
-                                                Ipsum
-                                                comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et
-                                                Malorum"
-                                                (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book
-                                                is a
-                                                treatise on the theory of ethics, very popular during the Renaissance.
-                                                The
-                                                first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a
-                                                line
-                                                in section 1.10.32.
-
-                                                The standard chunk of Lorem Ipsum used since the 1500s is reproduced
-                                                below
-                                                for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus
-                                                Bonorum
-                                                et Malorum" by Cicero are also reproduced in their exact original form,
-                                                accompanied by English versions from the 1914 translation by H. Rackham.
-                                                Contrary to popular belief, Lorem Ipsum is not simply random text. It
-                                                has
-                                                roots in a piece of classical Latin literature from 45 BC, making it
-                                                over
-                                                2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney
-                                                College in Virginia, looked up one of the more obscure Latin words,
-                                                consectetur, from a Lorem Ipsum passage, and going through the cites of
-                                                the
-                                                word in classical literature, discovered the undoubtable source. Lorem
-                                                Ipsum
-                                                comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et
-                                                Malorum"
-                                                (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book
-                                                is a
-                                                treatise on the theory of ethics, very popular during the Renaissance.
-                                                The
-                                                first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a
-                                                line
-                                                in section 1.10.32.
-
-                                                The standard chunk of Lorem Ipsum used since the 1500s is reproduced
-                                                below
-                                                for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus
-                                                Bonorum
-                                                et Malorum" by Cicero are also reproduced in their exact original form,
-                                                accompanied by English versions from the 1914 translation by H. Rackham.
-                                            </p>
-
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-dismiss="modal">Close</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                <!-- /Modal -->
+                                @endforeach
+                            @else
+                                <p>No existen registros</p>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -331,125 +285,23 @@
                         <div class="col">
                             <div id="scrolling">
                                 <ul>
+                                    @foreach ($events as $event)
                                     <li>
                                         <div class="event-content">
                                             <div class="event-image">
-                                                <img src="https://images.pexels.com/photos/445109/pexels-photo-445109.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+                                                <img src="{{$event->getFirstImage()}}"
                                                     alt="event">
                                             </div>
-                                            <h6 class="event-title">Campania de visión y odontología Pedro Belazco</h6>
-                                            <p class="event-description">Descripción de evento, descripción de evento,
-                                                descripción de
-                                                evento,descripción de evento,descripción de evento,descripción de
-                                                evento, más texo</p>
+                                            <h6 class="event-title">{{$event->title}}</h6>
+                                            <p class="event-description">{{$event->description}}</p>
                                             <div class="event-date">
+                                                <p>{{$event->additional_data}}</p>
                                                 <span>2020-20-15 al 2020-20-16</span>
                                                 <span>20:00 - 8:00</span>
                                             </div>
                                         </div>
                                     </li>
-                                    <li>
-                                        <div class="event-content">
-                                            <div class="event-image">
-                                                <img src="https://images.pexels.com/photos/906052/pexels-photo-906052.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-                                                    alt="event">
-                                            </div>
-                                            <h6 class="event-title">Campania de visión y odontología Pedro Belazco</h6>
-                                            <p class="event-description">Descripción de evento, descripción de evento,
-                                                descripción de
-                                                evento,descripción de evento,descripción de evento,descripción de
-                                                evento, más texo</p>
-                                            <div class="event-date">
-                                                <span>2020-20-15 al 2020-20-16</span>
-                                                <span>20:00 - 8:00</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="event-content">
-                                            <div class="event-image">
-                                                <img src="https://images.pexels.com/photos/341970/pexels-photo-341970.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-                                                    alt="event">
-                                            </div>
-                                            <h6 class="event-title">Campania de visión y odontología Pedro Belazco</h6>
-                                            <p class="event-description">Descripción de evento, descripción de evento,
-                                                descripción de
-                                                evento,descripción de evento,descripción de evento,descripción de
-                                                evento, más texo</p>
-                                            <div class="event-date">
-                                                <span>2020-20-15 al 2020-20-16</span>
-                                                <span>20:00 - 8:00</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="event-content">
-                                            <div class="event-image">
-                                                <img src="https://images.pexels.com/photos/445109/pexels-photo-445109.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-                                                    alt="event">
-                                            </div>
-                                            <h6 class="event-title">Campania de visión y odontología Pedro Belazco</h6>
-                                            <p class="event-description">Descripción de evento, descripción de evento,
-                                                descripción de
-                                                evento,descripción de evento,descripción de evento,descripción de
-                                                evento, más texo</p>
-                                            <div class="event-date">
-                                                <span>2020-20-15 al 2020-20-16</span>
-                                                <span>20:00 - 8:00</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="event-content">
-                                            <div class="event-image">
-                                                <img src="https://images.pexels.com/photos/445109/pexels-photo-445109.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-                                                    alt="event">
-                                            </div>
-                                            <h6 class="event-title">Campania de visión y odontología Pedro Belazco</h6>
-                                            <p class="event-description">Descripción de evento, descripción de evento,
-                                                descripción de
-                                                evento,descripción de evento,descripción de evento,descripción de
-                                                evento, más texo</p>
-                                            <div class="event-date">
-                                                <span>2020-20-15 al 2020-20-16</span>
-                                                <span>20:00 - 8:00</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="event-content">
-                                            <div class="event-image">
-                                                <img src="https://images.pexels.com/photos/445109/pexels-photo-445109.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-                                                    alt="event">
-                                            </div>
-                                            <h6 class="event-title">Campania de visión y odontología Pedro Belazco</h6>
-                                            <p class="event-description">Descripción de evento, descripción de evento,
-                                                descripción de
-                                                evento,descripción de evento,descripción de evento,descripción de
-                                                evento, más texo</p>
-                                            <div class="event-date">
-                                                <span>2020-20-15 al 2020-20-16</span>
-                                                <span>20:00 - 8:00</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="event-content">
-                                            <div class="event-image">
-                                                <img src="https://images.pexels.com/photos/445109/pexels-photo-445109.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-                                                    alt="event">
-                                            </div>
-                                            <h6 class="event-title">Campania de visión y odontología Pedro Belazco</h6>
-                                            <p class="event-description">Descripción de evento, descripción de evento,
-                                                descripción de
-                                                evento,descripción de evento,descripción de evento,descripción de
-                                                evento, más texo</p>
-                                            <div class="event-date">
-                                                <span>2020-20-15 al 2020-20-16</span>
-                                                <span>20:00 - 8:00</span>
-                                            </div>
-                                        </div>
-                                    </li>
+                                    @endforeach
                                 </ul>
                             </div>
                         </div>

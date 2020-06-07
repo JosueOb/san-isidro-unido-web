@@ -16819,7 +16819,7 @@ header,
 }
 
 #header {
-  background: url("https://images.pexels.com/photos/445109/pexels-photo-445109.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
+  background: url("https://siu-dev97-sd.s3-sa-east-1.amazonaws.com/recursos_publicos/landing/header-background.jpg");
   background-repeat: no-repeat;
   background-position: center;
   background-attachment: fixed;
@@ -17112,7 +17112,7 @@ header,
 }
 
 #events .event-content .event-date {
-  margin: 0.75rem 1.25rem;
+  padding: 0.75rem 1.25rem;
   display: flex;
   flex-direction: column;
   justify-content: center;

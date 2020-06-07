@@ -83,3 +83,6 @@ carousel.itemslide({
 $(window).resize(function () {
     carousel.reload();
 }); //Recalculate width and center positions and sizes when window is resized
+
+$(document.querySelector("#news-carousel .carousel-inner").firstElementChild).addClass('active');
+$(document.querySelector("#news-carousel .carousel-indicators").firstElementChild).addClass('active')
