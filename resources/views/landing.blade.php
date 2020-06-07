@@ -509,13 +509,88 @@
                     </div>
                 </div>
             </section>
-
-
-
-
         </div>
     </main>
     <!--/Main layout-->
+
+    <footer class="footer">
+        <div class="social-media">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="social-media-title">Nuestras redes sociales</h6>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="social-media-icons">
+                            <!--Facebook-->
+                            <a class="social-icon" href="#" target="_blank">
+                                <i class="fab fa-facebook-f"></i> Facebook
+                            </a>
+                            <!--Instagram-->
+                            <a class="social-icon" href="#" target="_blank">
+                                <i class="fab fa-instagram"></i> Instagram
+                            </a>
+                            <!--Youtube-->
+                            <a class="social-icon" href="#" target="_blank">
+                                <i class="fab fa-youtube"></i> Youtube
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-content">
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-md-4">
+                        <div class="footer-item">
+                            <h6 class="item-title"><a href="#">San Isidro Unido</a></h6>
+                            <hr class="item-slide">
+                            <div class="item-content description">
+                                <p>Comunícate directamente con la directiva barrial con SIU</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="footer-item">
+                            <h6 class="item-title">Contacto</h6>
+                            <hr class="item-slide">
+                            <div class="item-content contacts">
+                                <p><i class="fa fa-envelope mr-3"></i> siul@gmail.com</p>
+                                <p><i class="fa fa-phone mr-3"></i> 022505682</p>
+                                <p><i class="fa fa-print mr-3"></i> 022505682</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="footer-item">
+                            <h6 class="item-title">Menú Principal</h6>
+                            <hr class="item-slide">
+                            <div class="item-content options">
+                                <a class="footer-link" href="#home">Inicio</a>
+                                <a class="footer-link" href="#features">Descripción</a>
+                                <a class="footer-link" href="#directive">Directiva</a>
+                                <a class="footer-link" href="#news">Noticias</a>
+                                <a class="footer-link" href="#events">Eventos</a>
+                                <a class="footer-link" href="#">Login</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="footer-copyright">
+            Copyright © 2020
+            <a href="#">San Isidro Unido</a>
+        </div>
+    </footer>
 
 </body>
 </html>
