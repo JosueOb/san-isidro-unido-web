@@ -149,79 +149,26 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-12 col-sm-6 col-xl-3">
+                        @foreach ($directiveMembers as $directive)
+                        <div class="col-12 col-md-6">
                             <div class="directive-member">
                                 <div class="row">
                                     <div class="col-5">
                                         <img class="member-photo"
-                                            src="https://images.pexels.com/photos/445109/pexels-photo-445109.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+                                            src="{{$directive->getAvatar()}}"
                                             alt="user-photo">
                                     </div>
                                     <div class="col-7">
                                         <div class="menber-info">
-                                            <h4 class="member-name">Josué Ricardo Cando Obaco</h4>
-                                            <p class="member-position">Presidente</p>
-                                            <span class="member-phone">0984254187</span>
+                                            <h4 class="member-name">{{$directive->getFullName()}}</h4>
+                                            <p class="member-position">{{$directive->position->name}}</p>
+                                            <span class="member-phone">{{$directive->email}}</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="col-12 col-sm-6 col-xl-3">
-                            <div class="directive-member">
-                                <div class="row">
-                                    <div class="col-5">
-                                        <img class="member-photo"
-                                            src="https://images.pexels.com/photos/3922221/pexels-photo-3922221.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-                                            alt="user-photo">
-                                    </div>
-                                    <div class="col-7">
-                                        <div class="menber-info">
-                                            <h4 class="member-name">Josué Ricardo Cando Obaco</h4>
-                                            <p class="member-position">Presidente</p>
-                                            <span class="member-phone">0984254187</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6 col-xl-3">
-                            <div class="directive-member">
-                                <div class="row">
-                                    <div class="col-5">
-                                        <img class="member-photo"
-                                            src="https://images.pexels.com/photos/3922221/pexels-photo-3922221.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-                                            alt="user-photo">
-                                    </div>
-                                    <div class="col-7">
-                                        <div class="menber-info">
-                                            <h4 class="member-name">Josué Ricardo Cando Obaco</h4>
-                                            <p class="member-position">Presidente</p>
-                                            <span class="member-phone">0984254187</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6 col-xl-3">
-                            <div class="directive-member">
-                                <div class="row">
-                                    <div class="col-5">
-                                        <img class="member-photo"
-                                            src="https://images.pexels.com/photos/1839564/pexels-photo-1839564.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-                                            alt="user-photo">
-                                    </div>
-                                    <div class="col-7">
-                                        <div class="menber-info">
-                                            <h4 class="member-name">Josué Ricardo Cando Obaco</h4>
-                                            <p class="member-position">Presidente</p>
-                                            <span class="member-phone">0984254187</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
             </section>

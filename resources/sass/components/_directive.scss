@@ -27,6 +27,7 @@
             }
             .menber-info{
                 // border: black 1px solid;
+                box-sizing: border-box;
                 display: flex;
                 flex-direction: column;
                 height: 100%;
@@ -36,16 +37,22 @@
             }
             .member-name{
                 // border: solid red 1px;
+                display: block;
                 font-size: 23px;
                 font-weight: 500;
             }
             .member-position{
                 // border: solid red 1px;
+                display: block;
+                box-sizing: border-box;
+                overflow: hidden;
+                text-overflow: ellipsis;
                 margin: .25rem .75rem;
                 text-transform: uppercase;
                 font-weight: 700;
                 letter-spacing: 1.3px;
-                font-size: 176x;
+                font-size: 16px;
+                width: 100%;
             }
             .member-phone{
                 // border: solid black 1px;
