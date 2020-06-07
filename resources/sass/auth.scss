@@ -20,20 +20,9 @@
 @import 'override/button';
 
 // Layout
+@import 'layout/main-nav';
 @import 'layout/forms';
-@import 'layout/main-navbar';
-@import 'layout/main-sidebar';
-@import 'layout/page-header';
-@import 'layout/main-content';
-@import 'layout/main-footer';
+@import 'layout/footer';
 
-// // Pages
-// @import 'pages/login';
-
-//Components
-@import 'components/card-post';
-@import 'components/gallery-images';
-@import 'components/gallery-documents';
-@import 'components/map';
-@import 'components/phone-numbers';
-@import 'components/user-avatar';
+// Pages
+@import 'pages/login';

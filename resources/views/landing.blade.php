@@ -26,7 +26,7 @@
 
         <nav class="navbar navbar-expand-lg fixed-top" id="mainNav">
             <div class="container-fluid">
-                <a id="brand" class="navbar-brand js-scroll-trigger" href="#home">
+                <a class="navbar-brand js-scroll-trigger" href="#home">
                     <img src="https://siu-dev97-sd.s3-sa-east-1.amazonaws.com/recursos_publicos/logos/sanIsidroIconOnlyTransparent.svg" alt="">
                     <span>San Isidro Unido</span>
                 </a>
@@ -36,7 +36,7 @@
                     <i class="fas fa-bars"></i>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
-                    <ul class="navbar-nav text-uppercase ml-auto">
+                    <ul class="navbar-nav text-uppercase ml-auto" id="navItems">
                         <li class="nav-item">
                             <a class="nav-link js-scroll-trigger" href="#home">Inicio</a>
                         </li>
@@ -368,13 +368,13 @@
                         <div class="footer-item">
                             <h6 class="item-title">Menú Principal</h6>
                             <hr class="item-slide">
-                            <div class="item-content options">
+                            <div class="item-content options" id="footer-links">
                                 <a class="footer-link" href="#home">Inicio</a>
                                 <a class="footer-link" href="#features">Descripción</a>
                                 <a class="footer-link" href="#directive">Directiva</a>
                                 <a class="footer-link" href="#news">Noticias</a>
                                 <a class="footer-link" href="#events">Eventos</a>
-                                <a class="footer-link" href="#">Login</a>
+                                <a class="footer-link" href="{{route('login')}}">Login</a>
                             </div>
                         </div>
                     </div>

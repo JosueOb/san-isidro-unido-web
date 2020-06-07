@@ -46,43 +46,50 @@ var animateOptions = {
     easing:'easeInOutQuad'
 };
 
-$('#brand').on('click',function(event){
-    // $('#home').animatescroll();
-    // var href = this.attributes['href'];
-    var href = $(this).attr('href');
-    $(href).animatescroll(animateOptions);
-});
+if($('#navItems').length != 0){
+    $('.nav-item').on('click', function(event){
+        // console.log($(this.firstElementChild).attr('href'));
+        var href = $(this.firstElementChild).attr('href')
+        $(href).animatescroll(animateOptions);
+    });
+}
+if($('#brand').length != 0){
+    $('#brand').on('click',function(event){
+        // $('#home').animatescroll();
+        // var href = this.attributes['href'];
+        var href = $(this).attr('href');
+        $(href).animatescroll(animateOptions);
+    });
+}
 
-$('.nav-item').on('click', function(event){
-    // console.log($(this.firstElementChild).attr('href'));
-    var href = $(this.firstElementChild).attr('href')
-    $(href).animatescroll(animateOptions);
-});
-
-$('.footer-link').on('click', function(event){
-    // console.log(this.firstElementChild.firstElementChild);
-    var href = $(this).attr('href')
-    // console.log(href);
-    $(href).animatescroll(animateOptions);
-});
+if($('#footer-links').length != 0){
+    $('.footer-link').on('click', function(event){
+        // console.log(this.firstElementChild.firstElementChild);
+        var href = $(this).attr('href')
+        // console.log(href);
+        $(href).animatescroll(animateOptions);
+    });
+}
 
 /**
  * SCROLLING - CAROUSEL
  */
-var carousel;
-
-carousel = $("#scrolling ul");
-var items = [].slice.call(document.querySelector("#scrolling").firstElementChild.children)
-// console.log(Math.round(items.length/2) - 1);
-
-carousel.itemslide({
-    start: Math.round(items.length/2) - 1,
-    //swipe_out: true //NOTE: REMOVE THIS OPTION IF YOU WANT TO DISABLE THE SWIPING SLIDES OUT FEATURE. -->
-}); //initialize itemslide
-
-$(window).resize(function () {
-    carousel.reload();
-}); //Recalculate width and center positions and sizes when window is resized
-
-$(document.querySelector("#news-carousel .carousel-inner").firstElementChild).addClass('active');
-$(document.querySelector("#news-carousel .carousel-indicators").firstElementChild).addClass('active')
+if($('#scrolling').length != 0 ){
+    var carousel;
+    carousel = $("#scrolling ul");
+    var items = [].slice.call(document.querySelector("#scrolling").firstElementChild.children)
+    // console.log(Math.round(items.length/2) - 1);
+    
+    carousel.itemslide({
+        start: Math.round(items.length/2) - 1,
+        //swipe_out: true //NOTE: REMOVE THIS OPTION IF YOU WANT TO DISABLE THE SWIPING SLIDES OUT FEATURE. -->
+    }); //initialize itemslide
+    
+    $(window).resize(function () {
+        carousel.reload();
+    }); //Recalculate width and center positions and sizes when window is resized
+}
+if($('#news-carousel').length != 0 ){
+    $(document.querySelector("#news-carousel .carousel-inner").firstElementChild).addClass('active');
+    $(document.querySelector("#news-carousel .carousel-indicators").firstElementChild).addClass('active')
+}
