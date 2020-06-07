@@ -57,7 +57,7 @@ class ApiPostController extends ApiBaseController
             $filterUser = ($request->get('user')) ? intval($request->get('user')): -1;
             $filterByTitle = ($request->get('title')) ? $request->get('title'): '';
             $filterByPolice = ($request->get('police')) ? intval($request->get('police')): -1;
-            $filterActive = ($request->get('police')) ? intval($request->get('active')): -1;
+            $filterActive = ($request->get('active')) ? intval($request->get('active')): -1;
             $filterStatusAttendance = ($request->get('status_attendance') != null) ? $request->get('status_attendance'): '';
             $filterSize =  ($request->get('size')) ? intval($request->get('size')): 20;
             //APLICAR FILTROS
@@ -76,9 +76,8 @@ class ApiPostController extends ApiBaseController
                 $queryset = $queryset->userId($filterUser);
             }
 
-            // dd($queryset->get());
-
-            if ($filterUser != -1) {
+           
+            if ($filterActive != -1) {
                 $queryset = $queryset->where('state', 1);
             }
 
@@ -155,9 +154,8 @@ class ApiPostController extends ApiBaseController
             "approved_by" => null, 
             "status_attendance" => 'atendido'
         ]);
-        //Cambiar Campo isAttended
-        $emergency->is_attended = 1;
         $emergency->additional_data = array_merge($emergency->additional_data ?? [], $aditionalData->getEmergencyData());
+        $emergency->state = 0;
         $emergency->save();
         //Notificar al usuario que creo el post sobre quien lo va a atender
         $title_noti = "Tu solicitud de emergencia fue aceptada";
@@ -215,9 +213,8 @@ class ApiPostController extends ApiBaseController
                 "approved_by" => null, 
                 "status_attendance" => 'rechazado'
                 ]);
-            //Cambiar Campo isAttended
-            $emergency->is_attended = 0;
             $emergency->additional_data = array_merge($emergency->additional_data ?? [], $aditionalData->getEmergencyData());
+            $emergency->state = 0;
             $emergency->save();
             //Enviar Notificación
             $title_noti = "Tu solicitud de emergencia fue rechazada";
@@ -258,12 +255,11 @@ class ApiPostController extends ApiBaseController
             $post->description = $request->description;
             $post->user_id = $token_decoded->user->id;
             $post->category_id = $category->id;
-            $post->state = 1;
             $post->ubication = $request->ubication;
-
             $aditionalData = new AdditionalDataCls();
             $aditionalDataSave = (isset($post->additional_data)) ? $post->additional_data: $aditionalData->getEmergencyData();
             $post->additional_data = $aditionalDataSave;
+            $post->state = 0;
             $post->save();
             //Guardar Resources
             if (!is_null($request->images) && count($request->images) > 0) {
@@ -346,10 +342,7 @@ class ApiPostController extends ApiBaseController
             $post->user_id = $request->token->user->id;
             $post->subcategory_id = $request->subcategory_id;
             $post->category_id = $category->id;
-            
-            // $post->date = date("Y-m-d");
-            // $post->time = date("H:i:s");
-            $post->state = 1;
+            $post->state = 0;
             $post->ubication = $request->ubication;
             $post->save();
             //Guardar Recursos

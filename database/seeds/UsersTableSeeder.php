@@ -51,7 +51,7 @@ class UsersTableSeeder extends Seeder
         });
 
         $roleNeighbor = Role::where('slug', 'morador')->first();
-        $neighbors = factory(User::class, 50)->create();
+        $neighbors = factory(User::class, 4)->create();
         $neighbors->each(function(User $neighbor)use($roleNeighbor){
             // var_dump($neighbor->first_name.' '.$neighbor->last_name);
             // var_dump('https://ui-avatars.com/api/?name='.

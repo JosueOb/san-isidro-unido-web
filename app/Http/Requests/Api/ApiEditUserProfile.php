@@ -30,7 +30,7 @@ class ApiEditUserProfile extends FormRequest
             'first_name' => 'required|regex:/^[[:alpha:][:space:](áéíóúñÁÉÍÓÚÑ)]+$/|min:3|max:25',
             'last_name' => 'required|regex:/^[[:alpha:][:space:](áéíóúñÁÉÍÓÚÑ)]+$/|min:5|max:25',
             'email' => 'required|string|email',
-            'number_phone' => 'nullable|string|regex:/^(09)[0-9]{8}+$/',
+            'number_phone' => 'nullable|string',
         ];
     }
     /**

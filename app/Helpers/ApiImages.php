@@ -66,12 +66,13 @@ class ApiImages
      *
      * @return string
      */
-    public function saveAfiliationImageApi($imageFile, $previous_name = null)
+    public function saveAfiliationImageApi($imageFile, $previous_name = null, $img_default_name)
     {
         try {
             $uploadedFile = File::get($imageFile);
+            $img_default_name = ($img_default_name) ? $img_default_name: 'afiliation' . time();
             $img_extension = $imageFile->extension();
-            $img_name = ($previous_name) ? $previous_name : 'afiliation' . time() . '.' . $img_extension;
+            $img_name = ($previous_name) ? $previous_name : $img_default_name . '.'.$img_extension;
             $this->saveImageInDisk($this->diskImage, $img_name, $uploadedFile);
             return $img_name;
         } catch (Error $e) {

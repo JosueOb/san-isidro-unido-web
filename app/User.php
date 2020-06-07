@@ -29,7 +29,7 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'password', 'avatar', 'basic_service_image', 'number_phone'
+        'first_name', 'last_name', 'email', 'password', 'avatar', 'membership', 'number_phone'
     ];
 
     /**
@@ -48,15 +48,16 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'membership' => 'array',
     ];
 
     /*AGREGAR RESOURCE LINK ATTRIBUTE */
     protected $appends = ['avatar_link', 'fullname', 'basic_service_image_link'];
     public function getAvatarLinkAttribute(){
-        return $this->getApiLink();
+        return $this->getAvatarApiLink();
     }
     public function getBasicServiceImageLinkAttribute(){
-        return $this->getApiLink();
+        return $this->getBasicServiceApiLink();
     }
     public function getFullNameAttribute(){
         return $this->getFullName();
@@ -256,9 +257,21 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
     /**
     * get resource api link
     */
-    public function getApiLink(){
+    public function getAvatarApiLink(){
         $imageApi = new ApiImages();
         return $imageApi->getApiUrlLink($this->avatar);
+    }
+
+    /**
+    * get resource api link
+    */
+    public function getBasicServiceApiLink(){
+        $imageApi = new ApiImages();
+        if(isset($this->membership) && isset($this->membership['basic_service_image'])){
+            return $imageApi->getApiUrlLink($this->membership['basic_service_image']);
+        }else{
+            return '';
+        }
     }
     /**
      * The mothergoose check. Runs through each scenario provided

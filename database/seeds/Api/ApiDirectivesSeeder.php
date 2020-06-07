@@ -55,7 +55,6 @@ class ApiDirectivesSeeder extends Seeder
                 'last_name' => $lastname,
                 'email' => $email,
                 'avatar' => "https://ui-avatars.com/api/?name=$name+$lastname&size=255",
-                'basic_service_image' => "https://ui-avatars.com/api/?name=basicserviceimage&size=400",
                 'password' => password_hash('12345', PASSWORD_DEFAULT),
                 'position_id' => $posID,
                 "state" => true,
