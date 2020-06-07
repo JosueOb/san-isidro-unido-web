@@ -1,0 +1,79 @@
+#header {
+    // background: url('../../img/default_images/landing/header-background.jpg');
+    background: url('https://images.pexels.com/photos/445109/pexels-photo-445109.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940');
+    background-repeat: no-repeat;
+    background-position:center ;
+    background-attachment: fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    // border: solid purple 1px;
+    
+    .header-content{
+        // border: solid purple 1px;
+        display: flex !important;
+        height: 100%;
+        justify-content: center !important;
+        align-items: center !important;
+        color: darken($color: $shuttle-gray, $amount: 50%);
+        background-color: rgba($color: $body-bg-color, $alpha: .45);
+
+        .header-row{
+            // border: solid red 1px !important;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .title{
+            // border: solid red 1px;
+            display: flex;
+            justify-content: center;
+
+            .text{
+                // border: solid red 1px;
+                margin-right: .25rem !important;
+                letter-spacing: 1.5px;
+                font-size: 85px;
+                font-weight: 800;
+                margin: 0;
+            }
+            .logo{
+                // border: solid red 1px;
+                width: 85px;
+                margin-left: .25rem !important;
+            }
+            @media (max-width: 991.98px) {
+                .text{
+                    font-size: 70px;
+                }
+                .logo{
+                    width: 70px;
+                }
+            }
+        }
+        .description{
+            // border: solid 1px red;
+            font-size: 25px;
+            font-weight: 400;
+            color: darken($color: $shuttle-gray, $amount: 25%);
+            line-height: 30px;
+            margin-bottom: 2rem;
+            text-align: center;
+            @media (max-width: 991.98px) {
+                font-size: 20px;
+                line-height: 25px;
+            }
+        }
+        .download{
+            // border: solid 1px red;
+            display: flex;
+            justify-content: center;
+            a{
+                img{
+                    width: 12.5rem;
+                }
+            }
+        }
+    }
+}
