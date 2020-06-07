@@ -26,6 +26,7 @@
     },
     "dependencies": {
         "flatpickr": "^4.6.3",
+        "itemslide": "^1.5.0",
         "leaflet": "^1.6.0",
         "sweetalert2": "^8.17.6"
     }

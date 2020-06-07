@@ -6,6 +6,7 @@ try {
     console.log(e);
 }
 
+require('itemslide');
 require('./animatescroll');
 
 /**
@@ -64,3 +65,21 @@ $('.footer-link').on('click', function(event){
     // console.log(href);
     $(href).animatescroll(animateOptions);
 });
+
+/**
+ * SCROLLING - CAROUSEL
+ */
+var carousel;
+
+carousel = $("#scrolling ul");
+var items = [].slice.call(document.querySelector("#scrolling").firstElementChild.children)
+// console.log(Math.round(items.length/2) - 1);
+
+carousel.itemslide({
+    start: Math.round(items.length/2) - 1,
+    //swipe_out: true //NOTE: REMOVE THIS OPTION IF YOU WANT TO DISABLE THE SWIPING SLIDES OUT FEATURE. -->
+}); //initialize itemslide
+
+$(window).resize(function () {
+    carousel.reload();
+}); //Recalculate width and center positions and sizes when window is resized
