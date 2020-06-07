@@ -17146,6 +17146,33 @@ header,
   height: 100%;
 }
 
+#scrolling {
+  margin-top: 1.5rem;
+  overflow: hidden;
+}
+
+#scrolling ul {
+  /*Add if you want to disable the option of selecting the text while sliding*/
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  transform-style: preserve-3d;
+}
+
+#scrolling li {
+  float: left;
+  transform: scale(0.95);
+}
+
+#scrolling .itemslide-active {
+  /*applied to current active item*/
+  transform: scale(1);
+}
+
 .view {
   position: relative;
   overflow: hidden;
@@ -17398,5 +17425,65 @@ header,
   padding: 0.5rem;
   margin: 0;
   margin: 0.5rem 0;
+}
+
+#events {
+  margin-bottom: 5rem;
+}
+
+#events .event-content {
+  width: 18rem;
+  background-color: rgba(0, 0, 0, 0.45);
+  color: #ffffff;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.25rem 0.53125rem rgba(0, 0, 0, 0.2);
+}
+
+#events .event-content .event-image {
+  position: absolute;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+}
+
+#events .event-content .event-image > img {
+  border-radius: 0.5rem;
+  width: 100%;
+  height: auto;
+}
+
+@supports ((-o-object-fit: cover) or (object-fit: cover)) {
+  #events .event-content .event-image > img {
+    height: 100%;
+    -o-object-fit: cover;
+       object-fit: cover;
+    -o-object-position: center center;
+       object-position: center center;
+  }
+}
+
+#events .event-content .event-title {
+  padding: 1.75rem 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+#events .event-content .event-description {
+  margin: 0.25rem 1.5rem;
+  text-align: left;
+  line-height: 22.5px;
+  font-size: 18px;
+}
+
+#events .event-content .event-date {
+  margin: 0.75rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 17px;
+  font-weight: 600;
 }
 

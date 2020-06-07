@@ -368,15 +368,151 @@
                                     </div>
                                 </div>
                             </div>
-
-
-
                         </div>
                     </div>
                 </div>
             </section>
 
-            
+            <section id="events">
+                <div class="events-content">
+                    <h2 class="section-title">Eventos</h2>
+                    <div class="section-description">
+                        <p>Eventos que se presentan en el barrio</p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div id="scrolling">
+                                <ul>
+                                    <li>
+                                        <div class="event-content">
+                                            <div class="event-image">
+                                                <img src="https://images.pexels.com/photos/445109/pexels-photo-445109.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+                                                    alt="event">
+                                            </div>
+                                            <h6 class="event-title">Campania de visión y odontología Pedro Belazco</h6>
+                                            <p class="event-description">Descripción de evento, descripción de evento,
+                                                descripción de
+                                                evento,descripción de evento,descripción de evento,descripción de
+                                                evento, más texo</p>
+                                            <div class="event-date">
+                                                <span>2020-20-15 al 2020-20-16</span>
+                                                <span>20:00 - 8:00</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="event-content">
+                                            <div class="event-image">
+                                                <img src="https://images.pexels.com/photos/906052/pexels-photo-906052.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+                                                    alt="event">
+                                            </div>
+                                            <h6 class="event-title">Campania de visión y odontología Pedro Belazco</h6>
+                                            <p class="event-description">Descripción de evento, descripción de evento,
+                                                descripción de
+                                                evento,descripción de evento,descripción de evento,descripción de
+                                                evento, más texo</p>
+                                            <div class="event-date">
+                                                <span>2020-20-15 al 2020-20-16</span>
+                                                <span>20:00 - 8:00</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="event-content">
+                                            <div class="event-image">
+                                                <img src="https://images.pexels.com/photos/341970/pexels-photo-341970.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+                                                    alt="event">
+                                            </div>
+                                            <h6 class="event-title">Campania de visión y odontología Pedro Belazco</h6>
+                                            <p class="event-description">Descripción de evento, descripción de evento,
+                                                descripción de
+                                                evento,descripción de evento,descripción de evento,descripción de
+                                                evento, más texo</p>
+                                            <div class="event-date">
+                                                <span>2020-20-15 al 2020-20-16</span>
+                                                <span>20:00 - 8:00</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="event-content">
+                                            <div class="event-image">
+                                                <img src="https://images.pexels.com/photos/445109/pexels-photo-445109.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+                                                    alt="event">
+                                            </div>
+                                            <h6 class="event-title">Campania de visión y odontología Pedro Belazco</h6>
+                                            <p class="event-description">Descripción de evento, descripción de evento,
+                                                descripción de
+                                                evento,descripción de evento,descripción de evento,descripción de
+                                                evento, más texo</p>
+                                            <div class="event-date">
+                                                <span>2020-20-15 al 2020-20-16</span>
+                                                <span>20:00 - 8:00</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="event-content">
+                                            <div class="event-image">
+                                                <img src="https://images.pexels.com/photos/445109/pexels-photo-445109.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+                                                    alt="event">
+                                            </div>
+                                            <h6 class="event-title">Campania de visión y odontología Pedro Belazco</h6>
+                                            <p class="event-description">Descripción de evento, descripción de evento,
+                                                descripción de
+                                                evento,descripción de evento,descripción de evento,descripción de
+                                                evento, más texo</p>
+                                            <div class="event-date">
+                                                <span>2020-20-15 al 2020-20-16</span>
+                                                <span>20:00 - 8:00</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="event-content">
+                                            <div class="event-image">
+                                                <img src="https://images.pexels.com/photos/445109/pexels-photo-445109.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+                                                    alt="event">
+                                            </div>
+                                            <h6 class="event-title">Campania de visión y odontología Pedro Belazco</h6>
+                                            <p class="event-description">Descripción de evento, descripción de evento,
+                                                descripción de
+                                                evento,descripción de evento,descripción de evento,descripción de
+                                                evento, más texo</p>
+                                            <div class="event-date">
+                                                <span>2020-20-15 al 2020-20-16</span>
+                                                <span>20:00 - 8:00</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="event-content">
+                                            <div class="event-image">
+                                                <img src="https://images.pexels.com/photos/445109/pexels-photo-445109.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+                                                    alt="event">
+                                            </div>
+                                            <h6 class="event-title">Campania de visión y odontología Pedro Belazco</h6>
+                                            <p class="event-description">Descripción de evento, descripción de evento,
+                                                descripción de
+                                                evento,descripción de evento,descripción de evento,descripción de
+                                                evento, más texo</p>
+                                            <div class="event-date">
+                                                <span>2020-20-15 al 2020-20-16</span>
+                                                <span>20:00 - 8:00</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+
+
         </div>
     </main>
     <!--/Main layout-->
