@@ -17087,6 +17087,58 @@ body.landing {
   background-color: #F5F6F8;
 }
 
+body.landing section {
+  padding-top: 4.5rem;
+  padding-bottom: 2.5rem;
+  text-align: center;
+}
+
+body.landing section > div {
+  margin-top: 4.5rem;
+  margin-bottom: 2.5rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
+}
+
+@media (max-width: 767.98px) {
+  body.landing section > div {
+    margin-top: 0.75rem;
+    margin-bottom: 0.1rem;
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+  }
+}
+
+body.landing section .section-title {
+  margin: 0;
+  padding: 0;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-size: 40px;
+  font-weight: 800;
+}
+
+@media (max-width: 767.98px) {
+  body.landing section .section-title {
+    font-size: 30px;
+    letter-spacing: 1.2px;
+  }
+}
+
+body.landing section .section-description {
+  margin: 0;
+  padding: 0;
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+body.landing section .section-description p {
+  margin: 0;
+  font-size: 18px;
+}
+
 html,
 body,
 header,
@@ -17185,5 +17237,37 @@ header,
 
 #header .header-content .download a img {
   width: 12.5rem;
+}
+
+#features .features-content .feature-item i {
+  font-size: 5rem;
+  margin-top: 0.65rem;
+  margin-bottom: 0.65rem;
+}
+
+@media (max-width: 767.98px) {
+  #features .features-content .feature-item i {
+    font-size: 4rem;
+  }
+}
+
+#features .features-content .feature-item .item-title {
+  margin: 0.75rem 0.6rem;
+  padding: 0;
+  font-size: 25px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+@media (max-width: 767.98px) {
+  #features .features-content .feature-item .item-title {
+    font-size: 20px;
+  }
+}
+
+#features .features-content .feature-item .item-description {
+  margin: 0.75rem 0.6rem;
+  padding: 0;
+  font-size: 16px;
 }
 

@@ -1,6 +1,55 @@
 body.landing{
     font-family: $font-family-system-first;
     background-color: $body-bg-color;
+
+    section{
+        // border: solid red 1px;
+        padding-top: 4.5rem;
+        padding-bottom: 2.5rem;
+        text-align: center;
+
+        > div{
+            // border: solid black 1px;
+            margin-top: 4.5rem ;
+            margin-bottom: 2.5rem ;
+            margin-left: 2rem;
+            margin-right: 2rem;
+
+            @media (max-width: 767.98px) {
+                margin-top: .75rem;
+                margin-bottom: .1rem ;
+                margin-left: .25rem;
+                margin-right: .25rem;
+            }
+        }
+        .section-title{
+            // border: solid black 1px;
+            margin: 0;
+            padding: 0;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-size: 40px;
+            font-weight: 800;
+            @media (max-width: 767.98px) {
+                font-size: 30px;
+                letter-spacing: 1.2px;
+            }
+        }
+        .section-description{
+            // border: black solid 1px;
+            margin: 0;
+            padding: 0;
+            margin-top: 1.25rem;
+            margin-bottom: 1.25rem;
+    
+            p{
+                margin: 0;
+                font-size: 18px;
+            }
+        }
+    }
 }
 
 html,

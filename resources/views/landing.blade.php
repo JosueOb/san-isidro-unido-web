@@ -92,5 +92,60 @@
     <!--Main Navigation-->
 
 
+    <!--Main layout-->
+    <main>
+        <div class="container-fluid">
+            <section id="features">
+                <div class="features-content">
+                    <!-- Heading -->
+                    <h2 class="section-title">Descripción</h2>
+                    <div class="section-description">
+                        <p>En la aplicación móvil de SIU te permite realizar lo siguiente:</p>
+                    </div>
+
+                    <!--feature-items-->
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="feature-item">
+                                <i class="fa fa-camera-retro"></i>
+                                <h4 class="item-title">Reportar Problemas / Emegencias</h4>
+                                <p class="item-description">Puedes dar a conocer los problemas sociales que se presentan
+                                    en el barrio a la directiva,
+                                    como también notificar a la policía comunitaria alguna emergencia</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="feature-item">
+                                <i class="far fa-newspaper"></i>
+                                <h4 class="item-title">Conocer Noticias y Eventos</h4>
+                                <p class="item-description">Puedes conocer las actividades realizadas por parte de la
+                                    directiva, como también los
+                                    eventos
+                                    que se presenten en el barrio</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mb-1">
+                            <div class="feature-item">
+                                <i class="fas fa-portrait"></i>
+                                <h4 class="item-title">Directorio de Servicios Públicos</h4>
+                                <p class="item-description">Puedes visualizar un directorio con servicios públicos
+                                    presentes en el barrio, indicando
+                                    su
+                                    horario de anteción, ubicación e información de contacto</p>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            
+        </div>
+    </main>
+    <!--/Main layout-->
+
 </body>
 </html>
