@@ -6,6 +6,7 @@ try {
     console.log(e);
 }
 
+require('./animatescroll');
 
 /**
  * SCROLLSPY - SHRINK NAVIGATION MENU ON SCROll
@@ -33,3 +34,33 @@ var navbarCollapse = function () {
 navbarCollapse();
 // Collapse the navbar when page is scrolled
 $(window).scroll(navbarCollapse);
+
+
+
+/**
+ * ANIMATE SCROLL
+ */
+var animateOptions = {
+    scrollSpeed:2000,
+    easing:'easeInOutQuad'
+};
+
+$('#brand').on('click',function(event){
+    // $('#home').animatescroll();
+    // var href = this.attributes['href'];
+    var href = $(this).attr('href');
+    $(href).animatescroll(animateOptions);
+});
+
+$('.nav-item').on('click', function(event){
+    // console.log($(this.firstElementChild).attr('href'));
+    var href = $(this.firstElementChild).attr('href')
+    $(href).animatescroll(animateOptions);
+});
+
+$('.footer-link').on('click', function(event){
+    // console.log(this.firstElementChild.firstElementChild);
+    var href = $(this).attr('href')
+    // console.log(href);
+    $(href).animatescroll(animateOptions);
+});
