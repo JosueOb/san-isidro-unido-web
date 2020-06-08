@@ -35,7 +35,7 @@ $(document).ready(function () {
     if($('#map').length != 0 && $('#event-create').length != 0){
         // getCurrentDate();
         loadMap();
-        resetNumberOfImagesAllowed(8);
+        resetNumberOfImagesAllowed(3);
     }
 
 

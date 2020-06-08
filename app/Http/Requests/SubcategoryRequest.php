@@ -34,8 +34,8 @@ class SubcategoryRequest extends FormRequest
         }
 
         return [
-            'name'=>'required|regex:/^[[:alpha:][:space:](áéíóúÁÉÍÓÚ)]+$/|min:3|max:25|'.$uniqueName,
-            'description'=> 'nullable|regex:/^[[:alpha:][:space:](,;.áéíóúÁÉÍÓÚ)]+$/|max:255',
+            'name'=>'required|regex:/^[[:alpha:][:space:](áéíóúÁÉÍÓÚñÑ)]+$/|min:3|max:25|'.$uniqueName,
+            'description'=> 'nullable|regex:/^[[:alpha:][:space:](,;.áéíóúÁÉÍÓÚñÑ)]+$/|max:255',
             'category'=>[
                 'required',
                 Rule::exists('categories', 'id')->where(function($query){

@@ -34,7 +34,7 @@ class PublicServiceRequest extends FormRequest
             $uniqueEmail = 'unique:public_services,email,'.$this->route('publicService')->id;
          }
         return [
-            'name'=>'required|regex:/^[[:alpha:][:space:](áéíóúÁÉÍÓÚ)]+$/|min:3|max:45',
+            'name'=>'required|regex:/^[[:alpha:][:space:](áéíóúÁÉÍÓÚñÑ)]+$/|min:3|max:45',
             //se recibe el id de la subcategoría
             'id'=>[
                 'required',
