@@ -74,6 +74,5 @@ class SubcategoriesTableSeeder extends Seeder
             'category_id'=>$event->id,
             'icon'=> 'https://siu-dev97-sd.s3-sa-east-1.amazonaws.com/recursos_publicos/subcategory_icons/subcategory_icon_default.jpg',
         ]);
-        
     }
 }

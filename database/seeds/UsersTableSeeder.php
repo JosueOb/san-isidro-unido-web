@@ -33,16 +33,29 @@ class UsersTableSeeder extends Seeder
         $userAdmin->roles()->attach([$roleAdmin->id, $roleGuest->id],['state'=>true]);
         
         $roleDirective = Role::where('slug','directivo')->first();
+
+
+        
+        /**BORRAR */
+        $moderatorRole = Role::where('slug', 'moderador')->first();
+        /******/
+
+
         $positions = Position::all();
         $members = factory(User::class,5)->create();
-        $members->each(function(User $user)use($roleDirective, $roleGuest,$positions){
+        $members->each(function(User $user)use($roleDirective, $roleGuest,$positions, $moderatorRole){
             $user->avatar = 'https://ui-avatars.com/api/?name='.
             mb_substr($user->first_name,0,1).'+'.mb_substr($user->last_name,0,1).
             '&size=250';
             //se resta uno, debido a que el primer usurio administardor tiene el id = 1
             $user->position_id = $positions->where('id', $user->id-1)->first()->id;
             $user->save();
-            $user->roles()->attach([$roleDirective->id, $roleGuest->id],['state'=>true]);
+            // $user->roles()->attach([$roleDirective->id, $roleGuest->id],['state'=>true]);
+
+
+            /**BORRAR */
+            $user->roles()->attach([$roleDirective->id, $moderatorRole->id, $roleGuest->id],['state'=>true]);
+            /******/
         });
         $roleNeighbor = Role::where('slug', 'morador')->first();
         $neighbors = factory(User::class, 50)->create();
