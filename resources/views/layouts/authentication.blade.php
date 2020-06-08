@@ -77,7 +77,7 @@
 
                     <div class="col-md-4">
                         <div class="footer-item">
-                            <h6 class="item-title"><a href="#">San Isidro Unido</a></h6>
+                            <h6 class="item-title"><a href="{{route('landing')}}">San Isidro Unido</a></h6>
                             <hr class="item-slide">
                             <div class="item-content description">
                                 <p>Comunícate directamente con la directiva barrial con SIU</p>

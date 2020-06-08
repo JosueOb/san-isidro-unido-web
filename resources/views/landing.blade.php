@@ -26,7 +26,7 @@
 
         <nav class="navbar navbar-expand-lg fixed-top" id="mainNav">
             <div class="container-fluid">
-                <a class="navbar-brand js-scroll-trigger" href="#home">
+                <a id='brand' class="navbar-brand js-scroll-trigger" href="#home">
                     <img src="https://siu-dev97-sd.s3-sa-east-1.amazonaws.com/recursos_publicos/logos/sanIsidroIconOnlyTransparent.svg" alt="">
                     <span>San Isidro Unido</span>
                 </a>
@@ -344,7 +344,7 @@
 
                     <div class="col-md-4">
                         <div class="footer-item">
-                            <h6 class="item-title"><a href="#">San Isidro Unido</a></h6>
+                            <h6 class="item-title"><a  href="#home" onclick="$('#home').animatescroll({ scrollSpeed:2000,easing:'easeInOutQuad'});">San Isidro Unido</a></h6>
                             <hr class="item-slide">
                             <div class="item-content description">
                                 <p>Comunícate directamente con la directiva barrial con SIU</p>
