@@ -185,6 +185,9 @@ Route::middleware(['auth','verified', 'logout'])->group(function(){
         Route::get('policemen/{user}/edit', 'PoliceController@edit')->name('policemen.edit')->middleware('can:policemen.edit');
         Route::put('policemen/{user}', 'PoliceController@update')->name('policemen.update')->middleware('can:policemen.edit');
         Route::delete('policemen/{user}', 'PoliceController@destroy')->name('policemen.destroy')->middleware('can:policemen.destroy');
+
+        // NOTIFICACIONES
+        Route::get('notifications/problems', 'NotificationController@problems')->name('notifications.problems');
 });
 
 Route::get('logout', function () {

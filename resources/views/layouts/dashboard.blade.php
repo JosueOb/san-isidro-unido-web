@@ -29,7 +29,7 @@
       
 </head>
 <body>
-    <div class="container-fluid">
+    <div class="container-fluid" id="app">
         <div class="row">
             <!--Main Sidebar-->
             <aside class="main-sidebar col-12 col-md-3 col-lg-2 px-0">
@@ -269,6 +269,10 @@
                     <nav class="navbar align-items-stretch navbar-light p-0 justify-content-end flex-md-nowrap">
                     <!--<nav class="navbar align-items-stretch navbar-light flex-md-nowrap p-0 justify-content-end">-->
                         <ul class="navbar-nav flex-row">
+
+                                <problem-notifications :user="{{Auth::user()->id}}"></problem-notifications>
+
+
                             <li class="nav-item dropdown user-options m-0">
                                 <a href="#" class="nav-link dropdown-toggle px-3 text-nowrap" data-toggle="dropdown" id="dropdownMenuUser" role="button" aria-haspopup="true" aria-expanded="false">
                                     <img src="{{ Auth::user()->getAvatar()}}" alt="user avatar" class="user-avatar">

@@ -30,7 +30,7 @@ class TestNotificationsSeeder extends Seeder
 
         $neighbor_role = Role::where('slug', 'morador')->first();
         //OJO NO SE VERIFICA QUE LOS VECINOS SE ENCUENTREN ACTIVOS
-        $neighbors = $neighbor_role->users()->take(2)->get();
+        $neighbors = $neighbor_role->users()->take(3)->get();
 
         //Se buscan a todos los moderadores activos
         $moderator_role = Role::where('slug', 'moderador')->first();

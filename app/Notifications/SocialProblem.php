@@ -60,7 +60,10 @@ class SocialProblem extends Notification
     public function toArray($notifiable)
     {
         return [
-            'problem'=>$this->problem,
+            'title'=>'Problema reportado',
+            'description'=>$this->neighbor->getFullName().' ha reportado un problema',
+            'avatar_neighbor'=> $this->neighbor->getAvatar(),
+            'post'=>$this->problem,
             'neighbor'=>$this->neighbor,
         ];
     }
