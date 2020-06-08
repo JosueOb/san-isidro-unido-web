@@ -43,7 +43,7 @@ class UsersTableSeeder extends Seeder
 
             $user->avatar = 'https://ui-avatars.com/api/?name='.
             mb_substr($user->first_name,0,1).'+'.mb_substr($user->last_name,0,1).
-            '&size=255';
+            '&size=250';
             //se resta uno, debido a que el primer usurio administardor tiene el id = 1
             $user->position_id = $positions->where('id', $user->id-1)->first()->id;
             $user->save();
@@ -60,7 +60,7 @@ class UsersTableSeeder extends Seeder
 
             $neighbor->avatar = 'https://ui-avatars.com/api/?name='.
             mb_substr($neighbor->first_name,0,1).'+'.mb_substr($neighbor->last_name,0,1).
-            '&size=255';
+            '&size=250';
             $neighbor->save();
             $neighbor->roles()->attach([$roleNeighbor->id],['state'=>true]);
         });

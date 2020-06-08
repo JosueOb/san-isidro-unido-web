@@ -52,10 +52,10 @@ class UserCreated extends VerifyEmailBase
         return (new MailMessage)
                     ->subject('Bienvanida a '.env('APP_NAME'))
                     ->greeting('Hola, '.$notifiable->getFullName())
-                    ->line('Has sido/a registrado en nuestro sistema como '.strtolower($this->roleName).' y esta es la información para acceder:')
+                    ->line('Has sido registrado/a en nuestro sistema como '.strtolower($this->roleName).' y esta es la información para acceder:')
                     ->line('Correo: '.$notifiable->email)
                     ->line('Contraseña: '.$this->password)
-                    ->action('Ingresar', $verificationUrl)
+                    ->action('Verificar correo electrónico', $verificationUrl)
                     ->line('Recuerda cambiar tu contraseña una vez ingreses al sistema web')
                     ->salutation('Saludos');
     }

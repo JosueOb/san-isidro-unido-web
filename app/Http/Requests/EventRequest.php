@@ -47,7 +47,7 @@ class EventRequest extends FormRequest
             ],
             'start-date'=>'required|date_format:Y-m-d',
             'end-date'=>'nullable|date_format:Y-m-d',
-            'responsible'=>'required|regex:/^[[:alpha:][:space:](áéíóúÁÉÍÓÚ)]+$/|min:3|max:125',
+            'responsible'=>'required|regex:/^[[:alpha:][:space:](áéíóúÁÉÍÓÚñÑ)]+$/|min:3|max:125',
             'phone_numbers'=>'required|array|max:3',
             "phone_numbers.*" => array("required","regex:/(^(09)[0-9]{8})+$|(^(02)[0-9]{7})+$/"),
             "ubication"=>"required|json",
