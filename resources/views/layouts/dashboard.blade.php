@@ -12,13 +12,8 @@
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
 
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-    
     <!-- Icon-->
-    {{-- <link rel="icon" type="image/png" href="{{asset('storage/img/logo.png')}}"> --}}
-    <link rel="icon" type="image/png" href="https://siu-resources-s3.s3.us-east-2.amazonaws.com/default_images/logos/logo.png">
+    <link rel="icon" type="image/svg+xml" href="https://siu-dev97-sd.s3-sa-east-1.amazonaws.com/recursos_publicos/logos/sanIsidroIconOnlyTransparent.svg" sizes='48x48'>
 
     <!-- Styles -->
     {{-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> --}}
@@ -42,8 +37,8 @@
                     <nav class="navbar align-items-stretch navbar-light flex-md-nowrap border-bottom p-0">
                         <a class="navbar-brand w-100 mr-0" href="{{ route('login')}}">
                             <div class="d-table m-auto">
-                                {{-- <img src="{{ asset('storage/img/logo.png') }}" class="brand-logo d-inline-block align-top mr-1"> --}}
-                                <img src="https://siu-resources-s3.s3.us-east-2.amazonaws.com/default_images/logos/logo.png" class="brand-logo d-inline-block align-top mr-1">
+
+                                <img src="https://siu-dev97-sd.s3-sa-east-1.amazonaws.com/recursos_publicos/logos/SanIsidroIcono.svg" class="brand-logo d-inline-block align-top mr-1">
                                 <span class="d-none d-md-inline d-lg-none d-xl-inline ml-1 brand-name">San Isidro Unido</span>
                             </div>
                         </a>

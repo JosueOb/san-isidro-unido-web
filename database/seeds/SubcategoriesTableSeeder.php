@@ -20,21 +20,21 @@ class SubcategoriesTableSeeder extends Seeder
             'slug'=>'farmacia',
             'description'=>'',
             'category_id'=>$publicService->id,
-            'icon'=> 'https://siu-resources-s3.s3.us-east-2.amazonaws.com/default_images/subcategory_icons/subcategory_icon_default.jpg',
+            'icon'=> 'https://siu-dev97-sd.s3-sa-east-1.amazonaws.com/recursos_publicos/subcategory_icons/subcategory_icon_default.jpg',
         ]);
         Subcategory::create([
             'name'=>'Ferretería',
             'slug'=>'ferreteria',
             'description'=>'',
             'category_id'=>$publicService->id,
-            'icon'=> 'https://siu-resources-s3.s3.us-east-2.amazonaws.com/default_images/subcategory_icons/subcategory_icon_default.jpg',
+            'icon'=> 'https://siu-dev97-sd.s3-sa-east-1.amazonaws.com/recursos_publicos/subcategory_icons/subcategory_icon_default.jpg',
         ]);
         Subcategory::create([
             'name'=>'Mercado',
             'slug'=>'mercado',
             'description'=>'',
             'category_id'=>$publicService->id,
-            'icon'=> 'https://siu-resources-s3.s3.us-east-2.amazonaws.com/default_images/subcategory_icons/subcategory_icon_default.jpg',
+            'icon'=> 'https://siu-dev97-sd.s3-sa-east-1.amazonaws.com/recursos_publicos/subcategory_icons/subcategory_icon_default.jpg',
         ]);
 
         //Subcategorías de Eventos
@@ -44,35 +44,35 @@ class SubcategoriesTableSeeder extends Seeder
             'slug'=>'social',
             'description'=>'',
             'category_id'=>$event->id,
-            'icon'=> 'https://siu-resources-s3.s3.us-east-2.amazonaws.com/default_images/subcategory_icons/subcategory_icon_default.jpg',
+            'icon'=> 'https://siu-dev97-sd.s3-sa-east-1.amazonaws.com/recursos_publicos/subcategory_icons/subcategory_icon_default.jpg',
         ]);
         Subcategory::create([
             'name'=>'Comunitario',
             'slug'=>'comunitario',
             'description'=>'',
             'category_id'=>$event->id,
-            'icon'=> 'https://siu-resources-s3.s3.us-east-2.amazonaws.com/default_images/subcategory_icons/subcategory_icon_default.jpg',
+            'icon'=> 'https://siu-dev97-sd.s3-sa-east-1.amazonaws.com/recursos_publicos/subcategory_icons/subcategory_icon_default.jpg',
         ]);
         Subcategory::create([
             'name'=>'Cultural',
             'slug'=>'cultural',
             'description'=>'',
             'category_id'=>$event->id,
-            'icon'=> 'https://siu-resources-s3.s3.us-east-2.amazonaws.com/default_images/subcategory_icons/subcategory_icon_default.jpg',
+            'icon'=> 'https://siu-dev97-sd.s3-sa-east-1.amazonaws.com/recursos_publicos/subcategory_icons/subcategory_icon_default.jpg',
         ]);
         Subcategory::create([
             'name'=>'Deportivo',
             'slug'=>'deportivo',
             'description'=>'',
             'category_id'=>$event->id,
-            'icon'=> 'https://siu-resources-s3.s3.us-east-2.amazonaws.com/default_images/subcategory_icons/subcategory_icon_default.jpg',
+            'icon'=> 'https://siu-dev97-sd.s3-sa-east-1.amazonaws.com/recursos_publicos/subcategory_icons/subcategory_icon_default.jpg',
         ]);
         Subcategory::create([
             'name'=>'Educativo',
             'slug'=>'educativo',
             'description'=>'',
             'category_id'=>$event->id,
-            'icon'=> 'https://siu-resources-s3.s3.us-east-2.amazonaws.com/default_images/subcategory_icons/subcategory_icon_default.jpg',
+            'icon'=> 'https://siu-dev97-sd.s3-sa-east-1.amazonaws.com/recursos_publicos/subcategory_icons/subcategory_icon_default.jpg',
         ]);
         
     }
