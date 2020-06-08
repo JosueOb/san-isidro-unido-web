@@ -25,7 +25,7 @@
           </a>
 
           <small class="dropdown-item text-muted" v-if="problems_unread_notifications.length === 0 && problems_notifications.length > 0">No tienes notificationes pendientes</small>
-          <a href="#" class="dropdown-item notification__all text-center" v-if="problems_notifications.length > 0">Ver notificaciones anteriores</a>
+          <a href="/notifications/problems" class="dropdown-item notification__all text-center" v-if="problems_notifications.length > 0">Ver notificaciones anteriores</a>
           <small class="dropdown-item text-muted" v-else>No hay notificaciones</small>
         </div>
 
@@ -42,7 +42,7 @@ export default {
   },
   //Se ejecuta una vez que se carga la página
   mounted(){
-    axios.get('notifications/problems')
+    axios.get('/api/notifications/problems')
          .then(response => {
            this.problems_unread_notifications = response.data.unread_notifications;
            this.problems_notifications = response.data.problem_notifications;

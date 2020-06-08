@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
-    public function problems(Request $request){
+    public function api_problems(Request $request){
         $notifications = $request->user()->notifications;
         $problem_category = Category::where('slug', 'problema')->first();
         // dd($notifications);
@@ -23,5 +23,19 @@ class NotificationController extends Controller
             'problem_notifications'=>$problem_notifications, 
             'unread_notifications'=>$unread_notifications
         ];
+    }
+    public function problems(Request $request){
+
+        $user = $request->user();
+        $notifications = $user->notifications;
+        $problem_category = Category::where('slug', 'problema')->first();
+
+        $problem_notifications = $notifications->filter(function($notification, $key) use($problem_category){
+            return $notification->data['post']['category_id'] === $problem_category->id;
+        }); 
+
+        return view('notifications.problem',[
+            'all_problem_notifications'=>$problem_notifications,
+        ]);
     }
 }
