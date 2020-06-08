@@ -19,10 +19,7 @@ use Illuminate\Support\Facades\Route;
 | HomePage
 |--------------------------------------------------------------------------
 */
-Route::get('/', function () {
-    return view('welcome');
-});
-
+Route::get('/', 'LandingController@index')->name('landing');
 /*
 |--------------------------------------------------------------------------
 | Authentication
@@ -41,6 +38,13 @@ Route::get('verifiedMail/{id}', function (Request $request) {
     }
     return view('auth.verifiedMail');
 })->name('verifiedMail');
+
+Route::get('verifiedMailWeb/{id}', function (Request $request) {
+    if(!$request->hasValidSignature()){
+        abort(401);
+    }
+    return view('auth.verifiedMailWeb');
+})->name('verifiedMailWeb');
 
 /*
 |--------------------------------------------------------------------------

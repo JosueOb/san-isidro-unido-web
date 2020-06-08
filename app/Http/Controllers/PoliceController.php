@@ -59,7 +59,7 @@ class PoliceController extends Controller
 
         $password = Str::random(8);
         $avatar  = 'https://ui-avatars.com/api/?name='.
-        substr($validated['first_name'],0,1).'+'.substr($validated['last_name'],0,1).
+        mb_substr($validated['first_name'],0,1).'+'.mb_substr($validated['last_name'],0,1).
         '&size=255';
         $rolePolice = ModelsRole::where('slug', 'policia')->first();
 

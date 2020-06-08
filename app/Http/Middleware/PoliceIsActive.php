@@ -20,7 +20,7 @@ class PoliceIsActive
         //Se obtiene al policía
         $getUser = $request->route('user');
         //Se obtiene el estado de su relación entre roles y usuarios
-        $getStatusUserRole = $getUser->getRelationshipStateRolesUsers('policía');
+        $getStatusUserRole = $getUser->getRelationshipStateRolesUsers('policia');
 
         if(!$getStatusUserRole){
             return abort(403, 'Acción no autorizada');

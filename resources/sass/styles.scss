@@ -1,0 +1,32 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+// Font Awesome
+@import '~@fortawesome/fontawesome-free/scss/fontawesome';
+@import '~@fortawesome/fontawesome-free/scss/regular';
+@import '~@fortawesome/fontawesome-free/scss/solid';
+@import '~@fortawesome/fontawesome-free/scss/brands';
+
+// //Variables
+@import 'abstracts/variables';
+
+// Layout
+@import 'layout/main-nav';
+@import 'layout/footer';
+
+// Pages
+@import 'pages/landing';
+
+
+//Components
+@import 'components/mask';
+@import 'components/header';
+@import 'components/feature';
+@import 'components/directive';
+@import 'components/new';
+@import 'components/event';
+
+

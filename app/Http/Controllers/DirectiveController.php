@@ -23,7 +23,7 @@ class DirectiveController extends Controller
     public function __construct()
     {
         $this->middleware(ProtectedAdminUsers::class)->only('show','edit','update','destroy');
-        $this->middleware(MemberIsActive::class)->only('edit','update','destroy');
+        $this->middleware(MemberIsActive::class)->only('edit','update');
         $this->middleware(PreventMakingChangesToYourself::class)->only('edit','update','destroy');
         $this->middleware(ProtectedNeighborUsers::class)->only('show','edit','update','destroy');
     }
@@ -89,7 +89,7 @@ class DirectiveController extends Controller
         }
 
         $avatar  = 'https://ui-avatars.com/api/?name='.
-        substr($validated['first_name'],0,1).'+'.substr($validated['last_name'],0,1).
+        mb_substr($validated['first_name'],0,1).'+'.mb_substr($validated['last_name'],0,1).
         '&size=255';
         $password = Str::random(8);
         $roleNeighbor = Role::where('slug', 'morador')->first();

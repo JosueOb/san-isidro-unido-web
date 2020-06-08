@@ -23,7 +23,7 @@ class NeighborController extends Controller
     {
         $this->middleware(ProtectedAdminUsers::class)->only('show','edit','update','destroy');
         $this->middleware(ProtectedDirectiveUsers::class)->only('edit','update');
-        $this->middleware(NeighborIsActive::class)->only('edit','update','destroy');
+        $this->middleware(NeighborIsActive::class)->only('edit','update');
     }
     /**
      * Display a listing of the resource.
@@ -69,7 +69,7 @@ class NeighborController extends Controller
 
         $password = Str::random(8);
         $avatar  = 'https://ui-avatars.com/api/?name='.
-        substr($validated['first_name'],0,1).'+'.substr($validated['last_name'],0,1).
+        mb_substr($validated['first_name'],0,1).'+'.mb_substr($validated['last_name'],0,1).
         '&size=255';
         $roleNeighbord = Role::where('slug', 'morador')->first();
 

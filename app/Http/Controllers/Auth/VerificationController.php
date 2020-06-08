@@ -80,7 +80,12 @@ class VerificationController extends Controller
             }
 
             if($searchUser->hasSomeActiveWebSystemRole()){
-                return redirect()->route('login');
+                // return redirect()->route('login');
+                $temporaryURL = URL::temporarySignedRoute(
+                    'verifiedMailWeb', now()->addMinutes(15),
+                    ['id' => $searchUser->id]);
+                // return 
+                return redirect($temporaryURL);
             }else{
                 $temporaryURL = URL::temporarySignedRoute(
                     'verifiedMail', now()->addMinutes(15),

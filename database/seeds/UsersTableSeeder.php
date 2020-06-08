@@ -16,7 +16,7 @@ class UsersTableSeeder extends Seeder
     {
         //Se inserta un usuario
         $avatar =  $avatar = 'https://ui-avatars.com/api/?name='.
-        substr(env('USER_FIRST_NAME'),0,1).'+'.substr(env('USER_LAST_NAME'),0,1).
+        mb_substr(env('USER_FIRST_NAME'),0,1).'+'.mb_substr(env('USER_LAST_NAME'),0,1).
         '&size=255';
         $userAdmin = User::create([
             'first_name'=>env('USER_FIRST_NAME'),
@@ -37,7 +37,7 @@ class UsersTableSeeder extends Seeder
         $members = factory(User::class,5)->create();
         $members->each(function(User $user)use($roleDirective, $roleGuest,$positions){
             $user->avatar = 'https://ui-avatars.com/api/?name='.
-            substr($user->first_name,0,1).'+'.substr($user->last_name,0,1).
+            mb_substr($user->first_name,0,1).'+'.mb_substr($user->last_name,0,1).
             '&size=250';
             //se resta uno, debido a que el primer usurio administardor tiene el id = 1
             $user->position_id = $positions->where('id', $user->id-1)->first()->id;
@@ -48,7 +48,7 @@ class UsersTableSeeder extends Seeder
         $neighbors = factory(User::class, 50)->create();
         $neighbors->each(function(User $neighbor)use($roleNeighbor){
             $neighbor->avatar = 'https://ui-avatars.com/api/?name='.
-            substr($neighbor->first_name,0,1).'+'.substr($neighbor->last_name,0,1).
+            mb_substr($neighbor->first_name,0,1).'+'.mb_substr($neighbor->last_name,0,1).
             '&size=250';
             $neighbor->save();
             $neighbor->roles()->attach([$roleNeighbor->id],['state'=>true]);
