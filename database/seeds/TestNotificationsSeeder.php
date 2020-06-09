@@ -7,6 +7,7 @@ use App\Subcategory;
 use Caffeinated\Shinobi\Models\Role;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Notification;
+use App\HelpersClass\AdditionalData;
 
 class TestNotificationsSeeder extends Seeder
 {
@@ -41,14 +42,11 @@ class TestNotificationsSeeder extends Seeder
 
 
         $faker = Faker\Factory::create();
+        // $additionalData = new AdditionalData();
 
         $neighbors->each(function ($neighbor, $key) use ($problem_category, $problem_subcategory, $faker, $moderators_active) {
-            $additional_data = [
-                'problem' => [
-                    'approved_by' => null,
-                    'status_attendance' => 'pendiente'
-                ]
-            ];
+            $additionalData = new AdditionalData();
+            $additional_data = $additionalData->getInfoSocialProblem();
             $ubication = [
                 'lat' => $faker->latitude($min = -90, $max = 90),
                 'lng' => $faker->longitude($min = -180, $max = 180),
@@ -64,7 +62,8 @@ class TestNotificationsSeeder extends Seeder
                 'state' => false,
                 'user_id' => $neighbor->id,
                 'ubication' => json_encode($ubication),
-                'additional_data' => json_encode($additional_data),
+                // 'additional_data' => json_encode($additional_data),
+                'additional_data' => $additional_data,
             ]);
 
             Notification::send($moderators_active, new SocialProblem($problem, $neighbor));
