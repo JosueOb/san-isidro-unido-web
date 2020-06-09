@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\HelpersClass\AdditionalData;
+use App\Http\Middleware\SocialProblemRequest;
 use App\Http\Requests\RejectSocialProblemRequest;
 use App\Post;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Facades\Notification;
@@ -23,7 +25,7 @@ class RequestController extends Controller
 
     public function __construct()
     {
-        
+        $this->middleware(SocialProblemRequest::class)->only('approveSocialProblem', 'showRejectSocialProblem', 'rejectSocialProblem');
     }
 
     /**
@@ -35,22 +37,33 @@ class RequestController extends Controller
      */
 
     public function showSocialProblem(Post $problem, DatabaseNotification $notification){
-        //Se marca la notificación como leída
-        // dd($notification);
-        $notification->read_at = now();
-        $notification->save();
+        //Se determina si la notificación no ha sido leída
+        if($notification->unread()){
+            //Se marca la notificación como leída
+            $notification->markAsRead();
+        }
         //Se obtiene la ubicación del problema social
         $ubication = json_decode($problem->ubication, true);
         //Se obtiene las imágemes del problema social
         $images = $problem->resources()->where('type', 'image')->get();
         //Se obtiene el usuario que reporto el problema social
-        $user = $problem->user;
-        
+        $neighbor = $problem->user;
+
+        //Se obtiene información adicional del problema
+        $additional_data = $problem->additional_data;
+
+        //se obtiene el usuario que haya aprobado o rechazado la petición
+        $userWhoApprovedProblem = $additional_data['status_attendance'] === 'aprobado' ? User::find($additional_data['approved']['who']['id']) : null;
+        $userWhoRechazedProblem = $additional_data['status_attendance'] === 'rechazado' ? User::find($additional_data['rechazed']['who']['id']) : null;
+
         return view('request.socialProblem', [
             'problem' => $problem,
             'ubication'=> $ubication,
             'images' => $images,
-            'user' => $user,
+            'neighbor' => $neighbor,
+            'additionalData' => $additional_data,
+            'userWhoApprovedProblem' => $userWhoApprovedProblem,
+            'userWhoRechazedProblem' => $userWhoRechazedProblem,
         ]);
     }
 

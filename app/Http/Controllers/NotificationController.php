@@ -20,12 +20,10 @@ class NotificationController extends Controller
             return $notification->unread();
         });
         // dd($unread_notifications);
-        //Se genera una nueva colección con los datos filtrados
-        // $unread_notifications->newCollection($unread_notifications);
 
         return [
             'problem_notifications'=>array_values($problem_notifications->toArray()),//se re-indexa 
-            'unread_notifications'=>array_values($unread_notifications->toArray()),
+            'unread_notifications'=>array_values($unread_notifications->toArray()),//se re-indexa
         ];
     }
     public function problems(Request $request){

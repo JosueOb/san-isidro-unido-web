@@ -46,10 +46,24 @@
                         <p><strong>Descripción:</strong> {{$problem->description ?: 'sin descripción'}}</p>
                         {{-- <p><strong>Categoría:</strong> {{ strtolower($problem->category->name)}}</p> --}}
                         <p><strong>Categoría:</strong> {{ strtolower($problem->subcategory->name) }}</p>
-                        <p><strong>Reportado por:</strong> {{ $user->getFullName() }}</p>
+                        <p><strong>Reportado por:</strong> {{ $neighbor->getFullName() }}</p>
                         <p><strong>Fecha:</strong> {{ $problem->created_at }}</p>
                         
                         <p><strong>Referencia:</strong> {{$ubication['description'] ?: 'sin referencia de ubicación'}}</p>
+                        
+                        @if ($userWhoApprovedProblem)
+                        <h4 class="text-center text-uppercase font-weight-bolder text-success">Aprobado</h4>
+                        <p><strong class="text-capitalize">Aprobado por: </strong>{{$userWhoApprovedProblem->getFullName()}}</p>
+                        <p><strong>Fecha: </strong>{{$additionalData['approved']['date']}}</p>
+                        @endif
+
+                        @if ($userWhoRechazedProblem)
+                        <h4 class="text-center text-uppercase font-weight-bolder text-danger">Rechazado</h4>
+                        <p><strong>Rechazado por: </strong>{{$userWhoRechazedProblem->getFullName()}}</p>
+                        <p><strong>Fecha: </strong>{{$additionalData['rechazed']['date']}}</p>
+                        <p class="text-lowercase"><strong class="text-capitalize">Razón: </strong>{{$additionalData['rechazed']['reason']}}</p>
+                        @endif
+                        
                     </div>
                     <div class="col-12 col-md-6">
                         <p><strong>Ubicación</strong></p>
