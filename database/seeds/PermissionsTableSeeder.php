@@ -352,5 +352,23 @@ class PermissionsTableSeeder extends Seeder
             'private'=>false,
             'group'=>'policia',
         ]);
+
+        //Permisos sobre las notificaciones de solicitud de problema social
+        Permission::create([
+            'name'=>'Notificar las solicitudes para reportar un problema social',
+            'slug'=>'notifications.problems',
+            'description'=>'Notifica, lista y visualiza la solicitud de un problema social',
+            'private'=>false,
+            'group'=>'notificacion',
+        ]);
+
+        //Permiso sobre las acciones de aceptar o rechazar la solicitud de un problema social
+        Permission::create([
+            'name'=>'Aceptar o rechazar las solicitudes de problemas sociales',
+            'slug'=>'socialProblemReports.approveOReject',
+            'description'=>'Se permite aceptar o rechazar las solicitudes de problemas sociales',
+            'private'=>false,
+            'group'=>'notificacion',
+        ]);
     }
 }

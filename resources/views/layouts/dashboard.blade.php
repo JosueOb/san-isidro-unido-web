@@ -269,8 +269,10 @@
                     <nav class="navbar align-items-stretch navbar-light p-0 justify-content-end flex-md-nowrap">
                     <!--<nav class="navbar align-items-stretch navbar-light flex-md-nowrap p-0 justify-content-end">-->
                         <ul class="navbar-nav flex-row">
-
-                                <problem-notifications :user="{{Auth::user()->id}}"></problem-notifications>
+                           
+                            @can('notifications.problems')
+                            <problem-notifications :user="{{Auth::user()->id}}"></problem-notifications>
+                            @endcan
 
 
                             <li class="nav-item dropdown user-options m-0">

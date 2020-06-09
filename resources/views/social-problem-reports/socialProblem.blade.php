@@ -21,7 +21,7 @@
                         <h4  class="d-inline">Detalle del problema social</h4>
                     </div>
                     <div class="col">
-                        {{-- @can('events.edit') --}}
+                        @can('socialProblemReports.approveOReject')
                         <div class="row">
                             @if (!$userWhoApprovedProblem && !$userWhoRechazedProblem)
                             <div class="col">
@@ -34,7 +34,7 @@
                             </div>
                             @endif
                         </div>
-                        {{-- @endcan --}}
+                        @endcan
                     </div>
                 </div>
             </div>

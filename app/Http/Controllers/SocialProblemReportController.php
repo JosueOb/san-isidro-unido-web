@@ -25,6 +25,8 @@ class SocialProblemReportController extends Controller
 
     public function __construct()
     {
+        //Se verifica si tiene el usuario el rol con el permiso de aceptar o rechazar las solicitudes de problemas sociales
+        $this->middleware('can:socialProblemReports.approveOReject')->only('approveSocialProblem', 'showRejectSocialProblem', 'rejectSocialProblem');
         $this->middleware(SocialProblemReport::class)->only('approveSocialProblem', 'showRejectSocialProblem', 'rejectSocialProblem');
     }
 
