@@ -29,7 +29,7 @@
                                 </button>
                             </div>
                             <div class="col">
-                                <a href="{{route('request.rejectSocialProblem', $problem->id)}}" class="btn btn-danger float-right float-md-left"><i class="fas fa-times-circle"></i> Rechazar</a>
+                                <a href="{{route('request.showRejectSocialProblem', $problem->id)}}" class="btn btn-danger float-right float-md-left"><i class="fas fa-times-circle"></i> Rechazar</a>
                                 {{-- <button type="button" class="btn btn-danger float-right float-md-left" data-toggle="modal" data-target="#approveSocialProblemModal">
                                     <i class="fas fa-times-circle"></i> Rechazar
                                 </button> --}}
@@ -88,13 +88,13 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="rejectSocialModalLabel">Aprobación del problema social</h5>
+          <h5 class="modal-title" id="rejectSocialModalLabel">Confirmación</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-            <h6 class="text-center">¿Está seguro de aprobar el problema social reportado?</h6>
+            <h5 class="text-center font-weight-bolder">¿Está seguro de aprobar el problema social reportado?</h5>
             <small class="text-muted"><strong>Recuerda: </strong>una vez aprobado el problema social, se procede a publicarlo en la aplicación móvil y los miembros de la directiva barrial podrán gestionarlo</small>
 
         </div>

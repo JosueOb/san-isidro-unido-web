@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\HelpersClass\AdditionalData;
+use App\Http\Requests\RejectSocialProblemRequest;
 use App\Post;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\DatabaseNotification;
@@ -33,6 +35,10 @@ class RequestController extends Controller
      */
 
     public function showSocialProblem(Post $problem, DatabaseNotification $notification){
+        //Se marca la notificación como leída
+        // dd($notification);
+        $notification->read_at = now();
+        $notification->save();
         //Se obtiene la ubicación del problema social
         $ubication = json_decode($problem->ubication, true);
         //Se obtiene las imágemes del problema social
@@ -55,8 +61,36 @@ class RequestController extends Controller
      * @param  DatabaseNotification  $notification
      * @return \Illuminate\Http\Response
      */
-    public function approveSocialProblem(Post $problem){
-        dd($problem);
+    public function approveSocialProblem(Post $problem, Request $request){
+        //Se obtiene el usuario que aprobó el problema
+        $user = $request->user();
+
+        $additionalData = new AdditionalData();
+        $additionalData->setInfoSocialProblem([
+            "approved" => [
+                'who'=>$user,
+                'date'=>now(),
+            ],
+            "status_attendance" => 'aprobado'
+        ]);
+
+        //Se actualiza el estado de la solicitud de problema social
+        $problem->additional_data = $additionalData->getInfoSocialProblem();
+        //Se cambia el estado del post, para que sea visible en la app
+        $problem->state = true;
+        $problem->save();
+        
+        return redirect()->route('home')->with('success','Problema social aprobado');
+    }
+    /**
+     * Se presenta el formulario de rechazo de problema social
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showRejectSocialProblem(Post $problem){
+        return view('request.showRejectSocialProblem', [
+            'problem'=>$problem,
+        ]);
     }
     /**
      * Se registra el rechazo del problema social
@@ -65,7 +99,26 @@ class RequestController extends Controller
      * @param  DatabaseNotification  $notification
      * @return \Illuminate\Http\Response
      */
-    public function rejectSocialProblem(Post $problem){
-        dd($problem);
+    public function rejectSocialProblem(RejectSocialProblemRequest $request, Post $problem){
+        //Se valida la razón del rechazo del problema social (reglas de validación)
+        $validated = $request->validated();
+        // Se obtiene el usuario que rechazó en problema social
+        $user = $request->user();
+
+        $additionalData = new AdditionalData();
+        $additionalData->setInfoSocialProblem([
+            "rechazed"=>[
+                'who'=>$user,
+                'reason'=>$validated['description'],
+                'date'=>now(),
+            ],
+            "status_attendance" => 'rechazado'
+        ]);
+
+        //Se actualiza el estado de la solicitud de problema social
+        $problem->additional_data = $additionalData->getInfoSocialProblem();
+        $problem->save();
+        
+        return redirect()->route('home')->with('danger','Problema social rechazado');
     }
 }

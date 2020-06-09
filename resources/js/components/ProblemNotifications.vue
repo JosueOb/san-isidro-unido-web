@@ -51,7 +51,8 @@ export default {
          .then(response => {
            this.problems_unread_notifications = response.data.unread_notifications;
            this.problems_notifications = response.data.problem_notifications;
-          console.log(response)
+          console.log(response);
+          console.log(this.problems_unread_notifications.length);
          });
   }
 };
