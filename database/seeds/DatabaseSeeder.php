@@ -25,12 +25,10 @@ class DatabaseSeeder extends Seeder
         $this->call(CategoriesTableSeeder::class);
         //Llamando al seeder de SubcategoriesTableSeeder
         $this->call(SubcategoriesTableSeeder::class);
-
-
-        // //Llamando al seeder de PostsTableSeeder
-        // $this->call(PostsTableSeeder::class);
-        // //Llamando al seeder de PublicServicesTableSeeder
-        // $this->call(PublicServicesTableSeeder::class);
+        //Llamando al seeder de PostsTableSeeder
+        $this->call(PostsTableSeeder::class);
+        //Llamando al seeder de PublicServicesTableSeeder
+        $this->call(PublicServicesTableSeeder::class);
 
         //Test
         $this->call(TestNotificationsSeeder::class);
