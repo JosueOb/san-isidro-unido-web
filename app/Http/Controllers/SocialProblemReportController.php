@@ -3,20 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\HelpersClass\AdditionalData;
+use App\Http\Middleware\SocialProblemReport;
 use App\Http\Middleware\SocialProblemRequest;
 use App\Http\Requests\RejectSocialProblemRequest;
 use App\Post;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\DatabaseNotification;
-use Illuminate\Support\Facades\Notification;
 
-class RequestController extends Controller
+class SocialProblemReportController extends Controller
 {
-    //Se gestionan las solicitudes de problemas sociales y emergecias
+    //Se gestionan las solicitudes de problemas sociales 
     /*
     |--------------------------------------------------------------------------
-    | Request Controller
+    | SOCIAL PROBLEMA REPORT
     |--------------------------------------------------------------------------
     |
     | Se gestionan las solicitudes de problemas sociales y emergecias
@@ -25,7 +25,7 @@ class RequestController extends Controller
 
     public function __construct()
     {
-        $this->middleware(SocialProblemRequest::class)->only('approveSocialProblem', 'showRejectSocialProblem', 'rejectSocialProblem');
+        $this->middleware(SocialProblemReport::class)->only('approveSocialProblem', 'showRejectSocialProblem', 'rejectSocialProblem');
     }
 
     /**
@@ -56,7 +56,7 @@ class RequestController extends Controller
         $userWhoApprovedProblem = $additional_data['status_attendance'] === 'aprobado' ? User::find($additional_data['approved']['who']['id']) : null;
         $userWhoRechazedProblem = $additional_data['status_attendance'] === 'rechazado' ? User::find($additional_data['rechazed']['who']['id']) : null;
 
-        return view('request.socialProblem', [
+        return view('social-problem-reports.socialProblem', [
             'problem' => $problem,
             'ubication'=> $ubication,
             'images' => $images,
@@ -102,7 +102,7 @@ class RequestController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function showRejectSocialProblem(Post $problem, DatabaseNotification $notification){
-        return view('request.showRejectSocialProblem', [
+        return view('social-problem-reports.showRejectSocialProblem', [
             'problem'=>$problem,
             'notification'=>$notification
         ]);
@@ -135,7 +135,7 @@ class RequestController extends Controller
         $problem->additional_data = $additionalData->getInfoSocialProblem();
         $problem->save();
         
-        return redirect()->route('request.socialProblem',[
+        return redirect()->route('socialProblemReport.socialProblem',[
             'problem'=>$problem->id,
             'notification'=>$notification->id
         ])->with('danger','Problema social rechazado');

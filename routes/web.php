@@ -193,10 +193,10 @@ Route::middleware(['auth','verified', 'logout'])->group(function(){
         Route::get('notifications/problems', 'NotificationController@problems')->name('notifications.allProblems');
 
         //SOLICITUDES DE PROBLEMAS - EMERGENCIAS
-        Route::get('request/socialProblem/{problem}/{notification}', 'RequestController@showSocialProblem')->name('request.socialProblem');
-        Route::get('request/approve/socialProblem/{problem}', 'RequestController@approveSocialProblem')->name('request.approveSocialProblem');
-        Route::get('request/reject/socialProblem/{problem}/{notification}/create', 'RequestController@showRejectSocialProblem')->name('request.showRejectSocialProblem');
-        Route::post('request/reject/socialProblem/{problem}/{notification}', 'RequestController@rejectSocialProblem')->name('request.rejectSocialProblem');
+        Route::get('request/socialProblem/{problem}/{notification}', 'SocialProblemReportController@showSocialProblem')->name('socialProblemReport.socialProblem');
+        Route::get('request/approve/socialProblem/{problem}', 'SocialProblemReportController@approveSocialProblem')->name('socialProblemReport.approveSocialProblem');
+        Route::get('request/reject/socialProblem/{problem}/{notification}/create', 'SocialProblemReportController@showRejectSocialProblem')->name('socialProblemReport.showRejectSocialProblem');
+        Route::post('request/reject/socialProblem/{problem}/{notification}', 'SocialProblemReportController@rejectSocialProblem')->name('socialProblemReport.rejectSocialProblem');
         Route::get('request/reject/socialProblem/{problem}/{notification}', function () {
             return abort(404);
         });

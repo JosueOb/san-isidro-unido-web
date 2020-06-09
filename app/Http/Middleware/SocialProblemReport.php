@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class SocialProblemRequest
+class SocialProblemReport
 {
     /**
      * Handle an incoming request.

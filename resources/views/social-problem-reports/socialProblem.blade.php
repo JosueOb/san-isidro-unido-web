@@ -3,7 +3,7 @@
     Módulo Solicitud
 @endsection
 @section('page-header')
-    Reporte de Problema Social
+    Solicitud de Problema Social
 @endsection
 
 @section('content')
@@ -30,7 +30,7 @@
                                 </button>
                             </div>
                             <div class="col">
-                                <a href="{{route('request.showRejectSocialProblem', [$problem->id, $notification->id])}}" class="btn btn-danger float-right float-md-left"><i class="fas fa-times-circle"></i> Rechazar</a>
+                                <a href="{{route('socialProblemReport.showRejectSocialProblem', [$problem->id, $notification->id])}}" class="btn btn-danger float-right float-md-left"><i class="fas fa-times-circle"></i> Rechazar</a>
                             </div>
                             @endif
                         </div>
@@ -114,7 +114,7 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
           {{-- <button type="button" class="btn btn-success">Aprobar</button> --}}
-          <a href="{{route('request.approveSocialProblem', $problem->id)}}" class="btn btn-success float-right"><i class="fas fa-check-circle"></i> Aprobar</a> 
+          <a href="{{route('socialProblemReport.approveSocialProblem', $problem->id)}}" class="btn btn-success float-right"><i class="fas fa-check-circle"></i> Aprobar</a> 
         </div>
       </div>
     </div>
