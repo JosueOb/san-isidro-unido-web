@@ -64,6 +64,7 @@ class RequestController extends Controller
             'additionalData' => $additional_data,
             'userWhoApprovedProblem' => $userWhoApprovedProblem,
             'userWhoRechazedProblem' => $userWhoRechazedProblem,
+            'notification'=>$notification
         ]);
     }
 
@@ -93,16 +94,17 @@ class RequestController extends Controller
         $problem->state = true;
         $problem->save();
         
-        return redirect()->route('home')->with('success','Problema social aprobado');
+        return redirect()->back()->with('success','Problema social aprobado');
     }
     /**
      * Se presenta el formulario de rechazo de problema social
      *
      * @return \Illuminate\Http\Response
      */
-    public function showRejectSocialProblem(Post $problem){
+    public function showRejectSocialProblem(Post $problem, DatabaseNotification $notification){
         return view('request.showRejectSocialProblem', [
             'problem'=>$problem,
+            'notification'=>$notification
         ]);
     }
     /**
@@ -112,9 +114,10 @@ class RequestController extends Controller
      * @param  DatabaseNotification  $notification
      * @return \Illuminate\Http\Response
      */
-    public function rejectSocialProblem(RejectSocialProblemRequest $request, Post $problem){
+    public function rejectSocialProblem(RejectSocialProblemRequest $request, Post $problem, DatabaseNotification $notification){
         //Se valida la razón del rechazo del problema social (reglas de validación)
         $validated = $request->validated();
+
         // Se obtiene el usuario que rechazó en problema social
         $user = $request->user();
 
@@ -132,6 +135,10 @@ class RequestController extends Controller
         $problem->additional_data = $additionalData->getInfoSocialProblem();
         $problem->save();
         
-        return redirect()->route('home')->with('danger','Problema social rechazado');
+        return redirect()->route('request.socialProblem',[
+            'problem'=>$problem->id,
+            'notification'=>$notification->id
+        ])->with('danger','Problema social rechazado');
+
     }
 }

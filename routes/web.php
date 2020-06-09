@@ -195,9 +195,9 @@ Route::middleware(['auth','verified', 'logout'])->group(function(){
         //SOLICITUDES DE PROBLEMAS - EMERGENCIAS
         Route::get('request/socialProblem/{problem}/{notification}', 'RequestController@showSocialProblem')->name('request.socialProblem');
         Route::get('request/approve/socialProblem/{problem}', 'RequestController@approveSocialProblem')->name('request.approveSocialProblem');
-        Route::get('request/reject/socialProblem/{problem}/create', 'RequestController@showRejectSocialProblem')->name('request.showRejectSocialProblem');
-        Route::post('request/reject/socialProblem/{problem}', 'RequestController@rejectSocialProblem')->name('request.rejectSocialProblem');
-        Route::get('request/reject/socialProblem/{problem}', function () {
+        Route::get('request/reject/socialProblem/{problem}/{notification}/create', 'RequestController@showRejectSocialProblem')->name('request.showRejectSocialProblem');
+        Route::post('request/reject/socialProblem/{problem}/{notification}', 'RequestController@rejectSocialProblem')->name('request.rejectSocialProblem');
+        Route::get('request/reject/socialProblem/{problem}/{notification}', function () {
             return abort(404);
         });
 });

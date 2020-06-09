@@ -15,7 +15,7 @@
 
 <div class="row">
     <div class="col">
-        <form action="{{route('request.rejectSocialProblem', $problem->id)}}" method="POST">
+        <form action="{{route('request.rejectSocialProblem', [$problem->id, $notification->id])}}" method="POST">
             @csrf
             <div class="card card-primary">
                 <div class="card-body">

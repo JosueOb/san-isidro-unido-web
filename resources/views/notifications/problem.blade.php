@@ -57,7 +57,7 @@
                                             @if ($notification->read_at)
                                                 Leída
                                             @else
-                                                Pendiente
+                                                No leída
                                             @endif
                                         </td>
 

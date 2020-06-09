@@ -23,17 +23,16 @@
                     <div class="col">
                         {{-- @can('events.edit') --}}
                         <div class="row">
+                            @if (!$userWhoApprovedProblem && !$userWhoRechazedProblem)
                             <div class="col">
                                 <button type="button" class="btn btn-success float-right" data-toggle="modal" data-target="#rejectSocialProblemModal">
                                     <i class="fas fa-check-circle"></i> Aprobar
                                 </button>
                             </div>
                             <div class="col">
-                                <a href="{{route('request.showRejectSocialProblem', $problem->id)}}" class="btn btn-danger float-right float-md-left"><i class="fas fa-times-circle"></i> Rechazar</a>
-                                {{-- <button type="button" class="btn btn-danger float-right float-md-left" data-toggle="modal" data-target="#approveSocialProblemModal">
-                                    <i class="fas fa-times-circle"></i> Rechazar
-                                </button> --}}
+                                <a href="{{route('request.showRejectSocialProblem', [$problem->id, $notification->id])}}" class="btn btn-danger float-right float-md-left"><i class="fas fa-times-circle"></i> Rechazar</a>
                             </div>
+                            @endif
                         </div>
                         {{-- @endcan --}}
                     </div>
