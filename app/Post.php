@@ -84,7 +84,6 @@ class Post extends Model
 
 
     /*TODO: RELACIONES DE LOS MODELOS */
-
     
     /**
      * A post belongs to a user

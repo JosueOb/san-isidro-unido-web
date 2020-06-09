@@ -10,25 +10,28 @@
 
     // Notificaciones
     .notifications{
-
+        // border: solid red 1px;
         @media(max-width: 767.98px){
             position: static;
-
+            
             .dropdown-menu {
                 min-width: 100% !important;
             }
         }
-
+        
         .badge{
             position: static;
             padding: $notifications-badge-padding-y $notifications-badge-padding-x;
             font-size: $notifications-badge-font-size;
         }
         .dropdown-menu{
+            // border: solid red 1px;
             padding: 0;
             margin: 0;
             min-width: $notifications-dropdown-min-width-notification;
             left: auto;
+            // max-height: 50rem;
+            // overflow: scroll;
 
             .dropdown-item{
                 white-space: normal;

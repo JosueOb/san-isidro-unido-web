@@ -1,0 +1,20 @@
+.dropdown-menu {
+    // border: solid red 1px;
+    box-shadow: $notification-dropdown-menu-box-shadow;
+    border:none;
+    border-radius: 0.375rem;
+}
+
+.dropdown-item {
+    border-bottom: $main-navbar-nav-border-color;
+    &:hover{
+        // border: solid red 1px;
+        background-color: lighten($shuttle-gray,35%) !important;
+        color:$blue-800;
+    }
+    &:last-child{
+        // border:solid red 1px;
+        border-bottom-left-radius: 0.375rem;
+        border-bottom-right-radius: 0.375rem;
+    }
+}

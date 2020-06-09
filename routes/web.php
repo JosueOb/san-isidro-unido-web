@@ -185,6 +185,21 @@ Route::middleware(['auth','verified', 'logout'])->group(function(){
         Route::get('policemen/{user}/edit', 'PoliceController@edit')->name('policemen.edit')->middleware('can:policemen.edit');
         Route::put('policemen/{user}', 'PoliceController@update')->name('policemen.update')->middleware('can:policemen.edit');
         Route::delete('policemen/{user}', 'PoliceController@destroy')->name('policemen.destroy')->middleware('can:policemen.destroy');
+
+        //API - NOTIFICACIONES
+        Route::get('api/notifications/problems', 'NotificationController@api_problems')->name('notifications.problems')->middleware('can:notifications.problems');
+        
+        // NOTIFICACIONES
+        Route::get('notifications/problems', 'NotificationController@problems')->name('notifications.allProblems')->middleware('can:notifications.problems');
+
+        //SOLICITUDES DE PROBLEMAS - EMERGENCIAS
+        Route::get('request/socialProblem/{problem}/{notification}', 'SocialProblemReportController@showSocialProblem')->name('socialProblemReport.socialProblem')->middleware('can:notifications.problems');
+        Route::get('request/approve/socialProblem/{problem}/{notification}', 'SocialProblemReportController@approveSocialProblem')->name('socialProblemReport.approveSocialProblem');
+        Route::get('request/reject/socialProblem/{problem}/{notification}/create', 'SocialProblemReportController@showRejectSocialProblem')->name('socialProblemReport.showRejectSocialProblem');
+        Route::post('request/reject/socialProblem/{problem}/{notification}', 'SocialProblemReportController@rejectSocialProblem')->name('socialProblemReport.rejectSocialProblem');
+        Route::get('request/reject/socialProblem/{problem}/{notification}', function () {
+            return abort(404);
+        });
 });
 
 Route::get('logout', function () {

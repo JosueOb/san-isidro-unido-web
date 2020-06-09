@@ -16614,6 +16614,26 @@ readers do not read off random characters that represent icons */
   color: #ffffff;
 }
 
+.dropdown-menu {
+  box-shadow: 0 0.5rem 0.625rem rgba(90, 97, 105, 0.4);
+  border: none;
+  border-radius: 0.375rem;
+}
+
+.dropdown-item {
+  border-bottom: #e1e5eb solid 0.05px;
+}
+
+.dropdown-item:hover {
+  background-color: #b6bac0 !important;
+  color: #232f34;
+}
+
+.dropdown-item:last-child {
+  border-bottom-left-radius: 0.375rem;
+  border-bottom-right-radius: 0.375rem;
+}
+
 .btn:focus,
 .btn:active,
 .btn:active:focus,
