@@ -191,6 +191,11 @@ Route::middleware(['auth','verified', 'logout'])->group(function(){
         
         // NOTIFICACIONES
         Route::get('notifications/problems', 'NotificationController@problems')->name('notifications.allProblems');
+
+        //SOLICITUDES DE PROBLEMAS - EMERGENCIAS
+        Route::get('request/socialProblem/{problem}/{notification}', 'RequestController@showSocialProblem')->name('request.socialProblem');
+        Route::get('request/approve/socialProblem/{problem}', 'RequestController@approveSocialProblem')->name('request.approveSocialProblem');
+        Route::get('request/reject/socialProblem/{problem}', 'RequestController@rejectSocialProblem')->name('request.rejectSocialProblem');
 });
 
 Route::get('logout', function () {

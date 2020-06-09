@@ -9,10 +9,15 @@
 
         <div class="dropdown-menu" aria-labelledby="dropdownNotifications">
           <!-- <a class="dropdown-item" v-for="problem in problems" v-bind:key="problem"> -->
-          <a class="dropdown-item" v-for="problem_notification in problems_unread_notifications" v-bind:key="problem_notification.data.id">
+          <a class="dropdown-item" 
+              v-for="problem_notification in problems_unread_notifications" 
+              v-bind:key="problem_notification.id" 
+              :href="'/request/socialProblem/'+problem_notification.data.post.id+'/'+problem_notification.id"
+              >
+
             <div class="notification__icon-wrapper">
               <div class="notification__icon">
-                <img :src="problem_notification.data.avatar_neighbor" alt="avatar" />
+                <img :src="problem_notification.data.neighbor.avatar" alt="avatar" />
               </div>
             </div>
             <div class="notification__content">
