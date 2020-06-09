@@ -114,7 +114,7 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
           {{-- <button type="button" class="btn btn-success">Aprobar</button> --}}
-          <a href="{{route('socialProblemReport.approveSocialProblem', $problem->id)}}" class="btn btn-success float-right"><i class="fas fa-check-circle"></i> Aprobar</a> 
+          <a href="{{route('socialProblemReport.approveSocialProblem', [$problem->id, $notification->id])}}" class="btn btn-success float-right"><i class="fas fa-check-circle"></i> Aprobar</a> 
         </div>
       </div>
     </div>

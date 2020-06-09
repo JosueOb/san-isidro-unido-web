@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\HelpersClass\AdditionalData;
+use App\Http\Middleware\ProtectSocialProblemReportNotification;
 use App\Http\Middleware\SocialProblemReport;
 use App\Http\Middleware\SocialProblemRequest;
 use App\Http\Requests\RejectSocialProblemRequest;
@@ -27,6 +28,8 @@ class SocialProblemReportController extends Controller
     {
         //Se verifica si tiene el usuario el rol con el permiso de aceptar o rechazar las solicitudes de problemas sociales
         $this->middleware('can:socialProblemReports.approveOReject')->only('approveSocialProblem', 'showRejectSocialProblem', 'rejectSocialProblem');
+        //Se verifica que el id de la notificación le pertenece al usuario que realiza la petición http
+        $this->middleware(ProtectSocialProblemReportNotification::class)->only('showSocialProblem','approveSocialProblem', 'showRejectSocialProblem', 'rejectSocialProblem');
         $this->middleware(SocialProblemReport::class)->only('approveSocialProblem', 'showRejectSocialProblem', 'rejectSocialProblem');
     }
 
@@ -77,7 +80,7 @@ class SocialProblemReportController extends Controller
      * @param  DatabaseNotification  $notification
      * @return \Illuminate\Http\Response
      */
-    public function approveSocialProblem(Post $problem, Request $request){
+    public function approveSocialProblem(Post $problem, DatabaseNotification $notification, Request $request){
         //Se obtiene el usuario que aprobó el problema
         $user = $request->user();
 
@@ -96,7 +99,11 @@ class SocialProblemReportController extends Controller
         $problem->state = true;
         $problem->save();
         
-        return redirect()->back()->with('success','Problema social aprobado');
+        // return redirect()->back()->with('success','Problema social aprobado');
+        return redirect()->route('socialProblemReport.socialProblem',[
+            'problem'=>$problem->id,
+            'notification'=>$notification->id
+        ])->with('success','Problema social aprobado');
     }
     /**
      * Se presenta el formulario de rechazo de problema social
