@@ -16,16 +16,14 @@ class ApiUserActiveMiddleware
      */
     public function handle($request, Closure $next)
     {
-        //
         //Se obtiene al miembro de la directiva
         $currentUser =  User::findById($request->token->user->id)->first();
-        // dd($request->token->user, $currentUser);
         //Se obtiene el estado de su relación entre roles y usuarios
         $rolMoradorIsActive = $currentUser->getRelationshipStateRolesUsers('morador');
         $rolInvitadoIsActive = $currentUser->getRelationshipStateRolesUsers('invitado');
-        // dd($rolMoradorIsActive, $rolInvitadoIsActive);
+        $rolPoliciaIsActive = $currentUser->getRelationshipStateRolesUsers('policia');
 
-        if($rolMoradorIsActive|| $rolInvitadoIsActive){
+        if($rolMoradorIsActive || $rolInvitadoIsActive || $rolPoliciaIsActive){
             return $next($request);
         }
         return response()->json([

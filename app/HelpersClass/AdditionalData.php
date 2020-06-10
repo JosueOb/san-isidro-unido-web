@@ -12,10 +12,19 @@ class AdditionalData
     public function __construct() 
     {
         $this->emergency = [
-            "attended_by" => null,
-            'rechazed_by' => null,
-            'rechazed_reason' => null,
-            "approved_by" => null, 
+            "approved" => [
+                'who'=>null,//usuario que aprobó el problema
+                'date'=>null,//fecha de aprobación
+            ],
+            "rechazed"=>[
+                'who'=>null,//usuario que rechazó el problema social
+                'reason'=>null,//razón del rechazo del problema social
+                'date'=>null,//fecha de rechado
+            ],
+            "attended"=>[
+                'who'=>null,//usuario que cambió a solucionado el problema
+                'date'=>null,//fecha en la que se atendió al problema
+            ],
             "status_attendance" => 'pendiente' //atendido, rechazado, pendiente
         ];
         $this->event = [
@@ -26,7 +35,10 @@ class AdditionalData
                 'start_time' => date("H:i:s"),
                 'end_time' => date("H:i:s", strtotime('+3 hours', strtotime(date("H:i:s")))) 
             ],
-            "approved_by" => null, 
+            "approved" => [
+                'who'=>null,//usuario que aprobó el problema
+                'date'=>null,//fecha de aprobación
+            ],
             "status_attendance" => 'pendiente' //atendido, rechazado, pendiente
         ];
         $this->problem = [
@@ -46,7 +58,10 @@ class AdditionalData
             "status_attendance" => 'pendiente' //aprobado, rechazado, atendido(solucionado), pendiente
         ];
         $this->activity = [
-            "approved_by" => null, 
+            "approved" => [
+                'who'=>null,//usuario que aprobó el problema
+                'date'=>null,//fecha de aprobación
+            ],
             "status_attendance" => 'pendiente' //atendido, rechazado, pendiente
         ];
     }

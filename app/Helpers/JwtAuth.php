@@ -75,7 +75,6 @@ class JwtAuth {
 			"sub" => $user['id'],
 			"iat" => time(),
 			"exp" => time() + $this->timeExpiration,
-			'aud' => self::Aud(),
 			"user" => $user,
 		];
 		//Codificar y Decodificar información
@@ -108,11 +107,6 @@ class JwtAuth {
         $decoded = null;
 		try {
 			$decoded = JWT::decode($jwt, $this->key, [$this->algoritmoCifrado]);
-			if($decode->aud !== self::Aud())
-			{
-				// throw new Exception("Invalid user logged in.");
-				$auth = false;
-			}
 		} catch (\UnexpectedValueException $e) {
 			$auth = false;
 		} catch (\DomainException $e) {

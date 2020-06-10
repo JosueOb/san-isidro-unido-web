@@ -32,14 +32,23 @@ class ApiPostSeeder extends Seeder
             $aditionalData = new AdditionalDataCls();
             $user = User::orderBy(DB::raw('RAND()'))->take(1)->first();
             $aditionalData->setInfoEmergency([
-                "attended_by" => $user,
-                'rechazed_by' => null,
-                'rechazed_reason' => null,
-                "approved_by" => null, 
+                "approved" => [
+                    'who'=>null,
+                    'date'=>null,
+                ],
+                "rechazed"=>[
+                    'who'=>null,
+                    'reason'=>null,
+                    'date'=>null,
+                ],
+                "attended"=>[
+                    'who'=>null,
+                    'date'=>null
+                ],
                 "status_attendance" => $faker->randomElement(['pendiente'],1)
             ]);
             $initialDate =  CarbonImmutable::now();
-            $ubicationData = new UbicationCls($faker->address, $faker->latitude,$faker->longitude, 'lorem description');
+            $ubicationData = new UbicationCls($faker->address, $faker->latitude,$faker->longitude, 'fake description');
             $idPostEmergencia = DB::table('posts')->insertGetId([
                 'title' => $faker->realText(50,2),
                 'description' =>  $faker->realText(200,2),
@@ -53,7 +62,7 @@ class ApiPostSeeder extends Seeder
             ]);
             for($img = 1; $img <= 3; $img++){
                 DB::table('resources')->insert([
-                    'url' => "https://loremflickr.com/250/250?random=$em",
+                    'url' => "https://source.unsplash.com/random",
                     'post_id' => $idPostEmergencia,
                     'type' => "image",
                     'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
@@ -73,7 +82,7 @@ class ApiPostSeeder extends Seeder
             })->orderBy(DB::raw('RAND()'))->first();
             $initialDate =  CarbonImmutable::now();
             $subcategory = Subcategory::where('category_id', $categoriaProblemasSociales->id)->orderBy(DB::raw('RAND()'))->first();
-            $ubicationData = new UbicationCls($faker->address, $faker->latitude,$faker->longitude, 'lorem description');
+            $ubicationData = new UbicationCls($faker->address, $faker->latitude,$faker->longitude, 'fake description');
             $idPostProblemaSocial = DB::table('posts')->insertGetId([
                 'title' => $faker->realText(50,2),
                 'description' =>  $faker->realText(200,2),
@@ -90,7 +99,7 @@ class ApiPostSeeder extends Seeder
             ]);
             for($img_sp = 1; $img_sp <= 3; $img_sp++){
                 DB::table('resources')->insert([
-                    'url' => "https://loremflickr.com/250/250?random=$sp",
+                    'url' => "https://source.unsplash.com/randomp",
                     'post_id' => $idPostProblemaSocial,
                     'type' => "image",
                     'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
@@ -127,7 +136,7 @@ class ApiPostSeeder extends Seeder
             $subcategoryEvents = $categoriaEventos->subcategories()->orderBy(DB::raw('RAND()'))->first();
             $intervalDays = rand(2, 15);
             $initialDate =  CarbonImmutable::now();
-            $ubicationData = new UbicationCls($faker->address, $faker->latitude,$faker->longitude, 'lorem description');
+            $ubicationData = new UbicationCls($faker->address, $faker->latitude,$faker->longitude, 'nightloigs description');
             $finalDate = $initialDate->add($intervalDays, 'day');
            
             $idPostEvento = DB::table('posts')->insertGetId([
@@ -144,7 +153,7 @@ class ApiPostSeeder extends Seeder
             // dd($aditionalDataEvento->getEventData(), $idPostEvento);
             for($iev = 1; $iev <= 3; $iev++){
                 DB::table('resources')->insert([
-                    'url' => "https://loremflickr.com/250/250?random=$ev",
+                    'url' => "https://source.unsplash.com/random",
                     'post_id' => $idPostEvento,
                     "type" => "image",
                     'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
@@ -166,7 +175,7 @@ class ApiPostSeeder extends Seeder
             ]);
             $user = User::orderBy(DB::raw('RAND()'))->take(1)->first();
             $initialDate =  CarbonImmutable::now();
-            $ubicationData = new UbicationCls($faker->address, $faker->latitude,$faker->longitude, 'lorem description');
+            $ubicationData = new UbicationCls($faker->address, $faker->latitude,$faker->longitude, 'nightly description');
             $idPostReporte = DB::table('posts')->insertGetId([
                 'title' => $faker->realText(50,2),
                 'description' =>  $faker->realText(200,2),
@@ -180,7 +189,7 @@ class ApiPostSeeder extends Seeder
             ]);
             for($irp = 1; $irp <= 3; $irp++){
                 DB::table('resources')->insert([
-                    'url' => "https://loremflickr.com/250/250?random=$rp",
+                    'url' => "https://source.unsplash.com/random",
                     'post_id' => $idPostReporte,
                     "type" => 'image',
                     'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()

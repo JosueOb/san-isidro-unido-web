@@ -84,10 +84,16 @@ class ApiUserController extends ApiBaseController
      *
      * @return array
      */
-    public function detail($id)
+    public function detail(Request $request, $id)
     {
+        $getRoles= ($request->get('roles')) ? intval($request->get('roles')): -1;
         try {
-            $user = User::findById($id)->first();
+            if ($getRoles != -1){
+                $user = User::findById($id)->with(['roles'])->first();
+            }else{
+                $user = User::findById($id)->first();
+            }
+           
             //Validar si el usuario existe
             if (!is_null($user)) {
                 ;

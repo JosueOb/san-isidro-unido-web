@@ -82,8 +82,8 @@ class ApiPostController extends ApiBaseController
             }
 
             if ($filterByPolice != -1) {
-                $queryset = $queryset->where('additional_data->attended_by->id', $filterByPolice);
-            }           
+                $queryset = $queryset->where('additional_data->attended->who->id', $filterByPolice);
+            }
 
             if ($filterByTitle != '') {
                 $queryset = $queryset->where('title', 'LIKE', "%$filterByTitle%");
@@ -92,6 +92,7 @@ class ApiPostController extends ApiBaseController
             if ($filterStatusAttendance != '') {
                 $queryset = $queryset->where('additional_data->status_attendance', $filterStatusAttendance);
             }
+            // dd($queryset->toSql());
             //Retornar Paginacion y datos ordenados descendentemente para devolver los mas nuevos primero
             $posts = $queryset->orderBy('created_at', 'DESC')->simplePaginate($filterSize)->toArray();
             return $this->sendPaginateResponse(200, 'Datos Obtenidos', $posts);
@@ -148,18 +149,18 @@ class ApiPostController extends ApiBaseController
         //Actualizar Aditional Data
         $aditionalData = new AdditionalDataCls();
         $aditionalData->setInfoEmergency([
-            'rechazed_by' => null,
-            'attended_by' => $token_decoded->user,
-            'rechazed_reason' => null,
-            "approved_by" => null, 
-            "status_attendance" => 'atendido'
+            "status_attendance" => 'atendido',
+            "attended"=>[
+                'who'=> $token_decoded->user,
+                'date'=> date('Y-m-d H:i:s')
+            ]
         ]);
         $emergency->additional_data = array_merge($emergency->additional_data ?? [], $aditionalData->getEmergencyData());
         $emergency->state = 0;
         $emergency->save();
         //Notificar al usuario que creo el post sobre quien lo va a atender
         $title_noti = "Tu solicitud de emergencia fue aceptada";
-        $description_noti = "El policia " . $token_decoded->user->first_name . " ha aceptado atender tu emergencia";
+        $description_noti = "El policia " . $token_decoded->user->fullname . " ha aceptado atender tu emergencia";
         $user_devices = OnesignalNotification::getUserDevices($emergency->user_id);
         if (!is_null($user_devices) && count($user_devices) > 0) {
             //Enviar notification al usuario en especifico
@@ -207,11 +208,12 @@ class ApiPostController extends ApiBaseController
             //Actualizar Aditional Data
             $aditionalData = new AdditionalDataCls();
             $aditionalData->setInfoEmergency([
-                'attended_by' => null,
-                'rechazed_by' => $token_decoded->user,
-                'rechazed_reason' => $request->motivo,
-                "approved_by" => null, 
-                "status_attendance" => 'rechazado'
+                "status_attendance" => 'rechazado',
+                "rechazed"=>[
+                    'who'=> $token_decoded->user,
+                    'reason'=> $request->motivo,
+                    'date'=> date('Y-m-d H:i:s')
+                ]
                 ]);
             $emergency->additional_data = array_merge($emergency->additional_data ?? [], $aditionalData->getEmergencyData());
             $emergency->state = 0;
@@ -281,7 +283,7 @@ class ApiPostController extends ApiBaseController
             $new_post = Post::findById($post->id)->with(["category", "subcategory", 'resources', 'reactions'])->first();
             //Notificar Emergencia a los Policias
             $title_notification_policia = "Nueva emergencia reportada";
-            $description_notification_policia = "El usuario " . $new_post->user->first_name . " ha reportado una emergencia";
+            $description_notification_policia = "El usuario " . $new_post->user->fullname . " ha reportado una emergencia";
 
             foreach ($policias as $policia) {
                 $policia->notify(new PostNotification($new_post, $title_notification_policia, $description_notification_policia));
@@ -292,7 +294,7 @@ class ApiPostController extends ApiBaseController
                     OnesignalNotification::sendNotificationByPlayersID(
                         $title_notification_policia,
                         $description_notification_policia,
-                            [
+                        [
                                 "post" => $new_post
                             ],
                         $user_devices_policia
@@ -366,7 +368,7 @@ class ApiPostController extends ApiBaseController
  
             $new_post = Post::findById($post->id)->with(["category", "subcategory", 'resources', 'reactions'])->first();
             $title_notification_moderador = 'Un nuevo problema social ha sido reportado';
-            $description_notification_moderador = 'El usuario ' . $new_post->user->first_name . ' ha reportado un problema social';
+            $description_notification_moderador = 'El usuario ' . $new_post->user->fullname . ' ha reportado un problema social';
             //Notificar Moderadores
             foreach ($moderadores as $moderador) {
                 $moderador->notify(new PostNotification($new_post, $title_notification_moderador, $description_notification_moderador));

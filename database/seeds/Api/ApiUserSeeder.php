@@ -101,13 +101,6 @@ class ApiUserSeeder extends Seeder {
 			'avatar' => "https://ui-avatars.com/api/?name=Ramiro+Gonzales&size=255",
             'password' => password_hash('12345', PASSWORD_DEFAULT),
             'email_verified_at'=> now(),
-            // 'membership' => json_encode( [
-            //     'identity_card'   => '1234558784',
-            //     'basic_service_image' => 'https://fakeimg.pl/250x100/',
-            //     'approved_by' => null,
-            //     'rechazed_by' => null,
-            //     'rechazed_reason' => null
-            // ])
             'membership' => $membresiaInvitado->getAll()
             ]);
 	
