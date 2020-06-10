@@ -25,7 +25,7 @@ class RoleRequest extends FormRequest
     public function rules()
     {
         return [
-            'description'=> 'nullable|regex:/^[[:alpha:][:space:](,;.áéíóúñÁÉÍÓÚÑ)]+$/|max:255',
+            'description'=> 'nullable|regex:/^[[:alpha:][:space:](,;.áéíóúÁÉÍÓÚñÑ)]+$/|max:255',
             'permissions'=>'required|'.Rule::exists('permissions','id')->where('private',false),
         ];
     }

@@ -6,15 +6,18 @@
     outline: none;
 }
 
-a{
-    font-size: 12px;
-  color: $blue-600;
-  font-weight: 500;
-  transition: all .5s;
-  -webkit-transition: all .5s;
-  -o-transition: all .5s;
-}
-
-h1, h2, h3, h4, h5, h6 {
-    font-weight: 700;
+form{
+    .form-group{
+        a{
+            font-size: 12px;
+            color: $blue-600;
+            font-weight: 500;
+            transition: all .5s;
+            -webkit-transition: all .5s;
+            -o-transition: all .5s;
+        }
+    }
+    h1, h2, h3, h4, h5, h6 {
+        font-weight: 700;
+    }
 }

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\HelpersClass;
 
 class AdditionalData 
@@ -31,8 +30,20 @@ class AdditionalData
             "status_attendance" => 'pendiente' //atendido, rechazado, pendiente
         ];
         $this->problem = [
-            "approved_by" => null, 
-            "status_attendance" => 'pendiente' //atendido, rechazado, pendiente
+            "approved" => [
+                'who'=>null,//usuario que aprobó el problema
+                'date'=>null,//fecha de aprobación
+            ],
+            "rechazed"=>[
+                'who'=>null,//usuario que rechazó el problema social
+                'reason'=>null,//razón del rechazo del problema social
+                'date'=>null,//fecha de rechado
+            ],
+            "attended"=>[
+                'who'=>null,//usuario que cambió a solucionado el problema
+                'date'=>null,//fecha en la que se atendió al problema
+            ],
+            "status_attendance" => 'pendiente' //aprobado, rechazado, atendido(solucionado), pendiente
         ];
         $this->activity = [
             "approved_by" => null, 

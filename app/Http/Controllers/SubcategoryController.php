@@ -59,7 +59,7 @@ class SubcategoryController extends Controller
         if($icon){
             $subcategory->icon = $icon->store('subcategory_icons', 's3');
         }else{
-            $subcategory->icon = 'https://siu-resources-s3.s3.us-east-2.amazonaws.com/default_images/subcategory_icons/subcategory_icon_default.jpg';
+            $subcategory->icon = 'https://siu-dev97-sd.s3-sa-east-1.amazonaws.com/recursos_publicos/subcategory_icons/subcategory_icon_default.jpg';
         }
 
         $subcategory->save();

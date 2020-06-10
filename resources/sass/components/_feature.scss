@@ -1,0 +1,36 @@
+#features{
+    // border: solid purple 1px;
+    .features-content{
+        // border: solid red 1px;
+        .feature-item{
+            // border: solid red 1px;
+            i{
+                font-size: 5rem;
+                margin-top: 0.65rem;
+                margin-bottom: 0.65rem;
+                // background-color: pink;
+                @media (max-width: 767.98px) {
+                    font-size: 4rem;
+                }
+            }
+            .item-title{
+                // border: solid red 1px;
+                margin: .75rem .6rem;
+                padding: 0;
+                font-size: 25px;
+                font-weight: 700;
+                text-transform: uppercase;
+
+                @media (max-width: 767.98px) {
+                    font-size: 20px;
+                }
+            }
+            .item-description{
+                // background-color: red;
+                margin: .75rem .6rem;
+                padding: 0;
+                font-size: 16px;
+            }
+        }
+    }
+}

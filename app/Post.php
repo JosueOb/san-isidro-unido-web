@@ -84,7 +84,6 @@ class Post extends Model
 
 
     /*TODO: RELACIONES DE LOS MODELOS */
-
     
     /**
      * A post belongs to a user
@@ -135,7 +134,7 @@ class Post extends Model
             $image_url = $image->getLink();
         }else{
             //en caso de no tener imagen se retorna una por defecto
-            $image_url = 'https://siu-resources-s3.s3.us-east-2.amazonaws.com/default_images/report_image_default/report_default.jpg';
+            $image_url = 'https://siu-dev97-sd.s3-sa-east-1.amazonaws.com/recursos_publicos/category_icons/report_icon_default.jpg';
         }
         return $image_url;
     }

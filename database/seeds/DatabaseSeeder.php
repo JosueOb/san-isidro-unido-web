@@ -1,5 +1,6 @@
 <?php
 
+use App\Notifications\SocialProblem;
 use App\Subcategory;
 use Illuminate\Database\Seeder;
 
@@ -43,5 +44,9 @@ class DatabaseSeeder extends Seeder
         $this->call(ApiPublicServiceSeeder::class);
         //TODO: Llamado al Seeder Directives
         // $this->call(ApiDirectivesSeeder::class);
+
+
+        //TEST-NOTIFICATIONS
+        $this->call(TestNotificationsSeeder::class);
     }
 }
