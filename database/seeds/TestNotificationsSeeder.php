@@ -8,6 +8,7 @@ use Caffeinated\Shinobi\Models\Role;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Notification;
 use App\HelpersClass\AdditionalData;
+use App\Notifications\EmergencyReported;
 
 class TestNotificationsSeeder extends Seeder
 {
@@ -37,7 +38,9 @@ class TestNotificationsSeeder extends Seeder
         $faker = Faker\Factory::create();
         // $additionalData = new AdditionalData();
 
-        $neighbors->each(function ($neighbor, $key) use ($problem_category, $problem_subcategory, $faker, $moderators_active) {
+        $emergency_category = Category::where('slug', 'emergencia')->first();
+
+        $neighbors->each(function ($neighbor, $key) use ($problem_category, $problem_subcategory, $emergency_category, $faker, $moderators_active) {
             $additionalData = new AdditionalData();
             $additional_data = $additionalData->getInfoSocialProblem();
             $ubication = [
@@ -46,7 +49,7 @@ class TestNotificationsSeeder extends Seeder
                 'address' => $faker->address,
                 'description' => $faker->text($maxNbChars = 30),
             ];
-
+            //Registro de problemas sociales reportados
             $problem = Post::create([
                 'title' => 'Problema' . ' ' . $key,
                 'description' => 'Descripción' . ' ' . $key,
@@ -60,6 +63,21 @@ class TestNotificationsSeeder extends Seeder
             ]);
 
             Notification::send($moderators_active, new SocialProblem($problem, $neighbor));
+
+            $additionalDataEmergency = new AdditionalData();
+            $additional_data_emergency = $additionalDataEmergency->getEmergencyData();
+            //Registro de emergencias reportadas
+            $emergency = Post::create([
+                'title' => 'Emergencia' . ' ' . $key,
+                'description' => 'Descripción' . ' ' . $key,
+                'category_id' => $emergency_category->id,
+                'state' => false,
+                'user_id' => $neighbor->id,
+                'ubication' => json_encode($ubication),
+                'additional_data' => $additional_data_emergency,
+            ]);
+
+            Notification::send($moderators_active, new EmergencyReported($emergency, $neighbor));
         });
 
     }
