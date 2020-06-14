@@ -26,6 +26,11 @@ class NotificationController extends Controller
             'unread_notifications'=>array_values($unread_notifications->toArray()),//se re-indexa
         ];
     }
+
+    public function api_emergencies(Request $request){
+        $notifications = $request->user()->notifications;
+    }
+    //Se listan todas las notificaciones de problemas sociales reportados
     public function problems(Request $request){
 
         $user = $request->user();

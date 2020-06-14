@@ -8,6 +8,7 @@ use Caffeinated\Shinobi\Models\Role;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Notification;
 use App\HelpersClass\AdditionalData;
+use App\Notifications\EmergencyReported;
 
 class TestNotificationsSeeder extends Seeder
 {
@@ -82,7 +83,8 @@ class TestNotificationsSeeder extends Seeder
                 'ubication' => json_encode($ubication),
                 'additional_data' => $additional_data_emergency,
             ]);
-            
+
+            Notification::send($moderators_active, new EmergencyReported($emergency, $neighbor));
         });
 
     }

@@ -274,6 +274,8 @@
                             <problem-notifications :user="{{Auth::user()->id}}"></problem-notifications>
                             @endcan
 
+                            <emergency-notifications></emergency-notifications>
+
 
                             <li class="nav-item dropdown user-options m-0">
                                 <a href="#" class="nav-link dropdown-toggle px-3 text-nowrap" data-toggle="dropdown" id="dropdownMenuUser" role="button" aria-haspopup="true" aria-expanded="false">
