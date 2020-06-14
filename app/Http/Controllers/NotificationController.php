@@ -60,4 +60,19 @@ class NotificationController extends Controller
             'all_problem_notifications'=>$problem_notifications,
         ]);
     }
+    //Se listan todas las notificaciones de emergencias de problemas sociales reportados
+    public function emergencies(Request $request){
+
+        $user = $request->user();
+        $notifications = $user->notifications;
+        $emergency_category = Category::where('slug', 'emergencia')->first();
+
+        $emergency_notifications = $notifications->filter(function($notification, $key) use($emergency_category){
+            return $notification->data['post']['category_id'] === $emergency_category->id;
+        }); 
+
+        return view('notifications.emergency',[
+            'all_emergency_notifications'=>$emergency_notifications,
+        ]);
+    }
 }
