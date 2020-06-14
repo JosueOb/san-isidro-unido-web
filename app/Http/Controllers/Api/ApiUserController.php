@@ -637,7 +637,6 @@ class ApiUserController extends ApiBaseController
             if (is_null($user)) {
                 return $this->sendError(404, 'no existe el usuario', ['notifications' => 'no existe el usuario']);
             }
-            // dd($user);
             $notification = $user->notifications()->find($request->notification_id);
             if ($notification) {
                 $notification->read_at = date('Y-m-d H:i:s');
