@@ -90,7 +90,6 @@ class ApiImages
      */
     private function saveImageInDisk($diskname, $img_name, $img_file)
     {
-        // dd($diskname);
         try {
             if (Storage::disk($diskname)->exists($img_name)) {
                 Storage::disk($diskname)->delete($img_name);

@@ -35,7 +35,10 @@ class AdditionalData
                 'start_time' => date("H:i:s"),
                 'end_time' => date("H:i:s", strtotime('+3 hours', strtotime(date("H:i:s")))) 
             ],
-            "approved_by" => null, 
+            "approved" => [
+                'who'=>null,//usuario que aprobó el problema
+                'date'=>null,//fecha de aprobación
+            ],
             "status_attendance" => 'pendiente' //atendido, rechazado, pendiente
         ];
         $this->problem = [
@@ -55,7 +58,10 @@ class AdditionalData
             "status_attendance" => 'pendiente' //aprobado, rechazado, atendido(solucionado), pendiente
         ];
         $this->activity = [
-            "approved_by" => null, 
+            "approved" => [
+                'who'=>null,//usuario que aprobó el problema
+                'date'=>null,//fecha de aprobación
+            ],
             "status_attendance" => 'pendiente' //atendido, rechazado, pendiente
         ];
     }
