@@ -188,6 +188,7 @@ Route::middleware(['auth','verified', 'logout'])->group(function(){
 
         //API - NOTIFICACIONES
         Route::get('api/notifications/problems', 'NotificationController@api_problems')->name('notifications.problems')->middleware('can:notifications.problems');
+        Route::get('api/notifications/emergencies', 'NotificationController@api_emergencies')->name('notifications.emergencies');
         
         // NOTIFICACIONES
         Route::get('notifications/problems', 'NotificationController@problems')->name('notifications.allProblems')->middleware('can:notifications.problems');

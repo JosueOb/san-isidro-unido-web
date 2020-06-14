@@ -29,6 +29,21 @@ class NotificationController extends Controller
 
     public function api_emergencies(Request $request){
         $notifications = $request->user()->notifications;
+        // dd($notifications);
+        $emergency_category = Category::where('slug', 'emergencia')->first();
+        $emergency_notifications = $notifications->filter(function($notification) use($emergency_category){
+            return $notification->data['post']['category_id'] === $emergency_category->id;
+        }); 
+
+        $unread_notifications = $emergency_notifications->filter(function($notification){
+            return $notification->unread();
+        });
+        // dd($unread_notifications);
+
+        return [
+            'emergency_notifications'=>array_values($emergency_notifications->toArray()),//se re-indexa 
+            'unread_notifications'=>array_values($unread_notifications->toArray()),//se re-indexa
+        ];
     }
     //Se listan todas las notificaciones de problemas sociales reportados
     public function problems(Request $request){
