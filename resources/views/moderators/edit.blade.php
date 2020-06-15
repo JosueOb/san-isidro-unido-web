@@ -1,17 +1,17 @@
 @extends('layouts.dashboard')
 @section('page-subtitle')
-    Módulo Vecinos
+    Módulo Moderadores
 @endsection
 @section('page-header')
-    Editar morador
+    Editar moderador
 @endsection
-@section('item-neighbor')
+@section('item-moderator')
     active
 @endsection
-@section('item-neighbor-collapse')
+@section('item-moderator-collapse')
     show
 @endsection
-@section('item-neighbor-list')
+@section('item-moderator-list')
     active
 @endsection
 @section('content')
@@ -24,23 +24,23 @@
     <div class="col">
         <div class="card card-primary">
             <div class="card-body">
-                <form action="{{route('neighbors.update', $neighbor->id)}}" method="POST">
+                <form action="{{route('moderators.update', $moderator->id)}}" method="POST">
                     @csrf
                     @method('put')
                     <div class="row">
                         <div class="form-group col-12 col-md-6">
                             <label for="first_name">Nombre</label>
-                            <input id="first_name" type="text" class="form-control" name="first_name" value="{{ old('first_name') ?: $neighbor->first_name }}" readonly>
+                            <input id="first_name" type="text" class="form-control" name="first_name" value="{{ old('first_name') ?: $moderator->first_name }}" readonly>
                         </div>
                         <div class="form-group col-12 col-md-6">
                             <label for="last_name">Apellidos</label>
-                            <input id="last_name" type="text" class="form-control" name="last_name" value="{{ old('last_name') ?: $neighbor->last_name}}" readonly>
+                            <input id="last_name" type="text" class="form-control" name="last_name" value="{{ old('last_name') ?: $moderator->last_name}}" readonly>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-12 col-md-6">
                             <label for="email">Email</label>
-                            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') ?: $neighbor->email}}" required autofocus>
+                            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') ?: $moderator->email}}" required autofocus>
                             @error('email')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -49,7 +49,7 @@
                         </div>
                         <div class="form-group col-12 col-md-6">
                             <label for="number_phone">Celular</label>
-                            <input id="number_phone" type="text" class="form-control @error('number_phone') is-invalid @enderror" name="number_phone" value="{{old('number_phone') ?: $neighbor->number_phone}}" maxlength="10" pattern="(09)[0-9]{8}" title="Recuerda que se admiten solo 10 dígitos y anteponer el código 09 al ingresar tu número telefónico" required>
+                            <input id="number_phone" type="text" class="form-control @error('number_phone') is-invalid @enderror" name="number_phone" value="{{old('number_phone') ?: $moderator->number_phone}}" maxlength="10" pattern="(09)[0-9]{8}" title="Recuerda que se admiten solo 10 dígitos y anteponer el código 09 al ingresar tu número telefónico" required>
                             <small id="number_phoneHelp" class="form-text text-muted">
                                 Recuerda anteponer el código 08 o 09 al ingresar tu número telefónico
                             </small>

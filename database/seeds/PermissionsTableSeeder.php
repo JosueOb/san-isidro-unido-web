@@ -289,30 +289,44 @@ class PermissionsTableSeeder extends Seeder
         ]);
         //Permisos sobre el módulo de moderadores
         Permission::create([
-            'name'=>'Listar los moderadores',
-            'slug'=>'moderators.index',
-            'description'=>'Lista los moderadores registrados por la directiva',
-            'private'=>true,
-            'group'=>'moderador',
-        ]);
-        Permission::create([
             'name'=>'Asignar moderador',
-            'slug'=>'moderators.create',
-            'description'=>'Asigna un nuevo moderador',
+            'slug'=>'moderators.assign',
+            'description'=>'Asigna el rol de moderador',
             'private'=>true,
             'group'=>'moderador',
         ]);
         Permission::create([
-            'name'=>'Ver a detalle un moderador',
+            'name'=>'Listar moderadores asignados',
+            'slug'=>'moderators.index',
+            'description'=>'Lista a los moderadores registrados',
+            'private'=>true,
+            'group'=>'moderador',
+        ]);
+        Permission::create([
+            'name'=>'Crear moderador',
+            'slug'=>'moderators.create',
+            'description'=>'Registrar a los nuevos moderadores',
+            'private'=>true,
+            'group'=>'moderador',
+        ]);
+        Permission::create([
+            'name'=>'Ver detalle de los moderadores asignados',
             'slug'=>'moderators.show',
             'description'=>'Ver en detalle cada uno de los moderadores registrados',
             'private'=>true,
             'group'=>'moderador',
         ]);
         Permission::create([
+            'name'=>'Editar moderador',
+            'slug'=>'moderators.edit',
+            'description'=>'Editar registros de los moderadores',
+            'private'=>true,
+            'group'=>'moderador',
+        ]);
+        Permission::create([
             'name'=>'Eliminar moderador',
             'slug'=>'moderators.destroy',
-            'description'=>'Eliminar los registros de moderadores',
+            'description'=>'Desactiva a los moderadores',
             'private'=>true,
             'group'=>'moderador',
         ]);

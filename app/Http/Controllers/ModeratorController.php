@@ -3,20 +3,64 @@
 namespace App\Http\Controllers;
 
 use App\Http\Middleware\IsModerator;
+use App\Http\Middleware\ModeratorIsActive;
+use App\Http\Middleware\NeighborIsActive;
+use App\Http\Middleware\ProtectedAdminUsers;
 use App\Http\Middleware\ProtectedDirectiveUsers;
+use App\Http\Middleware\ProtectedGuestUsers;
+use App\Http\Middleware\ProtectedModeratorUsers;
+use App\Http\Middleware\ProtectedPoliceUsers;
+use App\Http\Requests\NeighborRequest;
 use App\Notifications\ModeratorCreated;
+use App\Notifications\UserCreated;
 use App\User;
-use Caffeinated\Shinobi\Contracts\Role;
-use Caffeinated\Shinobi\Models\Role as ModelsRole;
+use Caffeinated\Shinobi\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Builder;
 
 class ModeratorController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(IsModerator::class)->only('show');
+        $this->middleware(ProtectedAdminUsers::class)->only('storeAssign', 'show', 'edit', 'update', 'destroy');
+        $this->middleware(ProtectedDirectiveUsers::class)->only('storeAssign', 'show', 'edit', 'update', 'destroy');
+        $this->middleware(ProtectedPoliceUsers::class)->only('storeAssign', 'show', 'edit', 'update', 'destroy');
+        $this->middleware(ProtectedGuestUsers::class)->only('storeAssign', 'show', 'edit', 'update', 'destroy');
+        $this->middleware(ProtectedModeratorUsers::class)->only('storeAssign');
+
+        $this->middleware(NeighborIsActive::class)->only('storeAssign');
+        $this->middleware(ModeratorIsActive::class)->only( 'edit', 'update');
     }
+
+    public function assign()
+    {
+        $neighbor_role = Role::where('slug', 'morador')->first();
+
+        $neighbors = $neighbor_role->users()->whereDoesntHave('roles', function (Builder $query) {
+            //Se evita que se listen a los regitros de administrador, directivo y moderadores asignados
+            $query->whereIn('slug', ['admin', 'directivo', 'moderador']);
+        })->orderBy('last_name', 'asc')->paginate(10);
+
+        return view('moderators.assign', [
+            'neighbors' => $neighbors,
+        ]);
+    }
+
+    public function storeAssign(User $user)
+    {
+        //Se verifica que el usuario tenga verificado su correo electrónico
+        if ($user->email_verified_at) {
+            $role_moderator = Role::where('slug', 'moderador')->first();
+            $user->roles()->attach($role_moderator->id, ['state' => true]);
+            //Se envía un correo electrónico
+            $user->notify(new ModeratorCreated());
+            return redirect()->back()->with('success', 'Moderador asignado correctamente, puedes observarlo en la opción de Listar moderadores');
+        } else {
+            return redirect()->back()->with('danger', 'El morador no a verificado su correo electrónico');
+        }
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -24,11 +68,11 @@ class ModeratorController extends Controller
      */
     public function index()
     {
-        $role_moderator = ModelsRole::where('slug', 'moderador')->first();
-        $moderators = $role_moderator->users()->paginate();
+        $role_moderator = Role::where('slug', 'moderador')->first();
+        $moderators = $role_moderator->users()->orderBy('last_name', 'asc')->paginate(10);
 
         return view('moderators.index', [
-            'moderators'=> $moderators,
+            'moderators' => $moderators,
         ]);
     }
 
@@ -39,25 +83,7 @@ class ModeratorController extends Controller
      */
     public function create()
     {
-        // //Se realiza la consulta, se buscan los usuario que poseean el rol de morador pero no el del administrador
-        // $neighbors = User::whereHas('roles', function(Builder $query){
-        //     $query->where('slug', 'morador');
-        // })->whereDoesntHave('roles', function (Builder $query) {
-        //     $query->where('slug',  'admin');
-        //         //   ->where('slug', 'moderador');
-        // })->get();
-
-        
-        
-        $role_neighbor = ModelsRole::where('slug', 'morador')->first();
-        $neighbors = $role_neighbor->users()->paginate();
-        // $neighbors = $role_neighbor->users()->whereNull('position_id')->paginate();
-        
-        
-        // dd($neighbors);
-        return view('moderators.create', [
-            'neighbors' => $neighbors,
-        ]);
+        return view('moderators.create');
     }
 
     /**
@@ -66,30 +92,31 @@ class ModeratorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function store(User $user)
+    public function store(NeighborRequest $request)
     {
-        //Se verifica que el usuario esté activo como morador
-        if($user->getRelationshipStateRolesUsers('morador')){
-            // Se verifica si el usuario ya tiene asignado el rol de moderador
-            if($user->getASpecificRole('moderador')){
-                return redirect()->back()->with('danger', 'Moderador ya asignado');
-            }
-            if($user->email_verified_at){
-                $role_moderator = ModelsRole::where('slug', 'moderador')->first();
-                $user->roles()->attach($role_moderator->id, ['state'=>true]);
+        $validated = $request->validated();
 
-                //Se envía un correo electrónico
-                $user->notify(new ModeratorCreated());
-                return redirect()->back()->with('success', 'Moderador asignado correctamente');
-            }else{
-                return redirect()->back()->with('danger', 'El morador no a verificado su correo electrónico');
-            }
-        }else{
-            return redirect()->back()->with('danger', 'El morador se encuentra inactivo');
-        }
+        $password = Str::random(8);
+        $avatar  = 'https://ui-avatars.com/api/?name='.
+        mb_substr($validated['first_name'],0,1).'+'.mb_substr($validated['last_name'],0,1).
+        '&size=255';
+        $moderator_role = Role::where('slug', 'moderador')->first();
 
+        $moderator = new User();
+        $moderator->first_name = $validated['first_name'];
+        $moderator->last_name = $validated['last_name'];
+        $moderator->email = $validated['email'];
+        $moderator->avatar = $avatar;
+        $moderator->password = \password_hash($password, PASSWORD_DEFAULT);
+        $moderator->number_phone = $validated['number_phone'];
+        $moderator->state = true;
+        $moderator->save();
 
-        // dd('ingreso a guardar el usuario '.$user->id);
+        $moderator->roles()->attach($moderator_role->id, ['state'=>true]);
+
+        $moderator->notify(new UserCreated($password, $moderator_role->name));
+
+        return redirect()->route('moderators.index')->with('success', 'Moderador registrado con éxito');
     }
 
     /**
@@ -101,32 +128,54 @@ class ModeratorController extends Controller
     public function show(User $user)
     {
         return view('moderators.show', [
+            'moderator' => $user,
+        ]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(User $user)
+    {
+        return view('moderators.edit', [
             'moderator'=> $user,
         ]);
     }
 
-    // /**
-    //  * Show the form for editing the specified resource.
-    //  *
-    //  * @param  int  $id
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function edit($id)
-    // {
-    //     //
-    // }
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(NeighborRequest $request, User $user)
+    {
+        $validated = $request->validated();
 
-    // /**
-    //  * Update the specified resource in storage.
-    //  *
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @param  int  $id
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function update(Request $request, $id)
-    // {
-    //     //
-    // }
+        //Se obtiene el correo del objeto usuario y del formulario
+        $oldEmail = $user->email;
+        $newEmail = $validated['email'];
+        //Se actualiza el campo email y position del usuario
+        $user->email = $validated['email'];
+        $user->number_phone = $validated['number_phone'];
+        //Se verifica si el correo del formulario con el del usuario no iguales
+        if($oldEmail != $newEmail){
+            //Se procede a generar una contraseña
+            $password = Str::random(8);
+            //Se cambia la contraseña del usuario
+            $user->password = password_hash($password, PASSWORD_DEFAULT);
+            //Se envía una notificación
+            $user->notify(new UserCreated($password, 'moderador'));
+        }
+
+        $user->save();
+
+        return redirect()->route('moderators.index')->with('success','Moderador actualizado exitosamente');
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -139,13 +188,13 @@ class ModeratorController extends Controller
         $message = null;
         $roleModeratorUser = $user->getASpecificRole('moderador');
 
-        if($roleModeratorUser->pivot->state){
+        if ($roleModeratorUser->pivot->state) {
             $message = 'desactivado';
-            $user->roles()->updateExistingPivot($roleModeratorUser->id, ['state'=>false]);
-        }else{
+            $user->roles()->updateExistingPivot($roleModeratorUser->id, ['state' => false]);
+        } else {
             $message = 'activado';
-            $user->roles()->updateExistingPivot($roleModeratorUser->id, ['state'=>true]);
+            $user->roles()->updateExistingPivot($roleModeratorUser->id, ['state' => true]);
         }
-        return redirect()->back()->with('success', 'Moderador '.$message.' con éxito');
+        return redirect()->back()->with('success', 'Moderador ' . $message . ' con éxito');
     }
 }

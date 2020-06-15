@@ -173,11 +173,17 @@ Route::middleware(['auth','verified', 'logout'])->group(function(){
         Route::get('search/events','SearchController@events')->name('search.events')->middleware('can:events.index');
         
         //MODERADOR
-        Route::get('moderators/create', 'ModeratorController@create')->name('moderators.create')->middleware('can:moderators.create');
-        Route::get('moderators/{user}/create', 'ModeratorController@store')->name('moderators.store')->middleware('can:moderators.create');
+        Route::get('moderators/assign', 'ModeratorController@assign')->name('moderators.assign')->middleware('can:moderators.assign');
+        Route::get('search/assign','SearchController@assign')->name('search.assign')->middleware('can:moderators.assign');
+        Route::put('moderators/assign/{user}', 'ModeratorController@storeAssign')->name('moderators.storeAssign')->middleware('can:moderators.assign');
         Route::get('moderators', 'ModeratorController@index')->name('moderators.index')->middleware('can:moderators.index');
-        Route::delete('moderators/{user}', 'ModeratorController@destroy')->name('moderators.destroy')->middleware('can:moderators.destroy');
+        Route::get('search/moderators', 'SearchController@moderators')->name('search.moderators')->middleware('can:moderators.index');
+        Route::get('moderators/create', 'ModeratorController@create')->name('moderators.create')->middleware('can:moderators.create');
+        Route::post('moderators/store', 'ModeratorController@store')->name('moderators.store')->middleware('can:moderators.create');
         Route::get('moderators/{user}', 'ModeratorController@show')->name('moderators.show')->middleware('can:moderators.show');
+        Route::get('moderators/{user}/edit', 'ModeratorController@edit')->name('moderators.edit')->middleware('can:moderators.edit');
+        Route::put('moderators/{user}', 'ModeratorController@update')->name('moderators.update')->middleware('can:moderators.edit');
+        Route::delete('moderators/{user}', 'ModeratorController@destroy')->name('moderators.destroy')->middleware('can:moderators.destroy');
 
         //POLICIA
         Route::get('policemen', 'PoliceController@index')->name('policemen.index')->middleware('can:policemen.index');

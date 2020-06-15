@@ -29,7 +29,6 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col">
-                        <p><strong>Id:</strong> {{$moderator->id}}</p>
                         <p><strong>Nombre:</strong> {{$moderator->first_name}}</p>
                         <p><strong>Apellidos:</strong> {{$moderator->last_name}}</p>
                         <p><strong>Corre electrónico:</strong> {{$moderator->email}}</p>

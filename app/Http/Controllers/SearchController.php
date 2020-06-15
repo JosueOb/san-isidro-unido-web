@@ -416,4 +416,119 @@ class SearchController extends Controller
             'policemen' => $policemen_found,
         ]);
     }
+
+    public function assign(QueryRequest $request){
+        $validated = $request->validated();
+        $option = $request->has('searchOption') ? $validated['searchOption'] : null;
+        $value = $request->has('searchValue') ? $validated['searchValue'] : null;
+        $filter = $request->query('filterOption'); //obtiene la variable enviado en la petición GET
+
+        $neighbor_role = Role::where('slug', 'morador')->first();
+        // $neighbors = $neighbor_role->users()->whereDoesntHave('roles', function (Builder $query) {
+        //     $query->where('slug', 'admin');
+        // });
+        $neighbors = $neighbor_role->users()->whereDoesntHave('roles', function(Builder $query){
+            //Se evita que se listen a los regitros de administrador, directivo y moderadores asignados
+            $query->whereIn('slug', ['admin', 'directivo', 'moderador']);
+        });
+        // ->wherePivot('state', true)
+        $neighbors_found = null;
+
+        if ($option && $value) {
+            switch ($option) {
+                case 1:
+                    //Se busca acorde al nombre ingresado
+                    $neighbors_found = $neighbors->where('first_name', 'LIKE', "$value%");
+                    break;
+                case 2:
+                    //Se busca acorde al apellido ingresado
+                    $neighbors_found = $neighbors->where('last_name', 'LIKE', "$value%");
+                    break;
+                default:
+                    return abort(404);
+                    break;
+            }
+        }
+
+        if ($filter) {
+            switch ($filter) {
+                case 1:
+                    $state = true;
+                    break;
+                case 2:
+                    $state = false;
+                    break;
+
+                default:
+                    return abort(404);
+                    break;
+            }
+
+            if ($neighbors_found) {
+                $neighbors_found = $neighbors_found->wherePivot('state', $state)->orderBy('last_name', 'asc')->paginate(10);
+            } else {
+                $neighbors_found = $neighbors->wherePivot('state', $state)->orderBy('last_name', 'asc')->paginate(10);
+            }
+        } else {
+            $neighbors_found = $neighbors_found->orderBy('last_name', 'asc')->paginate(10);
+        }
+
+        return view('moderators.assign', [
+            'neighbors' => $neighbors_found,
+        ]);
+    }
+
+    public function moderators(QueryRequest $request){
+        $validated = $request->validated();
+        $option = $request->has('searchOption') ? $validated['searchOption'] : null;
+        $value = $request->has('searchValue') ? $validated['searchValue'] : null;
+        $filter = $request->query('filterOption'); //obtiene la variable enviado en la petición GET
+
+        $rol_moderator = Role::where('slug', 'moderador')->first();
+        $moderators = $rol_moderator->users();
+        $moderators_found = null;
+
+        if ($option && $value) {
+            switch ($option) {
+                case 1:
+                    //Se busca acorde al nombre ingresado
+                    $moderators_found = $moderators->where('first_name', 'LIKE', "$value%");
+                    break;
+                case 2:
+                    //Se busca acorde al apellido ingresado
+                    $moderators_found = $moderators->where('last_name', 'LIKE', "$value%");
+                    break;
+                default:
+                    return abort(404);
+                    break;
+            }
+        }
+
+        if ($filter) {
+            switch ($filter) {
+                case 1:
+                    $state = true;
+                    break;
+                case 2:
+                    $state = false;
+                    break;
+
+                default:
+                    return abort(404);
+                    break;
+            }
+
+            if ($moderators_found) {
+                $moderators_found = $moderators_found->wherePivot('state', $state)->orderBy('last_name', 'asc')->paginate(10);
+            } else {
+                $moderators_found = $moderators->wherePivot('state', $state)->orderBy('last_name', 'asc')->paginate(10);
+            }
+        } else {
+            $moderators_found = $moderators_found->orderBy('last_name', 'asc')->paginate(10);
+        }
+
+        return view('moderators.index', [
+            'moderators' => $moderators_found,
+        ]);
+    }
 }

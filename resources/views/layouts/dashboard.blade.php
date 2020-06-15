@@ -214,7 +214,7 @@
                                 {{-- @endif --}}
                             @endcanany
 
-                            @canany(['moderators.index','moderators.create'])
+                            @canany(['moderators.index','moderators.create', 'moderators.assign'])
                             <li class="nav-item @yield('item-moderator')">
                                 <a class="nav-link" data-toggle="collapse" data-target="#collapseModerator" aria-expanded="true" aria-controls="collapseModerator">
                                     <i class="fas fa-shield-alt"></i>
@@ -222,12 +222,16 @@
                                 </a>
                                 <div id="collapseModerator" class="collapse @yield('item-moderator-collapse')" >
                                     <div class="collapse-inner">
-                                        @can('moderators.create')
-                                        <a class="collapse-item @yield('item-moderator-create')" href="{{route('moderators.create')}}"><i class="fas fa-user-plus"></i>Asignar moderador</a>
+                                        @can('moderators.assign')
+                                        <a class="collapse-item @yield('item-moderator-assign')" href="{{route('moderators.assign')}}"><i class="fas fa-user-shield"></i>Asignar moderador</a>
                                         @endcan
                                         @can('moderators.index')
                                         <a class="collapse-item @yield('item-moderator-list')" href="{{route('moderators.index')}}"><i class="fas fa-list"></i>Listar moderadores</a>
                                         @endcan
+                                        @can('moderators.create')
+                                        <a class="collapse-item @yield('item-moderator-create')" href="{{route('moderators.create')}}"><i class="fas fa-user-plus"></i>Registrar moderador</a>
+                                        @endcan
+                                        
                                 </div>
                                 </div>
                             </li>
@@ -235,7 +239,7 @@
 
                         {{-- @endif --}}
 
-                        @if (Auth::user()->getRelationshipStateRolesUsers('moderador'))
+                        {{-- @if (Auth::user()->getRelationshipStateRolesUsers('moderador')) --}}
 
                             @canany(['policemen.index', 'policemen.create'])
                             <li class="nav-item @yield('item-police')">
@@ -254,7 +258,8 @@
                                     </div>
                                 </div>
                             </li>
-                            @endcanany
+
+                            {{-- @endcanany --}}
                         @endif
 
                     </ul>
