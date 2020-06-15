@@ -39,35 +39,35 @@ class PermissionsTableSeeder extends Seeder
             'name'=>'Listar miembros de la directiva',
             'slug'=>'members.index',
             'description'=>'Lista los miembros de la directiva registrados',
-            'private'=>false,
+            'private'=>true,
             'group'=>'directiva',
         ]);
         Permission::create([
             'name'=>'Crear miembro de la directiva',
             'slug'=>'members.create',
             'description'=>'Registrar a los miembros de la directiva',
-            'private'=>false,
+            'private'=>true,
             'group'=>'directiva',
         ]);
         Permission::create([
             'name'=>'Ver detalle de miembros de la directiva',
             'slug'=>'members.show',
             'description'=>'Ver en detalle cada uno de los miembros de la directiva registrados',
-            'private'=>false,
+            'private'=>true,
             'group'=>'directiva',
         ]);
         Permission::create([
             'name'=>'Editar miembros de la directiva',
             'slug'=>'members.edit',
             'description'=>'Editar registros de miembros de la directiva',
-            'private'=>false,
+            'private'=>true,
             'group'=>'directiva',
         ]);
         Permission::create([
             'name'=>'Eliminar miembros de la directiva',
             'slug'=>'members.destroy',
             'description'=>'Eliminar registros de los miembros de la directiva',
-            'private'=>false,
+            'private'=>true,
             'group'=>'directiva',
         ]);
         //Permisos sobre el módulo de directiva referente a los cargos
@@ -292,28 +292,28 @@ class PermissionsTableSeeder extends Seeder
             'name'=>'Listar los moderadores',
             'slug'=>'moderators.index',
             'description'=>'Lista los moderadores registrados por la directiva',
-            'private'=>false,
+            'private'=>true,
             'group'=>'moderador',
         ]);
         Permission::create([
             'name'=>'Asignar moderador',
             'slug'=>'moderators.create',
             'description'=>'Asigna un nuevo moderador',
-            'private'=>false,
+            'private'=>true,
             'group'=>'moderador',
         ]);
         Permission::create([
             'name'=>'Ver a detalle un moderador',
             'slug'=>'moderators.show',
             'description'=>'Ver en detalle cada uno de los moderadores registrados',
-            'private'=>false,
+            'private'=>true,
             'group'=>'moderador',
         ]);
         Permission::create([
             'name'=>'Eliminar moderador',
             'slug'=>'moderators.destroy',
             'description'=>'Eliminar los registros de moderadores',
-            'private'=>false,
+            'private'=>true,
             'group'=>'moderador',
         ]);
         //Permisos sobre el módulo de policía

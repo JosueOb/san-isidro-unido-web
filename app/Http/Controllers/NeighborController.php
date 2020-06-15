@@ -6,6 +6,9 @@ use App\Http\Middleware\NeighborIsActive;
 use App\Http\Middleware\PreventMakingChangesToYourself;
 use App\Http\Middleware\ProtectedAdminUsers;
 use App\Http\Middleware\ProtectedDirectiveUsers;
+use App\Http\Middleware\ProtectedGuestUsers;
+use App\Http\Middleware\ProtectedModeratorUsers;
+use App\Http\Middleware\ProtectedPoliceUsers;
 use App\Http\Requests\NeighborRequest;
 use App\Notifications\NeighborCreated;
 use App\User;
@@ -22,7 +25,11 @@ class NeighborController extends Controller
     public function __construct()
     {
         $this->middleware(ProtectedAdminUsers::class)->only('show','edit','update','destroy');
+        $this->middleware(ProtectedPoliceUsers::class)->only('show','edit','update', 'destroy');
+        $this->middleware(ProtectedGuestUsers::class)->only('show','edit','update', 'destroy');
+
         $this->middleware(ProtectedDirectiveUsers::class)->only('edit','update');
+        $this->middleware(ProtectedModeratorUsers::class)->only('edit','update');
         $this->middleware(NeighborIsActive::class)->only('edit','update');
     }
     /**

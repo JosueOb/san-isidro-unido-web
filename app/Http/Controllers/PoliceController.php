@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Middleware\PoliceIsActive;
 use App\Http\Middleware\ProtectedAdminUsers;
 use App\Http\Middleware\ProtectedDirectiveUsers;
+use App\Http\Middleware\ProtectedGuestUsers;
+use App\Http\Middleware\ProtectedModeratorUsers;
 use App\Http\Middleware\ProtectedNeighborUsers;
 use App\Http\Requests\NeighborRequest;
 use App\Notifications\NeighborCreated;
@@ -19,8 +21,11 @@ class PoliceController extends Controller
     {
         $this->middleware(ProtectedAdminUsers::class)->only('show','edit','update','destroy');
         $this->middleware(ProtectedDirectiveUsers::class)->only('show','edit','update','destroy');
-        $this->middleware(PoliceIsActive::class)->only('edit','update');
+        $this->middleware(ProtectedModeratorUsers::class)->only('show','edit','update','destroy');
         $this->middleware(ProtectedNeighborUsers::class)->only('show','edit','update','destroy');
+        $this->middleware(ProtectedGuestUsers::class)->only('show','edit','update','destroy');
+        
+        $this->middleware(PoliceIsActive::class)->only('edit','update');
     }
     /**
      * Display a listing of the resource.

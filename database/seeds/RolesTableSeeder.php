@@ -41,7 +41,7 @@ class RolesTableSeeder extends Seeder
             'mobile_app'=>false,
         ]);
         $moderatorRole->save();
-        $moderatorRole->permissions()->attach([43,44,45,46,47,48,49]);
+        $moderatorRole->permissions()->attach([13,14,15,16,17,43,44,45,46,47,48,49]);
 
         /**
          * Roles de la aplicación móvil
