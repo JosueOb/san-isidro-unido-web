@@ -42,7 +42,7 @@ class UsersTableSeeder extends Seeder
         **/
         $roleDirective = Role::where('slug','directivo')->first();
         $positions = Position::all();
-        $members = factory(App\User::class,5)->create();
+        $members = factory(App\User::class, 5)->create();
         $members->each(function(User $user)use($roleDirective, $roleGuest,$positions){
             // var_dump($user->first_name .' '. $user->last_name);
             // var_dump( 'https://ui-avatars.com/api/?name='.
@@ -54,6 +54,7 @@ class UsersTableSeeder extends Seeder
             '&size=250';
             //se resta uno, debido a que el primer usurio administardor tiene el id = 1
             $user->position_id = $positions->where('id', $user->id-1)->first()->id;
+            // $user->position_id = $positions->random()->id;
             $user->save();
             $user->roles()->attach([$roleDirective->id, $roleGuest->id],['state'=>true]);
 
@@ -64,7 +65,7 @@ class UsersTableSeeder extends Seeder
          * Se registra a los moradores del barrio
         **/
         $roleNeighbor = Role::where('slug', 'morador')->first();
-        $neighbors = factory(User::class, 15)->create();
+        $neighbors = factory(User::class, 40)->create();
         $neighbors->each(function(User $neighbor)use($roleNeighbor){
             // var_dump($neighbor->first_name.' '.$neighbor->last_name);
             // var_dump('https://ui-avatars.com/api/?name='.

@@ -24,11 +24,7 @@
     <div class=" col-md-12 col-xl-7">
         <div class="card card-primary">
             <div class="card-header">
-                {{-- <h4 class="d-inline">Roles del sistema web</h4> --}}
-                <h4 class="p-1">Roles del sistema web</h4>
-                {{-- @can('roles.create')
-                <a href="{{route('roles.create')}}" class="btn btn-primary float-right">Nuevo</a>
-                @endcan --}}
+                <h4>Sistema web</h4>
             </div>
 
             <div class="card-body">
@@ -38,11 +34,9 @@
                         <table class="table table-light table-hover table-sm">
                             <thead>
                                 <tr>
-                                    <th width='10px'>Id</th>
                                     <th>Nombre</th>
                                     <th>Slug</th>
                                     <th>Descripción</th>
-                                    {{-- @canany(['roles.show', 'roles.edit','roles.destroy']) --}}
                                     @canany(['roles.show', 'roles.edit'])
                                     <th>Opciones</th>
                                     @endcanany
@@ -51,7 +45,6 @@
                             <tbody>
                                 @foreach ($webSystemRoles as $webSystemRole)
                                     <tr>
-                                        <td>{{ $webSystemRole->id }}</td>
                                         <td>{{ $webSystemRole->name }}</td>
                                         <td>{{ $webSystemRole->slug }}</td>
                                         <td>{{ $webSystemRole->description ?: 'Sin descripción'}}</td>
@@ -68,35 +61,6 @@
                                             </td>
                                             @endif
                                         @endcan
-                                        {{-- @can('roles.destroy')
-                                        <td width='10px'>
-                                            <a href="#" class="btn btn-danger"  data-toggle="modal" data-target="#deleteRole{{$publicRole->id}}">Eliminar</a>
-                                            <!--Modal-->
-                                            <div class="modal fade" id="deleteRole{{$publicRole->id}}" tabindex="-1" role="dialog" aria-labelledby="eliminarRol" aria-hidden="true">
-                                                <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">Confirmar eliminación</h5>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        ¿Está seguro de eliminar el rol de {{ strtolower($publicRole->name) }}?
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                                    <form action="{{ route('roles.destroy', $publicRole->id) }}" method="POST">
-                                                        @csrf
-                                                        @method('delete')
-                                                        <button type="submit" class="btn btn-danger">Eliminar</button>
-                                                    </form>
-                                                    </div>
-                                                </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        @endcan --}}
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -118,7 +82,7 @@
     <div class="col-md-12 col-xl-5">
         <div class="card card-primary">
             <div class="card-header">
-                <h4 class="p-1">Roles del la aplicación móvil</h4>
+                <h4>Aplicación móvil</h4>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -126,7 +90,6 @@
                         <table class="table table-light table-hover table-sm">
                             <thead>
                                 <tr>
-                                    <th width='10px'>Id</th>
                                     <th>Nombre</th>
                                     <th>Descripción</th>
                                     @can(['roles.show'])
@@ -137,7 +100,6 @@
                             <tbody>
                                 @foreach ($appRoles as $appRole)
                                 <tr>
-                                    <td>{{$appRole->id}}</td>
                                     <td>{{$appRole->name}}</td>
                                     <td>{{$appRole->description ?: 'Sin descripción'}}</td>
                                     @can('roles.show')

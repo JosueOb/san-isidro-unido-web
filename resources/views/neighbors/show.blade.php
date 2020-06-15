@@ -29,7 +29,6 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col">
-                        <p><strong>Id:</strong> {{$neighbor->id}}</p>
                         <p><strong>Nombre:</strong> {{$neighbor->first_name}}</p>
                         <p><strong>Apellidos:</strong> {{$neighbor->last_name}}</p>
                         <p><strong>Corre electrónico:</strong> {{$neighbor->email}}</p>

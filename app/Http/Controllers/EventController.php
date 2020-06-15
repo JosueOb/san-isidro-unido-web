@@ -32,7 +32,7 @@ class EventController extends Controller
     public function index()
     {
         $category_event = Category::where('slug', 'evento')->first();
-        $events = $category_event->posts()->paginate();
+        $events = $category_event->posts()->latest()->paginate(10);
         return view('events.index',[
             'events' => $events,
         ]);
@@ -86,8 +86,7 @@ class EventController extends Controller
         $event->user_id = $request->user()->id;
         $event->category_id = $category_event->id;
         $event->subcategory_id = $validated['id'];
-        // $event->additional_data = json_encode($additional_data);
-        $event->additional_data = $this->additionalData->getAll();
+        $event->additional_data = $this->additionalData->getInfoEvent();
         $event->save();
 
         $phones = $validated['phone_numbers'];
@@ -126,8 +125,8 @@ class EventController extends Controller
     public function show(Post $post)
     {
         $additional_data = $post->additional_data;
-        $event_range_date = $additional_data['event']['range_date'];
-        $event_responsible = $additional_data['event']['responsible'];
+        $event_range_date = $additional_data['range_date'];
+        $event_responsible = $additional_data['responsible'];
         $ubication = $post->ubication;
         $images = $post->resources()->where('type', 'image')->get();
         return view('events.show', [
@@ -150,8 +149,8 @@ class EventController extends Controller
         $category = Category::where('slug', 'evento')->first();
         $subcategories = $category->subcategories()->get();
         $additional_data = $post->additional_data;
-        $event_range_date = $additional_data['event']['range_date'];
-        $event_responsible = $additional_data['event']['responsible'];
+        $event_range_date = $additional_data['range_date'];
+        $event_responsible = $additional_data['responsible'];
         $ubication = $post->ubication;
         $images = $post->resources()->where('type', 'image')->get();
         return view('events.edit',[
@@ -179,23 +178,21 @@ class EventController extends Controller
         //Se le agrega al arreglo el detalle de la descripción de ubicación
         $ubication['description'] = $validated['ubication-description'];
 
-        $additional_data = [
-            'event'=>[
-                'responsible'=> $validated['responsible'],
-                'range_date' => [
-                    'start_date' => $validated['start-date'],
+        $this->additionalData->setInfoEvent([
+            'responsible' => $validated['responsible'],
+            "range_date" => [
+                'start_date' => $validated['start-date'],
                     'end_date' => $validated['end-date'],
                     'start_time' => $validated['start-time'],
                     'end_time' => $validated['end-time'],
-                ]
             ]
-        ];
+        ]);
 
         $post->title = $validated['title'];
         $post->description = $validated['description'];
-        $post->ubication = $ubication;//Se devuelve una representación de un JSON;
+        $post->ubication = $ubication;
         $post->subcategory_id = $validated['id'];
-        $post->additional_data = $additional_data;
+        $post->additional_data =$this->additionalData->getInfoEvent();
         $post->save();
 
         $newPhones = $validated['phone_numbers'];

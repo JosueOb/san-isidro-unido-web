@@ -34,12 +34,10 @@ class DirectiveController extends Controller
      */
     public function index()
     {
-         // Inicializa @rownum
-         DB::statement(DB::raw('SET @rownum = 0'));
         //Se buscan a todos los usuarios con el rol directivo/a para listarlos
         $members = User::whereHas('roles',function(Builder $query){
             $query->where('slug','directivo');
-        })->select('*',DB::raw('@rownum := @rownum + 1 as rownum'))->paginate();
+        })->orderBy('last_name', 'asc')->paginate(10);
 
         return view('directive.index',[
             'members'=>$members,
@@ -231,58 +229,7 @@ class DirectiveController extends Controller
         }
         return redirect()->back()->with('success','Miembro de la directiva '.$message);
     }
-    /**
-     * filtros para listar usuarios activo, inactivo y todos.
-     *
-     * @param  int  $option
-     * @return App\User;
-     */
-    public function filters($option){
-        // Inicializa @rownum
-        DB::statement(DB::raw('SET @rownum = 0'));
-        //Se obtienen a todos los usuarios con el rol de directivo
-        $members = User::whereHas('roles', function(Builder $query){
-            $query->where('slug', 'directivo');
-        })->get();
-
-        switch ($option) {
-            case 1:
-            //Se filtran a los directivos activos
-                $members = $members->filter(function(User $value){
-                    return $value->getRelationshipStateRolesUsers('directivo');
-                })->values();
-                break;
-            case 2:
-            //Se filtran a los directivos inactivos
-                $members = $members->filter(function(User $value){
-                    return !$value->getRelationshipStateRolesUsers('directivo');
-                })->values();
-                break;
-            default:
-                return abort(404);
-                break;
-        }
-
-        //Se crear un paginador manualmente
-        $total = count($members);
-        $pageName = 'page';
-        $perPage = 15;
-
-        //Se agrega un campo al usuario indicando su posición en el arreglo
-        $members->each(function($user, $key){
-            data_fill($user,'rownum',  $key = $key + 1);
-        });
-
-        $members = new LengthAwarePaginator($members->forPage(Paginator::resolveCurrentPage(), $perPage), $total, $perPage, Paginator::resolveCurrentPage(), [
-            'path' => Paginator::resolveCurrentPath(),
-            'pageName' => $pageName,
-        ]);
-
-        return view('directive.index',[
-            'members'=>$members,
-        ]);
-    }
-
+   
     //Permite verificar si algún usuario con el cargo de asignación de one-person, se encuentra activo
     //como directivo para impedir el registro de un nuevo miembros con dicho cargo. Solo se permitirá el 
     //registro de un nuevo usuario con el cargo de asignación de one-person si los anteriores miembros

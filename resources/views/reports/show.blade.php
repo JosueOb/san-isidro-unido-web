@@ -29,7 +29,6 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col">
-                        <p><strong>Id:</strong> {{$report->id}}</p>
                         <p><strong>Título:</strong> {{$report->title}}</p>
                         <p><strong>Descripción:</strong> {{$report->description}}</p>
                         <p><strong>Fecha:</strong> {{$report->created_at}}</p>

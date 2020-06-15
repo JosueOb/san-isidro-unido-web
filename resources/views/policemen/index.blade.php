@@ -20,11 +20,11 @@
         @include('layouts.alerts')
     </div>
 </div>
-{{-- <div class="row">
+<div class="row">
     <div class="col">
         <div class="card card-primary">
             <div class="card-body">
-                <form action="{{route('search.neighbors')}}" method="GET">
+                <form action="{{route('search.policemen')}}" method="GET">
  
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -65,7 +65,7 @@
             </div>
         </div>
     </div>
-</div> --}}
+</div>
 <div class="row">
     <div class="col">
         <div class="card card-primary">
@@ -82,24 +82,40 @@
                 </div>
             </div>
             <div class="card-body">
-                {{-- <div class="row">
+                <div class="row">
+                    @error('filterOption')
+                        <span class="invalid-feedback d-inline text-center mb-2" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
                     <div class="col text-center">
-                        @can('neighbors.index')
-                        <a href="{{route('neighbors.index')}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Todos</a>
-                        <a href="{{route('neighbors.filters', 1)}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Activos</a>
-                        <a href="{{route('neighbors.filters', 2)}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Inactivos</a>
+                        @can('policemen.index')
+                        @php
+                            $searchOption = request()->query('searchOption');
+                            $searchValue = request()->query('searchValue');
+                        @endphp
+                        <a href="{{route('policemen.index')}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Todos</a>
+                        <a href="{{route('search.policemen', [
+                            'filterOption'=>1, 
+                            'searchOption' => $searchOption, 
+                            'searchValue' => $searchValue
+                        ])}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Activos</a>
+                        <a href="{{route('search.policemen', [
+                            'filterOption'=>2, 
+                            'searchOption' => $searchOption, 
+                            'searchValue' => $searchValue
+                        ])}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Inactivos</a>
                         @endcan
                     </div>
-                </div> --}}
+                </div>
                 <div class="row">
                     <div class="col table-responsive mt-3">
                         @if (count($policemen)>0)
                         <table class="table table-light table-hover table-sm">
                             <thead>
                                 <tr>
-                                    <th>Id</th>
-                                    <th>Nombre</th>
                                     <th>Apellido</th>
+                                    <th>Nombre</th>
                                     <th>Correo</th>
                                     <th>Estado</th>
                                     @canany(['policemen.show', 'policemen.edit','policemen.destroy'])
@@ -110,9 +126,8 @@
                             <tbody>
                                 @foreach ($policemen as $police)
                                     <tr>
-                                        <td>{{ $police->id}}</td>
-                                        <td>{{ $police->first_name }}</td>
                                         <td>{{ $police->last_name }}</td>
+                                        <td>{{ $police->first_name }}</td>
                                         <td>{{ $police->email }}</td>
                                         <td>
                                             <span class="badge badge-pill {{$police->getRelationshipStateRolesUsers('policia') ? 'badge-success': 'badge-danger'}}">
@@ -138,14 +153,12 @@
 
                                         @can('policemen.destroy')
                                         <td width='10px'>
-                                            {{-- @if (Auth::user()->id != $neighbor->id) --}}
-                                                @if ($police->getRelationshipStateRolesUsers('policia'))
-                                                    <a href="#" class="btn btn-danger"  data-toggle="modal" data-target="#deletePolice{{$police->id}}">Desactivar</a>
-                                                @else
-                                                    <a href="#" class="btn btn-success"  data-toggle="modal" data-target="#activePolice{{$police->id}}">Activar</a>
-                                                @endif
-                                            {{-- @endif --}}
-                                           
+                                            @if ($police->getRelationshipStateRolesUsers('policia'))
+                                                <a href="#" class="btn btn-danger"  data-toggle="modal" data-target="#deletePolice{{$police->id}}">Desactivar</a>
+                                            @else
+                                                <a href="#" class="btn btn-success"  data-toggle="modal" data-target="#activePolice{{$police->id}}">Activar</a>
+                                            @endif
+                                        
 
                                             <!--Modal-->
                                             <div class="modal fade" id="deletePolice{{$police->id}}" tabindex="-1" role="dialog" aria-labelledby="eliminarPolicia" aria-hidden="true">
@@ -211,7 +224,7 @@
             <div class="card-footer">
                 <p class="text-muted m-0 float-right">Total: {{$policemen->total()}}</p>
                 <nav>
-                    {{$policemen->links()}}
+                    {{$policemen->appends(request()->query())->links()}}
                 </nav>
             </div>
         </div>

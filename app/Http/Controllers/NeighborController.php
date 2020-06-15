@@ -32,14 +32,18 @@ class NeighborController extends Controller
      */
     public function index()
     {
-        // Inicializa @rownum
-        DB::statement(DB::raw('SET @rownum = 0'));
         //Se realiza la consulta, se buscan los usuario que poseean el rol de morador pero no el del administrador
-        $neighbors = User::whereHas('roles', function(Builder $query){
-            $query->where('slug', 'morador');
-        })->whereDoesntHave('roles', function (Builder $query) {
+        // $neighbors = User::whereHas('roles', function(Builder $query){
+        //     $query->where('slug', 'morador');
+        // })->whereDoesntHave('roles', function (Builder $query) {
+        //     $query->where('slug', 'admin');
+        // })->orderBy('last_name', 'asc')->paginate(10);
+
+        $neighbor_role = Role::where('slug', 'morador')->first();
+        $neighbors = $neighbor_role->users()->whereDoesntHave('roles', function(Builder $query){
             $query->where('slug', 'admin');
-        })->select('*',DB::raw('@rownum := @rownum + 1 as rownum'))->paginate();
+        })->orderBy('last_name', 'asc')->paginate(10);
+
         return view('neighbors.index',[
             'neighbors'=>$neighbors,
         ]);
@@ -166,57 +170,5 @@ class NeighborController extends Controller
         }
 
         return redirect()->back()->with('success', 'Morador '.$message.' con éxito');
-    }
-    /**
-     * filtros para listar usuarios activo, inactivo y todos.
-     *
-     * @param  int  $option
-     * @return App\User;
-     */
-    public function filters($option){
-
-        //Se obtienen a todos los usuarios con el rol de morador excepto al administrador
-        $neighbors = User::whereHas('roles', function(Builder $query){
-            $query->where('slug', 'morador');
-        })->whereDoesntHave('roles', function (Builder $query) {
-            $query->where('slug', 'admin');
-        })->get();
-
-        switch ($option) {
-            case 1:
-            //Se filtran a los moradores activos
-                $neighbors = $neighbors->filter(function(User $value){
-                    return $value->getRelationshipStateRolesUsers('morador');
-                })->values();
-                break;
-            case 2:
-            //Se filtran a los moradores inactivos
-                $neighbors = $neighbors->filter(function(User $value){
-                    return !$value->getRelationshipStateRolesUsers('morador');
-                })->values();
-                break;
-            default:
-                return abort(404);
-                break;
-        }
-
-        //Se crear un paginador manualmente
-        $total = count($neighbors);
-        $pageName = 'page';
-        $perPage = 15;
-
-        //Se agrega un campo al usuario indicando su posición en el arreglo
-        $neighbors->each(function($user, $key){
-            data_fill($user,'rownum',  $key = $key + 1);
-        });
-
-        $neighbors = new LengthAwarePaginator($neighbors->forPage(Paginator::resolveCurrentPage(), $perPage), $total, $perPage, Paginator::resolveCurrentPage(), [
-            'path' => Paginator::resolveCurrentPath(),
-            'pageName' => $pageName,
-        ]);
-
-        return view('neighbors.index',[
-            'neighbors'=>$neighbors,
-        ]);
     }
 }

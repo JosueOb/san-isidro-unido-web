@@ -83,11 +83,28 @@
             </div>
             <div class="card-body">
                 <div class="row">
+                    @error('filterOption')
+                        <span class="invalid-feedback d-inline text-center mb-2" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
                     <div class="col text-center">
                         @can('neighbors.index')
+                        @php
+                            $searchOption = request()->query('searchOption');
+                            $searchValue = request()->query('searchValue');
+                        @endphp
                         <a href="{{route('neighbors.index')}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Todos</a>
-                        <a href="{{route('neighbors.filters', 1)}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Activos</a>
-                        <a href="{{route('neighbors.filters', 2)}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Inactivos</a>
+                        <a href="{{route('search.neighbors', [
+                            'filterOption'=>1, 
+                            'searchOption' => $searchOption, 
+                            'searchValue' => $searchValue
+                        ])}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Activos</a>
+                        <a href="{{route('search.neighbors', [
+                            'filterOption'=>2, 
+                            'searchOption' => $searchOption, 
+                            'searchValue' => $searchValue
+                        ])}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Inactivos</a>
                         @endcan
                     </div>
                 </div>
@@ -97,9 +114,8 @@
                         <table class="table table-light table-hover table-sm">
                             <thead>
                                 <tr>
-                                    <th>Id</th>
+                                    <th>Apellidos</th>
                                     <th>Nombre</th>
-                                    <th>Apellido</th>
                                     <th>Correo</th>
                                     <th>Estado</th>
                                     @canany(['neighbors.show', 'neighbors.edit','neighbors.destroy'])
@@ -110,9 +126,8 @@
                             <tbody>
                                 @foreach ($neighbors as $neighbor)
                                     <tr>
-                                        <td>{{ $neighbor->rownum }}</td>
-                                        <td>{{ $neighbor->first_name }}</td>
                                         <td>{{ $neighbor->last_name }}</td>
+                                        <td>{{ $neighbor->first_name }}</td>
                                         <td>{{ $neighbor->email }}</td>
                                         <td>
                                             <span class="badge badge-pill {{$neighbor->getRelationshipStateRolesUsers('morador') ? 'badge-success': 'badge-danger'}}">
@@ -211,7 +226,7 @@
             <div class="card-footer">
                 <p class="text-muted m-0 float-right">Total: {{$neighbors->total()}}</p>
                 <nav>
-                    {{$neighbors->links()}}
+                    {{$neighbors->appends(request()->query())->links()}}
                 </nav>
             </div>
         </div>

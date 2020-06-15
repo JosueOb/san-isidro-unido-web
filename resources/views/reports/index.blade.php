@@ -35,11 +35,11 @@
                                     {{'selected'}}
                                 @endif
                                 >Título</option>
-                                {{-- <option value="2" 
+                                <option value="2" 
                                 @if (old('searchOption')== 2 || request('searchOption')== 2)
                                     {{'selected'}}
                                 @endif
-                                >Autor</option> --}}
+                                >Autor</option>
                                 {{-- <option value="3" 
                                 @if (old('searchOption')== 3 || request('searchOption')== 3)
                                     {{'selected'}}
@@ -88,11 +88,28 @@
             </div>
             <div class="card-body">
                 <div class="row">
+                    @error('filterOption')
+                        <span class="invalid-feedback d-inline text-center mb-2" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
                     <div class="col text-center">
                         @can('reports.index')
+                        @php
+                            $searchOption = request()->query('searchOption');
+                            $searchValue = request()->query('searchValue');
+                        @endphp
                         <a href="{{route('reports.index')}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Todos</a>
-                        <a href="{{route('reports.filters', 1)}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Activos</a>
-                        <a href="{{route('reports.filters', 2)}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Inactivos</a>
+                        <a href="{{route('search.reports', [
+                            'filterOption'=>1, 
+                            'searchOption' => $searchOption, 
+                            'searchValue' => $searchValue
+                        ])}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Activos</a>
+                        <a href="{{route('search.reports', [
+                            'filterOption'=>2, 
+                            'searchOption' => $searchOption, 
+                            'searchValue' => $searchValue
+                        ])}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Inactivos</a>
                         @endcan
                     </div>
                 </div>
@@ -212,7 +229,7 @@
             <div class="card-footer">
                 <p class="text-muted m-0 float-right">Total: {{$reports->total()}}</p>
                 <nav>
-                    {{$reports->links()}}
+                    {{$reports->appends(request()->query())->links()}}
                 </nav>
             </div>
         </div>

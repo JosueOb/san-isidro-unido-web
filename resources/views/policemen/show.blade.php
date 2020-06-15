@@ -36,7 +36,6 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col">
-                        <p><strong>Id:</strong> {{$police->id}}</p>
                         <p><strong>Nombre:</strong> {{$police->first_name}}</p>
                         <p><strong>Apellidos:</strong> {{$police->last_name}}</p>
                         <p><strong>Corre electrónico:</strong> {{$police->email}}</p>

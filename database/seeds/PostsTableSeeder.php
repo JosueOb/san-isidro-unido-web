@@ -23,71 +23,77 @@ class PostsTableSeeder extends Seeder
         $members = User::whereHas('roles', function (Builder $query) {
             $query->where('slug', 'directivo');
         })->get();
-        
+
         //Reporte de actividades
         $category_report = Category::where('slug', 'informe')->first();
         $reports = factory(Post::class, 25)
-                    ->create()
-                    ->each(function (Post $post) use ($members, $category_report, $faker) {
-                        $member = $members->random();
-                        $post->user_id = $member->id;
-                        $post->category_id = $category_report->id;
-                        $post->save();
-                        for ($i=0; $i < rand(0, 2) ; $i++) {
-                            Resource::create([
-                                'url'=>$faker->imageUrl($width = 640, $height = 480, 'nature'),
-                                'post_id'=>$post->id,
-                                'type'=>'image'
-                            ]);
-                        }
-                    });
+            ->create()
+            ->each(function (Post $post) use ($members, $category_report, $faker) {
+                $member = $members->random();
+                $post->user_id = $member->id;
+                $post->category_id = $category_report->id;
+                $post->save();
+                for ($i = 0; $i < rand(0, 2); $i++) {
+                    Resource::create([
+                        'url' => 'https://source.unsplash.com/collection/'.$i,
+                        'post_id' => $post->id,
+                        'type' => 'image'
+                    ]);
+                }
+            });
 
         // Eventos
         $category_event = Category::where('slug', 'evento')->first();
         $subcategories_event = $category_event->subcategories;
 
         $events = factory(App\Post::class, 25)
-                    ->create()
-                    ->each(function (Post $post) use ($members, $category_event, $subcategories_event, $faker) {
-                        $member = $members->random();
-                        $post->user_id = $member->id;
-                        $post->category_id = $category_event->id;
-                        $post->subcategory_id = $subcategories_event->random()->id;
+            ->create()
+            ->each(function (Post $post) use ($members, $category_event, $subcategories_event, $faker) {
+                $member = $members->random();
+                $post->user_id = $member->id;
+                $post->category_id = $category_event->id;
+                $post->subcategory_id = $subcategories_event->random()->id;
 
-                        $additional_data = [
-                                'responsible'=> $faker->name(),
-                                'range_date' => [
-                                    'start_date' => '2020-05-20',
-                                    'end_date' => '2020-05-26',
-                                    'start_time' => $faker->time($format = 'H:i', $max = 'now'),
-                                    'end_time' => $faker->time($format = 'H:i', $max = 'now'),
-                                ],
-                                "approved_by" => null, 
-                                "status_attendance" => 'pendiente'
-                            
-                        ];
-                        $ubication = [
-                            'latitude'=>$faker->latitude($min = -90, $max = 90),
-                            'longitude'=>$faker->longitude($min = -180, $max = 180),
-                            'address'=>$faker->address,
-                            'description'=>$faker->text($maxNbChars = 30),
-                        ];
+                //Start point of our range date
+                $start = strtotime("10 September 2018");
+                //End point of our date range.
+                $end = strtotime("22 July 2020");
+                $timestamp = mt_rand($start, $end);
 
-                        $post->additional_data = $additional_data;
-                        $post->ubication = $ubication;
-                        $post->save();
+                $additional_data = [
+                    'responsible' => $faker->name(),
+                    'range_date' => [
+                        'start_date' => date("Y-m-d", $timestamp),
+                        'end_date' => date("Y-m-d",strtotime(date("Y-m-d", $timestamp)."+ 1 week")),
+                        'start_time' => $faker->time($format = 'H:i', $max = 'now'),
+                        'end_time' => $faker->time($format = 'H:i', $max = 'now'),
+                    ],
+                    "approved_by" => null,
+                    "status_attendance" => 'pendiente'
 
-                        for ($i=0; $i < rand(1, 3) ; $i++) {
-                            $phone_number = new Phone(['phone_number' => '09'.rand(10000000, 99999999)]);
-                            $post->phones()->save($phone_number);
-                        }
-                        for ($i=0; $i < rand(0, 2) ; $i++) {
-                            Resource::create([
-                                'url'=>$faker->imageUrl($width = 640, $height = 480, 'nature'),
-                                'post_id'=>$post->id,
-                                'type'=>'image'
-                            ]);
-                        }
-                    });
+                ];
+                $ubication = [
+                    'latitude' => $faker->latitude($min = -90, $max = 90),
+                    'longitude' => $faker->longitude($min = -180, $max = 180),
+                    'address' => $faker->address,
+                    'description' => $faker->text($maxNbChars = 30),
+                ];
+
+                $post->additional_data = $additional_data;
+                $post->ubication = $ubication;
+                $post->save();
+
+                for ($i = 0; $i < rand(1, 3); $i++) {
+                    $phone_number = new Phone(['phone_number' => '09' . rand(10000000, 99999999)]);
+                    $post->phones()->save($phone_number);
+                }
+                for ($i = 0; $i < rand(0, 2); $i++) {
+                    Resource::create([
+                        'url' => 'https://source.unsplash.com/collection/'.$i,
+                        'post_id' => $post->id,
+                        'type' => 'image'
+                    ]);
+                }
+            });
     }
 }

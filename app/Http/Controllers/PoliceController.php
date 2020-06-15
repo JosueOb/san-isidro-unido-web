@@ -9,7 +9,7 @@ use App\Http\Middleware\ProtectedNeighborUsers;
 use App\Http\Requests\NeighborRequest;
 use App\Notifications\NeighborCreated;
 use App\User;
-use Caffeinated\Shinobi\Models\Role as ModelsRole;
+use Caffeinated\Shinobi\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -29,8 +29,8 @@ class PoliceController extends Controller
      */
     public function index()
     {
-        $role_police = ModelsRole::where('slug', 'policia')->first();
-        $policemen = $role_police->users()->paginate();
+        $role_police = Role::where('slug', 'policia')->first();
+        $policemen = $role_police->users()->orderBy('last_name', 'asc')->paginate(10);
 
         return view('policemen.index', [
             'policemen'=>$policemen,
@@ -61,7 +61,7 @@ class PoliceController extends Controller
         $avatar  = 'https://ui-avatars.com/api/?name='.
         mb_substr($validated['first_name'],0,1).'+'.mb_substr($validated['last_name'],0,1).
         '&size=255';
-        $rolePolice = ModelsRole::where('slug', 'policia')->first();
+        $rolePolice = Role::where('slug', 'policia')->first();
 
         $police = new User();
         $police->first_name = $validated['first_name'];

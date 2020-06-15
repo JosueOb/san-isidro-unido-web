@@ -28,7 +28,7 @@
   />
       
 </head>
-<body>
+<body class="dashboard">
     <div class="container-fluid" id="app">
         <div class="row">
             <!--Main Sidebar-->

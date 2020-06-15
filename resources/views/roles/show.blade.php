@@ -3,7 +3,7 @@
     Módulo Roles
 @endsection
 @section('page-header')
-    Detalle Rol
+    Detalle del rol
 @endsection
 @section('item-role')
     active
@@ -24,17 +24,16 @@
     <div class="col">
         <div class="card card-primary">
             <div class="card-header">
-                    <h4 class="d-inline">{{$role->name}}</h4>
-                    @can('roles.edit')
-                        @if (!$role->mobile_app && $role->slug != 'admin')
-                            <a href="{{route('roles.edit',$role->id)}}" class="btn btn-primary float-right">Editar</a>
-                        @endif
-                    @endcan
+                <h4 class="d-inline">{{$role->name}}</h4>
+                @can('roles.edit')
+                    @if (!$role->mobile_app && $role->slug != 'admin')
+                        <a href="{{route('roles.edit',$role->id)}}" class="btn btn-primary float-right">Editar</a>
+                    @endif
+                @endcan
             </div>
             <div class="card-body">
-                <p><strong>Descripción:</strong> {{$role->description ?: 'Sin descripción'}}</p>
-                <p><strong>Permiso especial:</strong> {{$role->special ?: 'Ninguno'}}</p>
-                <h4>Permisos asignados</h4>
+                <p><span class="font-weight-bolder">Descripción:</span> {{$role->description ?: 'Sin descripción'}}</p>
+                <h6 class="font-weight-bolder">Permisos asignados</h6>
 
                 @if ($permissionGroup->count() > 0)
                 <div class="list-group list-group-flush accordion">
