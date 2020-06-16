@@ -62,6 +62,7 @@ class SocialProblemReported extends Notification
         return [
             'title'=>'Problema reportado',
             'description'=>$this->neighbor->getFullName().' ha reportado un problema',
+            'type'=>'problem_reported',
             'post'=>$this->problem,
             'neighbor'=>$this->neighbor,
         ];

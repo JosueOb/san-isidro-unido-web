@@ -2,28 +2,32 @@
 
 namespace App\Notifications;
 
+use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
+
 class MembershipRequest extends Notification
 {
     use Queueable;
-
+    protected $neighbor;
     // public $post;
-    public $titleNotification;
-    public $messageNotification;
+    // protected $titleNotification;
+    // protected $messageNotification;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($titleNotification='Titulo de la Notificacion', $messageNotification = 'Contenido de la Notificacion')
+    // public function __construct($titleNotification = null, $messageNotification = null)
+    public function __construct(User $neighborRecieved)
     {
-        $this->titleNotification = $titleNotification;
-        $this->messageNotification = $messageNotification;
+        $this->neighbor = $neighborRecieved;
+    //     $this->titleNotification = $titleNotification;
+    //     $this->messageNotification = $messageNotification;
     }
 
     /**
@@ -59,12 +63,13 @@ class MembershipRequest extends Notification
      */
     public function toArray($notifiable)
     {
-        $title_noti = $this->titleNotification;
-        $description_noti = $this->messageNotification;
+        // $title_noti = $this->titleNotification;
+        // $description_noti = $this->messageNotification;
         $notificationArray = [
-            "title" => $title_noti,
-            "message" => $description_noti,
-            "notification_user" => $notifiable
+            "title" => 'Solicitud de afiliación',
+            "description" => $this->neighbor->getFullName().' ah solicitado afilización',
+            'type'=>'membership_reported',
+            "neighbor" => $this->neighbor,
         ];
         return $notificationArray;
     }

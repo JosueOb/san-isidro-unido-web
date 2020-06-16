@@ -1,11 +1,13 @@
 <?php
 
 use App\HelpersClass\Membership;
+use App\Notifications\MembershipRequest;
 use App\Position;
 use Illuminate\Database\Seeder;
 use App\User;
 use Caffeinated\Shinobi\Models\Role;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Notification;
 
 class UsersTableSeeder extends Seeder
 {
@@ -89,7 +91,7 @@ class UsersTableSeeder extends Seeder
         $faker = Faker\Factory::create();
 
         $guests = factory(User::class, 5)->create();
-        $guests->each(function (User $guest) use ($guestRole, $faker) {
+        $guests->each(function (User $guest) use ($guestRole, $faker, $moderators) {
             $membership = new Membership();
             // $membership->setIdentityCard($faker->numberBetween($min = 1000000000, $max = 9999999999));
             $membership->setIdentityCard($faker->randomNumber());
@@ -101,7 +103,7 @@ class UsersTableSeeder extends Seeder
 
             $guest->roles()->attach([$guestRole->id], ['state' => true]);
 
-            // Notification::send($moderators_active, new SocialProblem($problem, $neighbor));
+            Notification::send($moderators, new MembershipRequest($guest));
 
         });
     }

@@ -16720,11 +16720,15 @@ form h6 {
   height: 2.1875rem;
   margin: auto;
   border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 
 .main-navbar .navbar .notifications .dropdown-menu .notification__icon img {
   border-radius: 50%;
   width: 100%;
+  width: 2.1875rem;
+  height: 2.1875rem;
 }
 
 .main-navbar .navbar .notifications .dropdown-menu .notification__content {

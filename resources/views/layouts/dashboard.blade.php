@@ -281,6 +281,9 @@
                             @can('notifications.emergencies')
                             <emergency-notifications></emergency-notifications>
                             @endcan
+                            {{-- @can('notifications.emergencies') --}}
+                            <membership-notifications></membership-notifications>
+                            {{-- @endcan --}}
 
 
                             <li class="nav-item dropdown user-options m-0">

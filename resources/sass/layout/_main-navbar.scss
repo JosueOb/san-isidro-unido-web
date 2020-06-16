@@ -58,10 +58,13 @@
                     height: $notifications-icon-height;
                     margin: auto;
                     border-radius: 50%;
+                    object-fit: cover;
                     
                     img{
                         border-radius: 50%;
                         width: 100%;
+                        width: $notifications-icon-width;
+                        height: $notifications-icon-height;
                     }
                 }
 

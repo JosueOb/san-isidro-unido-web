@@ -63,6 +63,7 @@ class EmergencyReported extends Notification
         return [
             'title'=>'Emergencia reportada',
             'description'=>$this->neighbor->getFullName().' ha reportado una emergencia',
+            'type'=>'emergency_reported',
             'post'=>$this->emergency,
             'neighbor'=>$this->neighbor,
         ];

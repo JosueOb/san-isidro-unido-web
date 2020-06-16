@@ -65,7 +65,7 @@ class PostNotification extends Notification
         $post =  Post::findById($this->post->id)->with(["category", "subcategory"])->first();
         $notificationArray = [
             "title" => $this->titleNotification,
-            "message" => $this->messageNotification,
+            "description" => $this->messageNotification,
             "notification_user" => $notifiable, //el usuario al que le voy a enviar 
             "post" => $post,
         ];
