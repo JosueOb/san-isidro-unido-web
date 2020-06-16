@@ -3,7 +3,7 @@
     Módulo Servicios Públicos
 @endsection
 @section('page-header')
-    Lugares registrados
+    Listado de lugares
 @endsection
 @section('item-public-service')
     active
@@ -74,7 +74,7 @@
                     <div class="col">
                         <h4 class="d-inline">Servicios públicos</h4>
                         @can('publicServices.create')
-                        <a href="{{route('publicServices.create')}}" class="btn btn-primary float-right">Nuevo</a>
+                        <a href="{{route('publicServices.create')}}" class="btn btn-primary float-right"><i class="fas fa-plus-circle"></i> Agregar</a>
                         @endcan
                     </div>
                 </div>
@@ -125,7 +125,11 @@
                                                     </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        ¿Está seguro de eliminar el servicio público {{ strtolower($publicService->name) }}?
+                                                        <h5 class="text-center font-weight-bolder">¿Está seguro de eliminar el servicio público {{ strtolower($publicService->name) }} ?</h5>
+                                                        <small class="text-muted">
+                                                            <strong>Recuerda: </strong>
+                                                            el registro se elimina completamente de la base de datos
+                                                        </small>
                                                     </div>
                                                     <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>

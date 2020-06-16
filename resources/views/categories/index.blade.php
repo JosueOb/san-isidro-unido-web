@@ -53,7 +53,7 @@
                                         <td class="w-25"><img class="w-25 rounded " src={{$category->getLink()}}></td>
                                         @can('categories.edit')
                                         <td width='10px'>
-                                            <a href="{{route('categories.edit', $category->id)}}" class="btn btn-secondary"> Editar</a>
+                                            <a href="{{route('categories.edit', $category->id)}}" class="btn btn-secondary">Editar</a>
                                         </td>
                                         @endcan
 

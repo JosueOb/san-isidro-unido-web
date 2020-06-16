@@ -3,7 +3,7 @@
     Módulo Servicios Públicos
 @endsection
 @section('page-header')
-    Registrar un nuevo lugar
+    Registrar lugar
 @endsection
 @section('item-public-service')
     active
@@ -132,7 +132,7 @@
 
                     <div class="form-group col-4 offset-4">
                         <button type="submit" class="btn btn-primary btn-block" id="send-data">
-                            Registrar
+                            Guardar
                             <i class="far fa-save"></i>
                         </button>
                     </div>

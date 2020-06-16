@@ -74,7 +74,7 @@
                     <div class="col">
                         <h4 class="d-inline">Eventos</h4>
                         @can('events.create')
-                        <a href="{{route('events.create')}}" class="btn btn-primary float-right">Nuevo</a>
+                        <a href="{{route('events.create')}}" class="btn btn-primary float-right"><i class="fas fa-plus-circle"></i> Agregar</a>
                         @endcan
                     </div>
                 </div>
@@ -145,7 +145,7 @@
                                         @can('events.destroy')
                                         <td width='10px'>
                                             @if ($event->state )
-                                                <a href="#" class="btn btn-danger"  data-toggle="modal" data-target="#deleteEvent{{$event->id}}">Eliminar</a>
+                                                <a href="#" class="btn btn-danger"  data-toggle="modal" data-target="#deleteEvent{{$event->id}}">Desactivar</a>
                                             @else
                                                 <a href="#" class="btn btn-success"  data-toggle="modal" data-target="#activeEvent{{$event->id}}">Activar</a>
                                             @endif
@@ -154,20 +154,21 @@
                                                 <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">Confirmar eliminación</h5>
+                                                    <h5 class="modal-title" id="exampleModalLabel">Confirmar desactivación</h5>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        ¿Está seguro de eliminar el evento {{ $event->title }}?
+                                                        <h5 class="text-center font-weight-bolder">¿Está seguro de desactivar el evento: {{ $event->title }} ?</h5>
+                                                        <small class="text-muted"><strong>Recuerda: </strong> una vez desactivado el evento: {{ $event->title }}, no podrá ser visualizado en la aplicación móvil</small>
                                                     </div>
                                                     <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                                                     <form action="{{ route('events.destroy', $event->id) }}" method="POST">
                                                         @csrf
                                                         @method('delete')
-                                                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                        <button type="submit" class="btn btn-danger">Desactivar</button>
                                                     </form>
                                                     </div>
                                                 </div>
@@ -183,7 +184,8 @@
                                                         </button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            ¿Está seguro de activar el evento {{ $event->title }}?
+                                                            <h5 class="text-center font-weight-bolder">¿Está seguro de activar el evento: {{ $event->title }} ?</h5>
+                                                        <small class="text-muted"><strong>Recuerda: </strong> una vez activado el evento: {{ $event->title }}, podrá ser visualizado nuevamente en la aplicación móvil</small>
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>

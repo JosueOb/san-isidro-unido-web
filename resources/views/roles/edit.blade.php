@@ -95,7 +95,7 @@
     
                     <div class="form-group col-4 offset-4">
                         <button type="submit" class="btn btn-primary btn-block">
-                            Guardar
+                            Actualizar
                             <i class="far fa-save"></i>
                         </button>
                     </div>

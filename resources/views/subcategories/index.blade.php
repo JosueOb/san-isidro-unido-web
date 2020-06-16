@@ -27,8 +27,8 @@
                 <form action="{{route('search.subcategories')}}" method="GET">
                     <div class="input-group">
                         <div class="input-group-prepend">
-                            {{-- <select class="custom-select @error('searchOption') is-invalid @enderror" name="searchOption" required> --}}
-                            <select class="custom-select @error('searchOption') is-invalid @enderror" name="searchOption" >
+
+                            <select class="custom-select @error('searchOption') is-invalid @enderror" name="searchOption" required>
                                 <option value="">Buscar</option>
                                 <option value="1"
                                 @if (old('searchOption')== 1 || request('searchOption')== 1)
@@ -38,8 +38,8 @@
                             </select>
                             
                         </div>
-                        {{-- <input type="text" class="form-control @error('searchValue') is-invalid @enderror"  name="searchValue" value="{{old('searchValue') ?: request('searchValue')}}" maxlength="50" required> --}}
-                        <input type="text" class="form-control @error('searchValue') is-invalid @enderror"  name="searchValue" value="{{old('searchValue') ?: request('searchValue')}}" maxlength="50">
+ 
+                        <input type="text" class="form-control @error('searchValue') is-invalid @enderror"  name="searchValue" value="{{old('searchValue') ?: request('searchValue')}}" maxlength="50" required>
                         
                         <div class="input-group-prepend">
                             <button type="submit" class="btn btn-dark">
@@ -146,7 +146,11 @@
                                                     </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        ¿Está seguro de eliminar la subcategoría {{ strtolower($subcategory->name) }}?
+                                                        <h5 class="text-center font-weight-bolder">¿Está seguro de eliminar la subcategoría {{ strtolower($subcategory->name) }} ?</h5>
+                                                        <small class="text-muted">
+                                                            <strong>Recuerda: </strong>
+                                                            el registro se elimina completamente de la base de datos
+                                                        </small>
                                                     </div>
                                                     <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>

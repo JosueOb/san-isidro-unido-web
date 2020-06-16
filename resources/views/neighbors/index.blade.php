@@ -75,7 +75,7 @@
                         <h4 class="d-inline">Moradores registrados</h4>
 
                         @can('neighbors.create')
-                        <a href="{{route('neighbors.create')}}" class="btn btn-primary float-right">Agregar</a>
+                        <a href="{{route('neighbors.create')}}" class="btn btn-primary float-right"><i class="fas fa-plus-circle"></i> Agregar</a>
                         @endcan
 
                     </div>
@@ -167,13 +167,14 @@
                                                 <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">Confirmar eliminación</h5>
+                                                    <h5 class="modal-title" id="exampleModalLabel">Confirmar desactivación</h5>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        ¿Está seguro de eliminar al usuario {{ $neighbor->first_name }}?
+                                                        <h5 class="text-center font-weight-bolder">¿Está seguro de desactivar al usuario {{ $neighbor->getFullName() }} ?</h5>
+                                                        <small class="text-muted"><strong>Recuerda: </strong> una vez desactivado el usuario {{ $neighbor->getFullName() }}, no podrá ingresar a la aplicación móvil</small>
                                                     </div>
                                                     <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -196,7 +197,8 @@
                                                     </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        ¿Está seguro de activar al usuario {{ $neighbor->first_name }}?
+                                                        <h5 class="text-center font-weight-bolder">¿Está seguro de activar al usuario {{ $neighbor->getFullName() }} ?</h5>
+                                                        <small class="text-muted"><strong>Recuerda: </strong> una vez activado al usuario {{ $neighbor->getFullName() }}, podrá ingresar nuevamente a la aplicación móvil</small>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>

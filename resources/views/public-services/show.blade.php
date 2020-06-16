@@ -31,7 +31,7 @@
                         <h4  class="d-inline">Detalle de servicio público</h4>
 
                         @can('publicServices.edit')
-                        <a href="{{route('publicServices.edit', $publicService->id)}}" class="btn btn-primary float-right">Editar</a>
+                        <a href="{{route('publicServices.edit', $publicService->id)}}" class="btn btn-primary float-right"><i class="far fa-edit"></i> Editar</a>
                         @endcan
                     </div>
                 </div>

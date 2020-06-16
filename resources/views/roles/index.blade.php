@@ -50,13 +50,13 @@
                                         <td>{{ $webSystemRole->description ?: 'Sin descripción'}}</td>
 
                                         @can('roles.show')
-                                            <td width='10px'>
+                                            <td >
                                                 <a href="{{route('roles.show',$webSystemRole->id)}}" class="btn btn-info">Ver</a>
                                             </td>
                                         @endcan
                                         @can('roles.edit')
                                             @if ($webSystemRole->slug != 'admin')
-                                            <td width='10px'>
+                                            <td >
                                                 <a href="{{route('roles.edit',$webSystemRole->id)}}" class="btn btn-secondary"> Editar</a>
                                             </td>
                                             @endif

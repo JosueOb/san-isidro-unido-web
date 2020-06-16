@@ -75,7 +75,7 @@
                         <h4 class="d-inline">Policías registrados</h4>
 
                         @can('policemen.create')
-                        <a href="{{route('policemen.create')}}" class="btn btn-primary float-right">Agregar</a>
+                        <a href="{{route('policemen.create')}}" class="btn btn-primary float-right"><i class="fas fa-plus-circle"></i> Agregar</a>
                         @endcan
 
                     </div>
@@ -171,7 +171,8 @@
                                                     </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        ¿Está seguro de eliminar al policía {{ $police->first_name }}?
+                                                        <h5 class="text-center font-weight-bolder">¿Está seguro de desactivar al policía {{ $police->getFullName() }} ?</h5>
+                                                        <small class="text-muted"><strong>Recuerda: </strong> una vez desactivado al policía {{ $police->getFullName() }}, no podrá ingresar a la aplicación móvil</small>
                                                     </div>
                                                     <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -194,7 +195,8 @@
                                                     </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        ¿Está seguro de activar al policía {{ $police->first_name }}?
+                                                        <h5 class="text-center font-weight-bolder">¿Está seguro de activar al policía {{ $police->getFullName() }} ?</h5>
+                                                        <small class="text-muted"><strong>Recuerda: </strong> una vez activado al policía {{ $police->getFullName() }}, podrá ingresar nuevamente a la aplicación móvil</small>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>

@@ -3,7 +3,7 @@
     Módulo Directiva
 @endsection
 @section('page-header')
-    Registrar nuevo directivo
+    Registrar directivo
 @endsection
 @section('item-directive')
     active
@@ -83,7 +83,7 @@
             
                     <div class="form-group col-4 offset-4">
                         <button type="submit" class="btn btn-primary btn-block">
-                            Registrar
+                            Guardar
                             <i class="far fa-save"></i>
                         </button>
                     </div>

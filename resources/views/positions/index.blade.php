@@ -28,7 +28,7 @@
                     <div class="col">
                         <h4 class="d-inline">Cargos</h4>
                         @can('positions.create')
-                        <a href="{{route('positions.create')}}" class="btn btn-primary float-right">Nuevo</a>
+                        <a href="{{route('positions.create')}}" class="btn btn-primary float-right"><i class="fas fa-plus-circle"></i> Agregar</a>
                         @endcan
                     </div>
                 </div>
@@ -40,7 +40,6 @@
                         <table class="table table-light table-hover table-sm">
                             <thead>
                                 <tr>
-                                    <th width='10px'>Id</th>
                                     <th>Nombre</th>
                                     <th>Descripción</th>
                                     <th>Asignación</th>
@@ -52,7 +51,6 @@
                             <tbody>
                                 @foreach ($positions as $position)
                                     <tr>
-                                        <td>{{$position->id}}</td>
                                         <td>{{$position->name}}</td>
                                         <td>{{$position->description ?? 'Sin descripción'}}</td>
                                         <td>{{$position->allocation}}</td>
@@ -77,7 +75,12 @@
                                                     </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        ¿Está seguro de eliminar el cargo de {{ strtolower($position->name) }}?
+                                                        {{-- ¿Está seguro de eliminar el cargo de {{ strtolower($position->name) }}? --}}
+                                                        <h5 class="text-center font-weight-bolder">¿Está seguro de eliminar el cargo {{ strtolower($position->name) }} ?</h5>
+                                                        <small class="text-muted">
+                                                            <strong>Recuerda: </strong>
+                                                            el registro se elimina completamente de la base de datos
+                                                        </small>
                                                     </div>
                                                     <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>

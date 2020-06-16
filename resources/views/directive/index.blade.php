@@ -80,7 +80,7 @@
                         <h4 class="d-inline">Miembros de la directiva registrados</h4>
 
                         @can('members.create')
-                        <a href="{{route('members.create')}}" class="btn btn-primary float-right">Agregar</a>
+                        <a href="{{route('members.create')}}" class="btn btn-primary float-right"><i class="fas fa-plus-circle"></i> Agregar</a>
                         @endcan
 
                     </div>
@@ -162,7 +162,7 @@
                                         <td width='10px'>
                                             @if (Auth::user()->id != $member->id)
                                                 @if ($member->getRelationshipStateRolesUsers('directivo'))
-                                                    <a href="#" class="btn btn-danger"  data-toggle="modal" data-target="#deleteMember{{$member->id}}">Eliminar</a>
+                                                    <a href="#" class="btn btn-danger"  data-toggle="modal" data-target="#deleteMember{{$member->id}}">Desactivar</a>
                                                     
                                                 @else
                                                     <a href="#" class="btn btn-success"  data-toggle="modal" data-target="#activeMember{{$member->id}}">Activar</a>
@@ -175,20 +175,24 @@
                                                 <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">Confirmar eliminación</h5>
+                                                    <h5 class="modal-title" id="exampleModalLabel">Confirmar desactivación</h5>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        ¿Está seguro de eliminar al usuario {{ $member->first_name }}?
+                                                        <h5 class="text-center font-weight-bolder">¿Está seguro de desactivar al usuario {{ $member->getFullName() }} ?</h5>
+                                                        <small class="text-muted">
+                                                            <strong>Recuerda: </strong>
+                                                            una vez desactivado al usuario {{ $member->getFullName() }}, no podrá ingresar al sistema web
+                                                        </small>
                                                     </div>
                                                     <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                                                     <form action="{{ route('members.destroy', $member->id) }}" method="POST">
                                                         @csrf
                                                         @method('delete')
-                                                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                        <button type="submit" class="btn btn-danger">Desactivar</button>
                                                     </form>
                                                     </div>
                                                 </div>
@@ -204,7 +208,8 @@
                                                     </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        ¿Está seguro de activar al usuario {{ $member->first_name }}?
+                                                        <h5 class="text-center font-weight-bolder">¿Está seguro de activar al usuario {{ $member->getFullName() }} ?</h5>
+                                                        <small class="text-muted"><strong>Recuerda: </strong> una vez activado al usuario {{ $member->getFullName() }}, podrá ingresar nuevamente al sistema web</small>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>

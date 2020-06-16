@@ -3,7 +3,7 @@
     Módulo Directiva
 @endsection
 @section('page-header')
-    Registrar nuevo cargo
+    Registrar cargo
 @endsection
 @section('item-directive')
     active

@@ -3,7 +3,7 @@
     Módulo Servicios Públicos
 @endsection
 @section('page-header')
-    Actualizar servicio público
+    Actualizar lugar
 @endsection
 @section('item-public-service')
     active
@@ -144,7 +144,7 @@
 
                     <div class="form-group col-4 offset-4">
                         <button type="submit" class="btn btn-primary btn-block" id="send-data">
-                            Registrar
+                            Actualizar
                             <i class="far fa-save"></i>
                         </button>
                     </div>

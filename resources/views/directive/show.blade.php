@@ -24,7 +24,14 @@
     <div class="col">
         <div class="card card-primary">
             <div class="card-header">
-                    <h4>Detalle de usuario</h4>
+                    <h4 class="d-inline">Detalle de usuario</h4>
+                    @can('members.edit')
+                        @if (Auth::user()->id != $member->id)
+                            @if ($member->getASpecificRole('directivo')->pivot->state)
+                                <a href="{{route('members.edit',$member->id)}}" class="btn btn-secondary float-right"><i class="far fa-edit"></i> Editar</a>
+                            @endif
+                        @endif
+                    @endcan
             </div>
             <div class="card-body">
                 <div class="row">

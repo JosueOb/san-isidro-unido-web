@@ -75,7 +75,7 @@
                         <h4 class="d-inline">Moradores registrados</h4>
 
                         @can('moderators.create')
-                        <a href="{{route('moderators.create')}}" class="btn btn-primary float-right">Registrar</a>
+                        <a href="{{route('moderators.create')}}" class="btn btn-primary float-right"><i class="fas fa-plus-circle"></i> Agregar</a>
                         @endcan
 
                     </div>
@@ -160,7 +160,7 @@
                                                         </div>
                                                         <div class="modal-body">
                                                             <h5 class="text-center font-weight-bolder">¿Está seguro de asignar al usuario {{ $neighbor->getFullName() }} como moderador?</h5>
-                                                            <small class="text-muted"><strong>Recuerda: </strong> una vez asignado el rol de moderador al usuario {{ $neighbor->getFullName() }}, podrá ingresar al sistema web.</small>
+                                                            <small class="text-muted"><strong>Recuerda: </strong> una vez asignado el rol de moderador al usuario {{ $neighbor->getFullName() }}, podrá ingresar al sistema web</small>
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
