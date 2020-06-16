@@ -1,14 +1,15 @@
 <?php
 
 use App\Category;
-use App\Notifications\SocialProblem;
 use App\Post;
-use App\Subcategory;
 use Caffeinated\Shinobi\Models\Role;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Notification;
 use App\HelpersClass\AdditionalData;
 use App\Notifications\EmergencyReported;
+use App\Notifications\SocialProblemReported;
+use App\Resource;
+use App\User;
 
 class TestNotificationsSeeder extends Seeder
 {
@@ -62,7 +63,15 @@ class TestNotificationsSeeder extends Seeder
                 'additional_data' => $additional_data,
             ]);
 
-            Notification::send($moderators_active, new SocialProblem($problem, $neighbor));
+            for ($i = 0; $i < rand(1, 3); $i++) {
+                Resource::create([
+                    'url' => 'https://source.unsplash.com/collection/'.$i,
+                    'post_id' => $problem->id,
+                    'type' => 'image'
+                ]);
+            }
+
+            Notification::send($moderators_active, new SocialProblemReported($problem, $neighbor));
 
             $additionalDataEmergency = new AdditionalData();
             $additional_data_emergency = $additionalDataEmergency->getEmergencyData();
@@ -77,6 +86,13 @@ class TestNotificationsSeeder extends Seeder
                 'additional_data' => $additional_data_emergency,
             ]);
 
+            for ($i = 0; $i < rand(1, 3); $i++) {
+                Resource::create([
+                    'url' => 'https://source.unsplash.com/collection/'.$i,
+                    'post_id' => $emergency->id,
+                    'type' => 'image'
+                ]);
+            }
             Notification::send($moderators_active, new EmergencyReported($emergency, $neighbor));
         });
 

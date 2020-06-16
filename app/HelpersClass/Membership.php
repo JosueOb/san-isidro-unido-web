@@ -6,16 +6,22 @@ class Membership
 {
     protected $identity_card;
     protected $basic_service_image;
-    protected $approved_by;
-    protected $rechazed_by;
-    protected $rechazed_reason;
+    protected $approved;
+    protected $rechazed;
+    protected $status_attendance = 'pendiente';//pendiente, aprovado, rechazado
 
-    public function __construct($identity_card = '', $basic_service_image = '', $approved_by = '', $rechazed_by = '', $rechazed_reason = ''){
+    public function __construct($identity_card = null, $basic_service_image = null){
         $this->identity_card = $identity_card;
         $this->basic_service_image = $basic_service_image;
-        $this->approved_by = $approved_by;
-        $this->rechazed_by = $rechazed_by;
-        $this->rechazed_reason = $rechazed_reason;
+        $this->approved = [
+            'who'=>null,//usuario que aprobó la solicitud
+            'date'=>null,//fecha de aprovación
+        ];
+        $this->rechazed = [
+            'who' =>null,
+            'reason'=>null,//razón del rechazo
+            'date'=>null,
+        ];
     }
     
     public function getIdentityCard() 
@@ -38,34 +44,45 @@ class Membership
         $this->basic_service_image = $basic_service_image;
     } 
 
-    public function getApprovedBy() 
+    public function getApproved() 
     {
-        return $this->approved_by;
+        return $this->approved;
     }
 
-    public function setApprovedBy($approved_by) 
+    public function setApproved($approved) 
     {
-        $this->approved_by = $approved_by;
+        $this->approved = array_merge($this->approved, $approved);
+        
     }
 
-    public function getRechazedReason() 
+    // public function getRechazedReason() 
+    // {
+    //     return $this->rechazed_reason;
+    // }
+
+    // public function setRechazedReason($rechazed_reason) 
+    // {
+    //     $this->rechazed_reason = $rechazed_reason;
+    // }
+
+    public function getRechazed() 
     {
-        return $this->rechazed_reason;
+        return $this->rechazed;
     }
 
-    public function setRechazedReason($rechazed_reason) 
+    public function setRechazed($rechazed) 
     {
-        $this->rechazed_reason = $rechazed_reason;
+        $this->rechazed = array_merge($this->rechazed, $rechazed);
     }
 
-    public function getRechazedBy() 
+    public function getStatusAttendance() 
     {
-        return $this->rechazed_by;
+        return $this->status_attendance;
     }
 
-    public function setRechazedBy($rechazed_by) 
+    public function setStatusAttendance($status_attendance) 
     {
-        $this->rechazed_by = $rechazed_by;
+        $this->status_attendance = $status_attendance;
     }
 
     public function getAll()
@@ -74,9 +91,9 @@ class Membership
         [
             'identity_card'   => $this->getIdentityCard(),
             'basic_service_image' => $this->getBasicServiceImage(),
-            'approved_by' => $this->getApprovedBy(),
-            'rechazed_by' => $this->getRechazedBy(),
-            'rechazed_reason' => $this->getRechazedReason(),
+            'approved' => $this->getApproved(),
+            'rechazed' => $this->getRechazed(),
+            'status_attendance' => $this->getStatusAttendance(),
         ];
     }
 }

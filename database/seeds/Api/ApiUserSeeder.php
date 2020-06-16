@@ -21,7 +21,7 @@ class ApiUserSeeder extends Seeder {
         $roleInvitado= Role::where('slug', 'invitado')->first();
         $rolePolicia = Role::where('slug', 'policia')->first();
         //TODO: Primer Usuario
-        $membresiaMorador = new Membership();
+        // $membresiaMorador = new Membership();
         $morador = User::create([
             'first_name' => 'Jose',
 			'last_name' => 'Maza',
@@ -30,7 +30,7 @@ class ApiUserSeeder extends Seeder {
             'state'=>true,
             'password' => password_hash('12345', PASSWORD_DEFAULT),
             'email_verified_at'=> now(),
-            'membership' => $membresiaMorador->getAll()
+            // 'membership' => $membresiaMorador->getAll()
         ]);
 
         SocialProfile::create([
@@ -55,7 +55,7 @@ class ApiUserSeeder extends Seeder {
         }
 
         // $user_one = User::findById($idOne)->first();
-        $membresiaInvitada = new Membership();
+        // $membresiaInvitada = new Membership();
         $morador->roles()->attach([$roleMorador->id],['state'=>true]);
         //TODO:Segundo Usuario
         $invitada = User::create([
@@ -66,7 +66,7 @@ class ApiUserSeeder extends Seeder {
 			'avatar' => "https://ui-avatars.com/api/?name=Ana+Jimenez&size=255",
             'password' => password_hash('12345', PASSWORD_DEFAULT),
             'email_verified_at'=> now(),
-            'membership' => $membresiaInvitada->getAll()
+            // 'membership' => $membresiaInvitada->getAll()
         ]);
 
         SocialProfile::create([
@@ -92,7 +92,7 @@ class ApiUserSeeder extends Seeder {
         // $user_two = User::findById($idTwo)->first();
         $invitada->roles()->attach([$roleInvitado->id],['state'=>true]);
         //TODO:Tercer Usuario
-        $membresiaInvitado = new Membership('1234558784','https://fakeimg.pl/250x100/', null, null, null);
+        $membresiaInvitado = new Membership('1234558784','https://fakeimg.pl/250x100/');
         $invitado = User::create([
             'first_name' => 'Ramiro',
 			'last_name' => 'Gonzales',
@@ -135,7 +135,7 @@ class ApiUserSeeder extends Seeder {
         // $user_three = User::findById($idThree)->first();
         $invitado->roles()->attach([$roleInvitado->id],['state'=>true]);
         //TODO:Cuarto Usuario
-        $membresiaPolicia = new Membership();
+        // $membresiaPolicia = new Membership();
         $policia = User::create([
             'first_name' => 'Bolivar',
 			'last_name' => 'Cumbicus',
@@ -144,7 +144,7 @@ class ApiUserSeeder extends Seeder {
             'state'=>true,
             'password' => password_hash('12345', PASSWORD_DEFAULT),
             'email_verified_at'=> now(),
-            'membership' => $membresiaPolicia->getAll()
+            // 'membership' => $membresiaPolicia->getAll()
         ]);
         for($i = 0; $i < 2; $i++){
             DB::table('devices')->insertGetId([

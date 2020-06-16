@@ -1,9 +1,11 @@
 <?php
 
+use App\HelpersClass\Membership;
 use App\Position;
 use Illuminate\Database\Seeder;
 use App\User;
 use Caffeinated\Shinobi\Models\Role;
+use Illuminate\Support\Facades\App;
 
 class UsersTableSeeder extends Seeder
 {
@@ -42,7 +44,7 @@ class UsersTableSeeder extends Seeder
          **/
         $roleDirective = Role::where('slug', 'directivo')->first();
         $positions = Position::all();
-        $members = factory(App\User::class, 5)->create();
+        $members = factory(User::class, 5)->create();
         $members->each(function (User $user) use ($roleDirective, $roleGuest, $positions) {
 
             $user->avatar = 'https://ui-avatars.com/api/?name=' .
@@ -78,6 +80,29 @@ class UsersTableSeeder extends Seeder
         $moderators = $neighbors->random(4);
         $moderators->each(function (User $moderator) use ($moderatorRole) {
             $moderator->roles()->attach([$moderatorRole->id], ['state' => true]);
+        });
+        /**
+         * INVITADO
+         * Se asigna el rol de invitadi a los usuarios registrados de redes sociales o registrados desde la aplicación móvil
+         **/
+        $guestRole = Role::where('slug', 'invitado')->first();
+        $faker = Faker\Factory::create();
+
+        $guests = factory(User::class, 5)->create();
+        $guests->each(function (User $guest) use ($guestRole, $faker) {
+            $membership = new Membership();
+            // $membership->setIdentityCard($faker->numberBetween($min = 1000000000, $max = 9999999999));
+            $membership->setIdentityCard($faker->randomNumber());
+            $membership->setBasicServiceImage('https://source.unsplash.com/collection/');
+
+            $guest->membership = $membership->getAll();
+            $guest->avatar = 'https://source.unsplash.com/collection/';
+            $guest->save();
+
+            $guest->roles()->attach([$guestRole->id], ['state' => true]);
+
+            // Notification::send($moderators_active, new SocialProblem($problem, $neighbor));
+
         });
     }
 }
