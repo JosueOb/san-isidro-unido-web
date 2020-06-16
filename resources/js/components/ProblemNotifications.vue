@@ -2,7 +2,7 @@
 <li class="nav-item dropdown notifications m-0">
       <a class="nav-link nav-link-icon text-center" href="#" role="button" id="dropdownNotifications" data-toggle='dropdown' aria-haspopup="true" aria-expanded="false">
           <div class="nav-link-icon__wrapper">
-              <i class="fas fa-times-circle"></i>
+              <i class="fas fa-fist-raised"></i>
               <span class="badge badge-pill badge-danger" v-if="problems_unread_notifications.length > 0">+{{problems_unread_notifications.length}}</span>
           </div>
       </a>
