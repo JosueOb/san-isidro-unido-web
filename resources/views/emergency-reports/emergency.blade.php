@@ -14,7 +14,7 @@
 </div>
 <div class="row">
     <div class="col">
-        <div class="card card-primary" id='social-problem-show'>
+        <div class="card card-primary" id='emergency-show'>
             <div class="card-header">
                 <div class="row">
                     <div class="col">
@@ -53,8 +53,8 @@
                         <p><strong>Ubicación</strong></p>
                         <div id="map" class="map">
                             <div id="info" class="info text-muted">
-                                Latitud:  <span id='lat'>{{$ubication['lat']}}</span><br>
-                                Longitud: <span id='lng'>{{$ubication['lng']}}</span><br>
+                                Latitud:  <span id='latitude'>{{$ubication['latitude']}}</span><br>
+                                Longitud: <span id='longitude'>{{$ubication['longitude']}}</span><br>
                                 Dirección: <span id='address'>{{$ubication['address']}}</span><br>
                                 </span>
                             </div>

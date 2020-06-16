@@ -197,11 +197,11 @@ Route::middleware(['auth','verified', 'logout'])->group(function(){
         
         //API - NOTIFICACIONES
         Route::get('api/notifications/problems', 'NotificationController@api_problems')->name('notifications.problems')->middleware('can:notifications.problems');
-        Route::get('api/notifications/emergencies', 'NotificationController@api_emergencies')->name('notifications.emergencies');
+        Route::get('api/notifications/emergencies', 'NotificationController@api_emergencies')->name('notifications.emergencies')->middleware('can:notifications.emergencies');
         
         // NOTIFICACIONES
         Route::get('notifications/problems', 'NotificationController@problems')->name('notifications.allProblems')->middleware('can:notifications.problems');
-        Route::get('notifications/emergencies', 'NotificationController@emergencies')->name('notifications.allEmergencies');
+        Route::get('notifications/emergencies', 'NotificationController@emergencies')->name('notifications.allEmergencies')->middleware('can:notifications.emergencies');
 
         //SOLICITUDES DE PROBLEMAS - EMERGENCIAS
         Route::get('request/socialProblem/{problem}/{notification}', 'SocialProblemReportController@showSocialProblem')->name('socialProblemReport.socialProblem')->middleware('can:notifications.problems');

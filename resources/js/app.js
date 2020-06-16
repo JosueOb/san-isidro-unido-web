@@ -48,4 +48,4 @@ require('./public-service-show');
 require('./event-create');
 require('./event-show');
 require('./event-update');
-require('./social-problem-show');
+require('./publication-request-show');

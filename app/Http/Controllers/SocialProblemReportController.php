@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\HelpersClass\AdditionalData;
+use App\Http\Middleware\ProblemIsAttendedByModerator;
 use App\Http\Middleware\ProtectSocialProblemReportNotification;
 use App\Http\Middleware\SocialProblemReport;
 use App\Http\Middleware\SocialProblemRequest;
@@ -30,7 +31,7 @@ class SocialProblemReportController extends Controller
         $this->middleware('can:socialProblemReports.approveOReject')->only('approveSocialProblem', 'showRejectSocialProblem', 'rejectSocialProblem');
         //Se verifica que el id de la notificación le pertenece al usuario que realiza la petición http
         $this->middleware(ProtectSocialProblemReportNotification::class)->only('showSocialProblem','approveSocialProblem', 'showRejectSocialProblem', 'rejectSocialProblem');
-        $this->middleware(SocialProblemReport::class)->only('approveSocialProblem', 'showRejectSocialProblem', 'rejectSocialProblem');
+        $this->middleware(ProblemIsAttendedByModerator::class)->only('approveSocialProblem', 'showRejectSocialProblem', 'rejectSocialProblem');
     }
 
     /**

@@ -39,9 +39,9 @@
                                 <tr>
                                     {{-- <th>Título</th> --}}
                                     <th>Descripción</th>
+                                    <th>Fecha</th>
                                     <th>Estado</th>
-                                    {{-- <th>Categoría</th>
-                                    <th>Descripción</th> --}}
+
                                     {{-- @canany(['publicServices.edit','publicServices.destroy']) --}}
                                     <th>Opción</th>
                                     {{-- @endcanany --}}
@@ -52,12 +52,13 @@
                                     <tr>
                                         {{-- <td>{{$notification->data['title']}}</td> --}}
                                         <td>{{$notification->data['description']}}</td>
+                                        <td>{{$notification->created_at}}</td>
 
                                         <td>
                                             @if ($notification->read_at)
                                                 Leída
                                             @else
-                                                No leída
+                                                <strong>Pendiente</strong>
                                             @endif
                                         </td>
 

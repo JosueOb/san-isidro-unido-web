@@ -369,9 +369,17 @@ class PermissionsTableSeeder extends Seeder
 
         //Permisos sobre las notificaciones de solicitud de problema social
         Permission::create([
-            'name'=>'Notificar las solicitudes para reportar un problema social',
+            'name'=>'Notificar los problemas sociales reportados',
             'slug'=>'notifications.problems',
-            'description'=>'Notifica, lista y visualiza la solicitud de un problema social',
+            'description'=>'Notifica, lista y visualiza la solicitud de problemas sociales',
+            'private'=>false,
+            'group'=>'notificacion',
+        ]);
+        //Permisos sobre las notificaciones de solicitud de emergencia
+        Permission::create([
+            'name'=>'Notificar las emergencias reportadas',
+            'slug'=>'notifications.emergencies',
+            'description'=>'Notifica, lista y visualiza la solicitud de emergencias',
             'private'=>false,
             'group'=>'notificacion',
         ]);

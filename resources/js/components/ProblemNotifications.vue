@@ -29,9 +29,9 @@
             </div>
           </a>
 
-          <small class="dropdown-item text-muted" v-if="problems_unread_notifications.length === 0 && problems_notifications.length > 0">No tienes notificationes pendientes</small>
+          <small class="dropdown-item text-muted" v-if="problems_unread_notifications.length === 0 && problems_notifications.length > 0">No tienes notificationes pendientes de problemas sociales</small>
           <a href="/notifications/problems" class="dropdown-item notification__all text-center" v-if="problems_notifications.length > 0">Ver notificaciones anteriores</a>
-          <small class="dropdown-item text-muted" v-else>No hay notificaciones</small>
+          <small class="dropdown-item text-muted" v-else>No tienes notificaciones de problemas sociales</small>
         </div>
 
 </li>

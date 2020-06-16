@@ -278,8 +278,9 @@
                             @can('notifications.problems')
                             <problem-notifications :user="{{Auth::user()->id}}"></problem-notifications>
                             @endcan
-
+                            @can('notifications.emergencies')
                             <emergency-notifications></emergency-notifications>
+                            @endcan
 
 
                             <li class="nav-item dropdown user-options m-0">
