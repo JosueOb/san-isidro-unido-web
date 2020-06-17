@@ -27,16 +27,18 @@
                     <div class="row">
                         <div class="col">
                             <h4  class="d-inline">Detalle del policía</h4>
-                            {{-- @can('policemen.edit')
-                                <a href="{{route('policemen.edit', $police->id)}}" class="btn btn-primary float-right">Editar</a>
-                            @endcan --}}
+                            @can('policemen.edit')
+                            {{-- Si el usuario tiene al menos un rol del sistema web no se presenta la opción de editar --}}
+                                @if ($police->getRelationshipStateRolesUsers('policia'))
+                                    <a href="{{route('policemen.edit', $police->id)}}" class="btn btn-secondary float-right"><i class="far fa-edit"></i> Editar</a>
+                                @endif
+                            @endcan
                         </div>
                     </div>
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col">
-                        <p><strong>Id:</strong> {{$police->id}}</p>
                         <p><strong>Nombre:</strong> {{$police->first_name}}</p>
                         <p><strong>Apellidos:</strong> {{$police->last_name}}</p>
                         <p><strong>Corre electrónico:</strong> {{$police->email}}</p>

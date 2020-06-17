@@ -30,7 +30,7 @@
                         <h4  class="d-inline">Detalle de evento</h4>
 
                         @can('events.edit')
-                        <a href="{{route('events.edit', $event->id)}}" class="btn btn-primary float-right">Editar</a>
+                        <a href="{{route('events.edit', $event->id)}}" class="btn btn-primary float-right"><i class="far fa-edit"></i> Editar</a>
                         @endcan
                     </div>
                 </div>

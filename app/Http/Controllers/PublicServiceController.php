@@ -16,7 +16,7 @@ class PublicServiceController extends Controller
      */
     public function index()
     {
-        $publicServices = PublicService::paginate(10);
+        $publicServices = PublicService::orderBy('name', 'asc')->paginate(10);
         return view('public-services.index', [
             'publicServices'=> $publicServices,
         ]);

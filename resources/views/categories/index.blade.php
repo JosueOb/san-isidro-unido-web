@@ -37,7 +37,6 @@
                         <table class="table table-light table-hover table-sm">
                             <thead>
                                 <tr>
-                                    <th width='10px'>Id</th>
                                     <th>Nombre</th>
                                     <th>Descripción</th>
                                     <th>Icono</th>
@@ -49,13 +48,12 @@
                             <tbody>
                                 @foreach ($categories as $category)
                                     <tr>
-                                        <td>{{$category->id}}</td>
                                         <td>{{$category->name}}</td>
                                         <td>{{$category->description ?: 'Sin descripción'}}</td>
                                         <td class="w-25"><img class="w-25 rounded " src={{$category->getLink()}}></td>
                                         @can('categories.edit')
                                         <td width='10px'>
-                                            <a href="{{route('categories.edit', $category->id)}}" class="btn btn-secondary"> Editar</a>
+                                            <a href="{{route('categories.edit', $category->id)}}" class="btn btn-secondary">Editar</a>
                                         </td>
                                         @endcan
 

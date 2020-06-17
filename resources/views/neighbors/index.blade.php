@@ -75,7 +75,7 @@
                         <h4 class="d-inline">Moradores registrados</h4>
 
                         @can('neighbors.create')
-                        <a href="{{route('neighbors.create')}}" class="btn btn-primary float-right">Agregar</a>
+                        <a href="{{route('neighbors.create')}}" class="btn btn-primary float-right"><i class="fas fa-plus-circle"></i> Agregar</a>
                         @endcan
 
                     </div>
@@ -83,11 +83,28 @@
             </div>
             <div class="card-body">
                 <div class="row">
+                    @error('filterOption')
+                        <span class="invalid-feedback d-inline text-center mb-2" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
                     <div class="col text-center">
                         @can('neighbors.index')
+                        @php
+                            $searchOption = request()->query('searchOption');
+                            $searchValue = request()->query('searchValue');
+                        @endphp
                         <a href="{{route('neighbors.index')}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Todos</a>
-                        <a href="{{route('neighbors.filters', 1)}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Activos</a>
-                        <a href="{{route('neighbors.filters', 2)}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Inactivos</a>
+                        <a href="{{route('search.neighbors', [
+                            'filterOption'=>1, 
+                            'searchOption' => $searchOption, 
+                            'searchValue' => $searchValue
+                        ])}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Activos</a>
+                        <a href="{{route('search.neighbors', [
+                            'filterOption'=>2, 
+                            'searchOption' => $searchOption, 
+                            'searchValue' => $searchValue
+                        ])}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Inactivos</a>
                         @endcan
                     </div>
                 </div>
@@ -97,9 +114,8 @@
                         <table class="table table-light table-hover table-sm">
                             <thead>
                                 <tr>
-                                    <th>Id</th>
+                                    <th>Apellidos</th>
                                     <th>Nombre</th>
-                                    <th>Apellido</th>
                                     <th>Correo</th>
                                     <th>Estado</th>
                                     @canany(['neighbors.show', 'neighbors.edit','neighbors.destroy'])
@@ -110,9 +126,8 @@
                             <tbody>
                                 @foreach ($neighbors as $neighbor)
                                     <tr>
-                                        <td>{{ $neighbor->rownum }}</td>
-                                        <td>{{ $neighbor->first_name }}</td>
                                         <td>{{ $neighbor->last_name }}</td>
+                                        <td>{{ $neighbor->first_name }}</td>
                                         <td>{{ $neighbor->email }}</td>
                                         <td>
                                             <span class="badge badge-pill {{$neighbor->getRelationshipStateRolesUsers('morador') ? 'badge-success': 'badge-danger'}}">
@@ -152,13 +167,14 @@
                                                 <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">Confirmar eliminación</h5>
+                                                    <h5 class="modal-title" id="exampleModalLabel">Confirmar desactivación</h5>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        ¿Está seguro de eliminar al usuario {{ $neighbor->first_name }}?
+                                                        <h5 class="text-center font-weight-bolder">¿Está seguro de desactivar al usuario {{ $neighbor->getFullName() }} ?</h5>
+                                                        <small class="text-muted"><strong>Recuerda: </strong> una vez desactivado el usuario {{ $neighbor->getFullName() }}, no podrá ingresar a la aplicación móvil</small>
                                                     </div>
                                                     <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -181,7 +197,8 @@
                                                     </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        ¿Está seguro de activar al usuario {{ $neighbor->first_name }}?
+                                                        <h5 class="text-center font-weight-bolder">¿Está seguro de activar al usuario {{ $neighbor->getFullName() }} ?</h5>
+                                                        <small class="text-muted"><strong>Recuerda: </strong> una vez activado al usuario {{ $neighbor->getFullName() }}, podrá ingresar nuevamente a la aplicación móvil</small>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -211,7 +228,7 @@
             <div class="card-footer">
                 <p class="text-muted m-0 float-right">Total: {{$neighbors->total()}}</p>
                 <nav>
-                    {{$neighbors->links()}}
+                    {{$neighbors->appends(request()->query())->links()}}
                 </nav>
             </div>
         </div>

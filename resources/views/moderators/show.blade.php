@@ -24,12 +24,16 @@
     <div class="col">
         <div class="card card-primary">
             <div class="card-header">
-                    <h4>Detalle de moderador</h4>
+                <h4 class="d-inline">Detalle de moderador</h4>
+                @can('moderators.edit')
+                    @if ($moderator->getRelationshipStateRolesUsers('moderador'))
+                        <a href="{{route('moderators.edit',$moderator->id)}}" class="btn btn-secondary float-right"><i class="far fa-edit"></i> Editar</a>
+                    @endif
+                @endcan
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col">
-                        <p><strong>Id:</strong> {{$moderator->id}}</p>
                         <p><strong>Nombre:</strong> {{$moderator->first_name}}</p>
                         <p><strong>Apellidos:</strong> {{$moderator->last_name}}</p>
                         <p><strong>Corre electrónico:</strong> {{$moderator->email}}</p>

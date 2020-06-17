@@ -24,12 +24,16 @@
     <div class="col">
         <div class="card card-primary">
             <div class="card-header">
-                    <h4>Detalle de usuario</h4>
+                    <h4 class="d-inline">Detalle de usuario</h4>
+                    @can('neighbors.edit')
+                        @if ($neighbor->getWebSystemRoles()->isEmpty() && $neighbor->getRelationshipStateRolesUsers('morador'))
+                            <a href="{{route('neighbors.edit',$neighbor->id)}}" class="btn btn-secondary float-right"><i class="far fa-edit"></i> Editar</a>
+                        @endif
+                    @endcan
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col">
-                        <p><strong>Id:</strong> {{$neighbor->id}}</p>
                         <p><strong>Nombre:</strong> {{$neighbor->first_name}}</p>
                         <p><strong>Apellidos:</strong> {{$neighbor->last_name}}</p>
                         <p><strong>Corre electrónico:</strong> {{$neighbor->email}}</p>

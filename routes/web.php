@@ -87,8 +87,7 @@ Route::middleware(['auth','verified', 'logout'])->group(function(){
         Route::get('members/{user}/edit', 'DirectiveController@edit')->name('members.edit')->middleware('can:members.edit');
         Route::put('members/{user}', 'DirectiveController@update')->name('members.update')->middleware('can:members.edit');
         Route::delete('members/{user}', 'DirectiveController@destroy')->name('members.destroy')->middleware('can:members.destroy');
-        Route::get('members/filters/{option}', 'DirectiveController@filters')->name('members.filters')->middleware('can:members.index');
-        Route::get('search/members','SearchController@searchMembers')->name('search.members')->middleware('can:members.index');
+        Route::get('search/members','SearchController@members')->name('search.members')->middleware('can:members.index');
         
         //CARGOS
         Route::get('positions', 'PositionController@index')->name('positions.index')->middleware('can:positions.index');
@@ -116,6 +115,9 @@ Route::middleware(['auth','verified', 'logout'])->group(function(){
         Route::get('subcategory/{subcategory}/edit', 'SubcategoryController@edit')->name('subcategories.edit')->middleware('can:subcategories.edit');
         Route::put('subcategory/{subcategory}', 'SubcategoryController@update')->name('subcategories.update')->middleware('can:subcategories.edit');
         Route::delete('subcategory/{subcategory}', 'SubcategoryController@destroy')->name('subcategories.destroy')->middleware('can:subcategories.destroy');
+        Route::get('search/subcategories','SearchController@subcategories')->name('search.subcategories')->middleware('can:subcategories.index');
+
+        
         Route::get('subcategory/{subcategory}', function () {
             return abort(404);
         });
@@ -133,8 +135,7 @@ Route::middleware(['auth','verified', 'logout'])->group(function(){
         Route::get('neighbors/{user}/edit', 'NeighborController@edit')->name('neighbors.edit')->middleware('can:neighbors.edit');
         Route::put('neighbors/{user}', 'NeighborController@update')->name('neighbors.update')->middleware('can:neighbors.edit');
         Route::delete('neighbors/{user}', 'NeighborController@destroy')->name('neighbors.destroy')->middleware('can:neighbors.destroy');
-        Route::get('neighbors/filters/{option}', 'NeighborController@filters')->name('neighbors.filters')->middleware('can:neighbors.index');
-        Route::get('search/neighbors','SearchController@searchNeighbors')->name('search.neighbors')->middleware('can:neighbors.index');
+        Route::get('search/neighbors','SearchController@neighbors')->name('search.neighbors')->middleware('can:neighbors.index');
 
     /*
     |--------------------------------------------------------------------------
@@ -149,8 +150,7 @@ Route::middleware(['auth','verified', 'logout'])->group(function(){
         Route::get('reports/{post}/edit', 'ReportController@edit')->name('reports.edit')->middleware('can:reports.edit');
         Route::put('reports/{post}', 'ReportController@update')->name('reports.update')->middleware('can:reports.edit');
         Route::delete('reports/{post}', 'ReportController@destroy')->name('reports.destroy')->middleware('can:reports.destroy');
-        Route::get('reports/filters/{option}', 'ReportController@filters')->name('reports.filters')->middleware('can:reports.index');
-        Route::get('search/reports','SearchController@searchReports')->name('search.reports')->middleware('can:reports.index');
+        Route::get('search/reports','SearchController@reports')->name('search.reports')->middleware('can:reports.index');
 
         //SERVICIOS PUBLICOS
         Route::get('public-service', 'PublicServiceController@index')->name('publicServices.index')->middleware('can:publicServices.index');
@@ -160,7 +160,8 @@ Route::middleware(['auth','verified', 'logout'])->group(function(){
         Route::get('public-service/{publicService}/edit', 'PublicServiceController@edit')->name('publicServices.edit')->middleware('can:publicServices.edit');
         Route::put('public-service/{publicService}', 'PublicServiceController@update')->name('publicServices.update')->middleware('can:publicServices.edit');
         Route::delete('public-service/{publicService}', 'PublicServiceController@destroy')->name('publicServices.destroy')->middleware('can:publicServices.destroy');
-
+        Route::get('search/publicServices','SearchController@publicServices')->name('search.publicServices')->middleware('can:publicServices.index');
+        
         //EVENTOS
         Route::get('events', 'EventController@index')->name('events.index')->middleware('can:events.index');
         Route::get('events/create', 'EventController@create')->name('events.create')->middleware('can:events.create');
@@ -169,13 +170,20 @@ Route::middleware(['auth','verified', 'logout'])->group(function(){
         Route::get('events/{post}/edit', 'EventController@edit')->name('events.edit')->middleware('can:events.edit');
         Route::put('events/{post}', 'EventController@update')->name('events.update')->middleware('can:events.edit');
         Route::delete('events/{post}', 'EventController@destroy')->name('events.destroy')->middleware('can:events.destroy');
-
+        Route::get('search/events','SearchController@events')->name('search.events')->middleware('can:events.index');
+        
         //MODERADOR
-        Route::get('moderators/create', 'ModeratorController@create')->name('moderators.create')->middleware('can:moderators.create');
-        Route::get('moderators/{user}/create', 'ModeratorController@store')->name('moderators.store')->middleware('can:moderators.create');
+        Route::get('moderators/assign', 'ModeratorController@assign')->name('moderators.assign')->middleware('can:moderators.assign');
+        Route::get('search/assign','SearchController@assign')->name('search.assign')->middleware('can:moderators.assign');
+        Route::put('moderators/assign/{user}', 'ModeratorController@storeAssign')->name('moderators.storeAssign')->middleware('can:moderators.assign');
         Route::get('moderators', 'ModeratorController@index')->name('moderators.index')->middleware('can:moderators.index');
-        Route::delete('moderators/{user}', 'ModeratorController@destroy')->name('moderators.destroy')->middleware('can:moderators.destroy');
+        Route::get('search/moderators', 'SearchController@moderators')->name('search.moderators')->middleware('can:moderators.index');
+        Route::get('moderators/create', 'ModeratorController@create')->name('moderators.create')->middleware('can:moderators.create');
+        Route::post('moderators/store', 'ModeratorController@store')->name('moderators.store')->middleware('can:moderators.create');
         Route::get('moderators/{user}', 'ModeratorController@show')->name('moderators.show')->middleware('can:moderators.show');
+        Route::get('moderators/{user}/edit', 'ModeratorController@edit')->name('moderators.edit')->middleware('can:moderators.edit');
+        Route::put('moderators/{user}', 'ModeratorController@update')->name('moderators.update')->middleware('can:moderators.edit');
+        Route::delete('moderators/{user}', 'ModeratorController@destroy')->name('moderators.destroy')->middleware('can:moderators.destroy');
 
         //POLICIA
         Route::get('policemen', 'PoliceController@index')->name('policemen.index')->middleware('can:policemen.index');
@@ -185,7 +193,8 @@ Route::middleware(['auth','verified', 'logout'])->group(function(){
         Route::get('policemen/{user}/edit', 'PoliceController@edit')->name('policemen.edit')->middleware('can:policemen.edit');
         Route::put('policemen/{user}', 'PoliceController@update')->name('policemen.update')->middleware('can:policemen.edit');
         Route::delete('policemen/{user}', 'PoliceController@destroy')->name('policemen.destroy')->middleware('can:policemen.destroy');
-
+        Route::get('search/policemen', 'SearchController@policemen')->name('search.policemen')->middleware('can:policemen.index');
+        
         //API - NOTIFICACIONES
         Route::get('api/notifications/problems', 'NotificationController@api_problems')->name('notifications.problems')->middleware('can:notifications.problems');
         Route::get('api/notifications/emergencies', 'NotificationController@api_emergencies')->name('notifications.emergencies');

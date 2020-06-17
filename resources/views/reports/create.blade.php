@@ -54,7 +54,7 @@
                     </div>
                     <div class="form-group col-6 offset-3">
                         <button type="submit" class="btn btn-primary btn-block" id="send-data">
-                            Publicar
+                            Guardar
                             <i class="far fa-save"></i>
                         </button>
                     </div>

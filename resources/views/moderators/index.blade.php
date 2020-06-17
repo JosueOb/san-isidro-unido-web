@@ -3,7 +3,7 @@
     Módulo Moderadores
 @endsection
 @section('page-header')
-    Lista de moderadores
+    Listado de moderadores
 @endsection
 @section('item-moderator')
     active
@@ -20,11 +20,11 @@
         @include('layouts.alerts')
     </div>
 </div>
-{{-- <div class="row">
+<div class="row">
     <div class="col">
         <div class="card card-primary">
             <div class="card-body">
-                <form action="{{route('search.neighbors')}}" method="GET">
+                <form action="{{route('search.moderators')}}" method="GET">
  
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -65,65 +65,94 @@
             </div>
         </div>
     </div>
-</div> --}}
+</div>
 <div class="row">
     <div class="col">
         <div class="card card-primary">
             <div class="card-header">
                 <div class="row">
                     <div class="col">
-                        <h4 class="d-inline">Moderadores asignados</h4>
+                        <h4 class="d-inline">Moderadores registrados</h4>
 
                         @can('moderators.create')
-                        <a href="{{route('moderators.create')}}" class="btn btn-primary float-right">Asignar</a>
+                        <a href="{{route('moderators.create')}}" class="btn btn-primary float-right"><i class="fas fa-plus-circle"></i> Agregar</a>
                         @endcan
 
                     </div>
                 </div>
             </div>
             <div class="card-body">
-                {{-- <div class="row">
+                <div class="row">
+                    @error('filterOption')
+                        <span class="invalid-feedback d-inline text-center mb-2" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
                     <div class="col text-center">
-                        @can('neighbors.index')
-                        <a href="{{route('neighbors.index')}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Todos</a>
-                        <a href="{{route('neighbors.filters', 1)}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Activos</a>
-                        <a href="{{route('neighbors.filters', 2)}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Inactivos</a>
+                        @can('moderators.assign')
+                        @php
+                            $searchOption = request()->query('searchOption');
+                            $searchValue = request()->query('searchValue');
+                        @endphp
+                        <a href="{{route('moderators.index')}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Todos</a>
+                        <a href="{{route('search.moderators', [
+                            'filterOption'=>1, 
+                            'searchOption' => $searchOption, 
+                            'searchValue' => $searchValue
+                        ])}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Activos</a>
+                        <a href="{{route('search.moderators', [
+                            'filterOption'=>2, 
+                            'searchOption' => $searchOption, 
+                            'searchValue' => $searchValue
+                        ])}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Inactivos</a>
                         @endcan
                     </div>
-                </div> --}}
+                </div>
+
                 <div class="row">
                     <div class="col table-responsive mt-3">
                         @if (count($moderators)>0)
                         <table class="table table-light table-hover table-sm">
                             <thead>
                                 <tr>
-                                    <th>Id</th>
+                                    <th></th>
+                                    <th>Apellidos</th>
                                     <th>Nombre</th>
-                                    <th>Apellido</th>
-                                    <th>Correo</th>
+                                    <th>Correo electrónico</th>
                                     <th>Estado</th>
-                                    @canany(['moderators.show','moderators.destroy'])
+                                    @canany(['moderators.show', 'moderators.edit','moderators.destroy'])
                                     <th>Opciones</th>
                                     @endcanany
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($moderators as $moderator)
-                                    <tr>
-                                        <td>{{ $moderator->id }}</td>
-                                        <td>{{ $moderator->first_name }}</td>
+                                    <tr >
+                                        <td width='10px'>
+                                            <img src="{{$moderator->getAvatar()}}" class="rounded-circle" style="width: 2.25rem; height: 2.25rem; object-fit: cover;" alt="user-avatar">
+                                        </td>
                                         <td>{{ $moderator->last_name }}</td>
+                                        <td>{{ $moderator->first_name }}</td>
                                         <td>{{ $moderator->email }}</td>
                                         <td>
-                                            <span class="badge badge-pill {{ $moderator->getRelationshipStateRolesUsers('moderador') ? 'badge-success': 'badge-danger'}}">
-                                                {{ $moderator->getRelationshipStateRolesUsers('moderador') ? 'Activo': 'Inactivo'}}
+                                            <span class="badge badge-pill {{$moderator->getRelationshipStateRolesUsers('moderador') ? 'badge-success': 'badge-danger'}}">
+                                                {{$moderator->getRelationshipStateRolesUsers('moderador') ? 'Activo': 'Inactivo'}}
                                             </span>
                                         </td>
 
                                         @can('moderators.show')
                                         <td width='10px'>
-                                            <a href="{{route('moderators.show', $moderator->id)}}" class="btn btn-info">Ver</a>
+                                            <a href="{{route('moderators.show',$moderator->id)}}" class="btn btn-info">Ver</a>
                                         </td>
+                                        @endcan
+
+                                        @can('moderators.edit')
+                                            @if ($moderator->getRelationshipStateRolesUsers('moderador'))
+                                                <td width='10px'>
+                                                    <a href="{{route('moderators.edit',$moderator->id)}}" class="btn btn-secondary"> Editar</a>
+                                                </td>
+                                                
+                                            @endif
                                         @endcan
 
                                         @can('moderators.destroy')
@@ -146,14 +175,15 @@
                                                     </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        ¿Está seguro de eliminar al moderador {{ $moderator->first_name }}?
+                                                        <h5 class="text-center font-weight-bolder">¿Está seguro de desactivar al usuario {{ $moderator->getFullName() }} como moderador?</h5>
+                                                        <small class="text-muted"><strong>Recuerda: </strong> una vez desactivado el usuario {{ $moderator->getFullName() }}, no podrá ingresar al sistema web</small>
                                                     </div>
                                                     <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                                    <form action="{{route('moderators.destroy', $moderator->id)}}" method="POST">
+                                                    <form action="{{ route('moderators.destroy', $moderator->id) }}" method="POST">
                                                         @csrf
                                                         @method('delete')
-                                                        <button type="submit" class="btn btn-danger">Desactivar</button>
+                                                        <button type="submit" class="btn btn-danger">Eliminar</button>
                                                     </form>
                                                     </div>
                                                 </div>
@@ -169,12 +199,12 @@
                                                     </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        ¿Está seguro de activar al moderador {{ $moderator->first_name }}?
+                                                        <h5 class="text-center font-weight-bolder">¿Está seguro de activar al usuario {{ $moderator->getFullName() }} como moderador?</h5>
+                                                        <small class="text-muted"><strong>Recuerda: </strong> una vez activado al usuario {{ $moderator->getFullName() }}, podrá ingresar nuevamente al sistema web</small>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                                        {{-- <button type="button" class="btn btn-primary">Eliminar</button> --}}
-                                                        <form action="{{route('moderators.destroy', $moderator->id)}}" method="POST">
+                                                        <form action="{{ route('moderators.destroy', $moderator->id) }}" method="POST">
                                                             @csrf
                                                             @method('delete')
                                                             <button type="submit" class="btn btn-success">Activar</button>
@@ -199,10 +229,12 @@
             <div class="card-footer">
                 <p class="text-muted m-0 float-right">Total: {{$moderators->total()}}</p>
                 <nav>
-                    {{$moderators->links()}}
+                    {{$moderators->appends(request()->query())->links()}}
                 </nav>
             </div>
         </div>
     </div>
 </div>
+
+
 @endsection

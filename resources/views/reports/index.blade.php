@@ -3,7 +3,7 @@
     Módulo Informes
 @endsection
 @section('page-header')
-    Informes registrados
+    Listado de informes
 @endsection
 @section('item-report')
     active
@@ -35,16 +35,11 @@
                                     {{'selected'}}
                                 @endif
                                 >Título</option>
-                                {{-- <option value="2" 
+                                <option value="2" 
                                 @if (old('searchOption')== 2 || request('searchOption')== 2)
                                     {{'selected'}}
                                 @endif
-                                >Autor</option> --}}
-                                {{-- <option value="3" 
-                                @if (old('searchOption')== 3 || request('searchOption')== 3)
-                                    {{'selected'}}
-                                @endif
-                                >Cargo</option> --}}
+                                >Autor</option>
                             </select>
                             
                         </div>
@@ -80,7 +75,7 @@
                         <h4 class="d-inline">Informes registrados</h4>
 
                         @can('reports.create')
-                        <a href="{{route('reports.create')}}" class="btn btn-primary float-right">Agregar</a>
+                        <a href="{{route('reports.create')}}" class="btn btn-primary float-right"><i class="fas fa-plus-circle"></i> Agregar</a>
                         @endcan
 
                     </div>
@@ -88,11 +83,28 @@
             </div>
             <div class="card-body">
                 <div class="row">
+                    @error('filterOption')
+                        <span class="invalid-feedback d-inline text-center mb-2" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
                     <div class="col text-center">
                         @can('reports.index')
+                        @php
+                            $searchOption = request()->query('searchOption');
+                            $searchValue = request()->query('searchValue');
+                        @endphp
                         <a href="{{route('reports.index')}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Todos</a>
-                        <a href="{{route('reports.filters', 1)}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Activos</a>
-                        <a href="{{route('reports.filters', 2)}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Inactivos</a>
+                        <a href="{{route('search.reports', [
+                            'filterOption'=>1, 
+                            'searchOption' => $searchOption, 
+                            'searchValue' => $searchValue
+                        ])}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Activos</a>
+                        <a href="{{route('search.reports', [
+                            'filterOption'=>2, 
+                            'searchOption' => $searchOption, 
+                            'searchValue' => $searchValue
+                        ])}}" class="btn btn-outline-dark btn-sm ml-1 mr-1"><i class="fas fa-filter"></i> Inactivos</a>
                         @endcan
                     </div>
                 </div>
@@ -151,20 +163,21 @@
                                                     <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Confirmar eliminación</h5>
+                                                        <h5 class="modal-title" id="exampleModalLabel">Confirmar desactivación</h5>
                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            ¿Está seguro de eliminar el reporte {{ $report->title }}?
+                                                            <h5 class="text-center font-weight-bolder">¿Está seguro de desactivar el reporte: {{ $report->title }} ?</h5>
+                                                            <small class="text-muted"><strong>Recuerda: </strong> una vez desactivado el reporte: {{ $report->title }}, no podrá ser visualizado en la aplicación móvil</small>
                                                         </div>
                                                         <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                                                         <form action="{{ route('reports.destroy', $report->id) }}" method="POST">
                                                             @csrf
                                                             @method('delete')
-                                                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                            <button type="submit" class="btn btn-danger">Desactivar</button>
                                                         </form>
                                                         </div>
                                                     </div>
@@ -180,7 +193,8 @@
                                                             </button>
                                                             </div>
                                                             <div class="modal-body">
-                                                                ¿Está seguro de activar el informe {{ $report->title }}?
+                                                                <h5 class="text-center font-weight-bolder">¿Está seguro de activar el reporte: {{ $report->title }} ?</h5>
+                                                            <small class="text-muted"><strong>Recuerda: </strong> una vez activado el reporte: {{ $report->title }}, podrá ser visualizado nuevamente en la aplicación móvil</small>
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -212,7 +226,7 @@
             <div class="card-footer">
                 <p class="text-muted m-0 float-right">Total: {{$reports->total()}}</p>
                 <nav>
-                    {{$reports->links()}}
+                    {{$reports->appends(request()->query())->links()}}
                 </nav>
             </div>
         </div>

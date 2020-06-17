@@ -3,7 +3,7 @@
     Módulo Informes
 @endsection
 @section('page-header')
-    Informes registrados
+    Informe de actividad
 @endsection
 @section('item-repot')
     active
@@ -24,12 +24,14 @@
     <div class="col">
         <div class="card card-primary">
             <div class="card-header">
-                    <h4>Detalle de informe</h4>
+                    <h4 class="d-inline">Detalle de informe</h4>
+                    @can('reports.edit')
+                        <a href="{{route('reports.edit',$report->id)}}" class="btn btn-secondary float-right" id='edit'><i class="far fa-edit"></i> Editar</a>
+                    @endcan
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col">
-                        <p><strong>Id:</strong> {{$report->id}}</p>
                         <p><strong>Título:</strong> {{$report->title}}</p>
                         <p><strong>Descripción:</strong> {{$report->description}}</p>
                         <p><strong>Fecha:</strong> {{$report->created_at}}</p>

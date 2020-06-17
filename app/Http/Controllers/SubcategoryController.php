@@ -17,7 +17,7 @@ class SubcategoryController extends Controller
      */
     public function index()
     {
-        $subcategories = Subcategory::paginate(10);
+        $subcategories = Subcategory::orderBy('name', 'asc')->paginate(10);
         return view('subcategories.index',[
             'subcategories'=>$subcategories,
         ]);
@@ -63,7 +63,6 @@ class SubcategoryController extends Controller
         }
 
         $subcategory->save();
-
         return redirect()->route('subcategories.index')->with('success','Subcategoría registrada exitosamente');
     }
 

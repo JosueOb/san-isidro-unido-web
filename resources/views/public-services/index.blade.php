@@ -3,7 +3,7 @@
     Módulo Servicios Públicos
 @endsection
 @section('page-header')
-    Lugares registrados
+    Listado de lugares
 @endsection
 @section('item-public-service')
     active
@@ -20,7 +20,52 @@
         @include('layouts.alerts')
     </div>
 </div>
-
+<div class="row">
+    <div class="col">
+        <div class="card card-primary">
+            <div class="card-body">
+                <form action="{{route('search.publicServices')}}" method="GET">
+ 
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <select class="custom-select @error('searchOption') is-invalid @enderror" name="searchOption" required>
+                                <option value="">Buscar</option>
+                                <option value="1"
+                                @if (old('searchOption')== 1 || request('searchOption')== 1)
+                                    {{'selected'}}
+                                @endif
+                                >Nombre</option>
+                                <option value="2" 
+                                @if (old('searchOption')== 2 || request('searchOption')== 2)
+                                    {{'selected'}}
+                                @endif
+                                >Categoría</option>
+                            </select>
+                            
+                        </div>
+                        <input type="text" class="form-control @error('searchValue') is-invalid @enderror"  name="searchValue" value="{{old('searchValue') ?: request('searchValue')}}" maxlength="50" required>
+                        
+                        <div class="input-group-prepend">
+                            <button type="submit" class="btn btn-dark">
+                                    <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                        @error('searchOption')
+                            <span class="invalid-feedback d-inline" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                        @error('searchValue')
+                            <span class="invalid-feedback d-inline" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row">
     <div class="col">
         <div class="card card-primary">
@@ -29,7 +74,7 @@
                     <div class="col">
                         <h4 class="d-inline">Servicios públicos</h4>
                         @can('publicServices.create')
-                        <a href="{{route('publicServices.create')}}" class="btn btn-primary float-right">Nuevo</a>
+                        <a href="{{route('publicServices.create')}}" class="btn btn-primary float-right"><i class="fas fa-plus-circle"></i> Agregar</a>
                         @endcan
                     </div>
                 </div>
@@ -41,10 +86,8 @@
                         <table class="table table-light table-hover table-sm">
                             <thead>
                                 <tr>
-                                    <th width='10px'>Id</th>
                                     <th>Nombre</th>
                                     <th>Categoría</th>
-                                    <th>Descripción</th>
                                     @canany(['publicServices.edit','publicServices.destroy'])
                                     <th>Opciones</th>
                                     @endcanany
@@ -53,7 +96,6 @@
                             <tbody>
                                 @foreach ($publicServices as $publicService)
                                     <tr>
-                                        <td>{{$publicService->id}}</td>
                                         <td>{{$publicService->name}}</td>
                                         <td>{{$publicService->subcategory->name}}</td>
 
@@ -83,7 +125,11 @@
                                                     </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        ¿Está seguro de eliminar el servicio público {{ strtolower($publicService->name) }}?
+                                                        <h5 class="text-center font-weight-bolder">¿Está seguro de eliminar el servicio público {{ strtolower($publicService->name) }} ?</h5>
+                                                        <small class="text-muted">
+                                                            <strong>Recuerda: </strong>
+                                                            el registro se elimina completamente de la base de datos
+                                                        </small>
                                                     </div>
                                                     <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -112,7 +158,7 @@
             <div class="card-footer">
                 <p class="text-muted m-0 float-right">Total: {{$publicServices->total()}}</p>
                 <nav>
-                    {{$publicServices->links()}}
+                    {{$publicServices->appends(request()->query())->links()}}
                 </nav>
             </div>
         </div>

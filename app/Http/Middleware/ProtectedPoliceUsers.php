@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class IsModerator
+class ProtectedPoliceUsers
 {
     /**
      * Handle an incoming request.
@@ -15,10 +15,10 @@ class IsModerator
      */
     public function handle($request, Closure $next)
     {
-        $getUser = $getUser = $request->route('user');
-
-        if(!$getUser->getASpecificRole('moderador')){
-            return abort(403, 'Acción no autorizada');
+        $getUserRole = $request->route('user')->getASpecificRole('policia');
+        
+        if($getUserRole){
+            return abort(403,'Acción no autorizada');
         }
         return $next($request);
     }

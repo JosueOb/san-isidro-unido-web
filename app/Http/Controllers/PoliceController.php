@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Http\Middleware\PoliceIsActive;
 use App\Http\Middleware\ProtectedAdminUsers;
 use App\Http\Middleware\ProtectedDirectiveUsers;
+use App\Http\Middleware\ProtectedGuestUsers;
+use App\Http\Middleware\ProtectedModeratorUsers;
 use App\Http\Middleware\ProtectedNeighborUsers;
 use App\Http\Requests\NeighborRequest;
 use App\Notifications\NeighborCreated;
 use App\User;
-use Caffeinated\Shinobi\Models\Role as ModelsRole;
+use Caffeinated\Shinobi\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -19,8 +21,11 @@ class PoliceController extends Controller
     {
         $this->middleware(ProtectedAdminUsers::class)->only('show','edit','update','destroy');
         $this->middleware(ProtectedDirectiveUsers::class)->only('show','edit','update','destroy');
-        $this->middleware(PoliceIsActive::class)->only('edit','update');
+        $this->middleware(ProtectedModeratorUsers::class)->only('show','edit','update','destroy');
         $this->middleware(ProtectedNeighborUsers::class)->only('show','edit','update','destroy');
+        $this->middleware(ProtectedGuestUsers::class)->only('show','edit','update','destroy');
+        
+        $this->middleware(PoliceIsActive::class)->only('edit','update');
     }
     /**
      * Display a listing of the resource.
@@ -29,8 +34,8 @@ class PoliceController extends Controller
      */
     public function index()
     {
-        $role_police = ModelsRole::where('slug', 'policia')->first();
-        $policemen = $role_police->users()->paginate();
+        $role_police = Role::where('slug', 'policia')->first();
+        $policemen = $role_police->users()->orderBy('last_name', 'asc')->paginate(10);
 
         return view('policemen.index', [
             'policemen'=>$policemen,
@@ -61,7 +66,7 @@ class PoliceController extends Controller
         $avatar  = 'https://ui-avatars.com/api/?name='.
         mb_substr($validated['first_name'],0,1).'+'.mb_substr($validated['last_name'],0,1).
         '&size=255';
-        $rolePolice = ModelsRole::where('slug', 'policia')->first();
+        $rolePolice = Role::where('slug', 'policia')->first();
 
         $police = new User();
         $police->first_name = $validated['first_name'];

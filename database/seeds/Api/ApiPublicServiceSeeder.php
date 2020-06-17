@@ -35,8 +35,8 @@ class ApiPublicServiceSeeder extends Seeder
                     'name' => $name,
                     // 'description' => "$name con la mejor atención al mejor precio",
                     'public_opening'=>json_encode([
-                        'open-time'=>'7:00',
-                        'close-time'=>'16:00'
+                        'open_time'=>'7:00',
+                        'close_time'=>'16:00'
                     ]),
                     "email" => $faker->email,
                     'ubication' => json_encode([
