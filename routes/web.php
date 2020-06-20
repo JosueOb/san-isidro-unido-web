@@ -204,6 +204,8 @@ Route::middleware(['auth','verified', 'logout'])->group(function(){
         // NOTIFICACIONES
         Route::get('notifications/problems', 'NotificationController@problems')->name('notifications.allProblems')->middleware('can:notifications.problems');
         Route::get('notifications/emergencies', 'NotificationController@emergencies')->name('notifications.allEmergencies')->middleware('can:notifications.emergencies');
+        // >middleware('can:notifications.emergencies')
+        Route::get('notifications/memberships', 'NotificationController@memberships')->name('notifications.allMemberships');
 
         //SOLICITUDES DE PROBLEMAS - EMERGENCIAS
         Route::get('request/socialProblem/{problem}/{notification}', 'SocialProblemReportController@showSocialProblem')->name('socialProblemReport.socialProblem')->middleware('can:notifications.problems');
@@ -213,7 +215,10 @@ Route::middleware(['auth','verified', 'logout'])->group(function(){
         Route::get('request/reject/socialProblem/{problem}/{notification}', function () {
             return abort(404);
         });
+
         Route::get('request/emergency/{emergency}/{notification}', 'EmergencyReportController@showEmergency')->name('emergencyReport.emergency');
+        Route::get('request/membership/{user}/{notitication}', 'MembershipController@showMembership')->name('membershipReport.membership');
+        
 });
 
 Route::get('logout', function () {

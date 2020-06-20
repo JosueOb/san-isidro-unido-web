@@ -30,10 +30,10 @@ class NotificationController extends Controller
             'problem_notifications'=>array_values($problem_notifications->toArray()),//se re-indexa 
             'unread_notifications'=>array_values($unread_notifications->toArray()),//se re-indexa
         ];
-        return [
-            'problem_notifications'=>array(),//se re-indexa 
-            'unread_notifications'=>array(),//se re-indexa
-        ];
+        // return [
+        //     'problem_notifications'=>array(),//se re-indexa 
+        //     'unread_notifications'=>array(),//se re-indexa
+        // ];
     }
 
     public function api_emergencies(Request $request){
@@ -86,12 +86,16 @@ class NotificationController extends Controller
     //Se listan todas las notificaciones de problemas sociales reportados
     public function problems(Request $request){
 
-        $user = $request->user();
-        $notifications = $user->notifications;
+        $notifications = $request->user()->notifications;
         $problem_category = Category::where('slug', 'problema')->first();
 
-        $problem_notifications = $notifications->filter(function($notification, $key) use($problem_category){
-            return $notification->data['post']['category_id'] === $problem_category->id;
+        $problem_notifications = $notifications->filter(function($notification) use($problem_category){
+
+            $notification_type = Arr::exists($notification->data, 'type') ? $notification->data['type'] : null;
+
+            if($notification_type && $notification_type === 'problem_reported'){
+                return $notification->data['post']['category_id'] === $problem_category->id;
+            }
         }); 
 
         return view('notifications.problem',[
@@ -101,16 +105,35 @@ class NotificationController extends Controller
     //Se listan todas las notificaciones de emergencias de problemas sociales reportados
     public function emergencies(Request $request){
 
-        $user = $request->user();
-        $notifications = $user->notifications;
-        $emergency_category = Category::where('slug', 'emergencia')->first();
+        $notifications = $request->user()->notifications;
 
-        $emergency_notifications = $notifications->filter(function($notification, $key) use($emergency_category){
-            return $notification->data['post']['category_id'] === $emergency_category->id;
-        }); 
+        $emergency_category = Category::where('slug', 'emergencia')->first();
+        $emergency_notifications = $notifications->filter(function($notification) use($emergency_category){
+            $notification_type = Arr::exists($notification->data, 'type') ? $notification->data['type'] : null;
+
+            if($notification_type && $notification_type === 'emergency_reported'){
+                return $notification->data['post']['category_id'] === $emergency_category->id;
+            }
+
+        });
 
         return view('notifications.emergency',[
             'all_emergency_notifications'=>$emergency_notifications,
         ]);
+    }
+    public function memberships(Request $request){
+        $notifications = $request->user()->notifications;
+
+        $membership_notifications = $notifications->filter(function($notification){
+            $notification_type =  Arr::exists($notification->data, 'type') ? $notification->data['type'] : null;
+            if($notification_type && $notification_type === 'membership_reported'){
+                return $notification;
+            }
+        });
+
+        return view('notifications.membership', [
+            'all_membership_notifications'=>$membership_notifications,
+        ]);
+
     }
 }

@@ -29,7 +29,7 @@
           </a>
 
           <small class="dropdown-item text-muted" v-if="membership_unread_notifications.length === 0 && membership_notifications.length > 0">No tienes notificationes pendientes de afiliación</small>
-          <a href="#" class="dropdown-item notification__all text-center" v-if="membership_notifications.length > 0">Ver notificaciones anteriores</a>
+          <a href="/notifications/memberships" class="dropdown-item notification__all text-center" v-if="membership_notifications.length > 0">Ver notificaciones anteriores</a>
           <small class="dropdown-item text-muted" v-else>No tienes notificaciones de afiliación</small>
         </div>
 

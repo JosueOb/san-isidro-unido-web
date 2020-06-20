@@ -282,7 +282,7 @@
                             <emergency-notifications></emergency-notifications>
                             @endcan
                             {{-- @can('notifications.emergencies') --}}
-                            {{-- <membership-notifications></membership-notifications> --}}
+                            <membership-notifications></membership-notifications>
                             {{-- @endcan --}}
 
 

@@ -21,20 +21,20 @@
                         <h4  class="d-inline">Detalle de la emergencia</h4>
                     </div>
                     <div class="col">
-                        {{-- @can('socialProblemReports.approveOReject')
+                        {{-- @can('socialProblemReports.approveOReject') --}}
                         <div class="row">
-                            @if (!$userWhoApprovedProblem && !$userWhoRechazedProblem)
+                            {{-- @if (!$userWhoApprovedProblem && !$userWhoRechazedProblem) --}}
                             <div class="col">
-                                <button type="button" class="btn btn-success float-right" data-toggle="modal" data-target="#rejectSocialProblemModal">
-                                    <i class="fas fa-check-circle"></i> Aprobar
+                                <button type="button" class="btn btn-secondary float-right" data-toggle="modal" data-target="#rejectSocialProblemModal">
+                                    <i class="fas fa-check-circle"></i> Publicar
                                 </button>
                             </div>
-                            <div class="col">
+                            {{-- <div class="col">
                                 <a href="{{route('socialProblemReport.showRejectSocialProblem', [$problem->id, $notification->id])}}" class="btn btn-danger float-right float-md-left"><i class="fas fa-times-circle"></i> Rechazar</a>
-                            </div>
-                            @endif
+                            </div> --}}
+                            {{-- @endif --}}
                         </div>
-                        @endcan --}}
+                        {{-- @endcan --}}
                     </div>
                 </div>
             </div>
@@ -65,6 +65,7 @@
                     <div class="col">
                         @if (count($images) > 0)
                         <p><strong>Imágenes:</strong></p>
+                        <small class="text-muted "> <strong>Recuerda:</strong> que puede seleccionar la imágen para verla de tamaño completo</small>
                         <div class="gallery-images">
                             {{-- Se presentan las imágenes seleccionadas por el usuario --}}
                             @foreach ($images as $image)
@@ -92,13 +93,13 @@
           </button>
         </div>
         <div class="modal-body">
-            <h5 class="text-center font-weight-bolder">¿Está seguro de publicar la emergencia?</h5>
-            <small class="text-muted"><strong>Recuerda: </strong>una vez aprobado la emergencia, se procede a publicarlo en la aplicación móvil</small>
+            <h5 class="text-center font-weight-bolder">¿Estas seguro de publicar la emergencia?</h5>
+            <small class="text-muted"><strong>Recuerda: </strong>la emergencia será publicada en la aplicación móvil y no podrás revertir la acción.</small>
 
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-          {{-- <button type="button" class="btn btn-success">Aprobar</button> --}}
+          <button type="button" class="btn btn-success">Publicar</button>
           {{-- <a href="{{route('socialProblemReport.approveSocialProblem', [$problem->id, $notification->id])}}" class="btn btn-success float-right"><i class="fas fa-check-circle"></i> Aprobar</a>  --}}
         </div>
       </div>
