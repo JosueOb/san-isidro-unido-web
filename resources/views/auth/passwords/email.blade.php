@@ -38,7 +38,7 @@
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
-                            <small class="text-muted mt-2"> Ingresa tu correo electrónico para envió del enlace de restablecimiento de contraseña</small>
+                            <small class="text-muted mt-2"> Ingresa tu correo electrónico para el envío del enlace de restablecimiento de contraseña</small>
                         </div>
 
                         <div class="form-group">

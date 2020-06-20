@@ -62,10 +62,10 @@
                             <a class="social-icon" href="#" target="_blank">
                                 <i class="fab fa-instagram"></i> Instagram
                             </a>
-                            <!--Youtube-->
+                            {{-- <!--Youtube-->
                             <a class="social-icon" href="#" target="_blank">
                                 <i class="fab fa-youtube"></i> Youtube
-                            </a>
+                            </a> --}}
                         </div>
                     </div>
                 </div>

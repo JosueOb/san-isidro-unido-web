@@ -72,7 +72,7 @@
                             <!-- Divider -->
                             <hr class="hr">
                             <!-- Description -->
-                            <h4 class="description">SIU es un medio de comunición directo con la directiva barrial
+                            <h4 class="description">SIU te permite estar comunicado con la directiva barrial
                                 de San Iisdro de Puengasí</h4>
                             <!-- Download -->
                             <div class="download">
@@ -340,10 +340,10 @@
                             <a class="social-icon" href="#" target="_blank">
                                 <i class="fab fa-instagram"></i> Instagram
                             </a>
-                            <!--Youtube-->
+                            {{-- <!--Youtube-->
                             <a class="social-icon" href="#" target="_blank">
                                 <i class="fab fa-youtube"></i> Youtube
-                            </a>
+                            </a> --}}
                         </div>
                     </div>
                 </div>

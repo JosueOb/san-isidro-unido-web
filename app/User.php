@@ -18,6 +18,7 @@ use App\Reaction;
 use App\RoleUser;
 use App\MembershipRequest;
 use App\Notifications;
+use App\Notifications\UserResetPassword;
 
 class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
 {

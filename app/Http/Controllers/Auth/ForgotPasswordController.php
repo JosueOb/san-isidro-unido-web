@@ -54,7 +54,7 @@ class ForgotPasswordController extends Controller
             $this->broker()->sendResetLink(
                 $this->credentials($request)
             );
-            return back()->with('status', 'Se ha enviado un enlace a tu correo para restablecer la contraseña');
+            return back()->with('status', 'Se ha enviado un enlace a tu correo electrónico para restablecer tu contraseña');
 
         }else{
             return back()->with('alert', 'Usuario no registrado');

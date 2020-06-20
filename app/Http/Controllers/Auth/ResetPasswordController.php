@@ -83,7 +83,7 @@ class ResetPasswordController extends Controller
                 $message = 'No se encuentra ningún usuario registrado con el correo electrónico ingresado';
                 break;
             case Password::INVALID_PASSWORD:
-                $message = 'La contraseña debe tener como mínimo 8 caracteres, al menos un dígito, una minúscula, una mayúscula y coincidir';
+                $message = 'La contraseña debe tener como mínimo 8 caracteres, al menos un dígito y una mayúscula, y coincidir';
                 break;
             case Password::INVALID_TOKEN:
                 $message = 'Este token de restablecimiento de contraseña no es válido';
