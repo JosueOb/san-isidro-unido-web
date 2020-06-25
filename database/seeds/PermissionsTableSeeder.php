@@ -140,35 +140,35 @@ class PermissionsTableSeeder extends Seeder
             'name'=>'Listar los informes',
             'slug'=>'reports.index',
             'description'=>'Lista los informes registrados por la directiva',
-            'private'=>false,
+            'private'=>true,
             'group'=>'informe',
         ]);
         Permission::create([
             'name'=>'Crear informe',
             'slug'=>'reports.create',
             'description'=>'Registrar un nuevo informe',
-            'private'=>false,
+            'private'=>true,
             'group'=>'informe',
         ]);
         Permission::create([
             'name'=>'Ver a detalle un informe',
             'slug'=>'reports.show',
             'description'=>'Ver en detalle cada uno de los informes registrados',
-            'private'=>false,
+            'private'=>true,
             'group'=>'informe',
         ]);
         Permission::create([
             'name'=>'Editar informes',
             'slug'=>'reports.edit',
             'description'=>'Editar los informes registrados',
-            'private'=>false,
+            'private'=>true,
             'group'=>'informe',
         ]);
         Permission::create([
             'name'=>'Eliminar informes',
             'slug'=>'reports.destroy',
             'description'=>'Eliminar los registros de informes',
-            'private'=>false,
+            'private'=>true,
             'group'=>'informe',
         ]);
         //Permisos sobre el módulo de categorías
@@ -372,7 +372,7 @@ class PermissionsTableSeeder extends Seeder
             'name'=>'Notificar los problemas sociales reportados',
             'slug'=>'notifications.problems',
             'description'=>'Notifica, lista y visualiza la solicitud de problemas sociales',
-            'private'=>false,
+            'private'=>true,
             'group'=>'notificacion',
         ]);
         //Permisos sobre las notificaciones de solicitud de emergencia
@@ -380,7 +380,7 @@ class PermissionsTableSeeder extends Seeder
             'name'=>'Notificar las emergencias reportadas',
             'slug'=>'notifications.emergencies',
             'description'=>'Notifica, lista y visualiza la solicitud de emergencias',
-            'private'=>false,
+            'private'=>true,
             'group'=>'notificacion',
         ]);
 
@@ -389,7 +389,16 @@ class PermissionsTableSeeder extends Seeder
             'name'=>'Aceptar o rechazar las solicitudes de problemas sociales',
             'slug'=>'socialProblemReports.approveOReject',
             'description'=>'Se permite aceptar o rechazar las solicitudes de problemas sociales',
-            'private'=>false,
+            'private'=>true,
+            'group'=>'notificacion',
+        ]);
+
+        //Permiso sobre las acciones de aceptar o rechazar la solicitud de un problema social
+        Permission::create([
+            'name'=>'Publicar las emergencias reportadas',
+            'slug'=>'emergencyReport.publishEmergency',
+            'description'=>'Se permite hacer pública una emergencia reportada',
+            'private'=>true,
             'group'=>'notificacion',
         ]);
     }

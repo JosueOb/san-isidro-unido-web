@@ -21,20 +21,24 @@
                         <h4  class="d-inline">Detalle de la emergencia</h4>
                     </div>
                     <div class="col">
-                        {{-- @can('socialProblemReports.approveOReject') --}}
+                        @can('emergencyReport.publishEmergency')
                         <div class="row">
-                            {{-- @if (!$userWhoApprovedProblem && !$userWhoRechazedProblem) --}}
-                            <div class="col">
-                                <button type="button" class="btn btn-secondary float-right" data-toggle="modal" data-target="#rejectSocialProblemModal">
-                                    <i class="fas fa-check-circle"></i> Publicar
-                                </button>
-                            </div>
-                            {{-- <div class="col">
-                                <a href="{{route('socialProblemReport.showRejectSocialProblem', [$problem->id, $notification->id])}}" class="btn btn-danger float-right float-md-left"><i class="fas fa-times-circle"></i> Rechazar</a>
-                            </div> --}}
-                            {{-- @endif --}}
+                            @if ($userWhoAttendedEmergency)
+                                @if ($emergency->state)
+                                    <div class="col text-center" style="color:green;">
+                                        <i class="fas fa-thumbs-up"></i>
+                                        <h5 class="d-inline text-uppercase font-weight-bolder">Publicado</h5>
+                                    </div>
+                                @else
+                                <div class="col">
+                                    <button type="button" class="btn btn-secondary float-right" data-toggle="modal" data-target="#publishEmergencyModal">
+                                        <i class="fas fa-check-circle"></i> Publicar
+                                    </button>
+                                </div>
+                                @endif
+                            @endif
                         </div>
-                        {{-- @endcan --}}
+                        @endcan
                     </div>
                 </div>
             </div>
@@ -45,8 +49,23 @@
                         <p><strong>Descripción:</strong> {{$emergency->description ?: 'sin descripción'}}</p>
                         <p><strong>Reportado por:</strong> {{ $neighbor->getFullName() }}</p>
                         <p><strong>Fecha:</strong> {{ $emergency->created_at }}</p>
-                        
                         <p><strong>Referencia:</strong> {{$ubication['description'] ?: 'sin referencia de ubicación'}}</p>
+
+                        <h4 class="text-center text-uppercase font-weight-bolder text-info">{{$emergency->additional_data['status_attendance']}}</h4>
+
+
+                        @if ($userWhoAttendedEmergency)
+                        {{-- <h4 class="text-center text-uppercase font-weight-bolder text-success">Aprobado</h4> --}}
+                        <p><strong class="text-capitalize">Aprobado por: </strong>{{$userWhoAttendedEmergency->getFullName()}}</p>
+                        <p><strong>Fecha: </strong>{{$additionalData['approved']['date']}}</p>
+                        @endif
+
+                        @if ($userWhoRechazedEmergency)
+                        {{-- <h4 class="text-center text-uppercase font-weight-bolder text-danger">Rechazado</h4> --}}
+                        <p><strong>Rechazado por: </strong>{{$userWhoRechazedEmergency->getFullName()}}</p>
+                        <p><strong>Fecha: </strong>{{$additionalData['rechazed']['date']}}</p>
+                        <p class="text-lowercase"><strong class="text-capitalize">Razón: </strong>{{$additionalData['rechazed']['reason']}}</p>
+                        @endif
                         
                     </div>
                     <div class="col-12 col-md-6">
@@ -83,11 +102,11 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="rejectSocialProblemModal" tabindex="-1" role="dialog" aria-labelledby="rejectSocialModalLabel" aria-hidden="true">
+<div class="modal fade" id="publishEmergencyModal" tabindex="-1" role="dialog" aria-labelledby="publishEmergencyModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="rejectSocialModalLabel">Confirmación</h5>
+          <h5 class="modal-title" id="publishEmergencyModalLabel">Confirmación</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -99,8 +118,8 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-success">Publicar</button>
-          {{-- <a href="{{route('socialProblemReport.approveSocialProblem', [$problem->id, $notification->id])}}" class="btn btn-success float-right"><i class="fas fa-check-circle"></i> Aprobar</a>  --}}
+          {{-- <button type="button" class="btn btn-success">Publicar</button> --}}
+          <a href="{{route('emergencyReport.publishEmergency', [$emergency->id, $notification->id])}}" class="btn btn-success float-right"><i class="fas fa-check-circle"></i> Publicar</a> 
         </div>
       </div>
     </div>

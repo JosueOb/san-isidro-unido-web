@@ -12,20 +12,20 @@ class AdditionalData
     public function __construct() 
     {
         $this->emergency = [
-            "approved" => [
-                'who'=>null,//usuario que aprobó el problema
-                'date'=>null,//fecha de aprobación
-            ],
+            // "published" => [
+            //     'who'=>null,// moderador que aprobó la publicación de la emergencia
+            //     'date'=>null,//fecha de aprobación
+            // ],
             "rechazed"=>[
-                'who'=>null,//usuario que rechazó el problema social
-                'reason'=>null,//razón del rechazo del problema social
+                'who'=>null,//policía que rechazó la emergencia
+                'reason'=>null,//razón del rechazo
                 'date'=>null,//fecha de rechado
             ],
             "attended"=>[
-                'who'=>null,//usuario que cambió a solucionado el problema
-                'date'=>null,//fecha en la que se atendió al problema
+                'who'=>null,//policía que atendió la emergencia
+                'date'=>null,//fecha en la que se atendió
             ],
-            "status_attendance" => 'pendiente' //atendido, rechazado, pendiente
+            "status_attendance" => 'pendiente' //pendiente, atendido, rechazado
         ];
         $this->event = [
             "responsible" => null,
@@ -71,7 +71,7 @@ class AdditionalData
         return $this->emergency;
     }
 
-    public function setInfoEmergency($info_emergency) 
+    public function setInfoEmergency(array $info_emergency) 
     {
         $this->emergency = array_merge($this->emergency, $info_emergency);
     }

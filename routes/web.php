@@ -216,7 +216,11 @@ Route::middleware(['auth','verified', 'logout'])->group(function(){
             return abort(404);
         });
 
-        Route::get('request/emergency/{emergency}/{notification}', 'EmergencyReportController@showEmergency')->name('emergencyReport.emergency');
+        // SOLICITUDES DE EMERGENCIA
+        Route::get('request/emergency/{emergency}/{notification}', 'EmergencyReportController@showEmergency')->name('emergencyReport.emergency')->middleware('can:notifications.emergencies');
+        Route::get('request/publish/emergency/{emergency}/{notification}', 'EmergencyReportController@publishEmergency')->name('emergencyReport.publishEmergency');
+
+        // SOLICITUDES DE AFILIACIÓN
         Route::get('request/membership/{user}/{notitication}', 'MembershipController@showMembership')->name('membershipReport.membership');
         
 });

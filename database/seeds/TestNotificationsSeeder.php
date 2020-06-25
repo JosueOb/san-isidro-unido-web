@@ -96,5 +96,6 @@ class TestNotificationsSeeder extends Seeder
             Notification::send($moderators_active, new EmergencyReported($emergency, $neighbor));
         });
 
+
     }
 }
