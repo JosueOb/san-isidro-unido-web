@@ -161,7 +161,7 @@ class ApiPostController extends ApiBaseController
         //Obtener post con todos los datos necesarios
         $post_updated = Post::findById($emergency->id)->with(["category", "subcategory", 'resources', 'reactions'])->first();
         //Notificar al usuario que creo el post sobre quien lo va a atender
-        $title_noti = "Tu solicitud de emergencia fue aceptada";
+        $title_noti = "Tu reporte de emergencia fue aceptado";
         $description_noti = "El policia " . $token_decoded->user->fullname . " ha aceptado atender tu emergencia";
         $user_devices = OnesignalNotification::getUserDevices($post_updated->user_id);
         if (!is_null($user_devices) && count($user_devices) > 0) {
@@ -245,7 +245,7 @@ class ApiPostController extends ApiBaseController
             $post_updated = Post::findById($emergency->id)->with(["category", "subcategory", 'resources', 'reactions'])->first();
             //Enviar Notificación
             $title_noti = "Tu solicitud de emergencia fue rechazada";
-            $description_noti = "El policia " . $user->fullname . " no puede atenderle por el mótivo: " .  $request->motivo;
+            $description_noti = "El policia " . $user->fullname . " no puede atender su reporte de emergencia por el siguiente mótivo: " .  $request->motivo;
             $user_devices = OnesignalNotification::getUserDevices($emergency->user_id);
             if (!is_null($user_devices) && count($user_devices) > 0) {
                 //Enviar notification al usuario en especifico
@@ -423,7 +423,7 @@ class ApiPostController extends ApiBaseController
                     OnesignalNotification::sendNotificationByPlayersID(
                         $title_notification_moderador,
                         $description_notification_moderador,
-                        ["post" => $post_updated],
+                        ["post" => $new_post],
                         $user_devices_moderador
                     );
                 }
@@ -432,7 +432,7 @@ class ApiPostController extends ApiBaseController
             $title_notification_user = "Tu problema social fue reportado correctamente";
             $description_notification_user = "Cuando tu publicación sea aprobada, seras notificado inmediatamente";
 
-            $post_updated->user->notify(new PostNotification($post_updated, $title_notification_user, $description_notification_user));
+            $new_post->user->notify(new PostNotification($new_post, $title_notification_user, $description_notification_user));
 
             $user_devices_problema_social = OnesignalNotification::getUserDevices($new_post->user->id);
             if (!is_null($user_devices_problema_social) && count($user_devices_problema_social) > 0) {
@@ -445,7 +445,7 @@ class ApiPostController extends ApiBaseController
                     $user_devices_problema_social
                 );
             }
-            return $this->sendResponse(200, "Social Problem Created", $post_updated);
+            return $this->sendResponse(200, "Social Problem Created", $new_post);
         } catch (Exception $e) {
             return $this->sendError(500, "Error en el servidor", ['server_error' => $e->getMessage()]);
         }
