@@ -11,12 +11,12 @@
           <a class="dropdown-item" 
               v-for="membership_notification in membership_unread_notifications" 
               v-bind:key="membership_notification.id" 
-              :href="'/request/membership/'+membership_notification.data.neighbor.id+'/'+membership_notification.id"
+              :href="'/request/membership/'+membership_notification.id"
               >
 
             <div class="notification__icon-wrapper">
               <div class="notification__icon">
-                <img :src="membership_notification.data.neighbor.avatar" alt="avatar" />
+                <img :src="membership_notification.data.guest.avatar" alt="avatar" />
               </div>
             </div>
             <div class="notification__content">

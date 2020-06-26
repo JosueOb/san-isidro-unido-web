@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Membership;
 use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
@@ -12,22 +13,24 @@ use Illuminate\Notifications\Messages\MailMessage;
 class MembershipRequest extends Notification
 {
     use Queueable;
-    protected $neighbor;
-    // public $post;
-    // protected $titleNotification;
-    // protected $messageNotification;
+    protected $guest;//usuario invitado que realizó la solicitud de afiliación
+    protected $membership;//registro de la solicitud de afiliación
+    protected $titleNotification;
+    protected $descriptionNotificacion;
+    protected $typeNotification = 'membership_reported';
+
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    // public function __construct($titleNotification = null, $messageNotification = null)
-    public function __construct(User $neighborRecieved)
+    public function __construct($titleRecieved, $descriptionRecieved, Membership $membershipRecieved, User $guestRecieved)
     {
-        $this->neighbor = $neighborRecieved;
-    //     $this->titleNotification = $titleNotification;
-    //     $this->messageNotification = $messageNotification;
+        $this->titleNotification = $titleRecieved;
+        $this->descriptionNotificacion = $descriptionRecieved;
+        $this->guest = $guestRecieved;
+        $this->membership = $membershipRecieved;
     }
 
     /**
@@ -63,13 +66,12 @@ class MembershipRequest extends Notification
      */
     public function toArray($notifiable)
     {
-        // $title_noti = $this->titleNotification;
-        // $description_noti = $this->messageNotification;
         $notificationArray = [
-            "title" => 'Solicitud de afiliación',
-            "description" => $this->neighbor->getFullName().' ah solicitado afilización',
-            'type'=>'membership_reported',
-            "neighbor" => $this->neighbor,
+            "title" => $this->titleNotification,
+            "description" => $this->descriptionNotificacion,
+            'type' => $this->typeNotification,
+            "guest" => $this->guest,
+            "membership" => $this->membership,
         ];
         return $notificationArray;
     }

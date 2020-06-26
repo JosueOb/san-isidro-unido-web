@@ -91,20 +91,11 @@ class UsersTableSeeder extends Seeder
         $faker = Faker\Factory::create();
 
         $guests = factory(User::class, 5)->create();
-        $guests->each(function (User $guest) use ($guestRole, $faker, $moderators) {
-            $membership = new Membership();
-            // $membership->setIdentityCard($faker->numberBetween($min = 1000000000, $max = 9999999999));
-            $membership->setIdentityCard($faker->randomNumber());
-            $membership->setBasicServiceImage('https://source.unsplash.com/collection/');
-
-            $guest->membership = $membership->getAll();
-            $guest->avatar = 'https://source.unsplash.com/collection/';
+        $guests->each(function (User $guest) use ($guestRole) {
+            $guest->avatar = 'https://source.unsplash.com/daily';
+            $guest->number_phone = '0984254888';
             $guest->save();
-
             $guest->roles()->attach([$guestRole->id], ['state' => true]);
-
-            Notification::send($moderators, new MembershipRequest($guest));
-
         });
     }
 }

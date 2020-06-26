@@ -6,7 +6,10 @@ use Caffeinated\Shinobi\Models\Role;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Notification;
 use App\HelpersClass\AdditionalData;
+use App\HelpersClass\ResponisbleMembership;
+use App\Membership;
 use App\Notifications\EmergencyReported;
+use App\Notifications\MembershipRequest;
 use App\Notifications\SocialProblemReported;
 use App\Resource;
 use App\User;
@@ -31,7 +34,7 @@ class TestNotificationsSeeder extends Seeder
         //Se buscan a todos los moderadores activos
         $moderator_role = Role::where('slug', 'moderador')->first();
         $moderators = $moderator_role->users;
-        $moderators_active = $moderators->filter(function($moderator, $key) use($moderator_role){
+        $moderators_active = $moderators->filter(function ($moderator, $key) use ($moderator_role) {
             return $moderator->getRelationshipStateRolesUsers($moderator_role->slug);
         });
 
@@ -65,13 +68,13 @@ class TestNotificationsSeeder extends Seeder
 
             for ($i = 0; $i < rand(1, 3); $i++) {
                 Resource::create([
-                    'url' => 'https://source.unsplash.com/collection/'.$i,
+                    'url' => 'https://source.unsplash.com/collection/' . $i,
                     'post_id' => $problem->id,
                     'type' => 'image'
                 ]);
             }
 
-            Notification::send($moderators_active, new SocialProblemReported($problem, $neighbor));
+            // Notification::send($moderators_active, new SocialProblemReported($problem, $neighbor));
 
             $additionalDataEmergency = new AdditionalData();
             $additional_data_emergency = $additionalDataEmergency->getEmergencyData();
@@ -88,14 +91,41 @@ class TestNotificationsSeeder extends Seeder
 
             for ($i = 0; $i < rand(1, 3); $i++) {
                 Resource::create([
-                    'url' => 'https://source.unsplash.com/collection/'.$i,
+                    'url' => 'https://source.unsplash.com/collection/' . $i,
                     'post_id' => $emergency->id,
                     'type' => 'image'
                 ]);
             }
-            Notification::send($moderators_active, new EmergencyReported($emergency, $neighbor));
+            // Notification::send($moderators_active, new EmergencyReported($emergency, $neighbor));
         });
 
 
+        /**
+         * Notificaciones de solicitud de afiliación
+         **/
+
+        $guest_role = Role::where('slug', 'invitado')->first();
+        $guests = $guest_role->users()->take(3)->get();
+        $responsible_membership = new ResponisbleMembership();
+
+        $guests->each(function (User $guest) use ($responsible_membership, $moderators_active) {
+            $membership = Membership::create([
+                'identity_card' => '1724449325',
+                'basic_service_image' => 'https://source.unsplash.com/collection/190727/1600x900',
+                'status_attendance' => 'pendiente',
+                'responsible' => $responsible_membership->getAll(),
+                'user_id' => $guest->id,
+            ]);
+            
+            Notification::send(
+                $moderators_active,
+                new MembershipRequest(
+                    'Solicitud de afiliación',//título de la notificación
+                    $guest->getFullName().' ha solicitado afiliación',//descripción de la notificación
+                    $membership,//membresía
+                    $guest//usuario que realizó la solicitud
+                )
+            );
+        });
     }
 }

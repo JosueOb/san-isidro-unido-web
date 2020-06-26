@@ -49,7 +49,7 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'membership' => 'array',
+        // 'membership' => 'array',
     ];
 
     /*AGREGAR RESOURCE LINK ATTRIBUTE */
@@ -232,11 +232,18 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
         return $this->hasMany(Post::class);
     }
 
-    /*Un usuario puede tener una solicitud de afiliación */
-    public function membership_request()
-    {
-        return $this->hasOne(MembershipRequest::class);
+    /**
+     * A user can have many memberships
+     */
+    public function memberships(){
+        return $this->hasMany(Membership::class);
     }
+
+    // /*Un usuario puede tener una solicitud de afiliación */
+    // public function membership_request()
+    // {
+    //     return $this->hasOne(MembershipRequest::class);
+    // }
 
     /*FUNCIONES EXTRAS */    
     //Obtener los Roles

@@ -7,6 +7,7 @@ use App\Http\Middleware\ProblemIsAttendedByModerator;
 use App\Http\Middleware\ProtectSocialProblemReportNotification;
 use App\Http\Middleware\SocialProblemReport;
 use App\Http\Middleware\SocialProblemRequest;
+use App\Http\Requests\RejectReportRequest;
 use App\Http\Requests\RejectSocialProblemRequest;
 use App\Post;
 use App\User;
@@ -124,7 +125,7 @@ class SocialProblemReportController extends Controller
      * @param  DatabaseNotification  $notification
      * @return \Illuminate\Http\Response
      */
-    public function rejectSocialProblem(RejectSocialProblemRequest $request, Post $problem, DatabaseNotification $notification){
+    public function rejectSocialProblem(RejectReportRequest $request, Post $problem, DatabaseNotification $notification){
         //Se valida la razón del rechazo del problema social (reglas de validación)
         $validated = $request->validated();
 
