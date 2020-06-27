@@ -8,11 +8,10 @@
       </a>
 
         <div class="dropdown-menu" aria-labelledby="dropdownNotifications">
-          <!-- <a class="dropdown-item" v-for="problem in problems" v-bind:key="problem"> -->
           <a class="dropdown-item" 
               v-for="problem_notification in problems_unread_notifications" 
               v-bind:key="problem_notification.id" 
-              :href="'/request/socialProblem/'+problem_notification.data.post.id+'/'+problem_notification.id"
+              :href="'/request/socialProblem/'+problem_notification.id"
               >
 
             <div class="notification__icon-wrapper">
@@ -23,7 +22,6 @@
             <div class="notification__content">
               <span class="notification__category">{{problem_notification.data.title}}</span>
               <p>
-                <!-- <span class="text-success text-semibold">JosueOb</span> -->
                 {{problem_notification.data.description}}
               </p>
             </div>
@@ -51,8 +49,6 @@ export default {
          .then(response => {
            this.problems_unread_notifications = response.data.unread_notifications;
            this.problems_notifications = response.data.problem_notifications;
-          // console.log(response);
-          // console.log(this.problems_unread_notifications.length);
          });
   }
 };

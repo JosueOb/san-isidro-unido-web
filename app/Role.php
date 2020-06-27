@@ -55,7 +55,7 @@ class Role extends Model {
 			->using(RoleUser::class)
 			->withPivot([
 				'state',
-			]);
+			])->withTimestamps();
 	}
 
     /**

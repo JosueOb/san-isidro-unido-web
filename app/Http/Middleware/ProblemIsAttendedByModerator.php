@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Post;
 use Closure;
 
 class ProblemIsAttendedByModerator
@@ -15,15 +16,20 @@ class ProblemIsAttendedByModerator
      */
     public function handle($request, Closure $next)
     {
-        //Se obtiene el problema social reportado
-        $problem = $request->route('problem');
-        //se obtiene información adicional del problema social (estado de la solicituda)
-        $additional_data = $problem->additional_data;
+       //Se obtiene la notificación del moderador
+        $notification = $request->route('notification');
 
-        //Se verifica si el problema ha sido aceptado o rechazado
-        if($additional_data['status_attendance'] === 'aprobado' || $additional_data['status_attendance'] === 'rechazado'){
-            return abort(403,'Acción no autorizada');
+        //Se obtiene información del problema social reportado como objeto Post
+        $social_problem = Post::findOrFail($notification->data['post']['id']);
+
+         //Se obtiene el estado del problema social
+         $social_problem_status_attendance = $social_problem->additional_data['status_attendance'];
+
+        //Se verifica si el reporte de problema social está con estado pendiente para permitir su aprobación o rechazo por parte del moderador
+        if($social_problem_status_attendance === 'pendiente'){
+            return $next($request);
         }
-        return $next($request);
+        //caso contrario se retorna un error 403
+        return abort(403,'Acción no autorizada');
     }
 }

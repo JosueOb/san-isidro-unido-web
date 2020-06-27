@@ -66,7 +66,7 @@
                         <h4  class="d-inline">Detalle de solicitud</h4>
                     </div>
                     <div class="col">
-                        {{-- @can('socialProblemReports.approveOReject') --}}
+                        @can('membership.approveOrReject')
                         <div class="row">
                             {{-- Se muestra las acciones de aprobar o rechazar si la solicitusd está en un estado de pendiente --}}
                             @if ($membership->status_attendance === 'pendiente')
@@ -76,12 +76,11 @@
                                 </button>
                             </div>
                             <div class="col">
-                                {{-- <a href="#" class="btn btn-danger float-right float-md-left"><i class="fas fa-times-circle"></i> Rechazar</a> --}}
                                 <a href="{{route('membership.showReject', $notification->id)}}" class="btn btn-danger float-right float-md-left"><i class="fas fa-times-circle"></i> Rechazar</a>
                             </div>
                             @endif
                         </div>
-                        {{-- @endcan --}}
+                        @endcan
                     </div>
                 </div>
             </div>

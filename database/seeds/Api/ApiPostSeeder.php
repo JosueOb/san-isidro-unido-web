@@ -53,7 +53,7 @@ class ApiPostSeeder extends Seeder
                 'title' => $faker->realText(50,2),
                 'description' =>  $faker->realText(200,2),
                 "ubication" => json_encode($ubicationData->getAll()),
-                'additional_data' => json_encode($aditionalData->getEmergencyData()),
+                'additional_data' => json_encode($aditionalData->getInfoEmergency()),
                 "user_id" => $user->id,
                 'state'=>true,
                 "category_id" =>  $categoriaEmergencias->id,
@@ -89,7 +89,7 @@ class ApiPostSeeder extends Seeder
                 // 'date' => $initialDate->toDateString(),
                 // 'time' => $initialDate->toTimeString(),
                 "ubication" => json_encode($ubicationData->getAll()),
-                'additional_data' => json_encode($aditionalData->getProblemData()),
+                'additional_data' => json_encode($aditionalData->getInfoSocialProblem()),
                 // "is_attended" => rand(0, 1),
                 "user_id" => $user->id,
                 'state'=>true,
@@ -143,7 +143,7 @@ class ApiPostSeeder extends Seeder
                 'title' => $faker->realText(50,2),
                 'description' =>  $faker->realText(200,2),
                 'state'=>true,
-                'additional_data' => json_encode($aditionalDataEvento->getEventData()),
+                'additional_data' => json_encode($aditionalDataEvento->getInfoEvent()),
                 "ubication" => json_encode($ubicationData->getAll()),
                 "user_id" => $user->id,
                 "category_id" => $categoriaEventos->id,
@@ -169,10 +169,10 @@ class ApiPostSeeder extends Seeder
         //Crear Actividades Barriales
         for($rp = 1; $rp <= $numPosts; $rp++){
             $aditionalData = new AdditionalDataCls();
-            $aditionalData->setInfoActivity([
-                "approved_by" => null, 
-                "status_attendance" => $faker->randomElement(['pendiente'],1)
-            ]);
+            // $aditionalData->setInfoActivity([
+            //     "approved_by" => null, 
+            //     "status_attendance" => $faker->randomElement(['pendiente'],1)
+            // ]);
             $user = User::orderBy(DB::raw('RAND()'))->take(1)->first();
             $initialDate =  CarbonImmutable::now();
             $ubicationData = new UbicationCls($faker->address, $faker->latitude,$faker->longitude, 'nightly description');
@@ -180,7 +180,7 @@ class ApiPostSeeder extends Seeder
                 'title' => $faker->realText(50,2),
                 'description' =>  $faker->realText(200,2),
                 "ubication" => json_encode($ubicationData->getAll()),
-                'additional_data' => json_encode($aditionalData->getActivityData()),
+                // 'additional_data' => json_encode($aditionalData->getActivityData()),
                 "user_id" => $user->id,
                 'state'=>true,
                 "category_id" => $categoriaInformes->id,

@@ -223,7 +223,8 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
      */
     public function roles()
     {
-        return $this->belongsToMany(config('shinobi.models.role'))->withPivot('state')->withTimestamps();
+        return $this->belongsToMany(config('shinobi.models.role'))
+        ->withPivot(['state'])->withTimestamps();
     }
     /**
      * A user can have many posts

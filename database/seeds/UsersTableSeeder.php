@@ -31,7 +31,7 @@ class UsersTableSeeder extends Seeder
             'avatar' => $avatar,
             'email' => env('USER_EMAIL'),
             'password' => password_hash(env('USER_PASSWORD'), PASSWORD_DEFAULT),
-            'state' => true,
+            // 'state' => true,
             'email_verified_at' => now(),
         ]);
         $roleAdmin = Role::where('slug', 'admin')->first();
@@ -79,7 +79,7 @@ class UsersTableSeeder extends Seeder
          * Se asigna el rol de moderador a los miembros de la directiva o vecinos registrados
          **/
         $moderatorRole = Role::where('slug', 'moderador')->first();
-        $moderators = $neighbors->random(4);
+        $moderators = $neighbors->random(3);
         $moderators->each(function (User $moderator) use ($moderatorRole) {
             $moderator->roles()->attach([$moderatorRole->id], ['state' => true]);
         });

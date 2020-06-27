@@ -9,21 +9,27 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class SocialProblemReported extends Notification
+class PublicationReport extends Notification
 {
     use Queueable;
-    protected $problem;
-    protected $neighbor;
+    protected $neighbor; //morador que reportó el problema social/emergencia
+    protected $socialProblem; //problema social reportado
+    protected $titleNotification;
+    protected $descriptionNotificacion;
+    protected $typeNotification;//'problem_reported', 'emergency_reported'
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(Post $problemRecieved, User $neighborRecieved)
+    public function __construct($typeRecieved, $titleRecieved, $descriptionRecieved, Post $problemRecieved, User $neighborRecieved)
     {
-        $this->problem = $problemRecieved;
+        $this->typeNotification = $typeRecieved;
+        $this->titleNotification = $titleRecieved;
+        $this->descriptionNotificacion = $descriptionRecieved;
         $this->neighbor = $neighborRecieved;
+        $this->socialProblem = $problemRecieved;
     }
 
     /**
@@ -60,11 +66,11 @@ class SocialProblemReported extends Notification
     public function toArray($notifiable)
     {
         return [
-            'title'=>'Problema reportado',
-            'description'=>$this->neighbor->getFullName().' ha reportado un problema',
-            'type'=>'problem_reported',
-            'post'=>$this->problem,
-            'neighbor'=>$this->neighbor,
+            'title' => $this->titleNotification,
+            'description' => $this->descriptionNotificacion,
+            'type' => $this->typeNotification,
+            'post' => $this->socialProblem,
+            'neighbor' => $this->neighbor,
         ];
     }
 }

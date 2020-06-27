@@ -367,7 +367,9 @@ class PermissionsTableSeeder extends Seeder
             'group' => 'policia',
         ]);
 
-        //Permisos sobre las notificaciones de solicitud de problema social
+        /**
+         * Problemas sociales reportados
+         **/
         Permission::create([
             'name' => 'Notificar los problemas sociales reportados',
             'slug' => 'notifications.problems',
@@ -375,7 +377,17 @@ class PermissionsTableSeeder extends Seeder
             'private' => true,
             'group' => 'notificacion',
         ]);
-        //Permisos sobre las notificaciones de solicitud de emergencia
+        Permission::create([
+            'name' => 'Aceptar o rechazar las solicitudes de problemas sociales',
+            'slug' => 'socialProblemReports.approveOrReject',
+            'description' => 'Se permite aceptar o rechazar las solicitudes de problemas sociales',
+            'private' => true,
+            'group' => 'notificacion',
+        ]);
+
+        /**
+         * Emergencias reportados
+         **/
         Permission::create([
             'name' => 'Notificar las emergencias reportadas',
             'slug' => 'notifications.emergencies',
@@ -383,17 +395,6 @@ class PermissionsTableSeeder extends Seeder
             'private' => true,
             'group' => 'notificacion',
         ]);
-
-        //Permiso sobre las acciones de aceptar o rechazar la solicitud de un problema social
-        Permission::create([
-            'name' => 'Aceptar o rechazar las solicitudes de problemas sociales',
-            'slug' => 'socialProblemReports.approveOReject',
-            'description' => 'Se permite aceptar o rechazar las solicitudes de problemas sociales',
-            'private' => true,
-            'group' => 'notificacion',
-        ]);
-
-        //Permiso sobre las acciones de aceptar o rechazar la solicitud de un problema social
         Permission::create([
             'name' => 'Publicar las emergencias reportadas',
             'slug' => 'emergencyReport.publishEmergency',
