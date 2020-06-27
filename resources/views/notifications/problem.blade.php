@@ -3,7 +3,7 @@
     Notificaciones
 @endsection
 @section('page-header')
-    Problemas sociales
+    Problemas sociales reportados
 @endsection
 @section('content')
 <div class="row">

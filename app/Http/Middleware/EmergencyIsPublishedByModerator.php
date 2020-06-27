@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Post;
 use Closure;
 
 class EmergencyIsPublishedByModerator
@@ -15,10 +16,13 @@ class EmergencyIsPublishedByModerator
      */
     public function handle($request, Closure $next)
     {
-        //Se obtiene a ala emergencia
-        $emergency = $request->route('emergency');
+        //Se obtiene la notificación del moderador
+        $notification = $request->route('notification');
 
-        //Se verifica el estado de la emergencia
+        //Se obtiene información de la emergencia reportada como objeto Post
+        $emergency = Post::findOrFail($notification->data['post']['id']);
+
+        //Se verifica el estado de la emergencia, se permite publicar una emergencia si el estado es false
         if ($emergency->state) {
             return abort(403, 'Acción no autorizada');
         }

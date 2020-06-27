@@ -1,9 +1,9 @@
 @extends('layouts.dashboard')
 @section('page-subtitle')
-    Módulo notificaciones
+    Módulo Solicitud
 @endsection
 @section('page-header')
-    Solicitud de afiliación
+    Afiliación
 @endsection
 
 @section('content')
@@ -63,7 +63,7 @@
             <div class="card-header">
                 <div class="row">
                     <div class="col">
-                        <h4  class="d-inline">Detalle de solicitud</h4>
+                        <h4  class="d-inline">Detalle de la solicitud de afiliación</h4>
                     </div>
                     <div class="col">
                         @can('membership.approveOrReject')

@@ -397,7 +397,7 @@ class PermissionsTableSeeder extends Seeder
         ]);
         Permission::create([
             'name' => 'Publicar las emergencias reportadas',
-            'slug' => 'emergencyReport.publishEmergency',
+            'slug' => 'emergencyReport.publish',
             'description' => 'Se permite hacer pública una emergencia reportada',
             'private' => true,
             'group' => 'notificacion',
