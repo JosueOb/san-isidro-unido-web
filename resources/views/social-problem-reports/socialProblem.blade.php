@@ -19,9 +19,14 @@
     <div class="col">
         <div class="card card-primary">
             <div class="card-header">
-                <h4 class='text-uppercase font-weight-bolder text-center'>{{ $social_problem_status_attendance }}</h4>
+                <h4 class='text-uppercase font-weight-bolder float'>{{ $social_problem_status_attendance }}</h4>
             </div>
             <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <h5 class="text-uppercase text-center font-weight-bolder">Moderador</h5>
+                    </div>
+                </div>
                 @if ($social_problem_status_attendance === 'aprobado')
                 <div class="row">
                     <div class="col">

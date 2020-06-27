@@ -24,7 +24,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col">
-                        <h6 class="text-uppercase text-center font-weight-bolder">Policía</h5>
+                        <h5 class="text-uppercase text-center font-weight-bolder">Policía</h5>
                     </div>
                 </div>
                 @if ($emergency_status_attendance === 'atendido')
