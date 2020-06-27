@@ -50,7 +50,7 @@ class SocialProblemReportController extends Controller
             $notification->markAsRead();
         }
         //Se obtiene la ubicación del problema social
-        $ubication = json_decode($problem->ubication, true);
+        $ubication = $problem->ubication;
         //Se obtiene las imágemes del problema social
         $images = $problem->resources()->where('type', 'image')->get();
         //Se obtiene el usuario que reporto el problema social

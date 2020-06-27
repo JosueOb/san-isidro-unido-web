@@ -24,6 +24,6 @@ $factory->define(User::class, function (Faker $faker) {
         'email_verified_at' => now(),
         'password' => password_hash('password', PASSWORD_DEFAULT),
         'remember_token' => Str::random(10),
-        'state'=>true,
+        // 'state'=>true,
     ];
 });

@@ -8,5 +8,5 @@ class RoleUser extends Pivot
 {
     protected $table = "role_user";
     public $timestamps = true;
-
+    public $state;
 }

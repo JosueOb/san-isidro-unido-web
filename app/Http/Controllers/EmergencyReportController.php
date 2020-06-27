@@ -35,7 +35,7 @@ class EmergencyReportController extends Controller
             $notification->markAsRead();
         }
         //Se obtiene la ubicación de la emergencia
-        $ubication = json_decode($emergency->ubication, true);
+        $ubication = $emergency->ubication;
         //Se obtiene las imágemes de la emergencia
         $images = $emergency->resources()->where('type', 'image')->get();
         //Se obtiene el usuario que reporto la emergencia
