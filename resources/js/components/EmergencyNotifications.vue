@@ -11,7 +11,7 @@
           <a class="dropdown-item" 
               v-for="emergency_notification in emergency_unread_notifications" 
               v-bind:key="emergency_notification.id" 
-              :href="'/request/emergency/'+emergency_notification.data.post.id+'/'+emergency_notification.id"
+              :href="'/request/emergency/'+emergency_notification.id"
               >
 
             <div class="notification__icon-wrapper">
@@ -22,7 +22,6 @@
             <div class="notification__content">
               <span class="notification__category">{{emergency_notification.data.title}}</span>
               <p>
-                <!-- <span class="text-success text-semibold">JosueOb</span> -->
                 {{emergency_notification.data.description}}
               </p>
             </div>

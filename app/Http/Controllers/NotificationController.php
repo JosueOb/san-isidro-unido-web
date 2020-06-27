@@ -115,7 +115,6 @@ class NotificationController extends Controller
     //Se listan todas las notificaciones de emergencias de problemas sociales reportados
     public function emergencies(Request $request)
     {
-
         $notifications = $request->user()->notifications;
 
         $emergency_category = Category::where('slug', 'emergencia')->first();
@@ -127,8 +126,18 @@ class NotificationController extends Controller
             }
         });
 
+        //Se crear un paginador manualmente
+        $total = count($emergency_notifications);
+        $pageName = 'page';
+        $perPage = 10;
+
+        $notifications = new LengthAwarePaginator($emergency_notifications->forPage(Paginator::resolveCurrentPage(), $perPage), $total, $perPage, Paginator::resolveCurrentPage(), [
+            'path' => Paginator::resolveCurrentPath(),
+            'pageName' => $pageName,
+        ]);
+
         return view('notifications.emergency', [
-            'all_emergency_notifications' => $emergency_notifications,
+            'all_emergency_notifications' => $notifications,
         ]);
     }
 

@@ -3,7 +3,7 @@
     Notificaciones
 @endsection
 @section('page-header')
-    Emergencias
+    Emergencias reportadas
 @endsection
 @section('content')
 <div class="row">
@@ -14,22 +14,14 @@
 
 <div class="row">
     <div class="col">
-       <p>Lista de notificaciones de emergencias</p>
-    </div>
-</div>
-<div class="row">
-    <div class="col">
         <div class="card card-primary">
-            {{-- <div class="card-header">
+            <div class="card-header">
                 <div class="row">
                     <div class="col">
-                        <h4 class="d-inline">Servicios públicos</h4>
-                        @can('publicServices.create')
-                        <a href="{{route('publicServices.create')}}" class="btn btn-primary float-right">Nuevo</a>
-                        @endcan
+                        <h4 class="d-inline">Lista de notificaciones</h4>
                     </div>
                 </div>
-            </div> --}}
+            </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col table-responsive">
@@ -37,23 +29,17 @@
                         <table class="table table-light table-hover table-sm">
                             <thead>
                                 <tr>
-                                    {{-- <th>Título</th> --}}
                                     <th>Descripción</th>
                                     <th>Fecha</th>
                                     <th>Estado</th>
-
-                                    {{-- @canany(['publicServices.edit','publicServices.destroy']) --}}
                                     <th>Opción</th>
-                                    {{-- @endcanany --}}
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($all_emergency_notifications as $notification)
                                     <tr>
-                                        {{-- <td>{{$notification->data['title']}}</td> --}}
                                         <td>{{$notification->data['description']}}</td>
                                         <td>{{$notification->created_at}}</td>
-
                                         <td>
                                             @if ($notification->read_at)
                                                 Leída
@@ -62,12 +48,9 @@
                                             @endif
                                         </td>
 
-                                        {{-- <td>{{$publicService->name}}</td>
-                                        <td>{{$publicService->subcategory->name}}</td> --}}
-
                                         {{-- @can('publicServices.show') --}}
                                         <td width='10px'>
-                                            <a href="{{route('emergencyReport.emergency', [$notification->data['post']['id'], $notification->id])}}" class="btn btn-info">Ver</a>
+                                            <a href="{{route('emergencyReport.show', [$notification->data['post']['id'], $notification->id])}}" class="btn btn-info">Ver</a>
                                             {{-- <a href="#" class="btn btn-info">Ver</a> --}}
                                         </td>
                                         {{-- @endcan --}}
@@ -82,12 +65,14 @@
                     </div>
                 </div>
             </div>
-            {{-- <div class="card-footer">
-                <p class="text-muted m-0 float-right">Total: {{$publicServices->total()}}</p>
+            @if (count($all_emergency_notifications)>0)
+            <div class="card-footer">
+                <p class="text-muted m-0 float-right">Total: {{$all_emergency_notifications->total()}}</p>
                 <nav>
-                    {{$publicServices->links()}}
+                    {{$all_emergency_notifications->links()}}
                 </nav>
-            </div> --}}
+            </div>
+            @endif
         </div>
     </div>
 </div>

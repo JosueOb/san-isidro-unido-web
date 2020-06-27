@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Post;
 use Closure;
 
 class EmergencyIsAttendedByPolice
@@ -15,15 +16,20 @@ class EmergencyIsAttendedByPolice
      */
     public function handle($request, Closure $next)
     {
-        //Se obtiene la emergencia
-        $emergency = $request->route('emergency');
-        //se obtiene información adicional la emergencia (estado de la solicituda)
-        $additional_data = $emergency->additional_data;
+        //Se obtiene la notificación del moderador
+        $notification = $request->route('notification');
 
-        //Se verifica si la emergencia ha sido atendida
-        if ($additional_data['status_attendance'] === 'atendido') {
+        //Se obtiene información de la emergencia reportada como objeto Post
+        $emergency = Post::findOrFail($notification->data['post']['id']);
+
+        //Se obtiene el estado de la emergencia
+        $emergency_status_attendance = $emergency->additional_data['status_attendance'];
+
+        //Se verifica si el reporte de emergencia está con estado aprobado para permitir su publicación por parte del moderador
+        if ($emergency_status_attendance === 'aprobado') {
             return $next($request);
         }
+        //caso contrario se retorna un error 403
         return abort(403, 'Acción no autorizada');
     }
 }

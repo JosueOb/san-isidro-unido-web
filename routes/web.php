@@ -214,8 +214,8 @@ Route::middleware(['auth', 'verified', 'logout'])->group(function () {
     Route::post('request/reject/socialProblem/{notification}', 'SocialProblemReportController@reject')->name('socialProblemReport.reject')->middleware('can:socialProblemReports.approveOrReject');
 
     // EMERGENCIAS REPORTADAS
-    Route::get('request/emergency/{emergency}/{notification}', 'EmergencyReportController@showEmergency')->name('emergencyReport.emergency')->middleware('can:notifications.emergencies');
-    Route::get('request/publish/emergency/{emergency}/{notification}', 'EmergencyReportController@publishEmergency')->name('emergencyReport.publishEmergency');
+    Route::get('request/emergency/{notification}', 'EmergencyReportController@show')->name('emergencyReport.show')->middleware('can:notifications.emergencies');
+    Route::get('request/publish/emergency/{notification}', 'EmergencyReportController@publish')->name('emergencyReport.publish')->middleware('can:emergencyReport.publish');
 
     // SOLICITUDES DE AFILIACIÓN
     Route::get('request/membership/{notification}', 'MembershipController@show')->name('membership.show')->middleware('can:notifications.memberships');
