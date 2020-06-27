@@ -40,7 +40,7 @@ class LandingController extends Controller
                             ->latest()
                             ->take(10)
                             ->get();
-        // dd($events);
+        
         return view('landing',[
             'directiveMembers'=>$directive_members_active,
             'news'=>$news,

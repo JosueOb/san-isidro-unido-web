@@ -2,7 +2,7 @@
 
 namespace App\HelpersClass;
 
-class ResponisbleMembership
+class ResponsibleMembership
 {
     protected $approved;
     protected $rechazed;

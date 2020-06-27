@@ -4,6 +4,7 @@ namespace App\Helpers;
 use App\User;
 use Firebase\JWT\JWT;
 use Exception;
+use App\Membership;
 
 class JwtAuth {
 	public $key;
@@ -17,12 +18,11 @@ class JwtAuth {
 	// private $publicKey;
 
 	public function __construct() {
-		$this->key = 'ah9;HBW3%asd>u=Y.T#@,gasdKUD4[100%';
+		$this->key = 'ah9;HBW3%asd>u=Y.T#@,gasdKUD4[100%]SiuDev';
 		// $this->algoritmoCifrado = 'HS256';
 		$this->algoritmoCifrado = 'HS512';
 		// $this->algoritmoCifradoDoble = 'RS512';
-		$this->timeExpiration = (12 * 6 * 4 * 7 * 24 * 60 * 60);
-		// $this->timeExpiration = (7*24*60*60);
+		$this->timeExpiration = (4 * 7 * 24 * 60 * 60); //4 semanas
 		$this->allowedRoles = ['invitado', 'morador', 'policia'];
 		// $this->privateKey = file_get_contents(base_path('sm_private.pem'));
 		// $this->publicKey = file_get_contents(base_path('sm_private.pem'));
@@ -70,7 +70,10 @@ class JwtAuth {
      */
 	public function getToken($email, $getInfoToken = null) {
 		$user_bdd = User::where("email", $email)->mobileRol()->first();
+		$memberships = Membership::where('user_id', $user_bdd->id)->orderBy('id', 'desc')->take(1)->get();
 		$user = $user_bdd->makeHidden('password');
+		$user['memberships'] = $memberships->toArray();
+		
 		$token = [
 			"sub" => $user['id'],
 			"iat" => time(),
@@ -86,6 +89,7 @@ class JwtAuth {
 		} else {
 			$data = $decoded;
 		}
+		
 		return $data;
 	}
 

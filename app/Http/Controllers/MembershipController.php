@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\{Membership, User};
-use App\HelpersClass\ResponisbleMembership as HelperResponisbleMembership;
+use App\HelpersClass\ResponsibleMembership as HelperResponsibleMembership;
 use App\Http\Middleware\MembershipIsAttendedByModerator;
 use App\Http\Middleware\ProtectNotifications;
 use App\Http\Requests\RejectReportRequest;
@@ -56,7 +56,7 @@ class MembershipController extends Controller
         //Se obtiene información del moderador que aceptó la solicitud
         $moderator = $request->user();
 
-        $responsibleMembership = new HelperResponisbleMembership();
+        $responsibleMembership = new HelperResponsibleMembership();
         $responsibleMembership->setApproved([
             'who' => $moderator, //morador que aprobó la solicitud
             'date' => now()->toDateTimeString(), //fecha de aprobación ejemplo del formato 1975-12-25 14:15:16
@@ -98,7 +98,7 @@ class MembershipController extends Controller
         //Se obtiene información del moderador que rechazó la solicitud
         $moderator = $request->user();
 
-        $responsibleMembership = new HelperResponisbleMembership();
+        $responsibleMembership = new HelperResponsibleMembership();
         $responsibleMembership->setRechazed([
             'who' => $moderator, //morador que rechazó la solicitud
             'reason' => $validated['description'], //razón del rechazo
