@@ -202,21 +202,18 @@ Route::middleware(['auth', 'verified', 'logout'])->group(function () {
     Route::get('api/notifications/emergencies', 'NotificationController@api_emergencies')->name('notifications.emergencies')->middleware('can:notifications.emergencies');
     Route::get('api/notifications/memberships', 'NotificationController@api_memberships')->name('notifications.memberships')->middleware('can:notifications.memberships');
 
-    // NOTIFICACIONES
+    // LISTAR NOTIFICACIONES
     Route::get('notifications/problems', 'NotificationController@problems')->name('notifications.allProblems')->middleware('can:notifications.problems');
     Route::get('notifications/emergencies', 'NotificationController@emergencies')->name('notifications.allEmergencies')->middleware('can:notifications.emergencies');
     Route::get('notifications/memberships', 'NotificationController@memberships')->name('notifications.allMemberships')->middleware('can:notifications.memberships');
 
-    //SOLICITUDES DE PROBLEMAS - EMERGENCIAS
-    Route::get('request/socialProblem/{problem}/{notification}', 'SocialProblemReportController@showSocialProblem')->name('socialProblemReport.socialProblem')->middleware('can:notifications.problems');
-    Route::get('request/approve/socialProblem/{problem}/{notification}', 'SocialProblemReportController@approveSocialProblem')->name('socialProblemReport.approveSocialProblem');
-    Route::get('request/reject/socialProblem/{problem}/{notification}/create', 'SocialProblemReportController@showRejectSocialProblem')->name('socialProblemReport.showRejectSocialProblem');
-    Route::post('request/reject/socialProblem/{problem}/{notification}', 'SocialProblemReportController@rejectSocialProblem')->name('socialProblemReport.rejectSocialProblem');
-    Route::get('request/reject/socialProblem/{problem}/{notification}', function () {
-        return abort(404);
-    });
+    //PROBLEMAS REPORTADOS
+    Route::get('request/socialProblem/{notification}', 'SocialProblemReportController@show')->name('socialProblemReport.show')->middleware('can:notifications.problems');
+    Route::get('request/approve/socialProblem/{notification}', 'SocialProblemReportController@approve')->name('socialProblemReport.approve')->middleware('can:socialProblemReports.approveOrReject');
+    Route::get('request/reject/socialProblem/{notification}', 'SocialProblemReportController@showReject')->name('socialProblemReport.showReject')->middleware('can:socialProblemReports.approveOrReject');
+    Route::post('request/reject/socialProblem/{notification}', 'SocialProblemReportController@reject')->name('socialProblemReport.reject')->middleware('can:socialProblemReports.approveOrReject');
 
-    // SOLICITUDES DE EMERGENCIA
+    // EMERGENCIAS REPORTADAS
     Route::get('request/emergency/{emergency}/{notification}', 'EmergencyReportController@showEmergency')->name('emergencyReport.emergency')->middleware('can:notifications.emergencies');
     Route::get('request/publish/emergency/{emergency}/{notification}', 'EmergencyReportController@publishEmergency')->name('emergencyReport.publishEmergency');
 

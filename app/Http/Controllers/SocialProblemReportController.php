@@ -4,11 +4,8 @@ namespace App\Http\Controllers;
 
 use App\HelpersClass\AdditionalData;
 use App\Http\Middleware\ProblemIsAttendedByModerator;
-use App\Http\Middleware\ProtectSocialProblemReportNotification;
-use App\Http\Middleware\SocialProblemReport;
-use App\Http\Middleware\SocialProblemRequest;
+use App\Http\Middleware\ProtectNotifications;
 use App\Http\Requests\RejectReportRequest;
-use App\Http\Requests\RejectSocialProblemRequest;
 use App\Post;
 use App\User;
 use Illuminate\Http\Request;
@@ -16,62 +13,46 @@ use Illuminate\Notifications\DatabaseNotification;
 
 class SocialProblemReportController extends Controller
 {
-    //Se gestionan las solicitudes de problemas sociales 
-    /*
-    |--------------------------------------------------------------------------
-    | SOCIAL PROBLEMA REPORT
-    |--------------------------------------------------------------------------
-    |
-    | Se gestionan las solicitudes de problemas sociales y emergecias
-    |
-    */
-
     public function __construct()
     {
-        //Se verifica si tiene el usuario el rol con el permiso de aceptar o rechazar las solicitudes de problemas sociales
-        $this->middleware('can:socialProblemReports.approveOReject')->only('approveSocialProblem', 'showRejectSocialProblem', 'rejectSocialProblem');
-        //Se verifica que el id de la notificación le pertenece al usuario que realiza la petición http
-        $this->middleware(ProtectSocialProblemReportNotification::class)->only('showSocialProblem','approveSocialProblem', 'showRejectSocialProblem', 'rejectSocialProblem');
-        $this->middleware(ProblemIsAttendedByModerator::class)->only('approveSocialProblem', 'showRejectSocialProblem', 'rejectSocialProblem');
+        $this->middleware(ProtectNotifications::class)->only('show', 'approve', 'showReject', 'reject');
+        $this->middleware(ProblemIsAttendedByModerator::class)->only('approve', 'showReject', 'reject');
     }
 
     /**
-     * Se presenta la socilitud de problema social
+     * Se presenta la socilitud del problema social
      *
      * @param  Post  $problem
      * @param  DatabaseNotification  $notification
      * @return \Illuminate\Http\Response
      */
 
-    public function showSocialProblem(Post $problem, DatabaseNotification $notification){
-        //Se determina si la notificación no ha sido leída
-        if($notification->unread()){
+    public function show(DatabaseNotification $notification)
+    {
+        // Se determina si la notificación no ha sido leída
+        if ($notification->unread()) {
             //Se marca la notificación como leída
             $notification->markAsRead();
         }
+
+        //Se obtiene información del problema social reportado como objeto Post
+        $social_problem = Post::findOrFail($notification->data['post']['id']);
         //Se obtiene la ubicación del problema social
-        $ubication = $problem->ubication;
-        //Se obtiene las imágemes del problema social
-        $images = $problem->resources()->where('type', 'image')->get();
-        //Se obtiene el usuario que reporto el problema social
-        $neighbor = $problem->user;
-
-        //Se obtiene información adicional del problema
-        $additional_data = $problem->additional_data;
-
-        //se obtiene el usuario que haya aprobado o rechazado la petición
-        $userWhoApprovedProblem = $additional_data['status_attendance'] === 'aprobado' ? User::find($additional_data['approved']['who']['id']) : null;
-        $userWhoRechazedProblem = $additional_data['status_attendance'] === 'rechazado' ? User::find($additional_data['rechazed']['who']['id']) : null;
+        $ubication = $social_problem->ubication;
+        //Se obtiene las imagenes del problema social
+        $images = $social_problem->resources()->where('type', 'image')->get();
+        //Se obtiene el estado del problema social
+        $social_problem_status_attendance = $social_problem->additional_data['status_attendance'];
+        //Se obtiene información del morador que reportó el problema social como objeto User
+        $neighbor = User::findOrFail($notification->data['neighbor']['id']);
 
         return view('social-problem-reports.socialProblem', [
-            'problem' => $problem,
-            'ubication'=> $ubication,
+            'social_problem' => $social_problem,
+            'ubication' => $ubication,
             'images' => $images,
             'neighbor' => $neighbor,
-            'additionalData' => $additional_data,
-            'userWhoApprovedProblem' => $userWhoApprovedProblem,
-            'userWhoRechazedProblem' => $userWhoRechazedProblem,
-            'notification'=>$notification
+            'social_problem_status_attendance' => $social_problem_status_attendance,
+            'notification' => $notification
         ]);
     }
 
@@ -82,40 +63,42 @@ class SocialProblemReportController extends Controller
      * @param  DatabaseNotification  $notification
      * @return \Illuminate\Http\Response
      */
-    public function approveSocialProblem(Post $problem, DatabaseNotification $notification, Request $request){
-        //Se obtiene el usuario que aprobó el problema
-        $user = $request->user();
+    public function approve(DatabaseNotification $notification, Request $request)
+    {
+        //Se obtiene información del problema social reportado como objeto Post
+        $social_problem = Post::findOrFail($notification->data['post']['id']);
+        //Se obtiene información del moderador que aprobó el reporte de problema social
+        $moderator = $request->user();
 
-        $additionalData = new AdditionalData();
-        $additionalData->setInfoSocialProblem([
+        //Datos aprobación del problema social
+        $approval = new AdditionalData();
+        $approval->setInfoSocialProblem([
             "approved" => [
-                'who'=>$user,
-                'date'=>now(),
+                'who' => $moderator,
+                'date' => now()->toDateTimeString(),
             ],
             "status_attendance" => 'aprobado'
         ]);
 
-        //Se actualiza el estado de la solicitud de problema social
-        $problem->additional_data = $additionalData->getInfoSocialProblem();
+        //Se actualiza el registro del problema social, con los datos de aprobación
+        $social_problem->additional_data = $approval->getInfoSocialProblem();
         //Se cambia el estado del post, para que sea visible en la app
-        $problem->state = true;
-        $problem->save();
-        
-        // return redirect()->back()->with('success','Problema social aprobado');
-        return redirect()->route('socialProblemReport.socialProblem',[
-            'problem'=>$problem->id,
-            'notification'=>$notification->id
-        ])->with('success','Problema social aprobado');
+        $social_problem->state = true;
+        $social_problem->save();
+
+        return redirect()->route('socialProblemReport.show', [
+            'notification' => $notification->id
+        ])->with('success', 'Problema social aprobado exitosamente');
     }
     /**
      * Se presenta el formulario de rechazo de problema social
      *
      * @return \Illuminate\Http\Response
      */
-    public function showRejectSocialProblem(Post $problem, DatabaseNotification $notification){
+    public function showReject(DatabaseNotification $notification)
+    {
         return view('social-problem-reports.showRejectSocialProblem', [
-            'problem'=>$problem,
-            'notification'=>$notification
+            'notification' => $notification
         ]);
     }
     /**
@@ -125,31 +108,32 @@ class SocialProblemReportController extends Controller
      * @param  DatabaseNotification  $notification
      * @return \Illuminate\Http\Response
      */
-    public function rejectSocialProblem(RejectReportRequest $request, Post $problem, DatabaseNotification $notification){
-        //Se valida la razón del rechazo del problema social (reglas de validación)
+    public function reject(RejectReportRequest $request, DatabaseNotification $notification)
+    {
         $validated = $request->validated();
 
-        // Se obtiene el usuario que rechazó en problema social
-        $user = $request->user();
+        //Se obtiene información del problema social reportado como objeto Post
+        $social_problem = Post::findOrFail($notification->data['post']['id']);
+        //Se obtiene información del moderador que aprobó el reporte de problema social
+        $moderator = $request->user();
 
-        $additionalData = new AdditionalData();
-        $additionalData->setInfoSocialProblem([
-            "rechazed"=>[
-                'who'=>$user,
-                'reason'=>$validated['description'],
-                'date'=>now(),
+        //Datos aprobación del problema social
+        $approval = new AdditionalData();
+        $approval->setInfoSocialProblem([
+            "rechazed" => [
+                'who' => $moderator, //usuario que rechazó el problema social
+                'reason' => $validated['description'], //razón del rechazo del problema social
+                'date' => now()->toDateTimeString(), //fecha de rechado
             ],
             "status_attendance" => 'rechazado'
         ]);
 
-        //Se actualiza el estado de la solicitud de problema social
-        $problem->additional_data = $additionalData->getInfoSocialProblem();
-        $problem->save();
-        
-        return redirect()->route('socialProblemReport.socialProblem',[
-            'problem'=>$problem->id,
-            'notification'=>$notification->id
-        ])->with('danger','Problema social rechazado');
+        //Se actualiza el registro del problema social, con los datos de rechazo
+        $social_problem->additional_data = $approval->getInfoSocialProblem();
+        $social_problem->save();
 
+        return redirect()->route('socialProblemReport.show', [
+            'notification' => $notification->id
+        ])->with('success', 'Problema social rechazado exitosamente');
     }
 }

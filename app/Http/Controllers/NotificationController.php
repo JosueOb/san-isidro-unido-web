@@ -33,10 +33,6 @@ class NotificationController extends Controller
             'problem_notifications' => array_values($problem_notifications->toArray()), //se re-indexa 
             'unread_notifications' => array_values($unread_notifications->toArray()), //se re-indexa
         ];
-        // return [
-        //     'problem_notifications'=>array(),//se re-indexa 
-        //     'unread_notifications'=>array(),//se re-indexa
-        // ];
     }
 
     public function api_emergencies(Request $request)
@@ -102,8 +98,18 @@ class NotificationController extends Controller
             }
         });
 
+        //Se crear un paginador manualmente
+        $total = count($problem_notifications);
+        $pageName = 'page';
+        $perPage = 10;
+
+        $notifications = new LengthAwarePaginator($problem_notifications->forPage(Paginator::resolveCurrentPage(), $perPage), $total, $perPage, Paginator::resolveCurrentPage(), [
+            'path' => Paginator::resolveCurrentPath(),
+            'pageName' => $pageName,
+        ]);
+
         return view('notifications.problem', [
-            'all_problem_notifications' => $problem_notifications,
+            'all_problem_notifications' => $notifications,
         ]);
     }
     //Se listan todas las notificaciones de emergencias de problemas sociales reportados
@@ -137,12 +143,12 @@ class NotificationController extends Controller
             }
         });
 
-         //Se crear un paginador manualmente
-         $total = count($membership_notifications);
-         $pageName = 'page';
-         $perPage = 10;
+        //Se crear un paginador manualmente
+        $total = count($membership_notifications);
+        $pageName = 'page';
+        $perPage = 10;
 
-         $notifications = new LengthAwarePaginator($membership_notifications->forPage(Paginator::resolveCurrentPage(), $perPage), $total, $perPage, Paginator::resolveCurrentPage(), [
+        $notifications = new LengthAwarePaginator($membership_notifications->forPage(Paginator::resolveCurrentPage(), $perPage), $total, $perPage, Paginator::resolveCurrentPage(), [
             'path' => Paginator::resolveCurrentPath(),
             'pageName' => $pageName,
         ]);

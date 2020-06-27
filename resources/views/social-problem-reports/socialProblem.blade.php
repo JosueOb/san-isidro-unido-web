@@ -3,7 +3,7 @@
     Módulo Solicitud
 @endsection
 @section('page-header')
-    Solicitud de Problema Social
+    Problema Social
 @endsection
 
 @section('content')
@@ -12,25 +12,75 @@
         @include('layouts.alerts')
     </div>
 </div>
+
+{{-- Se muestra la información del moderador que aprobó o rechazó el reporte de problema social, cuando el estado del problema sea diferente a pendiente --}}
+@if ($social_problem_status_attendance !== 'pendiente')
+<div class="row">
+    <div class="col">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h4 class='text-uppercase font-weight-bolder text-center'>{{ $social_problem_status_attendance }}</h4>
+            </div>
+            <div class="card-body">
+                @if ($social_problem_status_attendance === 'aprobado')
+                <div class="row">
+                    <div class="col">
+                        <p><strong>Apellidos:</strong> {{ $social_problem->additional_data['approved']['who']['last_name'] }} </p>
+                    </div>
+                    <div class="col">
+                        <p><strong>Nombre:</strong> {{ $social_problem->additional_data['approved']['who']['first_name'] }} </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <p><strong>Fecha:</strong> {{ $social_problem->additional_data['approved']['date'] }} </p>
+                    </div>
+                </div>
+                @endif
+
+                @if ($social_problem_status_attendance === 'rechazado')
+                <div class="row">
+                    <div class="col">
+                        <p><strong>Apellidos:</strong> {{ $social_problem->additional_data['rechazed']['who']['last_name'] }}</p>
+                    </div>
+                    <div class="col">
+                        <p><strong>Nombre:</strong> {{ $social_problem->additional_data['rechazed']['who']['first_name'] }}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <p><strong>Fecha:</strong> {{ $social_problem->additional_data['rechazed']['date'] }} </p>
+                        <p><strong>Observación:</strong> {{ $social_problem->additional_data['rechazed']['reason'] }} </p>
+                    </div>
+                </div>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+@endif
+
+
 <div class="row">
     <div class="col">
         <div class="card card-primary" id='social-problem-show'>
             <div class="card-header">
                 <div class="row">
                     <div class="col">
-                        <h4  class="d-inline">Detalle del problema social</h4>
+                        <h4  class="d-inline">Detalle del problema social reportado</h4>
                     </div>
                     <div class="col">
-                        @can('socialProblemReports.approveOReject')
+                        @can('socialProblemReports.approveOrReject')
                         <div class="row">
-                            @if (!$userWhoApprovedProblem && !$userWhoRechazedProblem)
+                            {{-- Se muestra las acciones de aprobar o rechazar si el problema reportado esta en estado de pendiente --}}
+                            @if ($social_problem_status_attendance === 'pendiente')
                             <div class="col">
                                 <button type="button" class="btn btn-success float-right" data-toggle="modal" data-target="#rejectSocialProblemModal">
                                     <i class="fas fa-check-circle"></i> Aprobar
                                 </button>
                             </div>
                             <div class="col">
-                                <a href="{{route('socialProblemReport.showRejectSocialProblem', [$problem->id, $notification->id])}}" class="btn btn-danger float-right float-md-left"><i class="fas fa-times-circle"></i> Rechazar</a>
+                                <a href="{{route('socialProblemReport.showReject', $notification->id)}}" class="btn btn-danger float-right float-md-left"><i class="fas fa-times-circle"></i> Rechazar</a>
                             </div>
                             @endif
                         </div>
@@ -41,27 +91,12 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-12 col-md-6">
-                        <p><strong>Título:</strong> {{$problem->title}}</p>
-                        <p><strong>Descripción:</strong> {{$problem->description ?: 'sin descripción'}}</p>
-                        {{-- <p><strong>Categoría:</strong> {{ strtolower($problem->category->name)}}</p> --}}
-                        <p><strong>Categoría:</strong> {{ strtolower($problem->subcategory->name) }}</p>
+                        <p><strong>Título:</strong> {{$social_problem->title}}</p>
+                        <p><strong>Descripción:</strong> {{$social_problem->description ?: 'sin descripción'}}</p>
+                        <p><strong>Categoría:</strong> {{ strtolower($social_problem->subcategory->name) }}</p>
                         <p><strong>Reportado por:</strong> {{ $neighbor->getFullName() }}</p>
-                        <p><strong>Fecha:</strong> {{ $problem->created_at }}</p>
-                        
+                        <p><strong>Fecha:</strong> {{ $social_problem->created_at }}</p>
                         <p><strong>Referencia:</strong> {{$ubication['description'] ?: 'sin referencia de ubicación'}}</p>
-                        
-                        @if ($userWhoApprovedProblem)
-                        <h4 class="text-center text-uppercase font-weight-bolder text-success">Aprobado</h4>
-                        <p><strong class="text-capitalize">Aprobado por: </strong>{{$userWhoApprovedProblem->getFullName()}}</p>
-                        <p><strong>Fecha: </strong>{{$additionalData['approved']['date']}}</p>
-                        @endif
-
-                        @if ($userWhoRechazedProblem)
-                        <h4 class="text-center text-uppercase font-weight-bolder text-danger">Rechazado</h4>
-                        <p><strong>Rechazado por: </strong>{{$userWhoRechazedProblem->getFullName()}}</p>
-                        <p><strong>Fecha: </strong>{{$additionalData['rechazed']['date']}}</p>
-                        <p class="text-lowercase"><strong class="text-capitalize">Razón: </strong>{{$additionalData['rechazed']['reason']}}</p>
-                        @endif
                         
                     </div>
                     <div class="col-12 col-md-6">
@@ -113,8 +148,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-          {{-- <button type="button" class="btn btn-success">Aprobar</button> --}}
-          <a href="{{route('socialProblemReport.approveSocialProblem', [$problem->id, $notification->id])}}" class="btn btn-success float-right"><i class="fas fa-check-circle"></i> Aprobar</a> 
+          <a href="{{route('socialProblemReport.approve', $notification->id)}}" class="btn btn-success float-right"><i class="fas fa-check-circle"></i> Aprobar</a> 
         </div>
       </div>
     </div>

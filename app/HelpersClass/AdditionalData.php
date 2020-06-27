@@ -5,12 +5,28 @@ class AdditionalData
 {
     protected $emergency;
     protected $event;
-    protected $problem;
+    protected $social_problem;
     protected $activity;
     protected $post;
    
     public function __construct() 
     {
+        $this->social_problem = [
+            "approved" => [
+                'who'=>null,//usuario que aprobó el problema
+                'date'=>null,//fecha de aprobación
+            ],
+            "rechazed"=>[
+                'who'=>null,//usuario que rechazó el problema social
+                'reason'=>null,//razón del rechazo del problema social
+                'date'=>null,//fecha de rechado
+            ],
+            "attended"=>[
+                'who'=>null,//usuario que cambió a solucionado el problema
+                'date'=>null,//fecha en la que se atendió al problema
+            ],
+            "status_attendance" => 'pendiente' //aprobado, rechazado, atendido(solucionado), pendiente
+        ];
         $this->emergency = [
             // "published" => [
             //     'who'=>null,// moderador que aprobó la publicación de la emergencia
@@ -41,31 +57,24 @@ class AdditionalData
             ],
             "status_attendance" => 'pendiente' //atendido, rechazado, pendiente
         ];
-        $this->problem = [
-            "approved" => [
-                'who'=>null,//usuario que aprobó el problema
-                'date'=>null,//fecha de aprobación
-            ],
-            "rechazed"=>[
-                'who'=>null,//usuario que rechazó el problema social
-                'reason'=>null,//razón del rechazo del problema social
-                'date'=>null,//fecha de rechado
-            ],
-            "attended"=>[
-                'who'=>null,//usuario que cambió a solucionado el problema
-                'date'=>null,//fecha en la que se atendió al problema
-            ],
-            "status_attendance" => 'pendiente' //aprobado, rechazado, atendido(solucionado), pendiente
-        ];
-        $this->activity = [
-            "approved" => [
-                'who'=>null,//usuario que aprobó el problema
-                'date'=>null,//fecha de aprobación
-            ],
-            "status_attendance" => 'pendiente' //atendido, rechazado, pendiente
-        ];
+        // $this->activity = [
+        //     "approved" => [
+        //         'who'=>null,//usuario que aprobó el problema
+        //         'date'=>null,//fecha de aprobación
+        //     ],
+        //     "status_attendance" => 'pendiente' //atendido, rechazado, pendiente
+        // ];
     }
     
+    public function getInfoSocialProblem() 
+    {
+        return $this->social_problem;
+    }
+
+    public function setInfoSocialProblem($info_social_problem) 
+    {
+        $this->social_problem = array_merge($this->social_problem, $info_social_problem);
+    }
     public function getInfoEmergency() 
     {
         return $this->emergency;
@@ -86,25 +95,17 @@ class AdditionalData
         $this->event = array_merge($this->event, $info_event);
     }
 
-    public function getInfoSocialProblem() 
-    {
-        return $this->problem;
-    }
+    
 
-    public function setInfoSocialProblem($info_social_problem) 
-    {
-        $this->problem = array_merge($this->problem, $info_social_problem);
-    }
+    // public function getInfoActivity() 
+    // {
+    //     return $this->activity;
+    // }
 
-    public function getInfoActivity() 
-    {
-        return $this->activity;
-    }
-
-    public function setInfoActivity($info_activity) 
-    {
-        $this->activity = array_merge($this->activity, $info_activity);
-    }
+    // public function setInfoActivity($info_activity) 
+    // {
+    //     $this->activity = array_merge($this->activity, $info_activity);
+    // }
 
     public function getAll()
     {
@@ -113,27 +114,27 @@ class AdditionalData
             'emergency'   => $this->getInfoEmergency(),
             'event' => $this->getInfoEvent(),
             'problem' => $this->getInfoSocialProblem(),
-            'activity' => $this->getInfoActivity(),
+            // 'activity' => $this->getInfoActivity(),
         ];
     }
 
-    public function getEmergencyData()
-    {
-        return $this->getInfoEmergency();
-    }
+    // public function getEmergencyData()
+    // {
+    //     return $this->getInfoEmergency();
+    // }
 
-    public function getEventData()
-    {
-        return $this->getInfoEvent();
-    }
+    // public function getEventData()
+    // {
+    //     return $this->getInfoEvent();
+    // }
 
-    public function getProblemData()
-    {
-        return $this->getInfoSocialProblem();
-    }
+    // public function getProblemData()
+    // {
+    //     return $this->getInfoSocialProblem();
+    // }
 
-    public function getActivityData()
-    {
-        return $this->getInfoActivity();
-    }
+    // public function getActivityData()
+    // {
+    //     return $this->getInfoActivity();
+    // }
 }
