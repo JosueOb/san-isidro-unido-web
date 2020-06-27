@@ -30,15 +30,15 @@
                 @if ($emergency_status_attendance === 'atendido')
                 <div class="row">
                     <div class="col">
-                        <p><strong>Apellidos:</strong> {{ $emergency->additional_data['approved']['who']['last_name'] }} </p>
+                        <p><strong>Apellidos:</strong> {{ $emergency->additional_data['attended']['who']['last_name'] }} </p>
                     </div>
                     <div class="col">
-                        <p><strong>Nombre:</strong> {{ $emergency->additional_data['approved']['who']['first_name'] }} </p>
+                        <p><strong>Nombre:</strong> {{ $emergency->additional_data['attended']['who']['first_name'] }} </p>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
-                        <p><strong>Fecha:</strong> {{ $emergency->additional_data['approved']['date'] }} </p>
+                        <p><strong>Fecha:</strong> {{ $emergency->additional_data['attended']['date'] }} </p>
                     </div>
                 </div>
                 @endif
