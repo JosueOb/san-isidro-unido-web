@@ -37,6 +37,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('/{id}/perfiles-sociales', 'Api\ApiUserController@socialProfilesXUser');
         Route::get('/{id}/emergencias', 'Api\ApiUserController@getEmergenciesByUser');
         Route::get('/{id}/notificaciones', 'Api\ApiUserController@getNotificationsUser');
+        Route::get('/{id}/membresias', 'Api\ApiUserController@getMembresiasUser');
     });
 });
 

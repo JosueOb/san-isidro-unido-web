@@ -22,7 +22,8 @@ use App\Http\Controllers\Api\ApiDeviceController;
 use App\Helpers\OnesignalNotification;
 use App\Http\Requests\Api\ApiUserProviderRequest;
 use App\Http\Requests\Api\ApiEditUserProfile;
-use App\HelpersClass\Membership;
+use App\Membership;
+use App\HelpersClass\ResponsibleMembership;
 use App\Notifications\MembershipRequest as MembershipRequestNotification;
 
 
@@ -89,9 +90,9 @@ class ApiUserController extends ApiBaseController
         $getRoles= ($request->get('roles')) ? intval($request->get('roles')): -1;
         try {
             if ($getRoles != -1){
-                $user = User::findById($id)->with(['roles'])->first();
+                $user = User::findById($id)->with(['roles', 'memberships'])->first();
             }else{
-                $user = User::findById($id)->first();
+                $user = User::findById($id)->with(['memberships'])->first();
             }
            
             //Validar si el usuario existe
@@ -104,8 +105,7 @@ class ApiUserController extends ApiBaseController
         } catch (Exception $e) {
             return $this->sendError(500, "error", ['server_error' => $e->getMessage()]);
         }
-    }
-    
+    }   
 
     /**
     * Registra a un usuario y retorna el token del usuario
@@ -310,7 +310,6 @@ class ApiUserController extends ApiBaseController
         $utils = new Utils();
         $jwtAuth = new JwtAuth();
         $token_decoded = $request->token;
-        $membresiaPolicia = new Membership();
         try {
             $validatorAfiliation = Validator::make($request->all(), [
                                     'basic_service_image' => ['required', 'mimes:png,jpeg,jpg'],
@@ -325,15 +324,26 @@ class ApiUserController extends ApiBaseController
                     $imageApi = new ApiImages();
                     $image_name = $imageApi->saveAfiliationImageApi($request->basic_service_image, null, $user->fullname.'_afiliation');
                     //Guardar solicitud de afiliación
-                    $user_membership = new Membership();
-                    $user_membership->setIdentityCard($request->cedula);
-                    $user_membership->setBasicServiceImage($image_name);
-                    // TODO: $user->f = $image_name;
-                    $user->membership = $user_membership->getAll();
-                    $user->save();
+                    $responsible_membership = new ResponsibleMembership();
 
+                    $membership = new Membership();
+                    $membership->identity_card = $request->cedula;
+                    $membership->basic_service_image = $image_name;
+                    $membership->status_attendance = 'pendiente';
+                    $membership->responsible = '';
+                    $membership->user_id = $user->id;
+                    $membership->save();
+                    
                     $afiliation_title_noti = 'Solicitud de afiliación registrada';
                     $afiliation_description_noti = 'Tu solicitud ha sido enviada exitosamente';
+                  
+                    $user->notify(new MembershipRequestNotification(
+                        $afiliation_title_noti, 
+                        $afiliation_description_noti,
+                        $membership,
+                        $user
+                    ));
+
                     $user_devices = OnesignalNotification::getUserDevices($user->id);
                     if (!is_null($user_devices) && count($user_devices) > 0) {
                         //Enviar notification al usuario en especifico
@@ -343,13 +353,8 @@ class ApiUserController extends ApiBaseController
                             [],
                             $user_devices
                         );
-                    }
-                    $user->notify(new MembershipRequestNotification($afiliation_title_noti, $afiliation_description_noti));
-                    // $request = new MembershipRequest();
-                    // $request->status = 'pendiente_aprobacion';
-                    // $request->comment = "El Usuario $user->first_name ha solicitado la afiliación al barrio";
-                    // $request->user_id = $user->id;
-                    // $request->save();
+                    }                    
+                 
                     //Retornar Token
                     $token = $jwtAuth->getToken($user->email);
                     return $this->sendResponse(200, 'Afiliacion Solicitada Correctamente', ['token' => $token]);
@@ -613,6 +618,16 @@ class ApiUserController extends ApiBaseController
             }
             $notifications = $queryset->orderBy('created_at', 'DESC')->simplePaginate($filterSize)->toArray();
             return $this->sendPaginateResponse(200, 'Notificaciones obtenidas correctamente', $notifications);
+        } catch (Exception $e) {
+            return $this->sendError(500, "error", ['server_error' => $e->getMessage()]);
+        }
+    }
+
+    public function getMembresiasUser($user_id){
+        try{
+            $user = User::findById($user_id)->first();
+            $membresias = $user->memberships()->get();
+            return $this->sendResponse(200, 'success', $membresias);
         } catch (Exception $e) {
             return $this->sendError(500, "error", ['server_error' => $e->getMessage()]);
         }

@@ -6,7 +6,7 @@ use Caffeinated\Shinobi\Models\Role;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Notification;
 use App\HelpersClass\AdditionalData;
-use App\HelpersClass\ResponisbleMembership;
+use App\HelpersClass\ResponsibleMembership;
 use App\Membership;
 use App\Notifications\EmergencyReported;
 use App\Notifications\MembershipRequest;
@@ -106,7 +106,7 @@ class TestNotificationsSeeder extends Seeder
 
         $guest_role = Role::where('slug', 'invitado')->first();
         $guests = $guest_role->users()->take(3)->get();
-        $responsible_membership = new ResponisbleMembership();
+        $responsible_membership = new ResponsibleMembership();
 
         $guests->each(function (User $guest) use ($responsible_membership, $moderators_active) {
             $membership = Membership::create([
