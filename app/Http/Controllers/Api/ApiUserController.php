@@ -25,7 +25,7 @@ use App\Http\Requests\Api\ApiEditUserProfile;
 use App\Membership;
 use App\HelpersClass\ResponsibleMembership;
 use App\Notifications\MembershipRequest as MembershipRequestNotification;
-
+use App\Notifications\UserVerifyEmail;
 
 class ApiUserController extends ApiBaseController
 {
@@ -178,6 +178,7 @@ class ApiUserController extends ApiBaseController
         $user->roles()->attach($rolInvitado->id, [
                 'state' => 1,
             ]);
+        $user->notify(new UserVerifyEmail());
         if ($device) {
             $apiDeviceController = new ApiDeviceController;
             $apiDeviceController->saveDevice(
