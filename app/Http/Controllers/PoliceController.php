@@ -75,7 +75,6 @@ class PoliceController extends Controller
         $police->avatar = $avatar;
         $police->password = \password_hash($password, PASSWORD_DEFAULT);
         $police->number_phone = $validated['number_phone'];
-        $police->state = true;
         $police->save();
 
         $police->roles()->attach($rolePolice->id, ['state'=>true]);

@@ -173,7 +173,6 @@ class ApiUserController extends ApiBaseController
         $user->last_name = $last_name;
         $user->email = $email;
         $user->password = ($provider === 'formulario' && $password) ? password_hash($password, PASSWORD_DEFAULT) : null;
-        $user->state = true;
         $user->avatar = $avatar;
         $user->save();
         $user->roles()->attach($rolInvitado->id, [
