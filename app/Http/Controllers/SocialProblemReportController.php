@@ -69,7 +69,6 @@ class SocialProblemReportController extends Controller
         $social_problem = Post::findOrFail($notification->data['post']['id']);
         //Se obtiene información del moderador que aprobó el reporte de problema social
         $moderator = $request->user();
-
         //Datos aprobación del problema social
         $approval = new AdditionalData();
         $approval->setInfoSocialProblem([
@@ -117,9 +116,9 @@ class SocialProblemReportController extends Controller
         //Se obtiene información del moderador que aprobó el reporte de problema social
         $moderator = $request->user();
 
-        //Datos aprobación del problema social
-        $approval = new AdditionalData();
-        $approval->setInfoSocialProblem([
+        //Datos rechazo del problema social
+        $rejection = new AdditionalData();
+        $rejection->setInfoSocialProblem([
             "rechazed" => [
                 'who' => $moderator, //usuario que rechazó el problema social
                 'reason' => $validated['description'], //razón del rechazo del problema social
@@ -129,7 +128,7 @@ class SocialProblemReportController extends Controller
         ]);
 
         //Se actualiza el registro del problema social, con los datos de rechazo
-        $social_problem->additional_data = $approval->getInfoSocialProblem();
+        $social_problem->additional_data = $rejection->getInfoSocialProblem();
         $social_problem->save();
 
         return redirect()->route('socialProblemReport.show', [

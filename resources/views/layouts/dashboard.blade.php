@@ -16,7 +16,6 @@
     <link rel="icon" type="image/svg+xml" href="https://siu-dev97-sd.s3-sa-east-1.amazonaws.com/recursos_publicos/logos/sanIsidroIconOnlyTransparent.svg" sizes='48x48'>
 
     <!-- Styles -->
-    {{-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> --}}
     <link type="text/css" rel="stylesheet" href="{{ mix('css/app.css') }}">
 
     <!--Leaflet CSS-->
@@ -133,134 +132,153 @@
                         </li>
                         @endcanany
 
-                        {{-- @if (Auth::user()->getRelationshipStateRolesUsers('directivo')) --}}
+                        @canany(['neighbors.index', 'neighbors.create'])
+                        <li class="nav-item @yield('item-neighbor')">
+                            <a class="nav-link" data-toggle="collapse" data-target="#collapseNeighbor" aria-expanded="true" aria-controls="collapseNeighbor">
+                                <i class="fas fa-user"></i>
+                                <span>Vecinos</span>
+                            </a>
+                            <div id="collapseNeighbor" class="collapse @yield('item-neighbor-collapse')" >
+                                <div class="collapse-inner">
+                                    @can('neighbors.index')
+                                        <a class="collapse-item @yield('item-neighbor-list')" href="{{route('neighbors.index')}}"><i class="fas fa-list"></i>Listar vecinos</a>
+                                    @endcan
+                                    @can('neighbors.index')
+                                        <a class="collapse-item @yield('item-neighbor-create')" href="{{ route('neighbors.create')}}"><i class="fas fa-user-plus"></i>Registrar vecino</a>
+                                    @endcan
+                                </div>
+                            </div>
+                        </li>
+                        @endcanany
                         
-                            @canany(['neighbors.index', 'neighbors.create'])
-                            <li class="nav-item @yield('item-neighbor')">
-                                <a class="nav-link" data-toggle="collapse" data-target="#collapseNeighbor" aria-expanded="true" aria-controls="collapseNeighbor">
-                                    <i class="fas fa-user"></i>
-                                    <span>Vecinos</span>
-                                </a>
-                                <div id="collapseNeighbor" class="collapse @yield('item-neighbor-collapse')" >
-                                    <div class="collapse-inner">
-                                        @can('neighbors.index')
-                                            <a class="collapse-item @yield('item-neighbor-list')" href="{{route('neighbors.index')}}"><i class="fas fa-list"></i>Listar vecinos</a>
-                                        @endcan
-                                        @can('neighbors.index')
-                                            <a class="collapse-item @yield('item-neighbor-create')" href="{{ route('neighbors.create')}}"><i class="fas fa-user-plus"></i>Registrar vecino</a>
-                                        @endcan
-                                    </div>
+                        @canany(['reports.index', 'reports.create'])
+                        <li class="nav-item @yield('item-report')">
+                            <a class="nav-link" data-toggle="collapse" data-target="#collapseReport" aria-expanded="true" aria-controls="collapseReport">
+                                <i class="fas fa-book"></i>
+                                <span>Actividades</span>
+                            </a>
+                            <div id="collapseReport" class="collapse @yield('item-report-collapse')" >
+                                <div class="collapse-inner">
+                                    @can('reports.index')
+                                    <a class="collapse-item @yield('item-report-list')" href="{{ route('reports.index') }}"><i class="fas fa-list"></i>Listar actividades</a>
+                                    @endcan
+                                    @can('reports.create')
+                                    <a class="collapse-item @yield('item-report-create')" href="{{ route('reports.create')}}"><i class="fas fa-book-open"></i>Registrar actividades</a>
+                                    @endcan
                                 </div>
-                            </li>
-                            @endcanany
-                        
-                            @canany(['reports.index', 'reports.create'])
-                            <li class="nav-item @yield('item-report')">
-                                <a class="nav-link" data-toggle="collapse" data-target="#collapseReport" aria-expanded="true" aria-controls="collapseReport">
-                                    <i class="fas fa-book"></i>
-                                    <span>Actividades</span>
-                                </a>
-                                <div id="collapseReport" class="collapse @yield('item-report-collapse')" >
-                                    <div class="collapse-inner">
-                                        @can('reports.index')
-                                        <a class="collapse-item @yield('item-report-list')" href="{{ route('reports.index') }}"><i class="fas fa-list"></i>Listar actividades</a>
-                                        @endcan
-                                        @can('reports.create')
-                                        <a class="collapse-item @yield('item-report-create')" href="{{ route('reports.create')}}"><i class="fas fa-book-open"></i>Registrar actividades</a>
-                                        @endcan
-                                    </div>
-                                </div>
-                            </li>
-                            @endcanany
+                            </div>
+                        </li>
+                        @endcanany
 
-                            @canany(['publicServices.index','publicServices.create'])
-                            <li class="nav-item @yield('item-public-service')">
-                                <a class="nav-link" data-toggle="collapse" data-target="#collapsePublicService" aria-expanded="true" aria-controls="collapsePublicService">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                    <span>Servicios públicos</span>
+                        @canany(['publicServices.index','publicServices.create'])
+                        <li class="nav-item @yield('item-public-service')">
+                            <a class="nav-link" data-toggle="collapse" data-target="#collapsePublicService" aria-expanded="true" aria-controls="collapsePublicService">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Servicios públicos</span>
+                            </a>
+                            <div id="collapsePublicService" class="collapse @yield('item-public-service-collapse')" >
+                                <div class="collapse-inner">
+                                    @can('publicServices.index')
+                                    <a class="collapse-item @yield('item-public-service-list')" href="{{ route('publicServices.index') }}"><i class="fas fa-list"></i>Listar servicios publicos</a>
+                                    @endcan
+                                    @can('publicServices.create')
+                                    <a class="collapse-item @yield('item-public-service-create')" href="{{ route('publicServices.create') }}"><i class="fas fa-calendar-plus"></i></i>Registrar servicio público</a>
+                                    @endcan
+                            </div>
+                            </div>
+                        </li>
+                        @endcanany
+
+                        @canany(['events.index','events.create'])
+                            <li class="nav-item @yield('item-event')">
+                                <a class="nav-link" data-toggle="collapse" data-target="#collapseEvent" aria-expanded="true" aria-controls="collapseEvent">
+                                    <i class="fas fa-calendar-week"></i>
+                                    <span>Eventos</span>
                                 </a>
-                                <div id="collapsePublicService" class="collapse @yield('item-public-service-collapse')" >
+                                <div id="collapseEvent" class="collapse @yield('item-event-collapse')" >
                                     <div class="collapse-inner">
-                                        @can('publicServices.index')
-                                        <a class="collapse-item @yield('item-public-service-list')" href="{{ route('publicServices.index') }}"><i class="fas fa-list"></i>Listar servicios publicos</a>
+                                        @can('events.index')
+                                        <a class="collapse-item @yield('item-event-list')" href="{{route('events.index')}}"><i class="fas fa-list"></i>Listar eventos</a>
                                         @endcan
-                                        @can('publicServices.create')
-                                        <a class="collapse-item @yield('item-public-service-create')" href="{{ route('publicServices.create') }}"><i class="fas fa-calendar-plus"></i></i>Registrar servicio público</a>
+                                        @can('events.create')
+                                        <a class="collapse-item @yield('item-event-create')" href="{{route('events.create')}}"><i class="fas fa-calendar-plus"></i></i>Registrar evento</a>
                                         @endcan
                                 </div>
                                 </div>
                             </li>
-                            @endcanany
+                        @endcanany
 
-                            @canany(['events.index','events.create'])
-                                {{-- @if (Auth::user()->getRelationshipStateRolesUsers('directivo') || Auth::user()->getRelationshipStateRolesUsers('moderador')) --}}
+                        @canany(['moderators.index','moderators.create', 'moderators.assign'])
+                        <li class="nav-item @yield('item-moderator')">
+                            <a class="nav-link" data-toggle="collapse" data-target="#collapseModerator" aria-expanded="true" aria-controls="collapseModerator">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>Moderadores</span>
+                            </a>
+                            <div id="collapseModerator" class="collapse @yield('item-moderator-collapse')" >
+                                <div class="collapse-inner">
+                                    @can('moderators.assign')
+                                    <a class="collapse-item @yield('item-moderator-assign')" href="{{route('moderators.assign')}}"><i class="fas fa-user-shield"></i>Asignar moderador</a>
+                                    @endcan
+                                    @can('moderators.index')
+                                    <a class="collapse-item @yield('item-moderator-list')" href="{{route('moderators.index')}}"><i class="fas fa-list"></i>Listar moderadores</a>
+                                    @endcan
+                                    @can('moderators.create')
+                                    <a class="collapse-item @yield('item-moderator-create')" href="{{route('moderators.create')}}"><i class="fas fa-user-plus"></i>Registrar moderador</a>
+                                    @endcan
                                     
-                                <li class="nav-item @yield('item-event')">
-                                    <a class="nav-link" data-toggle="collapse" data-target="#collapseEvent" aria-expanded="true" aria-controls="collapseEvent">
-                                        <i class="fas fa-calendar-week"></i>
-                                        <span>Eventos</span>
-                                    </a>
-                                    <div id="collapseEvent" class="collapse @yield('item-event-collapse')" >
-                                        <div class="collapse-inner">
-                                            @can('events.index')
-                                            <a class="collapse-item @yield('item-event-list')" href="{{route('events.index')}}"><i class="fas fa-list"></i>Listar eventos</a>
-                                            @endcan
-                                            @can('events.create')
-                                            <a class="collapse-item @yield('item-event-create')" href="{{route('events.create')}}"><i class="fas fa-calendar-plus"></i></i>Registrar evento</a>
-                                            @endcan
-                                    </div>
-                                    </div>
-                                </li>
-                                {{-- @endif --}}
-                            @endcanany
+                            </div>
+                            </div>
+                        </li>
+                        @endcanany
 
-                            @canany(['moderators.index','moderators.create', 'moderators.assign'])
-                            <li class="nav-item @yield('item-moderator')">
-                                <a class="nav-link" data-toggle="collapse" data-target="#collapseModerator" aria-expanded="true" aria-controls="collapseModerator">
-                                    <i class="fas fa-shield-alt"></i>
-                                    <span>Moderadores</span>
-                                </a>
-                                <div id="collapseModerator" class="collapse @yield('item-moderator-collapse')" >
-                                    <div class="collapse-inner">
-                                        @can('moderators.assign')
-                                        <a class="collapse-item @yield('item-moderator-assign')" href="{{route('moderators.assign')}}"><i class="fas fa-user-shield"></i>Asignar moderador</a>
-                                        @endcan
-                                        @can('moderators.index')
-                                        <a class="collapse-item @yield('item-moderator-list')" href="{{route('moderators.index')}}"><i class="fas fa-list"></i>Listar moderadores</a>
-                                        @endcan
-                                        @can('moderators.create')
-                                        <a class="collapse-item @yield('item-moderator-create')" href="{{route('moderators.create')}}"><i class="fas fa-user-plus"></i>Registrar moderador</a>
-                                        @endcan
-                                        
+                        @canany(['policemen.index', 'policemen.create'])
+                        <li class="nav-item @yield('item-police')">
+                            <a class="nav-link" data-toggle="collapse" data-target="#collapsePolice" aria-expanded="true" aria-controls="collapsePolice">
+                                <i class="fas fa-user-shield"></i>
+                                <span>Policía</span>
+                            </a>
+                            <div id="collapsePolice" class="collapse @yield('item-police-collapse')" >
+                                <div class="collapse-inner">
+                                    @can('policemen.index')
+                                        <a class="collapse-item @yield('item-police-list')" href="{{route('policemen.index')}}"><i class="fas fa-list"></i>Listar policías</a>
+                                    @endcan
+                                    @can('policemen.create')
+                                        <a class="collapse-item @yield('item-police-create')" href="{{route('policemen.create')}}"><i class="fas fa-user-plus"></i>Registrar policía</a>
+                                    @endcan
                                 </div>
+                            </div>
+                        </li>
+                        @endcanany
+
+
+
+
+
+
+
+                        {{-- @canany(['socialProblems.index', 'falta el permiso  de la gráfica']) --}}
+                        @canany(['socialProblems.index'])
+                        <li class="nav-item @yield('item-problem')">
+                            <a class="nav-link" data-toggle="collapse" data-target="#collapseProblem" aria-expanded="true" aria-controls="collapseProblem">
+                                <i class="fas fa-fist-raised"></i>
+                                <span>Problema social</span>
+                            </a>
+                            <div id="collapseProblem" class="collapse @yield('item-problem-collapse')" >
+                                <div class="collapse-inner">
+                                    @can('socialProblems.index')
+                                        <a class="collapse-item @yield('item-problem-list')" href="{{route('socialProblems.index')}}"><i class="fas fa-list"></i>Listar problemas sociales</a>
+                                    @endcan
+                                    {{-- @can('policemen.create') --}}
+                                        <a class="collapse-item @yield('item-problem-graphic')" href="#"><i class="fas fa-chart-pie"></i>Ver gráfico estadístico</a>
+                                    {{-- @endcan --}}
                                 </div>
-                            </li>
-                            @endcanany
+                            </div>
+                        </li>
+                        @endcanany
 
-                        {{-- @endif --}}
 
-                        {{-- @if (Auth::user()->getRelationshipStateRolesUsers('moderador')) --}}
 
-                            @canany(['policemen.index', 'policemen.create'])
-                            <li class="nav-item @yield('item-police')">
-                                <a class="nav-link" data-toggle="collapse" data-target="#collapsePolice" aria-expanded="true" aria-controls="collapsePolice">
-                                    <i class="fas fa-user-shield"></i>
-                                    <span>Policía</span>
-                                </a>
-                                <div id="collapsePolice" class="collapse @yield('item-police-collapse')" >
-                                    <div class="collapse-inner">
-                                        @can('policemen.index')
-                                            <a class="collapse-item @yield('item-police-list')" href="{{route('policemen.index')}}"><i class="fas fa-list"></i>Listar policías</a>
-                                        @endcan
-                                        @can('policemen.create')
-                                            <a class="collapse-item @yield('item-police-create')" href="{{route('policemen.create')}}"><i class="fas fa-user-plus"></i>Registrar policía</a>
-                                        @endcan
-                                    </div>
-                                </div>
-                            </li>
 
-                            {{-- @endcanany --}}
-                        @endif
 
                     </ul>
                 </div>

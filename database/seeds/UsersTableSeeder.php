@@ -35,9 +35,9 @@ class UsersTableSeeder extends Seeder
             'email_verified_at' => now(),
         ]);
         $roleAdmin = Role::where('slug', 'admin')->first();
-        $roleGuest = Role::where('slug', 'morador')->first();
-        //Se asigna el rol de administrador y invitado an usuario registrado anteriormente
-        $userAdmin->roles()->attach([$roleAdmin->id, $roleGuest->id], ['state' => true]);
+        $roleNeighbor = Role::where('slug', 'morador')->first();
+        //Se asigna el rol de administrador y vecino an usuario registrado anteriormente
+        $userAdmin->roles()->attach([$roleNeighbor->id, $roleAdmin->id,], ['state' => true]);
 
 
         /**
@@ -47,7 +47,7 @@ class UsersTableSeeder extends Seeder
         $roleDirective = Role::where('slug', 'directivo')->first();
         $positions = Position::all();
         $members = factory(User::class, 5)->create();
-        $members->each(function (User $user) use ($roleDirective, $roleGuest, $positions) {
+        $members->each(function (User $user) use ($roleDirective, $roleNeighbor, $positions) {
 
             $user->avatar = 'https://ui-avatars.com/api/?name=' .
                 mb_substr($user->first_name, 0, 1) . '+' . mb_substr($user->last_name, 0, 1) .
@@ -56,14 +56,13 @@ class UsersTableSeeder extends Seeder
             $user->position_id = $positions->where('id', $user->id - 1)->first()->id;
             // $user->position_id = $positions->random()->id;
             $user->save();
-            $user->roles()->attach([$roleDirective->id, $roleGuest->id], ['state' => true]);
+            $user->roles()->attach([$roleNeighbor->id, $roleDirective->id], ['state' => true]);
         });
 
         /**
          * MORADORES - VECINOS
          * Se registra a los moradores del barrio
          **/
-        $roleNeighbor = Role::where('slug', 'morador')->first();
         $neighbors = factory(User::class, 40)->create();
         $neighbors->each(function (User $neighbor) use ($roleNeighbor) {
 
@@ -85,7 +84,7 @@ class UsersTableSeeder extends Seeder
         });
         /**
          * INVITADO
-         * Se asigna el rol de invitadi a los usuarios registrados de redes sociales o registrados desde la aplicación móvil
+         * Se asigna el rol de invitado a los usuarios registrados de redes sociales o registrados desde la aplicación móvil
          **/
         $guestRole = Role::where('slug', 'invitado')->first();
         $faker = Faker\Factory::create();

@@ -70,48 +70,48 @@ class ApiPostSeeder extends Seeder
             }
 
         }
-        //Problemas Sociales
-        for($sp = 1; $sp <= $numPosts; $sp++){
-            $aditionalData = new AdditionalDataCls();
-            $aditionalData->setInfoSocialProblem([
-                "approved_by" => null, 
-                "status_attendance" => $faker->randomElement(['pendiente'],1)
-            ]);
-            $user = User::whereHas('roles',function(Builder $query){
-                $query->where('slug','directivo');
-            })->orderBy(DB::raw('RAND()'))->first();
-            $initialDate =  CarbonImmutable::now();
-            $subcategory = Subcategory::where('category_id', $categoriaProblemasSociales->id)->orderBy(DB::raw('RAND()'))->first();
-            $ubicationData = new UbicationCls($faker->address, $faker->latitude,$faker->longitude, 'fake description');
-            $idPostProblemaSocial = DB::table('posts')->insertGetId([
-                'title' => $faker->realText(50,2),
-                'description' =>  $faker->realText(200,2),
-                // 'date' => $initialDate->toDateString(),
-                // 'time' => $initialDate->toTimeString(),
-                "ubication" => json_encode($ubicationData->getAll()),
-                'additional_data' => json_encode($aditionalData->getInfoSocialProblem()),
-                // "is_attended" => rand(0, 1),
-                "user_id" => $user->id,
-                'state'=>true,
-                "category_id" => $categoriaProblemasSociales->id,
-                "subcategory_id" => $subcategory->id,
-                'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
-            ]);
-            for($img_sp = 1; $img_sp <= 3; $img_sp++){
-                DB::table('resources')->insert([
-                    'url' => "https://source.unsplash.com/randomp",
-                    'post_id' => $idPostProblemaSocial,
-                    'type' => "image",
-                    'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
-                ]);
-            }
-            DB::table('reactions')->insert([
-                'post_id' => $idPostProblemaSocial,
-                'user_id' => $user->id,
-                'type' => 'like',
-                'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
-            ]);
-        }
+        // //Problemas Sociales
+        // for($sp = 1; $sp <= $numPosts; $sp++){
+        //     $aditionalData = new AdditionalDataCls();
+        //     $aditionalData->setInfoSocialProblem([
+        //         "approved_by" => null, 
+        //         "status_attendance" => $faker->randomElement(['pendiente'],1)
+        //     ]);
+        //     $user = User::whereHas('roles',function(Builder $query){
+        //         $query->where('slug','directivo');
+        //     })->orderBy(DB::raw('RAND()'))->first();
+        //     $initialDate =  CarbonImmutable::now();
+        //     $subcategory = Subcategory::where('category_id', $categoriaProblemasSociales->id)->orderBy(DB::raw('RAND()'))->first();
+        //     $ubicationData = new UbicationCls($faker->address, $faker->latitude,$faker->longitude, 'fake description');
+        //     $idPostProblemaSocial = DB::table('posts')->insertGetId([
+        //         'title' => $faker->realText(50,2),
+        //         'description' =>  $faker->realText(200,2),
+        //         // 'date' => $initialDate->toDateString(),
+        //         // 'time' => $initialDate->toTimeString(),
+        //         "ubication" => json_encode($ubicationData->getAll()),
+        //         'additional_data' => json_encode($aditionalData->getInfoSocialProblem()),
+        //         // "is_attended" => rand(0, 1),
+        //         "user_id" => $user->id,
+        //         'state'=>true,
+        //         "category_id" => $categoriaProblemasSociales->id,
+        //         "subcategory_id" => $subcategory->id,
+        //         'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
+        //     ]);
+        //     for($img_sp = 1; $img_sp <= 3; $img_sp++){
+        //         DB::table('resources')->insert([
+        //             'url' => "https://source.unsplash.com/randomp",
+        //             'post_id' => $idPostProblemaSocial,
+        //             'type' => "image",
+        //             'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
+        //         ]);
+        //     }
+        //     DB::table('reactions')->insert([
+        //         'post_id' => $idPostProblemaSocial,
+        //         'user_id' => $user->id,
+        //         'type' => 'like',
+        //         'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
+        //     ]);
+        // }
         //Crear Eventos
         //Start point of our range date
         $start = strtotime("10 September 2018");
