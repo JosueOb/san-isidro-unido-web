@@ -389,14 +389,14 @@ class ApiPostController extends ApiBaseController
                 $user_devices_policia = OnesignalNotification::getUserDevices($policia->id);
                 if (!is_null($user_devices_policia) && count($user_devices_policia) > 0) {
                     //Enviar notification al usuario en especifico
-                    OnesignalNotification::sendNotificationByPlayersID(
-                        $title_notification_policia,
-                        $description_notification_policia,
-                        [
-                                "post" => $new_post
-                            ],
-                        $user_devices_policia
-                    );
+                    // OnesignalNotification::sendNotificationByPlayersID(
+                    //     $title_notification_policia,
+                    //     $description_notification_policia,
+                    //     [
+                    //             "post" => $new_post
+                    //         ],
+                    //     $user_devices_policia
+                    // );
                 }
             }
             //Enviar notification al usuario que creo la emergencia

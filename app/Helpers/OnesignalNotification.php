@@ -13,9 +13,20 @@ use App\Device;
 class OnesignalNotification
 {
 
-    public static function getAppURL()
-    {
-        return env('APP_URL', 'http://localhost/github/sanisidrounido/public');
+    private static function generateRandomString($length = 10) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyz';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
+
+    public static function generateUniqueId(){
+        // return self::generateRandomString(8). "-" . self::generateRandomString(4) . "-" . self::generateRandomString(4) . "-" . self::generateRandomString(4) . "-" . self::generateRandomString(12);
+        return "";
     }
 
 
@@ -43,6 +54,7 @@ class OnesignalNotification
             return $request;
         } catch (RequestException $e) {
             echo 'Excepción capturada: ', Psr7\str($e->getRequest());
+            dd("sendPushNotification ERROR", $e);
             if ($e->hasResponse()) {
                 throw new Exception($e->getResponse());
             }
@@ -59,9 +71,13 @@ class OnesignalNotification
     {
         $devices = Device::findByUserId($user_id)->get();
         $id_devices = [];
+       
         foreach($devices as $device){
-            array_push($id_devices, $device->phone_id);
+            if($device->phone_id && $device->phone_id != ''){
+                array_push($id_devices, $device->phone_id);
+            }
         }
+        dd($id_devices);
         return $id_devices;
     }
 
@@ -90,10 +106,13 @@ class OnesignalNotification
         ];
         
         try {
+            $playerIdFake = self::generateUniqueId();
+            dd($bodyPeticionOnesignal, $playerIdFake);
             $request = self::sendPushNotification($bodyPeticionOnesignal);
             $response = $request->getBody();
             return ['content' => $response->getContents(), 'status' => $request->getStatusCode()];
         } catch (Exception $e) {
+            dd("sendNotificationByPlayersID ERROR", $e);
             return $e->getMessage();
         }
     }
