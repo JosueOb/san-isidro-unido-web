@@ -67,10 +67,15 @@ class MembershipController extends Controller
         $membership->responsible = $responsibleMembership->getAll();
         $membership->save();
 
-        // Se obtiene al rol de invitado
+        // Se obtiene al rol de invitado y morador
+        $guest_role = Role::where('slug', 'invitado')->first();
         $neighbor_role = Role::where('slug', 'morador')->first();
+
         //Se le asigna el rol de morador al solicitante
         $guest->roles()->attach([$neighbor_role->id], ['state' => true]);
+        //Se le retira el rol de invitado
+        // Detach a single role from the user...
+        $guest->roles()->detach($guest_role->id);
         //Se notifica al solicitante la aprobación de su solicitud
         $guest->notify(new ApproveMembership());
 

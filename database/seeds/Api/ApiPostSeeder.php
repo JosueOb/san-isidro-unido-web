@@ -137,7 +137,7 @@ class ApiPostSeeder extends Seeder
             $intervalDays = rand(2, 15);
             $initialDate =  CarbonImmutable::now();
             $ubicationData = new UbicationCls($faker->address, $faker->latitude,$faker->longitude, 'nightloigs description');
-            $finalDate = $initialDate->add($intervalDays, 'day');
+            // $finalDate = $initialDate->add($intervalDays, 'day');
            
             $idPostEvento = DB::table('posts')->insertGetId([
                 'title' => $faker->realText(50,2),
