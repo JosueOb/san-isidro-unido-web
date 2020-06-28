@@ -336,35 +336,35 @@ class PermissionsTableSeeder extends Seeder
             'slug' => 'policemen.index',
             'description' => 'Lista a los policías registrados',
             'private' => false,
-            'group' => 'policia',
+            'group' => 'policía',
         ]);
         Permission::create([
             'name' => 'Crear policía del barrio',
             'slug' => 'policemen.create',
             'description' => 'Registrar a los policías del barrio',
             'private' => false,
-            'group' => 'policia',
+            'group' => 'policía',
         ]);
         Permission::create([
             'name' => 'Ver detalle de los policías del barrio',
             'slug' => 'policemen.show',
             'description' => 'Ver en detalle cada uno de policías del barrio registrados',
             'private' => false,
-            'group' => 'policia',
+            'group' => 'policía',
         ]);
         Permission::create([
             'name' => 'Editar policías del barrio',
             'slug' => 'policemen.edit',
             'description' => 'Editar registros de los policía del barrio',
             'private' => false,
-            'group' => 'policia',
+            'group' => 'policía',
         ]);
         Permission::create([
             'name' => 'Eliminar policías del barrio',
             'slug' => 'policemen.destroy',
             'description' => 'Eliminar registros de los policías del barrio',
             'private' => false,
-            'group' => 'policia',
+            'group' => 'policía',
         ]);
 
         /**
@@ -375,14 +375,14 @@ class PermissionsTableSeeder extends Seeder
             'slug' => 'notifications.problems',
             'description' => 'Notifica, lista y visualiza la solicitud de problemas sociales',
             'private' => true,
-            'group' => 'notificacion',
+            'group' => 'notificación',
         ]);
         Permission::create([
             'name' => 'Aceptar o rechazar las solicitudes de problemas sociales',
             'slug' => 'socialProblemReports.approveOrReject',
             'description' => 'Se permite aceptar o rechazar las solicitudes de problemas sociales',
             'private' => true,
-            'group' => 'notificacion',
+            'group' => 'notificación',
         ]);
 
         /**
@@ -393,14 +393,14 @@ class PermissionsTableSeeder extends Seeder
             'slug' => 'notifications.emergencies',
             'description' => 'Notifica, lista y visualiza la solicitud de emergencias',
             'private' => true,
-            'group' => 'notificacion',
+            'group' => 'notificación',
         ]);
         Permission::create([
             'name' => 'Publicar las emergencias reportadas',
             'slug' => 'emergencyReport.publish',
             'description' => 'Se permite hacer pública una emergencia reportada',
             'private' => true,
-            'group' => 'notificacion',
+            'group' => 'notificación',
         ]);
 
         /**
@@ -411,14 +411,55 @@ class PermissionsTableSeeder extends Seeder
             'slug' => 'notifications.memberships',
             'description' => 'Notifica, lista y visualiza la solicitud de de afiliación',
             'private' => true,
-            'group' => 'notificacion',
+            'group' => 'notificación',
         ]);
         Permission::create([
             'name' => 'Aceptar o rechazar las solicitudes de afiliación',
             'slug' => 'membership.approveOrReject',
             'description' => 'Se permite aceptar o rechazar las solicitudes de afiliación',
             'private' => true,
-            'group' => 'notificacion',
+            'group' => 'notificación',
+        ]);
+        /**
+         * Módulo de problema social (Directiva)
+         **/
+        Permission::create([
+            'name' => 'Listar los problemas sociales abordados por el moderador',
+            'slug' => 'socialProblems.index',
+            'description' => 'Lista los problemas sociales aprobados o rechazados por parte del moderador',
+            'private' => true,
+            'group' => 'problema social',
+        ]);
+        Permission::create([
+            'name' => 'Ver detalle del problema social reportado',
+            'slug' => 'socialProblems.show',
+            'description' => 'Ver en detalle cada uno de los problemas sociales atendidos por el moderador',
+            'private' => true,
+            'group' => 'problema social',
+        ]);
+        Permission::create([
+            'name' => 'Atender o rechazar un poblema social',
+            'slug' => 'socialProblems.attendOrReject',
+            'description' => 'Se permite atender o rechazar un problema social',
+            'private' => true,
+            'group' => 'problema social',
+        ]);
+        /**
+         * Módulo de emergencias (Directiva)
+         **/
+        Permission::create([
+            'name' => 'Listar las emergencias abordadas por la policía comunitária',
+            'slug' => 'emergencies.index',
+            'description' => 'Lista las emergencias aprobadas o rechazadas por parte del policía',
+            'private' => true,
+            'group' => 'emergencia',
+        ]);
+        Permission::create([
+            'name' => 'Ver detalle de las emergencias',
+            'slug' => 'emergencies.show',
+            'description' => 'Ver en detalle cada una de las emergencias abordadas por la policía',
+            'private' => true,
+            'group' => 'emergencia',
         ]);
     }
 }

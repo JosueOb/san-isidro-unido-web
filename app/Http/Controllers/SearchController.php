@@ -309,7 +309,7 @@ class SearchController extends Controller
         $filter = $request->query('filterOption'); //obtiene la variable enviado en la petición GET
 
         $event_category = Category::where('slug', 'evento')->first();
-        $events = $event_category->posts();//se obtiene los eventos registrados
+        $events = $event_category->posts(); //se obtiene los eventos registrados
         $events_found = null;
 
         if ($option && $value) {
@@ -359,11 +359,12 @@ class SearchController extends Controller
         }
 
         return view('events.index', [
-            'events'=> $events_found,
+            'events' => $events_found,
         ]);
     }
 
-    public function policemen(QueryRequest $request){
+    public function policemen(QueryRequest $request)
+    {
         $validated = $request->validated();
         $option = $request->has('searchOption') ? $validated['searchOption'] : null;
         $value = $request->has('searchValue') ? $validated['searchValue'] : null;
@@ -417,7 +418,8 @@ class SearchController extends Controller
         ]);
     }
 
-    public function assign(QueryRequest $request){
+    public function assign(QueryRequest $request)
+    {
         $validated = $request->validated();
         $option = $request->has('searchOption') ? $validated['searchOption'] : null;
         $value = $request->has('searchValue') ? $validated['searchValue'] : null;
@@ -427,7 +429,7 @@ class SearchController extends Controller
         // $neighbors = $neighbor_role->users()->whereDoesntHave('roles', function (Builder $query) {
         //     $query->where('slug', 'admin');
         // });
-        $neighbors = $neighbor_role->users()->whereDoesntHave('roles', function(Builder $query){
+        $neighbors = $neighbor_role->users()->whereDoesntHave('roles', function (Builder $query) {
             //Se evita que se listen a los regitros de administrador, directivo y moderadores asignados
             $query->whereIn('slug', ['admin', 'directivo', 'moderador']);
         });
@@ -478,7 +480,8 @@ class SearchController extends Controller
         ]);
     }
 
-    public function moderators(QueryRequest $request){
+    public function moderators(QueryRequest $request)
+    {
         $validated = $request->validated();
         $option = $request->has('searchOption') ? $validated['searchOption'] : null;
         $value = $request->has('searchValue') ? $validated['searchValue'] : null;
@@ -529,6 +532,123 @@ class SearchController extends Controller
 
         return view('moderators.index', [
             'moderators' => $moderators_found,
+        ]);
+    }
+
+    public function socialProblems(QueryRequest $request)
+    {
+        $validated = $request->validated();
+        $option = $request->has('searchOption') ? $validated['searchOption'] : null;
+        $value = $request->has('searchValue') ? $validated['searchValue'] : null;
+        $filter = $request->query('filterOption'); //obtiene la variable enviado en la petición GET
+
+        $social_problem_category = Category::where('slug', 'problema')->first();
+        $social_problems = $social_problem_category->posts()->whereNotIn('additional_data->status_attendance', ['pendiente']); //se obtiene los problemas registrados
+        $social_problems_found = null;
+
+        if ($option && $value) {
+            switch ($option) {
+                case 1:
+                    //Se busca acorde al título
+                    $social_problems_found = $social_problems->where('title', 'LIKE', "%$value%");
+                    break;
+                case 2:
+                    //Se realiza la búsqueda solo de las subcategorias de problema
+                    $subcategories = $social_problem_category->subcategories()->where('name', 'LIKE', "$value%")->get();
+
+                    $subcategories_id = array();
+                    foreach ($subcategories as $subcategory) {
+                        array_push($subcategories_id, $subcategory->id);
+                    }
+
+                    $social_problems_found = $social_problems->whereIn('subcategory_id', $subcategories_id);
+                    break;
+
+                default:
+                    return abort(404);
+                    break;
+            }
+        }
+
+        if ($filter) {
+            switch ($filter) {
+                case 1:
+                    $status_attendance = 'aprobado';
+                    break;
+                case 2:
+                    $status_attendance = 'atendido';
+                    break;
+                case 3:
+                    $status_attendance = 'rechazado';
+                    break;
+                default:
+                    return abort(404);
+                    break;
+            }
+
+            if ($social_problems_found) {
+                $social_problems_found = $social_problems_found->where('additional_data->status_attendance', $status_attendance)->latest()->paginate(10);
+            } else {
+                $social_problems_found = $social_problems->where('additional_data->status_attendance', $status_attendance)->latest()->paginate(10);
+            }
+        } else {
+            $social_problems_found = $social_problems_found->latest()->paginate(10);
+        }
+
+        return view('social-problems.index', [
+            'socialProblems' => $social_problems_found,
+        ]);
+    }
+
+    public function emergencies(QueryRequest $request)
+    {
+        $validated = $request->validated();
+        $option = $request->has('searchOption') ? $validated['searchOption'] : null;
+        $value = $request->has('searchValue') ? $validated['searchValue'] : null;
+        $filter = $request->query('filterOption'); //obtiene la variable enviado en la petición GET
+
+        $emergency_category = Category::where('slug', 'problema')->first();
+        //se obtiene las emergencias abordadas por la policía
+        $emergencies = $emergency_category->posts()->whereNotIn('additional_data->status_attendance', ['pendiente']);
+        $emergencies_found = null;
+
+        if ($option && $value) {
+            switch ($option) {
+                case 1:
+                    //Se busca acorde al título
+                    $emergencies_found = $emergencies->where('title', 'LIKE', "%$value%");
+                    break;
+
+                default:
+                    return abort(404);
+                    break;
+            }
+        }
+
+        if ($filter) {
+            switch ($filter) {
+                case 1:
+                    $status_attendance = 'atendido';
+                    break;
+                case 2:
+                    $status_attendance = 'rechazado';
+                    break;
+                default:
+                    return abort(404);
+                    break;
+            }
+
+            if ($emergencies_found) {
+                $emergencies_found = $emergencies_found->where('additional_data->status_attendance', $status_attendance)->latest()->paginate(10);
+            } else {
+                $emergencies_found = $emergencies->where('additional_data->status_attendance', $status_attendance)->latest()->paginate(10);
+            }
+        } else {
+            $emergencies_found = $emergencies_found->latest()->paginate(10);
+        }
+
+        return view('emergencies.index', [
+            'emergencies' => $emergencies_found,
         ]);
     }
 }

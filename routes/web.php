@@ -222,6 +222,19 @@ Route::middleware(['auth', 'verified', 'logout'])->group(function () {
     Route::get('request/approve/membership/{notification}', 'MembershipController@approve')->name('membership.approve')->middleware('can:membership.approveOrReject');
     Route::get('request/reject/membership/{notification}', 'MembershipController@showReject')->name('membership.showReject')->middleware('can:membership.approveOrReject');
     Route::post('request/reject/membership/{notification}', 'MembershipController@reject')->name('membership.reject')->middleware('can:membership.approveOrReject');
+
+    //POBLEMA SOCIAL - GESTIÓN DIRECTIVA
+    Route::get('socialProblems', 'SocialProblemController@index')->name('socialProblems.index')->middleware('can:socialProblems.index');
+    Route::get('socialProblems/{post}', 'SocialProblemController@show')->name('socialProblems.show')->middleware('can:socialProblems.show');
+    Route::get('socialProblems/attend/{post}', 'SocialProblemController@attend')->name('socialProblems.attend')->middleware('can:socialProblems.attendOrReject');
+    Route::get('socialProblems/reject/{post}', 'SocialProblemController@showReject')->name('socialProblems.showReject')->middleware('can:socialProblems.attendOrReject');
+    Route::post('socialProblems/reject/{post}', 'SocialProblemController@reject')->name('socialProblems.reject')->middleware('can:socialProblems.attendOrReject');
+    Route::get('search/socialProblems', 'SearchController@socialProblems')->name('search.socialProblems')->middleware('can:socialProblems.index');
+    
+    // EMERGENCIAS
+    Route::get('emergencies', 'EmergencyController@index')->name('emergencies.index')->middleware('can:emergencies.index');
+    Route::get('emergencies/{post}', 'EmergencyController@show')->name('emergencies.show')->middleware('can:emergencies.show');
+    Route::get('search/emergencies', 'SearchController@emergencies')->name('search.emergencies')->middleware('can:emergencies.index');
 });
 
 Route::get('logout', function () {

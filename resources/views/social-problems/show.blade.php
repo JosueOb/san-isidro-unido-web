@@ -1,9 +1,18 @@
 @extends('layouts.dashboard')
 @section('page-subtitle')
-    Módulo Solicitud
+    Módulo Problema Social
 @endsection
 @section('page-header')
-    Problema Social
+    Problema Social reportado
+@endsection
+@section('item-problem')
+    active
+@endsection
+@section('item-problem-collapse')
+    show
+@endsection
+@section('item-problem-list')
+    active
 @endsection
 
 @section('content')
@@ -107,17 +116,17 @@
                         <h4  class="d-inline">Detalle del problema social reportado</h4>
                     </div>
                     <div class="col">
-                        @can('socialProblemReports.approveOrReject')
+                        @can('socialProblems.attendOrReject')
                         <div class="row">
-                            {{-- Se muestra las acciones de aprobar o rechazar si el problema reportado esta en estado de pendiente --}}
-                            @if ($social_problem_status_attendance === 'pendiente')
+                            {{-- Se muestra las acciones de atender o rechazar si el problema reportado esta en estado de aprobado por los moderadores --}}
+                            @if ($social_problem->state && $social_problem_status_attendance === 'aprobado')
                             <div class="col">
-                                <button type="button" class="btn btn-success float-right" data-toggle="modal" data-target="#rejectSocialProblemModal">
-                                    <i class="fas fa-check-circle"></i> Aprobar
+                                <button type="button" class="btn btn-success float-right" data-toggle="modal" data-target="#attendSocialProblemModal">
+                                    <i class="fas fa-check-circle"></i> Atender
                                 </button>
                             </div>
                             <div class="col">
-                                <a href="{{route('socialProblemReport.showReject', $notification->id)}}" class="btn btn-danger float-right float-md-left"><i class="fas fa-times-circle"></i> Rechazar</a>
+                                <a href="{{route('socialProblems.showReject', $social_problem->id)}}" class="btn btn-danger float-right float-md-left"><i class="fas fa-times-circle"></i> Rechazar</a>
                             </div>
                             @endif
                         </div>
@@ -169,23 +178,22 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="rejectSocialProblemModal" tabindex="-1" role="dialog" aria-labelledby="rejectSocialModalLabel" aria-hidden="true">
+<div class="modal fade" id="attendSocialProblemModal" tabindex="-1" role="dialog" aria-labelledby="attendSocialModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="rejectSocialModalLabel">Confirmación</h5>
+          <h5 class="modal-title" id="attendSocialModalLabel">Confirmación</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-            <h5 class="text-center font-weight-bolder">¿Está seguro de aprobar el problema social reportado?</h5>
-            <small class="text-muted"><strong>Recuerda: </strong>una vez aprobado el problema social, se procede a publicarlo en la aplicación móvil y los miembros de la directiva barrial podrán gestionarlo</small>
-
+            <h5 class="text-center font-weight-bolder">¿Está seguro de cambiar el estado del problema social a atendido?</h5>
+            <small class="text-muted"><strong>Recuerda: </strong>no se puede revertir este cambio de estado una vez realizado, el problema social queda registrado como resuleto y los usuarios moradores de la aplicación móvil lo pueden listar y visualizar como problema resuelto</small>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-          <a href="{{route('socialProblemReport.approve', $notification->id)}}" class="btn btn-success float-right"><i class="fas fa-check-circle"></i> Aprobar</a> 
+          <a href="{{route('socialProblems.attend', $social_problem->id )}}" class="btn btn-success float-right"><i class="fas fa-check-circle"></i> Atender</a> 
         </div>
       </div>
     </div>
