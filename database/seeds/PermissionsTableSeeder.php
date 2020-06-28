@@ -424,7 +424,7 @@ class PermissionsTableSeeder extends Seeder
          * Módulo de problema social (Directiva)
          **/
         Permission::create([
-            'name' => 'Listar los problemas sociales atendidos por el moderador',
+            'name' => 'Listar los problemas sociales abordados por el moderador',
             'slug' => 'socialProblems.index',
             'description' => 'Lista los problemas sociales aprobados o rechazados por parte del moderador',
             'private' => true,
@@ -443,6 +443,23 @@ class PermissionsTableSeeder extends Seeder
             'description' => 'Se permite atender o rechazar un problema social',
             'private' => true,
             'group' => 'problema social',
+        ]);
+        /**
+         * Módulo de emergencias (Directiva)
+         **/
+        Permission::create([
+            'name' => 'Listar las emergencias abordadas por la policía comunitária',
+            'slug' => 'emergencies.index',
+            'description' => 'Lista las emergencias aprobadas o rechazadas por parte del policía',
+            'private' => true,
+            'group' => 'emergencia',
+        ]);
+        Permission::create([
+            'name' => 'Ver detalle de las emergencias',
+            'slug' => 'emergencies.show',
+            'description' => 'Ver en detalle cada una de las emergencias abordadas por la policía',
+            'private' => true,
+            'group' => 'emergencia',
         ]);
     }
 }
