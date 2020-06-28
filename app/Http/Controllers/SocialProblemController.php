@@ -24,8 +24,6 @@ class SocialProblemController extends Controller
 
     public function index()
     {
-        //Se procede a obtener los problemas sociales que hayan sido aprobados por el moderador
-        $social_problem_category = Category::where('slug', 'problema')->first();
         //Se obtiene todos los problemas sociales con estado true, eso quiere decir que son públicos (aprobados por los moderadores)
         $social_problem_category = Category::where('slug', 'problema')->first();
         $social_problems = $social_problem_category->posts()

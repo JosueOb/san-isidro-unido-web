@@ -230,6 +230,11 @@ Route::middleware(['auth', 'verified', 'logout'])->group(function () {
     Route::get('socialProblems/reject/{post}', 'SocialProblemController@showReject')->name('socialProblems.showReject')->middleware('can:socialProblems.attendOrReject');
     Route::post('socialProblems/reject/{post}', 'SocialProblemController@reject')->name('socialProblems.reject')->middleware('can:socialProblems.attendOrReject');
     Route::get('search/socialProblems', 'SearchController@socialProblems')->name('search.socialProblems')->middleware('can:socialProblems.index');
+    
+    // EMERGENCIAS
+    Route::get('emergencies', 'EmergencyController@index')->name('emergencies.index')->middleware('can:emergencies.index');
+    Route::get('emergencies/{post}', 'EmergencyController@show')->name('emergencies.show')->middleware('can:emergencies.show');
+    Route::get('search/emergencies', 'SearchController@emergencies')->name('search.emergencies')->middleware('can:emergencies.index');
 });
 
 Route::get('logout', function () {

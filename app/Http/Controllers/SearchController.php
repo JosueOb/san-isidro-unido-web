@@ -599,4 +599,56 @@ class SearchController extends Controller
             'socialProblems' => $social_problems_found,
         ]);
     }
+
+    public function emergencies(QueryRequest $request)
+    {
+        $validated = $request->validated();
+        $option = $request->has('searchOption') ? $validated['searchOption'] : null;
+        $value = $request->has('searchValue') ? $validated['searchValue'] : null;
+        $filter = $request->query('filterOption'); //obtiene la variable enviado en la petición GET
+
+        $emergency_category = Category::where('slug', 'problema')->first();
+        //se obtiene las emergencias abordadas por la policía
+        $emergencies = $emergency_category->posts()->whereNotIn('additional_data->status_attendance', ['pendiente']);
+        $emergencies_found = null;
+
+        if ($option && $value) {
+            switch ($option) {
+                case 1:
+                    //Se busca acorde al título
+                    $emergencies_found = $emergencies->where('title', 'LIKE', "%$value%");
+                    break;
+
+                default:
+                    return abort(404);
+                    break;
+            }
+        }
+
+        if ($filter) {
+            switch ($filter) {
+                case 1:
+                    $status_attendance = 'atendido';
+                    break;
+                case 2:
+                    $status_attendance = 'rechazado';
+                    break;
+                default:
+                    return abort(404);
+                    break;
+            }
+
+            if ($emergencies_found) {
+                $emergencies_found = $emergencies_found->where('additional_data->status_attendance', $status_attendance)->latest()->paginate(10);
+            } else {
+                $emergencies_found = $emergencies->where('additional_data->status_attendance', $status_attendance)->latest()->paginate(10);
+            }
+        } else {
+            $emergencies_found = $emergencies_found->latest()->paginate(10);
+        }
+
+        return view('emergencies.index', [
+            'emergencies' => $emergencies_found,
+        ]);
+    }
 }

@@ -276,6 +276,26 @@
                         </li>
                         @endcanany
 
+                        {{-- @canany(['socialProblems.index', 'falta el permiso  de la gráfica']) --}}
+                        @canany(['emergencies.index'])
+                        <li class="nav-item @yield('item-emergency')">
+                            <a class="nav-link" data-toggle="collapse" data-target="#collapseEmergency" aria-expanded="true" aria-controls="collapseEmergency">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <span>Emergencias</span>
+                            </a>
+                            <div id="collapseEmergency" class="collapse @yield('item-emergency-collapse')" >
+                                <div class="collapse-inner">
+                                    @can('emergencies.index')
+                                        <a class="collapse-item @yield('item-emergency-list')" href="{{route('emergencies.index')}}"><i class="fas fa-list"></i>Listar emergencias reportadas</a>
+                                    @endcan
+                                    {{-- @can('policemen.create') --}}
+                                        <a class="collapse-item @yield('item-emergency-graphic')" href="#"><i class="fas fa-grip-horizontal"></i></i>Ver gráfico de emergencias</a>
+                                    {{-- @endcan --}}
+                                </div>
+                            </div>
+                        </li>
+                        @endcanany
+
 
 
 
