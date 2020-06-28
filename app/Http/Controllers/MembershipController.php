@@ -37,8 +37,6 @@ class MembershipController extends Controller
         // en caso de presnetar los datos de solicitante guardados en la notificación
         // $guest = $notification->data['guest'];
 
-        // dd($membership, $guest);
-
         return view('membership-reports.membership', [
             'notification' => $notification, //se envía el id de la notificación (string)
             'guest' => $guest, //se envía la información del solicitante (array)

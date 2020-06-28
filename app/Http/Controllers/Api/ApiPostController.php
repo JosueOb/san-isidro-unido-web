@@ -21,8 +21,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
 use App\Helpers\OnesignalNotification;
-use App\HelpersClass\AdditionalData as AdditionalDataCls;
-use App\HelpersClass\Ubication as UbicationCls;
+use App\HelpersClass\AdditionalData as HelperAdditionalData;
+use App\HelpersClass\Ubication as HelperUbication;
 
 //Request
 use App\Http\Requests\Api\ApiCreateEmergencyRequest;
@@ -92,7 +92,6 @@ class ApiPostController extends ApiBaseController
             if ($filterStatusAttendance != '') {
                 $queryset = $queryset->where('additional_data->status_attendance', $filterStatusAttendance);
             }
-            // dd($queryset->toSql());
             //Retornar Paginacion y datos ordenados descendentemente para devolver los mas nuevos primero
             $posts = $queryset->orderBy('created_at', 'DESC')->simplePaginate($filterSize)->toArray();
             return $this->sendPaginateResponse(200, 'Datos Obtenidos', $posts);
@@ -128,6 +127,7 @@ class ApiPostController extends ApiBaseController
     */
     public function atenderEmergencia(Request $request)
     {
+        $type_notification = "emergency_attended";
         $token_decoded = $request->get('token');
         $validatorAtenderEmergencia = Validator::make($request->all(), [
             "emergencia_id" => ['required', 'int'],
@@ -135,10 +135,13 @@ class ApiPostController extends ApiBaseController
         if ($validatorAtenderEmergencia->fails()) {
             return $this->sendError(400, "Datos no válidos", $validatorAtenderEmergencia->messages());
         }
-        $user = User::findById($token_decoded->user->id)->first();
-        if (!$user) {
-            return $this->sendError(400, "Usuario No encontrado", ['usuario' => 'Usuario no encontrado']);
+        $police_user = User::findById($token_decoded->user->id)->first();
+        if (!$police_user) {
+            return $this->sendError(400, "Policia No encontrado", ['policia' => 'policia no encontrado']);
         }
+
+      
+
         $postId = $request->get("emergencia_id");
         //Cambiar estado post
         $emergency = Post::findById($postId)->first();
@@ -146,8 +149,13 @@ class ApiPostController extends ApiBaseController
             return $this->sendError(400, "Publicación No existe", ["emergencia" => "publicación no existe"]);
         }
 
+        $report_user = User::findById($emergency->user_id)->first();
+        if (!$report_user) {
+            return $this->sendError(400, "Usuario No encontrado", ['usuario' => 'Usuario no encontrado']);
+        }
+
         //Actualizar Aditional Data
-        $aditionalData = new AdditionalDataCls();
+        $aditionalData = new HelperAdditionalData();
         $aditionalData->setInfoEmergency([
             "status_attendance" => 'atendido',
             "attended"=>[
@@ -155,7 +163,7 @@ class ApiPostController extends ApiBaseController
                 'date'=> date('Y-m-d H:i:s')
             ]
         ]);
-        $emergency->additional_data = array_merge($emergency->additional_data ?? [], $aditionalData->getEmergencyData());
+        $emergency->additional_data = array_merge($emergency->additional_data ?? [], $aditionalData->getInfoEmergency());
         $emergency->state = 0;
         $emergency->save();
         //Obtener post con todos los datos necesarios
@@ -163,7 +171,7 @@ class ApiPostController extends ApiBaseController
         //Notificar al usuario que creo el post sobre quien lo va a atender
         $title_noti = "Tu reporte de emergencia fue aceptado";
         $description_noti = "El policia " . $token_decoded->user->fullname . " ha aceptado atender tu emergencia";
-        $user_devices = OnesignalNotification::getUserDevices($post_updated->user_id);
+        $user_devices = OnesignalNotification::getUserDevices($report_user->id);
         if (!is_null($user_devices) && count($user_devices) > 0) {
             //Enviar notification al usuario en especifico
             OnesignalNotification::sendNotificationByPlayersID(
@@ -174,7 +182,14 @@ class ApiPostController extends ApiBaseController
             );
         }
         
-        $user->notify(new PostNotification($post_updated, $title_noti, $description_noti));
+        $report_user->notify(
+            new PostNotification(
+                $post_updated,
+                $title_noti,
+                $description_noti,
+                $type_notification
+            )
+        );
         //Enviar notificaciones a moderadores
         $rolModerador = Role::where('slug', 'moderador')->first();
  
@@ -183,7 +198,14 @@ class ApiPostController extends ApiBaseController
         $description_notification_moderador = 'El usuario ' . $token_decoded->user->fullname . ' ha aceptado atender una emergencia';
         //Notificar Moderadores
         foreach ($moderadores as $moderador) {
-            $moderador->notify(new PostNotification($emergency, $title_notification_moderador, $description_notification_moderador));
+            $moderador->notify(
+                new PostNotification(
+                    $emergency,
+                    $title_notification_moderador,
+                    $description_notification_moderador,
+                    $type_notification
+                )
+            );
 
             $user_devices_moderador= OnesignalNotification::getUserDevices($moderador->id);
             if (!is_null($user_devices_moderador) && count($user_devices_moderador) > 0) {
@@ -197,7 +219,6 @@ class ApiPostController extends ApiBaseController
             }
         }
         return $this->sendResponse(200, "Solicitud de Atención Registrada Correctamente", ["emergency" => $emergency]);
-        return $this->sendError(400, "Usuario No existe", ["usuario" => "usuario no existe"]);
     }
 
     /*Guardar motivo por el cual un policia rechaza atender emergencia
@@ -207,6 +228,7 @@ class ApiPostController extends ApiBaseController
     */
     public function rechazarEmergencia(Request $request)
     {
+        $type_notification = "emergency_rechazed";
         $token_decoded = $request->get('token');
         //Validar Formulario
         $validatorRechazarEmergencia = Validator::make($request->all(), [
@@ -216,9 +238,10 @@ class ApiPostController extends ApiBaseController
         if ($validatorRechazarEmergencia->fails()) {
             return $this->sendError(400, "Datos no válidos", $validatorRechazarEmergencia->messages());
         }
-        $user = User::findById($token_decoded->user->id)->first();
-        if (!$user) {
-            return $this->sendError(400, "Usuario No encontrado", ['usuario' => 'Usuario no encontrado']);
+
+        $police_user = User::findById($token_decoded->user->id)->first();
+        if (!$police_user) {
+            return $this->sendError(400, "Policia No encontrado", ['policia' => 'policia no encontrado']);
         }
         //Obtener valor motivo
         try {
@@ -227,9 +250,14 @@ class ApiPostController extends ApiBaseController
             if (!$emergency) {
                 return $this->sendError(404, "Emergencia no encontrada", ["emergency" => "La Emergencia solicitada no existe"]);
             }
+
+            $report_user = User::findById($emergency->user_id)->first();
+            if (!$report_user) {
+                return $this->sendError(400, "Usuario No encontrado", ['usuario' => 'Usuario no encontrado']);
+            }
             
             //Actualizar Aditional Data
-            $aditionalData = new AdditionalDataCls();
+            $aditionalData = new HelperAdditionalData();
             $aditionalData->setInfoEmergency([
                 "status_attendance" => 'rechazado',
                 "rechazed"=>[
@@ -238,15 +266,15 @@ class ApiPostController extends ApiBaseController
                     'date'=> date('Y-m-d H:i:s')
                 ]
                 ]);
-            $emergency->additional_data = array_merge($emergency->additional_data ?? [], $aditionalData->getEmergencyData());
+            $emergency->additional_data = array_merge($emergency->additional_data ?? [], $aditionalData->getInfoEmergency());
             $emergency->state = 0;
             $emergency->save();
             //Obtener post con todos los datos necesarios
             $post_updated = Post::findById($emergency->id)->with(["category", "subcategory", 'resources', 'reactions'])->first();
             //Enviar Notificación
             $title_noti = "Tu solicitud de emergencia fue rechazada";
-            $description_noti = "El policia " . $user->fullname . " no puede atender su reporte de emergencia por el siguiente mótivo: " .  $request->motivo;
-            $user_devices = OnesignalNotification::getUserDevices($emergency->user_id);
+            $description_noti = "El policia " . $police_user->fullname . " no puede atender su reporte de emergencia por el siguiente mótivo: " .  $request->motivo;
+            $user_devices = OnesignalNotification::getUserDevices($report_user->id);
             if (!is_null($user_devices) && count($user_devices) > 0) {
                 //Enviar notification al usuario en especifico
                 OnesignalNotification::sendNotificationByPlayersID(
@@ -256,7 +284,14 @@ class ApiPostController extends ApiBaseController
                     $user_devices
                 );
             }
-            $user->notify(new PostNotification($post_updated, $title_noti, $description_noti));
+            $report_user->notify(
+                new PostNotification(
+                    $post_updated,
+                    $title_noti,
+                    $description_noti,
+                    $type_notification
+                )
+            );
             //Enviar notificaciones a moderadores
             $rolModerador = Role::where('slug', 'moderador')->first();
             $moderadores = $rolModerador->users()->get();
@@ -265,7 +300,14 @@ class ApiPostController extends ApiBaseController
             $description_notification_moderador = 'El usuario ' . $token_decoded->user->fullname . ' ha rechazado atender una emergencia';
             //Notificar Moderadores
             foreach ($moderadores as $moderador) {
-                $moderador->notify(new PostNotification($post_updated, $title_notification_moderador, $description_notification_moderador));
+                $moderador->notify(
+                    new PostNotification(
+                        $post_updated,
+                        $title_notification_moderador,
+                        $description_notification_moderador,
+                        $type_notification
+                    )
+                );
   
                 $user_devices_moderador= OnesignalNotification::getUserDevices($moderador->id);
                 if (!is_null($user_devices_moderador) && count($user_devices_moderador) > 0) {
@@ -294,6 +336,7 @@ class ApiPostController extends ApiBaseController
     public function createEmergency(ApiCreateEmergencyRequest $request)
     {
         try {
+            $type_notification = "emergency_reported";
             $validated = $request->validated();
             $token_decoded = $request->get('token');
 
@@ -304,9 +347,10 @@ class ApiPostController extends ApiBaseController
             $post->user_id = $token_decoded->user->id;
             $post->category_id = $category->id;
             $post->ubication = $request->ubication;
-            $aditionalData = new AdditionalDataCls();
-            $aditionalDataSave = (isset($post->additional_data)) ? $post->additional_data: $aditionalData->getEmergencyData();
-            $post->additional_data = $aditionalDataSave;
+           
+            $additionalData = new HelperAdditionalData();
+            $post->additional_data = $additionalData->getInfoEmergency();
+            
             $post->state = 0;
             $post->save();
             //Guardar Resources
@@ -332,7 +376,14 @@ class ApiPostController extends ApiBaseController
             $description_notification_policia = "El usuario " . $new_post->user->fullname . " ha reportado una emergencia";
 
             foreach ($policias as $policia) {
-                $policia->notify(new PostNotification($new_post, $title_notification_policia, $description_notification_policia));
+                $policia->notify(
+                    new PostNotification(
+                        $new_post,
+                        $title_notification_policia,
+                        $description_notification_policia,
+                        $type_notification
+                    )
+                );
 
                 $user_devices_policia = OnesignalNotification::getUserDevices($policia->id);
                 if (!is_null($user_devices_policia) && count($user_devices_policia) > 0) {
@@ -351,7 +402,14 @@ class ApiPostController extends ApiBaseController
             $title_notification_user = "Tu emergencia fue reportada correctamente";
             $description_notification_user = "Cuando un policia atienda tu reporte, seras notificado inmediatamente";
 
-            $new_post->user->notify(new PostNotification($new_post, $title_notification_user, $description_notification_user));
+            $new_post->user->notify(
+                new PostNotification(
+                    $new_post,
+                    $title_notification_user,
+                    $description_notification_user,
+                    $type_notification
+                )
+            );
 
             $user_devices_emergencia = OnesignalNotification::getUserDevices($new_post->user->id);
             if (!is_null($user_devices_emergencia) && count($user_devices_emergencia) > 0) {
@@ -364,6 +422,34 @@ class ApiPostController extends ApiBaseController
                     $user_devices_emergencia
                 );
             }
+
+            //Enviar notificaciones a moderadores
+            $rolModerador = Role::where('slug', 'moderador')->first();
+            $moderadores = $rolModerador->users()->get();
+            $title_notification_moderador = "Una emergencia ha sido reportada";
+            $description_notification_moderador =  'El usuario ' . $token_decoded->user->fullname . ' ha reportado una emergencia';            //Notificar Moderadores
+            foreach ($moderadores as $moderador) {
+                $moderador->notify(
+                    new PostNotification(
+                        $new_post,
+                        $title_notification_moderador,
+                        $description_notification_moderador,
+                        $type_notification
+                    )
+                );
+  
+                $user_devices_moderador= OnesignalNotification::getUserDevices($moderador->id);
+                if (!is_null($user_devices_moderador) && count($user_devices_moderador) > 0) {
+                    //Enviar notification al usuario en especifico
+                    OnesignalNotification::sendNotificationByPlayersID(
+                        $title_notification_moderador,
+                        $description_notification_moderador,
+                        ["post" => $new_post],
+                        $user_devices_moderador
+                    );
+                }
+            }
+
             //Respuesta Api
             return $this->sendResponse(200, "Emergency Created", $new_post);
         } catch (Exception $e) {
@@ -383,7 +469,8 @@ class ApiPostController extends ApiBaseController
             //Validar Petición
             $validated = $request->validated();
             $category = Category::slug(Config::get('siu_config.categorias')['problemas_sociales'])->first();
-                
+            $type_notification = "problem_reported";
+            
             $post = new Post();
             $post->title = $request->title;
             $post->description = $request->description;
@@ -392,6 +479,8 @@ class ApiPostController extends ApiBaseController
             $post->category_id = $category->id;
             $post->state = 0;
             $post->ubication = $request->ubication;
+            $additionalData = new HelperAdditionalData();
+            $post->additional_data = $additionalData->getInfoEmergency();
             $post->save();
             //Guardar Recursos
             if (!is_null($request->images) && count($request->images) > 0) {
@@ -415,7 +504,14 @@ class ApiPostController extends ApiBaseController
             $description_notification_moderador = 'El usuario ' . $new_post->user->fullname . ' ha reportado un problema social';
             //Notificar Moderadores
             foreach ($moderadores as $moderador) {
-                $moderador->notify(new PostNotification($new_post, $title_notification_moderador, $description_notification_moderador));
+                $moderador->notify(
+                    new PostNotification(
+                        $new_post,
+                        $title_notification_moderador,
+                        $description_notification_moderador,
+                        $type_notification
+                    )
+                );
 
                 $user_devices_moderador= OnesignalNotification::getUserDevices($moderador->id);
                 if (!is_null($user_devices_moderador) && count($user_devices_moderador) > 0) {
@@ -432,7 +528,14 @@ class ApiPostController extends ApiBaseController
             $title_notification_user = "Tu problema social fue reportado correctamente";
             $description_notification_user = "Cuando tu publicación sea aprobada, seras notificado inmediatamente";
 
-            $new_post->user->notify(new PostNotification($new_post, $title_notification_user, $description_notification_user));
+            $new_post->user->notify(
+                new PostNotification(
+                    $new_post,
+                    $title_notification_user,
+                    $description_notification_user,
+                    $type_notification
+                )
+            );
 
             $user_devices_problema_social = OnesignalNotification::getUserDevices($new_post->user->id);
             if (!is_null($user_devices_problema_social) && count($user_devices_problema_social) > 0) {

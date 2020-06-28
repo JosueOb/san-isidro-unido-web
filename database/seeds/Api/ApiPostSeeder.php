@@ -150,7 +150,7 @@ class ApiPostSeeder extends Seeder
                 "subcategory_id" => $subcategoryEvents->id,
                 'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
             ]);
-            // dd($aditionalDataEvento->getEventData(), $idPostEvento);
+            
             for($iev = 1; $iev <= 3; $iev++){
                 DB::table('resources')->insert([
                     'url' => "https://source.unsplash.com/random",

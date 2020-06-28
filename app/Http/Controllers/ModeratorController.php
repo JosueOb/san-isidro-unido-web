@@ -109,7 +109,6 @@ class ModeratorController extends Controller
         $moderator->avatar = $avatar;
         $moderator->password = \password_hash($password, PASSWORD_DEFAULT);
         $moderator->number_phone = $validated['number_phone'];
-        $moderator->state = true;
         $moderator->save();
 
         $moderator->roles()->attach($moderator_role->id, ['state'=>true]);

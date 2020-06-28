@@ -106,7 +106,6 @@ class DirectiveController extends Controller
         $directiveMember->avatar = $avatar;
         $directiveMember->email = $validated['email'];
         $directiveMember->password =  password_hash($password,PASSWORD_DEFAULT);
-        $directiveMember->state = true;
         $directiveMember->position_id = $validated['position'];
         $directiveMember->save();
 

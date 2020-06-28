@@ -89,7 +89,6 @@ class NeighborController extends Controller
         $neighbor->avatar = $avatar;
         $neighbor->password = \password_hash($password, PASSWORD_DEFAULT);
         $neighbor->number_phone = $validated['number_phone'];
-        $neighbor->state = true;
         $neighbor->save();
 
         $neighbor->roles()->attach($roleNeighbord->id, ['state'=>true]);

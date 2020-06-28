@@ -173,7 +173,6 @@ class ApiUserController extends ApiBaseController
         $user->last_name = $last_name;
         $user->email = $email;
         $user->password = ($provider === 'formulario' && $password) ? password_hash($password, PASSWORD_DEFAULT) : null;
-        $user->state = true;
         $user->avatar = $avatar;
         $user->save();
         $user->roles()->attach($rolInvitado->id, [
@@ -235,7 +234,7 @@ class ApiUserController extends ApiBaseController
                     $user = User::email($request->email)->first();
                     if ($device) {
                         $deviceExists = $user->devices()->findByPhoneId($device['phone_id'])->first();
-                        if ($deviceExists) {
+                        if (!$deviceExists) {
                             $apiDeviceController = new ApiDeviceController;
                             $apiDeviceController->saveDevice(
                                 (array_key_exists('phone_id', $device)) ? $device['phone_id']: '',

@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\DB;
 use App\HelpersClass\Membership;
+use App\Helpers\OnesignalNotification;
 
 class ApiUserSeeder extends Seeder {
 	/**
@@ -46,11 +47,12 @@ class ApiUserSeeder extends Seeder {
 
         for($i = 0; $i < 2; $i++){
             DB::table('devices')->insert([
-                "phone_id" => $faker->creditCardNumber,
+                "phone_id" => OnesignalNotification::generateUniqueId(),
                 "phone_model" => $faker->name,
                 "phone_platform" => 'Modelo Generico',
                 "description" => $faker->sentence(6,true),
                 'user_id' => $morador->id,
+                "created_at" => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
             ]);
         }
 
@@ -82,11 +84,12 @@ class ApiUserSeeder extends Seeder {
       
         for($i = 0; $i < 2; $i++){
             DB::table('devices')->insert([
-                "phone_id" => $faker->creditCardNumber,
+                "phone_id" => OnesignalNotification::generateUniqueId(),
                 "phone_model" => $faker->name,
                 "phone_platform" => 'Modelo Generico',
                 "description" => $faker->sentence(6,true),
                 'user_id' => $invitada->id,
+                "created_at" => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
             ]);
         }
         // $user_two = User::findById($idTwo)->first();
@@ -115,21 +118,15 @@ class ApiUserSeeder extends Seeder {
             "provider" =>  $provider_options[1],
         ]);
         
-        // for($i = 0; $i < 2; $i++){
-        //     DB::table('social_profiles')->insert([
-        //         'user_id' => $idThree,
-        //         'social_id' => '487asasd8a7ddldskfkds4',
-        //         "provider" =>  $provider_options[array_rand($provider_options)],
-        //         'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
-        //     ]);
-        // }
+  
         for($i = 0; $i < 2; $i++){
             DB::table('devices')->insert([
-                "phone_id" => $faker->creditCardNumber,
+                "phone_id" => OnesignalNotification::generateUniqueId(),
                 "phone_model" => $faker->name,
                 "phone_platform" => 'Modelo Generico',
                 "description" => $faker->sentence(6,true),
                 'user_id' => $invitado->id,
+                "created_at" => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
             ]);
         }
         // $user_three = User::findById($idThree)->first();
@@ -148,11 +145,12 @@ class ApiUserSeeder extends Seeder {
         ]);
         for($i = 0; $i < 2; $i++){
             DB::table('devices')->insertGetId([
-                "phone_id" => $faker->creditCardNumber,
+                "phone_id" => OnesignalNotification::generateUniqueId(),
                 "phone_model" => $faker->name,
                 "description" => $faker->sentence(6,true),
                 "phone_platform" => 'Modelo Generico',
                 'user_id' => $policia->id,
+                "created_at" => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
             ]);
         }
         $policia->roles()->attach([$rolePolicia->id],['state'=>true]);
