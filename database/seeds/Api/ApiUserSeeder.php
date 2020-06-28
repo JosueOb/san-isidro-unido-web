@@ -52,6 +52,7 @@ class ApiUserSeeder extends Seeder {
                 "phone_platform" => 'Modelo Generico',
                 "description" => $faker->sentence(6,true),
                 'user_id' => $morador->id,
+                "created_at" => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
             ]);
         }
 
@@ -88,6 +89,7 @@ class ApiUserSeeder extends Seeder {
                 "phone_platform" => 'Modelo Generico',
                 "description" => $faker->sentence(6,true),
                 'user_id' => $invitada->id,
+                "created_at" => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
             ]);
         }
         // $user_two = User::findById($idTwo)->first();
@@ -124,6 +126,7 @@ class ApiUserSeeder extends Seeder {
                 "phone_platform" => 'Modelo Generico',
                 "description" => $faker->sentence(6,true),
                 'user_id' => $invitado->id,
+                "created_at" => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
             ]);
         }
         // $user_three = User::findById($idThree)->first();
@@ -147,6 +150,7 @@ class ApiUserSeeder extends Seeder {
                 "description" => $faker->sentence(6,true),
                 "phone_platform" => 'Modelo Generico',
                 'user_id' => $policia->id,
+                "created_at" => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
             ]);
         }
         $policia->roles()->attach([$rolePolicia->id],['state'=>true]);

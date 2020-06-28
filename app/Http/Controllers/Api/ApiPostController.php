@@ -92,7 +92,6 @@ class ApiPostController extends ApiBaseController
             if ($filterStatusAttendance != '') {
                 $queryset = $queryset->where('additional_data->status_attendance', $filterStatusAttendance);
             }
-            // dd($queryset->toSql());
             //Retornar Paginacion y datos ordenados descendentemente para devolver los mas nuevos primero
             $posts = $queryset->orderBy('created_at', 'DESC')->simplePaginate($filterSize)->toArray();
             return $this->sendPaginateResponse(200, 'Datos Obtenidos', $posts);
@@ -389,14 +388,14 @@ class ApiPostController extends ApiBaseController
                 $user_devices_policia = OnesignalNotification::getUserDevices($policia->id);
                 if (!is_null($user_devices_policia) && count($user_devices_policia) > 0) {
                     //Enviar notification al usuario en especifico
-                    // OnesignalNotification::sendNotificationByPlayersID(
-                    //     $title_notification_policia,
-                    //     $description_notification_policia,
-                    //     [
-                    //             "post" => $new_post
-                    //         ],
-                    //     $user_devices_policia
-                    // );
+                    OnesignalNotification::sendNotificationByPlayersID(
+                        $title_notification_policia,
+                        $description_notification_policia,
+                        [
+                                "post" => $new_post
+                            ],
+                        $user_devices_policia
+                    );
                 }
             }
             //Enviar notification al usuario que creo la emergencia

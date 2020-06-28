@@ -54,7 +54,6 @@ class OnesignalNotification
             return $request;
         } catch (RequestException $e) {
             echo 'Excepción capturada: ', Psr7\str($e->getRequest());
-            dd("sendPushNotification ERROR", $e);
             if ($e->hasResponse()) {
                 throw new Exception($e->getResponse());
             }
@@ -77,7 +76,6 @@ class OnesignalNotification
                 array_push($id_devices, $device->phone_id);
             }
         }
-        dd($id_devices);
         return $id_devices;
     }
 
@@ -107,12 +105,10 @@ class OnesignalNotification
         
         try {
             $playerIdFake = self::generateUniqueId();
-            dd($bodyPeticionOnesignal, $playerIdFake);
             $request = self::sendPushNotification($bodyPeticionOnesignal);
             $response = $request->getBody();
             return ['content' => $response->getContents(), 'status' => $request->getStatusCode()];
         } catch (Exception $e) {
-            dd("sendNotificationByPlayersID ERROR", $e);
             return $e->getMessage();
         }
     }

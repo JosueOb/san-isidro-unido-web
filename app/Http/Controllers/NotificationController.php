@@ -13,7 +13,7 @@ class NotificationController extends Controller
     public function api_problems(Request $request)
     {
         $notifications = $request->user()->notifications;
-        // dd($notifications);
+      
         $problem_category = Category::where('slug', 'problema')->first();
         $problem_notifications = $notifications->filter(function ($notification) use ($problem_category) {
 
@@ -38,7 +38,7 @@ class NotificationController extends Controller
     public function api_emergencies(Request $request)
     {
         $notifications = $request->user()->notifications;
-        // dd($notifications);
+        
         $emergency_category = Category::where('slug', 'emergencia')->first();
         $emergency_notifications = $notifications->filter(function ($notification) use ($emergency_category) {
             $notification_type = Arr::exists($notification->data, 'type') ? $notification->data['type'] : null;
@@ -51,7 +51,6 @@ class NotificationController extends Controller
         $unread_notifications = $emergency_notifications->filter(function ($notification) {
             return $notification->unread();
         });
-        // dd($unread_notifications);
 
         return [
             'emergency_notifications' => array_values($emergency_notifications->toArray()), //se re-indexa 
