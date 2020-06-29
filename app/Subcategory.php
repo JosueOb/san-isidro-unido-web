@@ -54,12 +54,6 @@ class Subcategory extends Model
         return $query->where('category_id', $category_id);
     }
 
-    /*AGREGAR RESOURCE LINK ATTRIBUTE */
-    protected $appends = ['image_link'];
-    public function getImageLinkAttribute(){
-        return $this->getApiLink();
-    }
-
     /*TODO: RELACIONES MODELO */ 
 
     /**

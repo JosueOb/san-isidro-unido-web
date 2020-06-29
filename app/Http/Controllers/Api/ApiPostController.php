@@ -168,7 +168,7 @@ class ApiPostController extends ApiBaseController
         $emergency->state = 0;
         $emergency->save();
         //Obtener post con todos los datos necesarios
-        $post_updated = Post::findById($emergency->id)->with(["category", "subcategory", 'resources', 'reactions'])->first();
+        $post_updated = Post::findById($emergency->id)->with(["category", "subcategory"])->first();
         //Notificar al usuario que creo el post sobre quien lo va a atender
         $title_noti = "Tu reporte de emergencia fue aceptado";
         $description_noti = "El policia " . $token_decoded->user->fullname . " ha aceptado atender tu emergencia";
@@ -272,7 +272,7 @@ class ApiPostController extends ApiBaseController
             $emergency->state = 0;
             $emergency->save();
             //Obtener post con todos los datos necesarios
-            $post_updated = Post::findById($emergency->id)->with(["category", "subcategory", 'resources', 'reactions'])->first();
+            $post_updated = Post::findById($emergency->id)->with(["category", "subcategory"])->first();
             //Enviar Notificación
             $title_noti = "Tu solicitud de emergencia fue rechazada";
             $description_noti = "El policia " . $police_user->fullname . " no puede atender su reporte de emergencia por el siguiente mótivo: " .  $request->motivo;
@@ -367,7 +367,7 @@ class ApiPostController extends ApiBaseController
                 foreach ($request->images as $image_file) {
                     $resource = new Resource();
                     $imageApi = new ApiImages();
-                    $image_name = $imageApi->savePostFileImageApi($image_file);
+                    $image_name = $imageApi->savePostFileImageApi($image_file, null, true);
                     $resource->url = $image_name;
                     $resource->type = "image";
                     $resource->post_id = $post->id;
@@ -375,11 +375,11 @@ class ApiPostController extends ApiBaseController
                 }
             }
 
-            //Enviar notificaciones a moderadores
+            //Enviar notificaciones a policias
             $rolPolicia = Role::where('slug', 'policia')->first();
             $policias = $rolPolicia->users()->get();
 
-            $new_post = Post::findById($post->id)->with(["category", "subcategory", 'resources', 'reactions'])->first();
+            $new_post = Post::findById($post->id)->with(["category", "subcategory"])->first();
             //Notificar Emergencia a los Policias
             $title_notification_policia = "Nueva emergencia reportada";
             $description_notification_policia = "El usuario " . $new_post->user->fullname . " ha reportado una emergencia";
@@ -401,8 +401,8 @@ class ApiPostController extends ApiBaseController
                         $title_notification_policia,
                         $description_notification_policia,
                         [
-                                "post" => $new_post
-                            ],
+                            "post" => $new_post
+                        ],
                         $user_devices_policia
                     );
                 }
@@ -465,7 +465,6 @@ class ApiPostController extends ApiBaseController
                     );
                 }
             }
-
             //Respuesta Api
             return $this->sendResponse(200, "Emergency Created", $new_post);
         } catch (Exception $e) {
@@ -503,7 +502,7 @@ class ApiPostController extends ApiBaseController
                 foreach ($request->images as $image_file) {
                     $resource = new Resource();
                     $imageApi = new ApiImages();
-                    $image_name = $imageApi->savePostFileImageApi($image_file);
+                    $image_name = $imageApi->savePostFileImageApi($image_file, null, true);
                     $resource->url = $image_name;
                     $resource->type = "image";
                     $resource->post_id = $post->id;
@@ -515,7 +514,7 @@ class ApiPostController extends ApiBaseController
  
             $moderadores = $rolModerador->users()->get();
  
-            $new_post = Post::findById($post->id)->with(["category", "subcategory", 'resources', 'reactions'])->first();
+            $new_post = Post::findById($post->id)->with(["category", "subcategory"])->first();
             $title_notification_moderador = 'Un nuevo problema social ha sido reportado';
             $description_notification_moderador = 'El usuario ' . $new_post->user->fullname . ' ha reportado un problema social';
             //Notificar Moderadores

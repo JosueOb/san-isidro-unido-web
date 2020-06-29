@@ -53,13 +53,14 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
     ];
 
     /*AGREGAR RESOURCE LINK ATTRIBUTE */
-    protected $appends = ['avatar_link', 'fullname', 'basic_service_image_link'];
-    public function getAvatarLinkAttribute(){
-        return $this->getAvatarApiLink();
-    }
-    public function getBasicServiceImageLinkAttribute(){
-        return $this->getBasicServiceApiLink();
-    }
+    protected $appends = ['fullname'];
+    // protected $appends = ['avatar_link', 'fullname', 'basic_service_image_link'];
+    // public function getAvatarLinkAttribute(){
+    //     return $this->getAvatarApiLink();
+    // }
+    // public function getBasicServiceImageLinkAttribute(){
+    //     return $this->getBasicServiceApiLink();
+    // }
     public function getFullNameAttribute(){
         return $this->getFullName();
     }
@@ -239,12 +240,6 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
     public function memberships(){
         return $this->hasMany(Membership::class);
     }
-
-    // /*Un usuario puede tener una solicitud de afiliación */
-    // public function membership_request()
-    // {
-    //     return $this->hasOne(MembershipRequest::class);
-    // }
 
     /*FUNCIONES EXTRAS */    
     //Obtener los Roles

@@ -26,13 +26,16 @@ class ApiImages
      *
      * @return string
      */
-    public function saveUserImageApi($imageFile, $previous_name = null)
+    public function saveUserImageApi($imageFile, $previous_name = null, $urlLink=false)
     {
         try {
             $uploadedFile = File::get($imageFile);
             $img_extension = $imageFile->extension();
             $img_name = ($previous_name) ? $previous_name : 'user' . time() . '.' . $img_extension;
             $this->saveImageInDisk($this->diskImage, $img_name, $uploadedFile);
+            if($urlLink){
+                return $this->getApiUrlLink($img_name);
+            }
             return $img_name;
         } catch (Error $e) {
             echo $e->getMessage();
@@ -46,13 +49,16 @@ class ApiImages
      *
      * @return string
      */
-    public function savePostFileImageApi($imageFile, $previous_name = null)
+    public function savePostFileImageApi($imageFile, $previous_name = null, $urlLink = false)
     {
         try {
             $uploadedFile = File::get($imageFile);
             $img_extension = $imageFile->extension();
             $img_name = ($previous_name) ? $previous_name : 'post_siu' . time() . '.' . $img_extension;
             $this->saveImageInDisk($this->diskImage, $img_name, $uploadedFile);
+            if($urlLink){
+                return $this->getApiUrlLink($img_name);
+            }
             return $img_name;
         } catch (Error $e) {
             echo $e->getMessage();
@@ -66,7 +72,7 @@ class ApiImages
      *
      * @return string
      */
-    public function saveAfiliationImageApi($imageFile, $previous_name = null, $img_default_name)
+    public function saveAfiliationImageApi($imageFile, $previous_name = null, $img_default_name, $urlLink = false)
     {
         try {
             $uploadedFile = File::get($imageFile);
@@ -74,6 +80,9 @@ class ApiImages
             $img_extension = $imageFile->extension();
             $img_name = ($previous_name) ? $previous_name : $img_default_name . '.'.$img_extension;
             $this->saveImageInDisk($this->diskImage, $img_name, $uploadedFile);
+            if($urlLink){
+                return $this->getApiUrlLink($img_name);
+            }
             return $img_name;
         } catch (Error $e) {
             echo $e->getMessage();
@@ -108,7 +117,7 @@ class ApiImages
         return \Storage::disk($diskname)->url($value);
     }
 
-    public function checkURLValid($url){
+    private function checkURLValid($url){
         $value = $url;
         return (preg_match(
             "/^((?:https?\:\/\/|www\.)(?:[-a-z0-9]+\.)*[-a-z0-9]+.*)$/", $value

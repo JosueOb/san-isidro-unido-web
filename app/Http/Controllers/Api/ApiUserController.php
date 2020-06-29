@@ -131,6 +131,9 @@ class ApiUserController extends ApiBaseController
             if (!$registervalidator->fails()) {
                 //Validar dispositivo
                 $device = $request->get('device', null);
+                $avatar = ($request->avatar) ? $request->avatar: 'https://ui-avatars.com/api/?name=' .
+                mb_substr($user->first_name, 0, 1) . '+' . mb_substr($user->last_name, 0, 1) .
+                '&size=250';
                 //Crear Usuario
                 $user = $this->registerNormalUser(
                     $request->first_name ?? '',
@@ -138,7 +141,7 @@ class ApiUserController extends ApiBaseController
                     $request->email ?? '',
                     $request->provider ?? '',
                     $request->password ?? '',
-                    $request->avatar ?? '',
+                    $avatar,
                     $device
                 );
                 //
@@ -323,7 +326,7 @@ class ApiUserController extends ApiBaseController
                 //Validar si existe el usuario
                 if (!is_null($user)) {
                     $imageApi = new ApiImages();
-                    $image_name = $imageApi->saveAfiliationImageApi($request->basic_service_image, null, $user->fullname.'_afiliation');
+                    $image_name = $imageApi->saveAfiliationImageApi($request->basic_service_image, null, $user->fullname.'_afiliation', true);
                     //Guardar solicitud de afiliación
                     $responsible_membership = new ResponsibleMembership();
 
@@ -339,12 +342,12 @@ class ApiUserController extends ApiBaseController
                     $afiliation_description_noti = 'Tu solicitud ha sido enviada exitosamente';
                   
                     //Notificar usuario
-                    // $user->notify(new MembershipRequestNotification(
-                    //     $afiliation_title_noti,
-                    //     $afiliation_description_noti,
-                    //     $membership,
-                    //     $user
-                    // ));
+                    $user->notify(new MembershipRequestNotification(
+                        $afiliation_title_noti,
+                        $afiliation_description_noti,
+                        $membership,
+                        $user
+                    ));
 
                     //Notificar moderadores
                     //Se obtiene a todos los moderadores activos para notificar las publicaciones realizadas
@@ -481,7 +484,7 @@ class ApiUserController extends ApiBaseController
                 //Validar si el usuario existe
                 if (!is_null($user)) {
                     $imageApi = new ApiImages();
-                    $image_name = $imageApi->saveUserImageApi($request->avatar, null, 'avatar_usuario');
+                    $image_name = $imageApi->saveUserImageApi($request->avatar, null, true);
                     $user->avatar = $image_name;
                     $user->save();
                     $token = $jwtAuth->getToken($user->email);

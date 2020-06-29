@@ -14,12 +14,7 @@ class Category extends Model
      */
     protected $table = 'categories';
 
-    /*TODO: SCOPES MODELO */ 
-    /*AGREGAR RESOURCE LINK ATTRIBUTE */
-    protected $appends = ['image_link'];
-    public function getImageLinkAttribute(){
-        return $this->getApiLink();
-    }
+    /*TODO: SCOPES MODELO */  
     
     /**
 	 *Filtra una categoria por su slug
