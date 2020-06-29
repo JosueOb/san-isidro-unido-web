@@ -50,7 +50,7 @@
 
                                         {{-- @can('publicServices.show') --}}
                                         <td width='10px'>
-                                            <a href="{{route('emergencyReport.show', [$notification->data['post']['id'], $notification->id])}}" class="btn btn-info">Ver</a>
+                                            <a href="{{route('emergencyReport.show', $notification->id)}}" class="btn btn-info">Ver</a>
                                             {{-- <a href="#" class="btn btn-info">Ver</a> --}}
                                         </td>
                                         {{-- @endcan --}}
