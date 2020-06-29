@@ -26,7 +26,7 @@ class EmergencyIsAttendedByPolice
         $emergency_status_attendance = $emergency->additional_data['status_attendance'];
 
         //Se verifica si el reporte de emergencia está con estado aprobado para permitir su publicación por parte del moderador
-        if ($emergency_status_attendance === 'aprobado') {
+        if ($emergency_status_attendance === 'atendido') {
             return $next($request);
         }
         //caso contrario se retorna un error 403
