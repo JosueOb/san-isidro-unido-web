@@ -431,11 +431,18 @@ class ApiPostController extends ApiBaseController
             $description_notification_moderador =  'El usuario ' . $token_decoded->user->fullname . ' ha reportado una emergencia';            //Notificar Moderadores
             foreach ($moderadores as $moderador) {
                 $moderador->notify(
-                    new PostNotification(
-                        $new_post,
-                        $title_notification_moderador,
-                        $description_notification_moderador,
-                        $type_notification
+                    // new PostNotification(
+                    //     $new_post,
+                    //     $title_notification_moderador,
+                    //     $description_notification_moderador,
+                    //     $type_notification
+                    // )
+                    new PublicationReport(
+                        $type_notification, //tipo de la notificación
+                        $new_post->category->name, //título de la notificación
+                        $new_post->user->fullname . ' ha solicitado afiliacion', //descripcción de la notificación
+                        $new_post, // post que almacena la notificación
+                        $post->user //morador que reportó el problema social
                     )
                 );
   

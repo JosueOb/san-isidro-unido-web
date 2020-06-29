@@ -356,7 +356,7 @@ class ApiUserController extends ApiBaseController
                         $moderators,
                         new MembershipRequestNotification(
                                 'Nueva Solicitud de Afiliación', //título de la notificación
-                                $user->getFullName() . ' ha reportado un problema social', //descripción de la notificación
+                                $user->getFullName() . ' ha solicitado afiliación', //descripción de la notificación
                                 $membership, // post que almacena la notificación
                                 $user //morador que reportó el problema social
                             )
