@@ -440,7 +440,7 @@ class ApiPostController extends ApiBaseController
                     new PublicationReport(
                         $type_notification, //tipo de la notificación
                         $new_post->category->name, //título de la notificación
-                        $new_post->user->fullname . ' ha solicitado afiliacion', //descripcción de la notificación
+                        $new_post->user->fullname . ' ha reportado una emergencia', //descripcción de la notificación
                         $new_post, // post que almacena la notificación
                         $post->user //morador que reportó el problema social
                     )
