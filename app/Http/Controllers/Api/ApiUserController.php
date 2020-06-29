@@ -9,6 +9,7 @@ use App\Helpers\Utils;
 use App\Http\Controllers\Api\ApiBaseController;
 use App\Post;
 use App\Role;
+use Illuminate\Support\Facades\Notification;
 use App\Rules\Api\Base64FormatImage;
 use App\Rules\Api\ProviderData;
 use App\Rules\Api\ValidarCedula;
@@ -89,9 +90,9 @@ class ApiUserController extends ApiBaseController
     {
         $getRoles= ($request->get('roles')) ? intval($request->get('roles')): -1;
         try {
-            if ($getRoles != -1){
+            if ($getRoles != -1) {
                 $user = User::findById($id)->with(['roles', 'memberships'])->first();
-            }else{
+            } else {
                 $user = User::findById($id)->with(['memberships'])->first();
             }
            
@@ -105,7 +106,7 @@ class ApiUserController extends ApiBaseController
         } catch (Exception $e) {
             return $this->sendError(500, "error", ['server_error' => $e->getMessage()]);
         }
-    }   
+    }
 
     /**
     * Registra a un usuario y retorna el token del usuario
@@ -337,13 +338,30 @@ class ApiUserController extends ApiBaseController
                     $afiliation_title_noti = 'Solicitud de afiliación registrada';
                     $afiliation_description_noti = 'Tu solicitud ha sido enviada exitosamente';
                   
-                    $user->notify(new MembershipRequestNotification(
-                        $afiliation_title_noti, 
-                        $afiliation_description_noti,
-                        $membership,
-                        $user
-                    ));
+                    //Notificar usuario
+                    // $user->notify(new MembershipRequestNotification(
+                    //     $afiliation_title_noti,
+                    //     $afiliation_description_noti,
+                    //     $membership,
+                    //     $user
+                    // ));
 
+                    //Notificar moderadores
+                    //Se obtiene a todos los moderadores activos para notificar las publicaciones realizadas
+                    $moderator_role = Role::where('slug', 'moderador')->first();
+                    $moderators = $moderator_role->users()
+                        ->wherePivot('state', true)->get();
+
+                    Notification::send(
+                        $moderators,
+                        new MembershipRequestNotification(
+                                'Nueva Solicitud de Afiliación', //título de la notificación
+                                $user->getFullName() . ' ha reportado un problema social', //descripción de la notificación
+                                $membership, // post que almacena la notificación
+                                $user //morador que reportó el problema social
+                            )
+                    );
+                        
                     $user_devices = OnesignalNotification::getUserDevices($user->id);
                     if (!is_null($user_devices) && count($user_devices) > 0) {
                         //Enviar notification al usuario en especifico
@@ -353,7 +371,7 @@ class ApiUserController extends ApiBaseController
                             [],
                             $user_devices
                         );
-                    }                    
+                    }
                  
                     //Retornar Token
                     $token = $jwtAuth->getToken($user->email);
@@ -623,8 +641,9 @@ class ApiUserController extends ApiBaseController
         }
     }
 
-    public function getMembresiasUser($user_id){
-        try{
+    public function getMembresiasUser($user_id)
+    {
+        try {
             $user = User::findById($user_id)->first();
             $membresias = $user->memberships()->get();
             return $this->sendResponse(200, 'success', $membresias);

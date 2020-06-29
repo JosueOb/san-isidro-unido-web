@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Helpers\OnesignalNotification;
 use App\HelpersClass\AdditionalData as HelperAdditionalData;
 use App\HelpersClass\Ubication as HelperUbication;
+use App\Notifications\PublicationReport;
 
 //Request
 use App\Http\Requests\Api\ApiCreateEmergencyRequest;
@@ -505,11 +506,18 @@ class ApiPostController extends ApiBaseController
             //Notificar Moderadores
             foreach ($moderadores as $moderador) {
                 $moderador->notify(
-                    new PostNotification(
-                        $new_post,
-                        $title_notification_moderador,
-                        $description_notification_moderador,
-                        $type_notification
+                    // new PostNotification(
+                    //     $new_post,
+                    //     $title_notification_moderador,
+                    //     $description_notification_moderador,
+                    //     $type_notification
+                    // )
+                    new PublicationReport(
+                        $type_notification, //tipo de la notificación
+                        $new_post->subcategory->name, //título de la notificación
+                        $new_post->user->fullname . ' ha reportado un problema social', //descripcción de la notificación
+                        $new_post, // post que almacena la notificación
+                        $post->user //morador que reportó el problema social
                     )
                 );
 
