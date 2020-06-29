@@ -461,5 +461,16 @@ class PermissionsTableSeeder extends Seeder
             'private' => true,
             'group' => 'emergencia',
         ]);
+
+        /**
+         * Gráficas de problemas sociales y emergencias
+         */
+        Permission::create([
+            'name' => 'Ver gráfica de problemas sociales y emergencias',
+            'slug' => 'graphics.show',
+            'description' => 'Ver graáfica de los problemas sociales que más afectan a los moradores y las emergencias sucedidas',
+            'private' => true,
+            'group' => 'gráficos',
+        ]);
     }
 }

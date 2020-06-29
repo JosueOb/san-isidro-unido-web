@@ -32,7 +32,7 @@ class RolesTableSeeder extends Seeder
             'mobile_app'=>false,
         ]);
         $directiveRole->save();
-        $directiveRole->permissions()->attach([4,5,6,7,8,13,14,15,16,17,18,19,20,21,22,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,56,57,58,59,60]);
+        $directiveRole->permissions()->attach([4,5,6,7,8,13,14,15,16,17,18,19,20,21,22,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,56,57,58,59,60,61]);
         //Moderador
         $moderatorRole = Role::create([
             'name'=>'Moderador',

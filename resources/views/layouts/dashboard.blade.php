@@ -11,6 +11,7 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
+    @yield('scripts')
 
     <!-- Icon-->
     <link rel="icon" type="image/svg+xml" href="https://siu-dev97-sd.s3-sa-east-1.amazonaws.com/recursos_publicos/logos/sanIsidroIconOnlyTransparent.svg" sizes='48x48'>
@@ -250,14 +251,7 @@
                         </li>
                         @endcanany
 
-
-
-
-
-
-
-                        {{-- @canany(['socialProblems.index', 'falta el permiso  de la gráfica']) --}}
-                        @canany(['socialProblems.index'])
+                        @canany(['socialProblems.index', 'graphics.show'])
                         <li class="nav-item @yield('item-problem')">
                             <a class="nav-link" data-toggle="collapse" data-target="#collapseProblem" aria-expanded="true" aria-controls="collapseProblem">
                                 <i class="fas fa-fist-raised"></i>
@@ -268,16 +262,15 @@
                                     @can('socialProblems.index')
                                         <a class="collapse-item @yield('item-problem-list')" href="{{route('socialProblems.index')}}"><i class="fas fa-list"></i>Listar problemas sociales</a>
                                     @endcan
-                                    {{-- @can('policemen.create') --}}
-                                        <a class="collapse-item @yield('item-problem-graphic')" href="#"><i class="fas fa-chart-pie"></i>Ver gráfico estadístico</a>
-                                    {{-- @endcan --}}
+                                    @can('graphics.show')
+                                        <a class="collapse-item @yield('item-problem-graphic')" href="{{route('graphic.socialProblems')}}"><i class="fas fa-chart-pie"></i>Ver gráfico estadístico</a>
+                                    @endcan
                                 </div>
                             </div>
                         </li>
                         @endcanany
 
-                        {{-- @canany(['socialProblems.index', 'falta el permiso  de la gráfica']) --}}
-                        @canany(['emergencies.index'])
+                        @canany(['emergencies.index', 'graphics.show'])
                         <li class="nav-item @yield('item-emergency')">
                             <a class="nav-link" data-toggle="collapse" data-target="#collapseEmergency" aria-expanded="true" aria-controls="collapseEmergency">
                                 <i class="fas fa-exclamation-circle"></i>
@@ -288,17 +281,13 @@
                                     @can('emergencies.index')
                                         <a class="collapse-item @yield('item-emergency-list')" href="{{route('emergencies.index')}}"><i class="fas fa-list"></i>Listar emergencias reportadas</a>
                                     @endcan
-                                    {{-- @can('policemen.create') --}}
-                                        <a class="collapse-item @yield('item-emergency-graphic')" href="#"><i class="fas fa-grip-horizontal"></i></i>Ver gráfico de emergencias</a>
-                                    {{-- @endcan --}}
+                                    @can('graphics.show')
+                                        <a class="collapse-item @yield('item-emergency-graphic')" href="{{route('graphic.emergencies')}}"><i class="fas fa-grip-horizontal"></i></i>Ver gráfico de emergencias</a>
+                                    @endcan
                                 </div>
                             </div>
                         </li>
                         @endcanany
-
-
-
-
 
                     </ul>
                 </div>
