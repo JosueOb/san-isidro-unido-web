@@ -128,7 +128,7 @@ class ApiPostController extends ApiBaseController
     */
     public function atenderEmergencia(Request $request)
     {
-        $type_notification = "emergency_attended";
+        $type_notification = "emergency_reported";
         $token_decoded = $request->get('token');
         $validatorAtenderEmergencia = Validator::make($request->all(), [
             "emergencia_id" => ['required', 'int'],
@@ -188,7 +188,8 @@ class ApiPostController extends ApiBaseController
                 $post_updated,
                 $title_noti,
                 $description_noti,
-                $type_notification
+                $type_notification,
+                $report_user
             )
         );
         //Enviar notificaciones a moderadores
@@ -229,7 +230,7 @@ class ApiPostController extends ApiBaseController
     */
     public function rechazarEmergencia(Request $request)
     {
-        $type_notification = "emergency_rechazed";
+        $type_notification = "emergency_reported";
         $token_decoded = $request->get('token');
         //Validar Formulario
         $validatorRechazarEmergencia = Validator::make($request->all(), [
@@ -302,11 +303,18 @@ class ApiPostController extends ApiBaseController
             //Notificar Moderadores
             foreach ($moderadores as $moderador) {
                 $moderador->notify(
+                    // new PostNotification(
+                    //     $post_updated,
+                    //     $title_notification_moderador,
+                    //     $description_notification_moderador,
+                    //     $type_notification
+                    // )
                     new PostNotification(
                         $post_updated,
-                        $title_notification_moderador,
-                        $description_notification_moderador,
-                        $type_notification
+                        $title_noti,
+                        $description_noti,
+                        $type_notification,
+                        $report_user
                     )
                 );
   

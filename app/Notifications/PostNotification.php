@@ -16,6 +16,7 @@ class PostNotification extends Notification
     public $titleNotification;
     public $messageNotification;
     public $typeNotification;
+    protected $neighbor;
     
 
     /**
@@ -23,13 +24,14 @@ class PostNotification extends Notification
      *
      * @return void
      */
-    public function __construct(Post $post, $titleNotification='Titulo de la Notificacion', $messageNotification = 'Contenido de la Notificacion', $typeNotification="tipo_notificacion")
+    public function __construct(Post $post, $titleNotification='Titulo de la Notificacion', $messageNotification = 'Contenido de la Notificacion', $typeNotification="tipo_notificacion", $neighborRecieved = null)
     {
         //
        $this->post = $post;
        $this->titleNotification = $titleNotification;
        $this->messageNotification = $messageNotification;
        $this->typeNotification = $typeNotification;
+       $this->neighbor = $neighborRecieved;
     }
 
     /**
@@ -69,7 +71,7 @@ class PostNotification extends Notification
         $notificationArray = [
             "title" => $this->titleNotification,
             "description" => $this->messageNotification,
-            "neighbor" => $notifiable, //el usuario al que le voy a enviar 
+            "neighbor" => (!$this->neighbor) ? $notifiable: $this->neighbor, //el usuario al que le voy a enviar 
             "post" => $post,
             'type' => $this->typeNotification,
         ];
