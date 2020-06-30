@@ -19,13 +19,11 @@ export default {
     return {
       social_problems: [],
       // Array will be automatically processed with visualization.arrayToDataTable function
-      chartDataHeader: ["Task", "Hours per Day"],
+      chartDataHeader: ["Problemas sociales", "Social Problems per Category"],
       updatedChartData: [],
       chartOptions: {
-        chart: {
-          title: "Company Performance",
-          subtitle: "Sales, Expenses, and Profit: 2014-2017"
-        },
+        title: "Problemas sociales reportados por categorías",
+        subtitle: "Problemas sociales reportados por los moradores del barrio",
         height: 450
       }
     };

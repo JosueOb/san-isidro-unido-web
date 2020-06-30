@@ -238,6 +238,7 @@ Route::middleware(['auth', 'verified', 'logout'])->group(function () {
 
     //GRAFICAS - PROBLEMAS SOCIALES Y EMERGENCIAS
     Route::get('api/socialProblems', 'GraphicController@api_social_problems')->name('api.socialProblems')->middleware('can:graphics.show');
+    Route::get('api/emergencies', 'GraphicController@api_emergencies')->name('api.emergencies')->middleware('can:graphics.show');
     Route::get('graphic/socialProblems', 'GraphicController@social_problems')->name('graphic.socialProblems')->middleware('can:graphics.show');
     Route::get('graphic/emergencies', 'GraphicController@emergencies')->name('graphic.emergencies')->middleware('can:graphics.show');
 });

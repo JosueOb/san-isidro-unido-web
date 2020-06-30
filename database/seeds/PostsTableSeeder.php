@@ -220,11 +220,15 @@ class PostsTableSeeder extends Seeder
         $police_role = Role::where('slug', 'policia')->first();
         $polices = $police_role->users()
             ->wherePivot('state', true)->with('roles')->get();
+        //Datos para genera una fecha aleatorea
+        $date_format = 'Y-m-d H:i:s';
+        $minimum_date = strtotime('2020-05-01');
+        $maximum_date =  strtotime(now()->toDateTimeString());//fecha actual
 
         // Se registran 15 emergencias entre atendidas o rechazados por parte del policía
-        $emergencies = factory(App\Post::class, 15)
+        $emergencies = factory(App\Post::class, 50)
             ->create()
-            ->each(function (Post $emergency) use ($neighbors, $category_emergency, $polices, $faker) {
+            ->each(function (Post $emergency) use ($neighbors, $category_emergency, $polices, $faker, $minimum_date, $maximum_date, $date_format) {
                 $neighbor = $neighbors->random(); //se obtiene un vecino de forma aleatore
                 $police = $polices->random(); //se obtiene un policía de forma aleatorea
 
@@ -258,6 +262,9 @@ class PostsTableSeeder extends Seeder
                     $faker->text($maxNbChars = 30)
                 );
 
+                //Se genera una fecha aleatorea
+               $radom_date = mt_rand($minimum_date, $maximum_date);
+
                 if ($getInfoEmergency['status_attendance'] === 'rechazado') {
                     $emergency->state = false;
                 }
@@ -266,6 +273,7 @@ class PostsTableSeeder extends Seeder
                 $emergency->category_id = $category_emergency->id;
                 $emergency->ubication = $ubication->getAll();
                 $emergency->additional_data = $getInfoEmergency;
+                $emergency->created_at = date($date_format, $radom_date);
                 $emergency->save();
 
                 //Se adjunta a la emergencia entre 1 a 3 imágenes
