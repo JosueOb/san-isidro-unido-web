@@ -20,6 +20,7 @@ class EmergencyController extends Controller
         $emergency_category = Category::where('slug', 'emergencia')->first();
         $emergencies = $emergency_category->posts()
             ->whereNotIn('additional_data->status_attendance', ['pendiente'])
+            ->latest()
             ->paginate(10);
 
         return view('emergencies.index', [

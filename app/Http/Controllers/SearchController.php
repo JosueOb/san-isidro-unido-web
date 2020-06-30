@@ -607,7 +607,7 @@ class SearchController extends Controller
         $value = $request->has('searchValue') ? $validated['searchValue'] : null;
         $filter = $request->query('filterOption'); //obtiene la variable enviado en la petición GET
 
-        $emergency_category = Category::where('slug', 'problema')->first();
+        $emergency_category = Category::where('slug', 'emergencia')->first();
         //se obtiene las emergencias abordadas por la policía
         $emergencies = $emergency_category->posts()->whereNotIn('additional_data->status_attendance', ['pendiente']);
         $emergencies_found = null;

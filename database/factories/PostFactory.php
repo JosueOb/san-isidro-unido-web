@@ -10,7 +10,6 @@ $factory->define(Post::class, function (Faker $faker) {
         'title'=> $faker->sentence($nbWords = 3, $variableNbWords = false),
         'description'=>$faker->text($maxNbChars = 200),
         'state'=>true,
-        //user_id y category_id se los cambian en el PostsSeeder
         'user_id'=> 2,
         'category_id'=> 2,
     ];

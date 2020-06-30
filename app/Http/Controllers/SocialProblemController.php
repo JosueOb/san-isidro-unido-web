@@ -28,6 +28,7 @@ class SocialProblemController extends Controller
         $social_problem_category = Category::where('slug', 'problema')->first();
         $social_problems = $social_problem_category->posts()
             ->whereNotIn('additional_data->status_attendance', ['pendiente'])
+            ->latest()
             ->paginate(10);
 
         return view('social-problems.index', [

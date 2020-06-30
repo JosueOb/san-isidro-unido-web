@@ -1,13 +1,13 @@
 <?php
 
-use App\HelpersClass\Membership;
-use App\Notifications\MembershipRequest;
+use App\Helpers\OnesignalNotification;
 use App\Position;
+use App\SocialProfile;
 use Illuminate\Database\Seeder;
 use App\User;
 use Caffeinated\Shinobi\Models\Role;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Notification;
+use Carbon\CarbonImmutable;
+use Illuminate\Support\Facades\DB;
 
 class UsersTableSeeder extends Seeder
 {
@@ -19,44 +19,70 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         /**
+         * Variables globales
+         */
+        $faker = \Faker\Factory::create();
+        $provider_options = ['facebook', 'google'];
+        /**
+         * Roles del sistema web y aplicación móvil
+         * 
+         */
+        $admin_role = Role::where('slug', 'admin')->first();
+        $directive_role = Role::where('slug', 'directivo')->first();
+        $moderator_role = Role::where('slug', 'moderador')->first();
+        $neighbor_role = Role::where('slug', 'morador')->first();
+        $guest_role = Role::where('slug', 'invitado')->first();
+        $police_role = Role::where('slug', 'policia')->first();
+
+        /**
          * ADMINISTRADOR USER
          * Se registra al usuario administrador
          **/
         $avatar =  $avatar = 'https://ui-avatars.com/api/?name=' .
             mb_substr(env('USER_FIRST_NAME'), 0, 1) . '+' . mb_substr(env('USER_LAST_NAME'), 0, 1) .
-            '&size=255';
+            '&size=250';
         $userAdmin = User::create([
             'first_name' => env('USER_FIRST_NAME'),
             'last_name' => env('USER_LAST_NAME'),
             'avatar' => $avatar,
             'email' => env('USER_EMAIL'),
+            'number_phone' => env('USER_PHONE'),
             'password' => password_hash(env('USER_PASSWORD'), PASSWORD_DEFAULT),
-            // 'state' => true,
             'email_verified_at' => now(),
         ]);
-        $roleAdmin = Role::where('slug', 'admin')->first();
-        $roleNeighbor = Role::where('slug', 'morador')->first();
-        //Se asigna el rol de administrador y vecino an usuario registrado anteriormente
-        $userAdmin->roles()->attach([$roleNeighbor->id, $roleAdmin->id,], ['state' => true]);
-
+        //Se asigna el rol de administrador y vecino al administrador
+        $userAdmin->roles()->attach([$neighbor_role->id, $admin_role->id], ['state' => true]);
 
         /**
          * DIRECTIVA
-         * Se registra a los usuario del la directiva barrial
+         * Se registra a los usuario de la directiva barrial
          **/
-        $roleDirective = Role::where('slug', 'directivo')->first();
-        $positions = Position::all();
-        $members = factory(User::class, 5)->create();
-        $members->each(function (User $user) use ($roleDirective, $roleNeighbor, $positions) {
-
-            $user->avatar = 'https://ui-avatars.com/api/?name=' .
-                mb_substr($user->first_name, 0, 1) . '+' . mb_substr($user->last_name, 0, 1) .
+        $president = User::create([
+            'first_name' => 'Pablo Aníbal',
+            'last_name' => 'Vela Galarza',
+            'email' => 'directive@example.com',
+            'number_phone' => '09' . mt_rand(80000000, 99999999),
+            'password' => password_hash('Directive01', PASSWORD_DEFAULT),
+            'email_verified_at' => now(),
+            'position_id' => 1, //se le asigna el cargo de presiente
+        ]);
+        $president->avatar = 'https://ui-avatars.com/api/?name=' .
+            mb_substr($president->first_name, 0, 1) . '+' . mb_substr($president->last_name, 0, 1) .
+            '&size=250';
+        $president->save();
+        $president->roles()->attach([$neighbor_role->id, $directive_role->id], ['state' => true]);
+        // Registro de 4 directivos
+        //Se obtiene todas los cargos registrado excepto el cargo de presidente
+        $positions = Position::whereNotIn('name', ['Presidente'])->get();
+        $positions->each(function (Position $position) use ($directive_role, $neighbor_role) {
+            // Por cada cargo se a a crea un directivo
+            $member = factory(User::class)->create();
+            $member->avatar = 'https://ui-avatars.com/api/?name=' .
+                mb_substr($member->first_name, 0, 1) . '+' . mb_substr($member->last_name, 0, 1) .
                 '&size=250';
-            //se resta uno, debido a que el primer usurio administardor tiene el id = 1
-            $user->position_id = $positions->where('id', $user->id - 1)->first()->id;
-            // $user->position_id = $positions->random()->id;
-            $user->save();
-            $user->roles()->attach([$roleNeighbor->id, $roleDirective->id], ['state' => true]);
+            $member->position_id = $position->id;
+            $member->save();
+            $member->roles()->attach([$neighbor_role->id, $directive_role->id], ['state' => true]);
         });
 
         /**
@@ -64,37 +90,107 @@ class UsersTableSeeder extends Seeder
          * Se registra a los moradores del barrio
          **/
         $neighbors = factory(User::class, 40)->create();
-        $neighbors->each(function (User $neighbor) use ($roleNeighbor) {
+        $neighbors->each(function (User $neighbor) use ($neighbor_role) {
 
             $neighbor->avatar = 'https://ui-avatars.com/api/?name=' .
                 mb_substr($neighbor->first_name, 0, 1) . '+' . mb_substr($neighbor->last_name, 0, 1) .
                 '&size=250';
             $neighbor->save();
-            $neighbor->roles()->attach([$roleNeighbor->id], ['state' => true]);
+            $neighbor->roles()->attach([$neighbor_role->id], ['state' => true]);
         });
 
         /**
          * MODERADOR
-         * Se asigna el rol de moderador a los miembros de la directiva o vecinos registrados
+         * Se registra y se asigna el rol de moderador
          **/
-        $moderatorRole = Role::where('slug', 'moderador')->first();
+        $moderator = User::create([
+            'first_name' => $faker->firstName,
+            'last_name' => $faker->lastName,
+            'email' => 'moderator@example.com',
+            'number_phone' => '09' . mt_rand(80000000, 99999999),
+            'password' => password_hash('Moderator01', PASSWORD_DEFAULT),
+            'email_verified_at' => now(),
+        ]);
+        $moderator->avatar = 'https://ui-avatars.com/api/?name=' .
+            mb_substr($moderator->first_name, 0, 1) . '+' . mb_substr($moderator->last_name, 0, 1) .
+            '&size=250';
+        $moderator->save();
+        $moderator->roles()->attach([$neighbor_role->id, $moderator_role->id], ['state' => true]);
+        // Se asigna aleatoreamente el rol de moderador a tres moradores registrados
         $moderators = $neighbors->random(3);
-        $moderators->each(function (User $moderator) use ($moderatorRole) {
-            $moderator->roles()->attach([$moderatorRole->id], ['state' => true]);
+        $moderators->each(function (User $moderator) use ($moderator_role) {
+            $moderator->roles()->attach([$moderator_role->id], ['state' => true]);
         });
+
+        /**
+         * POLICÍA
+         * registo de la policía comunitaria
+         */
+        $police = User::create([
+            'first_name' => $faker->firstName,
+            'last_name' => $faker->lastName,
+            'email' => 'police@example.com',
+            'number_phone' => '09' . mt_rand(80000000, 99999999),
+            'password' => password_hash('Police01', PASSWORD_DEFAULT),
+            'email_verified_at' => now(),
+        ]);
+        $police->avatar = 'https://ui-avatars.com/api/?name=' .
+            mb_substr($police->first_name, 0, 1) . '+' . mb_substr($police->last_name, 0, 1) .
+            '&size=250';
+        $police->save();
+        $police->roles()->attach([$police_role->id], ['state' => true]);
+        //Registro de 2 policías
+        $polices = factory(User::class, 2)->create();
+        $polices->each(function(User $police) use($police_role) {
+            $police->avatar = 'https://ui-avatars.com/api/?name=' .
+                mb_substr($police->first_name, 0, 1) . '+' . mb_substr($police->last_name, 0, 1) .
+                '&size=250';
+            $police->save();
+            $police->roles()->attach([$police_role->id], ['state' => true]);
+        });
+
         /**
          * INVITADO
          * Se asigna el rol de invitado a los usuarios registrados de redes sociales o registrados desde la aplicación móvil
          **/
-        $guestRole = Role::where('slug', 'invitado')->first();
-        $faker = Faker\Factory::create();
-
+        //Registro de usuarios ivitados por el formulario por parte del directivo o Moderador
         $guests = factory(User::class, 5)->create();
-        $guests->each(function (User $guest) use ($guestRole) {
+        $guests->each(function (User $guest) use ($guest_role) {
             $guest->avatar = 'https://source.unsplash.com/daily';
-            $guest->number_phone = '0984254888';
             $guest->save();
-            $guest->roles()->attach([$guestRole->id], ['state' => true]);
+            $guest->roles()->attach([$guest_role->id], ['state' => true]);
         });
+
+        //Registro de usuarios por redes sociales
+        $guest01 = User::create([
+            'first_name' => 'Jose',
+            'last_name' => 'Maza',
+            'email' => 'guest@example.com',
+            'number_phone' => '09' . mt_rand(80000000, 99999999),
+            'avatar' => "https://ui-avatars.com/api/?name=Jose+Maza&size=255",
+            'password' => password_hash('Guest01', PASSWORD_DEFAULT),
+            'email_verified_at' => now(),
+        ]);
+        SocialProfile::create([
+            'user_id' => $guest01->id,
+            'social_id' => '487asasd8a7ddldskfkds4',
+            "provider" =>  $provider_options[0],
+        ]);
+        SocialProfile::create([
+            'user_id' => $guest01->id,
+            'social_id' => '12151515151swswsxwxw',
+            "provider" =>  $provider_options[1],
+        ]);
+        for ($i = 0; $i < 2; $i++) {
+            DB::table('devices')->insert([
+                "phone_id" => OnesignalNotification::generateUniqueId(),
+                "phone_model" => $faker->name,
+                "phone_platform" => 'Modelo Generico',
+                "description" => $faker->sentence(6, true),
+                'user_id' => $guest01->id,
+                "created_at" => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
+            ]);
+        }
+        $guest01->roles()->attach([$guest_role->id], ['state' => true]);
     }
 }

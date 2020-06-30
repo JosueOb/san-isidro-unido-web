@@ -13,25 +13,21 @@ class AdditionalData
     {
         $this->social_problem = [
             "approved" => [
-                'who'=>null,//usuario que aprobó el problema
+                'who'=>null,//moderador que aprobó el problema
                 'date'=>null,//fecha de aprobación
             ],
             "rechazed"=>[
-                'who'=>null,//usuario que rechazó el problema social
+                'who'=>null,//moderador que rechazó el problema social
                 'reason'=>null,//razón del rechazo del problema social
                 'date'=>null,//fecha de rechado
             ],
             "attended"=>[
-                'who'=>null,//usuario que cambió a solucionado el problema
+                'who'=>null,//moderador que cambió a solucionado el problema
                 'date'=>null,//fecha en la que se atendió al problema
             ],
             "status_attendance" => 'pendiente' //aprobado, rechazado, atendido(solucionado), pendiente
         ];
         $this->emergency = [
-            // "published" => [
-            //     'who'=>null,// moderador que aprobó la publicación de la emergencia
-            //     'date'=>null,//fecha de aprobación
-            // ],
             "rechazed"=>[
                 'who'=>null,//policía que rechazó la emergencia
                 'reason'=>null,//razón del rechazo
@@ -44,26 +40,14 @@ class AdditionalData
             "status_attendance" => 'pendiente' //pendiente, atendido, rechazado
         ];
         $this->event = [
-            "responsible" => null,
+            "responsible" => null,//nombre del responsable del evento
             "range_date" => [
                 'start_date' => date("Y-m-d"),
                 'end_date' => date("Y-m-d",strtotime(date("Y-m-d")."+ 1 week")),
                 'start_time' => date("H:i:s"),
                 'end_time' => date("H:i:s", strtotime('+3 hours', strtotime(date("H:i:s")))) 
             ],
-            "approved" => [
-                'who'=>null,//usuario que aprobó el problema
-                'date'=>null,//fecha de aprobación
-            ],
-            "status_attendance" => 'pendiente' //atendido, rechazado, pendiente
         ];
-        // $this->activity = [
-        //     "approved" => [
-        //         'who'=>null,//usuario que aprobó el problema
-        //         'date'=>null,//fecha de aprobación
-        //     ],
-        //     "status_attendance" => 'pendiente' //atendido, rechazado, pendiente
-        // ];
     }
     
     public function getInfoSocialProblem() 
@@ -71,7 +55,7 @@ class AdditionalData
         return $this->social_problem;
     }
 
-    public function setInfoSocialProblem($info_social_problem) 
+    public function setInfoSocialProblem(array $info_social_problem) 
     {
         $this->social_problem = array_merge($this->social_problem, $info_social_problem);
     }
@@ -95,18 +79,6 @@ class AdditionalData
         $this->event = array_merge($this->event, $info_event);
     }
 
-    
-
-    // public function getInfoActivity() 
-    // {
-    //     return $this->activity;
-    // }
-
-    // public function setInfoActivity($info_activity) 
-    // {
-    //     $this->activity = array_merge($this->activity, $info_activity);
-    // }
-
     public function getAll()
     {
         return 
@@ -114,27 +86,6 @@ class AdditionalData
             'emergency'   => $this->getInfoEmergency(),
             'event' => $this->getInfoEvent(),
             'problem' => $this->getInfoSocialProblem(),
-            // 'activity' => $this->getInfoActivity(),
         ];
     }
-
-    // public function getEmergencyData()
-    // {
-    //     return $this->getInfoEmergency();
-    // }
-
-    // public function getEventData()
-    // {
-    //     return $this->getInfoEvent();
-    // }
-
-    // public function getProblemData()
-    // {
-    //     return $this->getInfoSocialProblem();
-    // }
-
-    // public function getActivityData()
-    // {
-    //     return $this->getInfoActivity();
-    // }
 }

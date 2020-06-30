@@ -159,12 +159,12 @@ class ApiPostSeeder extends Seeder
                     'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
                 ]);
             }
-            DB::table('reactions')->insert([
-                'post_id' => $idPostEvento,
-                'user_id' => $user->id,
-                'type' => 'assistance',
-                'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
-            ]);
+            // DB::table('reactions')->insert([
+            //     'post_id' => $idPostEvento,
+            //     'user_id' => $user->id,
+            //     'type' => 'assistance',
+            //     'created_at' => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
+            // ]);
         }
         //Crear Actividades Barriales
         for($rp = 1; $rp <= $numPosts; $rp++){
