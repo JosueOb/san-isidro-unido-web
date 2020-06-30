@@ -154,7 +154,7 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
 	 * @return mixed
 	 */
 	public function scopeGetBySpecificRol($query, $rol_slug) {
-		return $query->whereHas('roles', function ($q) {
+		return $query->whereHas('roles', function ($q) use($rol_slug) {
 			$q->where('slug', $rol_slug);
 		});
 	}
@@ -167,10 +167,11 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
 	 */
 	public function scopeRolActive($query) {
 		// return $query->where('slug', $slug);
-		$active = true;
-		return $query->whereHas('roles', function ($query) use ($active) {
+		$active = 1;
+		$query->whereHas('roles', function ($query) use ($active) {
 			$query->where('state', '=', $active);
-		});
+        });
+        return $query;
 	}
 
     //Se verifica que algún rol del sistema web asignados al usuario se encuentre activo

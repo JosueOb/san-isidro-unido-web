@@ -31,13 +31,20 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('directivos', 'Api\ApiUserController@getDirectives');
     // Grupo Usuarios
     Route::group(['prefix' => 'usuarios'], function () {
-        Route::get('/', 'Api\ApiUserController@index');
-        Route::get('/{id}', 'Api\ApiUserController@detail');
-        Route::get('/{id}/dispositivos', 'Api\ApiUserController@devicesXUser');
-        Route::get('/{id}/perfiles-sociales', 'Api\ApiUserController@socialProfilesXUser');
-        Route::get('/{id}/emergencias', 'Api\ApiUserController@getEmergenciesByUser');
-        Route::get('/{id}/notificaciones', 'Api\ApiUserController@getNotificationsUser');
-        Route::get('/{id}/membresias', 'Api\ApiUserController@getMembresiasUser');
+        Route::get('/', 'Api\ApiUserController@index')
+        ->middleware(['api.user_auth', 'api.user_active']);
+        Route::get('/{id}', 'Api\ApiUserController@detail')
+        ->middleware(['api.user_auth', 'api.user_active']);
+        Route::get('/{id}/dispositivos', 'Api\ApiUserController@devicesXUser')
+        ->middleware(['api.user_auth', 'api.user_active']);
+        Route::get('/{id}/perfiles-sociales', 'Api\ApiUserController@socialProfilesXUser')
+        ->middleware(['api.user_auth', 'api.user_active']);
+        Route::get('/{id}/emergencias', 'Api\ApiUserController@getEmergenciesByUser')
+        ->middleware(['api.user_auth', 'api.user_active']);
+        Route::get('/{id}/notificaciones', 'Api\ApiUserController@getNotificationsUser')
+        ->middleware(['api.user_auth', 'api.user_active']);
+        Route::get('/{id}/membresias', 'Api\ApiUserController@getMembresiasUser')
+        ->middleware(['api.user_auth', 'api.user_active']);
     });
 });
 
@@ -55,7 +62,8 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('emergencias', "Api\ApiPostController@createEmergency")
     ->middleware(['api.user_auth', 'api.user_active', 'base64Image']);
     //Crear un Problema Social
-    Route::post('problemas-sociales', "Api\ApiPostController@createSocialProblem")->middleware(['api.user_auth', 'api.user_active', 'base64Image']);
+    Route::post('problemas-sociales', "Api\ApiPostController@createSocialProblem")
+    ->middleware(['api.user_auth', 'api.user_active', 'base64Image']);
     //Crear un detalle de tipo Likes, Asistencias
     Route::post('detalles', "Api\ApiReactionController@create")
         ->middleware(['api.user_auth', 'api.user_active']);
