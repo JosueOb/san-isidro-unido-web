@@ -8,6 +8,7 @@ use App\Http\Middleware\ProtectNotifications;
 use App\Http\Requests\RejectReportRequest;
 use App\Post;
 use App\User;
+use Caffeinated\Shinobi\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\DatabaseNotification;
 
@@ -68,7 +69,11 @@ class SocialProblemReportController extends Controller
         //Se obtiene información del problema social reportado como objeto Post
         $social_problem = Post::findOrFail($notification->data['post']['id']);
         //Se obtiene información del moderador que aprobó el reporte de problema social
-        $moderator = $request->user();
+        $moderator_role = Role::where('slug', 'moderador')->first();
+        $moderator = $moderator_role->users()
+            ->where('user_id', $request->user()->id)
+            ->with('roles')->first();
+
         //Datos aprobación del problema social
         $approval = new AdditionalData();
         $approval->setInfoSocialProblem([
@@ -114,7 +119,10 @@ class SocialProblemReportController extends Controller
         //Se obtiene información del problema social reportado como objeto Post
         $social_problem = Post::findOrFail($notification->data['post']['id']);
         //Se obtiene información del moderador que aprobó el reporte de problema social
-        $moderator = $request->user();
+        $moderator_role = Role::where('slug', 'moderador')->first();
+        $moderator = $moderator_role->users()
+            ->where('user_id', $request->user()->id)
+            ->with('roles')->first();
 
         //Datos rechazo del problema social
         $rejection = new AdditionalData();

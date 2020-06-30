@@ -39,13 +39,7 @@
                     </div>
                 </div>
                 @if ($emergency_status_attendance === 'atendido')
-                {{-- <div class="row">
-                    <div class="col">
-                        <h5 class="text-uppercase text-center font-weight-bolder">
-                            {{ $emergency_status_attendance->additional_data['approved']['who']['roles'][1]['name'] }}
-                        </h5>
-                    </div>
-                </div> --}}
+
                 <div class="row">
                     <div class="col">
                         <p><strong>Apellidos:</strong> {{ $emergency->additional_data['attended']['who']['last_name'] }} </p>
@@ -62,13 +56,7 @@
                 @endif
 
                 @if ($emergency_status_attendance === 'rechazado')
-                {{-- <div class="row">
-                    <div class="col">
-                        <h5 class="text-uppercase text-center font-weight-bolder">
-                            {{ $social_problem->additional_data['rechazed']['who']['roles'][1]['name'] }}
-                        </h5>
-                    </div>
-                </div> --}}
+                
                 <div class="row">
                     <div class="col">
                         <p><strong>Apellidos:</strong> {{ $emergency->additional_data['rechazed']['who']['last_name'] }}</p>

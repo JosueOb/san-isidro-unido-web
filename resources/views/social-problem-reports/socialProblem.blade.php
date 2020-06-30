@@ -26,7 +26,14 @@
                 <div class="row">
                     <div class="col">
                         <h5 class="text-uppercase text-center font-weight-bolder">
-                            {{ $social_problem->additional_data['approved']['who']['roles'][1]['name'] }}
+                        @php
+                            $roles = collect($social_problem->additional_data['approved']['who']['roles']);
+                            $role = $roles->filter(function($roles, $key) use ($social_problem){
+                                return $social_problem->additional_data['approved']['who']['pivot']['role_id'] === $roles['id'];
+                            });
+                            $role = array_values($role->toArray());
+                        @endphp
+                        {{ $role[0]['name'] }}
                         </h5>
                     </div>
                 </div>
@@ -49,7 +56,14 @@
                 <div class="row">
                     <div class="col">
                         <h5 class="text-uppercase text-center font-weight-bolder">
-                            {{ $social_problem->additional_data['rechazed']['who']['roles'][1]['name'] }}
+                        @php
+                            $roles = collect($social_problem->additional_data['rechazed']['who']['roles']);
+                            $role = $roles->filter(function($roles, $key) use ($social_problem){
+                                return $social_problem->additional_data['rechazed']['who']['pivot']['role_id'] === $roles['id'];
+                            });
+                            $role = array_values($role->toArray());
+                        @endphp
+                        {{ $role[0]['name'] }}
                         </h5>
                     </div>
                 </div>
@@ -73,7 +87,14 @@
                 <div class="row">
                     <div class="col">
                         <h5 class="text-uppercase text-center font-weight-bolder">
-                            {{ $social_problem->additional_data['attended']['who']['roles'][1]['name'] }}
+                        @php
+                            $roles = collect($social_problem->additional_data['attended']['who']['roles']);
+                            $role = $roles->filter(function($roles, $key) use ($social_problem){
+                                return $social_problem->additional_data['attended']['who']['pivot']['role_id'] === $roles['id'];
+                            });
+                            $role = array_values($role->toArray());
+                        @endphp
+                        {{ $role[0]['name'] }}
                         </h5>
                     </div>
                 </div>

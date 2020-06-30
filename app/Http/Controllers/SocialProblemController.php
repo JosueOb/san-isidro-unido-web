@@ -10,6 +10,7 @@ use App\Http\Middleware\RejectSocialProblemsAddressedByDirective;
 use App\Http\Requests\RejectReportRequest;
 use App\Post;
 use App\User;
+use Caffeinated\Shinobi\Models\Role;
 use Illuminate\Http\Request;
 
 class SocialProblemController extends Controller
@@ -61,7 +62,10 @@ class SocialProblemController extends Controller
         //Se obtiene al post de problema social
         $social_problem = $post;
         //Se obtiene información del directivo que atendió al problema social
-        $directive = $request->user();
+        $directive_role = Role::where('slug', 'directivo')->first();
+        $directive = $directive_role->users()
+            ->where('user_id', $request->user()->id)
+            ->with('roles')->first();
 
         //Datos de attención del problema social
         $attention = new AdditionalData();
@@ -92,7 +96,10 @@ class SocialProblemController extends Controller
         //Se obtiene el problema social a rechazar
         $social_problem = $post;
         //se obtiene el directivo que está rechazando el problema social
-        $directive = $request->user();
+        $directive_role = Role::where('slug', 'directivo')->first();
+        $directive = $directive_role->users()
+            ->where('user_id', $request->user()->id)
+            ->with('roles')->first();
 
         //Datos del rechazo del problem social
         $rejection = new AdditionalData();
