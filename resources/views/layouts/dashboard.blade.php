@@ -11,7 +11,6 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
-    @yield('scripts')
 
     <!-- Icon-->
     <link rel="icon" type="image/svg+xml" href="https://siu-dev97-sd.s3-sa-east-1.amazonaws.com/recursos_publicos/logos/sanIsidroIconOnlyTransparent.svg" sizes='48x48'>
