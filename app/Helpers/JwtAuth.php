@@ -39,7 +39,7 @@ class JwtAuth {
 	public function singIn($email, $passOrToken, $provider) {
 		$validCredentials = false;
 		$user = User::email($email)->rolActive()->with("roles")->first();
-
+      
 		if (!is_null($user)) {
 			if ($provider === 'formulario') {
 				$validCredentials = (password_verify($passOrToken, $user['password'])) ? true : false;
@@ -69,7 +69,7 @@ class JwtAuth {
      * @return string|object
      */
 	public function getToken($email, $getInfoToken = null) {
-		$user_bdd = User::where("email", $email)->mobileRol()->first();
+		$user_bdd = User::where("email", $email)->mobileRol()->rolActive()->first();
 		$memberships = Membership::where('user_id', $user_bdd->id)->orderBy('id', 'desc')->take(1)->get();
 		$user = $user_bdd->makeHidden('password');
 		$user['memberships'] = $memberships->toArray();
