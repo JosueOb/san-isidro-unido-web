@@ -341,6 +341,7 @@ class ApiUserController extends ApiBaseController
                   
                     //Notificar usuario
                     $user->notify(new MembershipRequestNotification(
+                        'membership_reported',
                         $afiliation_title_noti,
                         $afiliation_description_noti,
                         $membership,
@@ -356,6 +357,7 @@ class ApiUserController extends ApiBaseController
                     Notification::send(
                         $moderators,
                         new MembershipRequestNotification(
+                                'membership_reported',
                                 'Nueva Solicitud de Afiliación', //título de la notificación
                                 $user->getFullName() . ' ha solicitado afiliación', //descripción de la notificación
                                 $membership, // post que almacena la notificación
