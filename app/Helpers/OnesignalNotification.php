@@ -86,7 +86,6 @@ class OnesignalNotification
         ];
         
         try {
-            $playerIdFake = self::generateUniqueId();
             $request = self::sendPushNotification($bodyPeticionOnesignal);
             $response = $request->getBody();
             return ['content' => $response->getContents(), 'status' => $request->getStatusCode()];
