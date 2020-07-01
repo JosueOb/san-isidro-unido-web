@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\HelpersClass\AdditionalData as AdditionalDataCls;
 use App\Notifications\PostNotification;
+use App\Notifications\PublicationReport;
+use Caffeinated\Shinobi\Models\Role;
 
 class EventController extends Controller
 {
@@ -104,13 +106,34 @@ class EventController extends Controller
                 ]);
             }
         }
-        //Notificar a todos los usuarios afiliados de la aplicación móvil
-        $title_notification_event = $event->title;
-        $description_notification_event = "El usuario " . $request->user()->getFullName() . " ha reportado un evento";
-        // $request->user()->notify(new PostNotification($event, $title_notification_event, $description_notification_event));
-        OnesignalNotification::sendNotificationBySegments($title_notification_event, $description_notification_event, [
-            "post" => $event
-        ]);
+
+        //Notificar a todos usuarios de la aplicación móvil
+        $neighbor_role = Role::where('slug', 'morador')->first();
+        $neighbors = $neighbor_role->users()->wherePivot('state', true)->get();
+        $n_title = 'Nuevo evento registrado';
+        $n_description = $event->title;
+        //Se obtiene el post guardado con su categoría
+        $post = $category_event->posts()->where('id', $event->id)->with('category', 'subcategory')->first();
+
+        foreach ($neighbors as $neighbor) {
+            $user_devices = OnesignalNotification::getUserDevices($neighbor->id);
+            if (!is_null($user_devices) && count($user_devices) > 0) {
+                OnesignalNotification::sendNotificationByPlayersID(
+                    $n_title,
+                    $n_description,
+                    ["post" => $post],
+                    $user_devices
+                );
+                //Por cada morador activo, se notifica el reporte registrado
+                $neighbor->notify(new PublicationReport(
+                    'event_reported', //tipo de la notificación
+                    $n_title, //título de la notificación
+                    $n_description, //descripcción de la notificación
+                    $post, // post que almacena la notificación
+                    $request->user() //directivo que reportó el evento
+                ));
+            }
+        }
 
         session()->flash('success', 'Servicio público registrado con éxito');
         return response()->json(['success'=>'Datos recibidos correctamente']);
@@ -245,13 +268,34 @@ class EventController extends Controller
             }
         }
 
-        //Notificar a todos los usuarios afiliados de la aplicación móvil
-        $title_notification_event = $post->title;
-        $description_notification_event = "Evento actualizado!";
-        // $request->user()->notify(new PostNotification($post, $title_notification_event, $description_notification_event));
-        OnesignalNotification::sendNotificationBySegments($title_notification_event, $description_notification_event, [
-            "post" => $post
-        ]);
+        //Notificar a todos usuarios de la aplicación móvil
+        $neighbor_role = Role::where('slug', 'morador')->first();
+        $neighbors = $neighbor_role->users()->wherePivot('state', true)->get();
+        $n_title = 'Nuevo evento actualizado';
+        $n_description = $post->title;
+        //Se obtiene el post guardado con su categoría
+        $category_event = Category::where('slug', 'evento')->first();
+        $event = $category_event->posts()->where('id', $post->id)->with('category', 'subcategory')->first();
+
+        foreach ($neighbors as $neighbor) {
+            $user_devices = OnesignalNotification::getUserDevices($neighbor->id);
+            if (!is_null($user_devices) && count($user_devices) > 0) {
+                OnesignalNotification::sendNotificationByPlayersID(
+                    $n_title,
+                    $n_description,
+                    ["post" => $event],
+                    $user_devices
+                );
+                //Por cada morador activo, se notifica el reporte registrado
+                $neighbor->notify(new PublicationReport(
+                    'event_reported', //tipo de la notificación
+                    $n_title, //título de la notificación
+                    $n_description, //descripcción de la notificación
+                    $event, // post que almacena la notificación
+                    $request->user() //directivo que reportó el evento
+                ));
+            }
+        }
 
         session()->flash('success', 'Servicio público actualizado con éxito');
         return response()->json([
