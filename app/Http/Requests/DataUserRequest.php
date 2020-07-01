@@ -26,7 +26,7 @@ class DataUserRequest extends FormRequest
         return [
             'first_name'=>'required|regex:/^[[:alpha:][:space:](áéíóúÁÉÍÓÚñÑ)]+$/|min:3|max:25',
             'last_name'=>'required|regex:/^[[:alpha:][:space:](áéíóúÁÉÍÓÚñÑ)]+$/|min:5|max:25',
-            'number_phone'=>'nullable|numeric|digits:10|regex:/^(09)[0-9]{8}+$/'
+            'number_phone'=>'required|numeric|digits:10|regex:/^(09)[0-9]{8}+$/'
         ];
     }
     /**

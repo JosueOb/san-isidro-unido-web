@@ -70,7 +70,7 @@
                                 </span>
                                 @enderror
                                 <small id="passwordHelp" class="form-text text-muted">
-                                    La contraseña debe tener como mínimo 8 caracteres, al menos un dígito, una minúscula y una mayúscula
+                                    La contraseña debe tener como mínimo 8 caracteres, una mayúscula y al menos un dígito
                                 </small>
                             </div>
                             <div class="form-group col-12 col-md-6 col-lg-12 col-xl-6">
@@ -128,8 +128,8 @@
                             <input id="email" type="text" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ Auth::user()->email}}" readonly>
                         </div>
                         <div class="form-group">
-                            <label for="number_phone">Celular <span class="text-muted">(opcional)</span></label>
-                            <input type="tel" class="form-control @error('number_phone') is-invalid @enderror" id='number_phone' name="number_phone" value="{{old('number_phone') ?: Auth::user()->number_phone}}" maxlength="10" pattern="(09)[0-9]{8}" title="Recuerda que se admiten solo 10 dígitos y anteponer el código 09 al ingresar tu número telefónico">
+                            <label for="number_phone">Celular</label>
+                            <input type="tel" class="form-control @error('number_phone') is-invalid @enderror" id='number_phone' name="number_phone" value="{{old('number_phone') ?: Auth::user()->number_phone}}" required maxlength="10" pattern="(09)[0-9]{8}" title="Recuerda que se admiten solo 10 dígitos y anteponer el código 09 al ingresar tu número telefónico">
                             <small id="number_phoneHelp" class="form-text text-muted">
                                 Recuerda anteponer el código 09 al ingresar tu número telefónico
                             </small>
