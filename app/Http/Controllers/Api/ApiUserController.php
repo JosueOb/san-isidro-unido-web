@@ -326,7 +326,7 @@ class ApiUserController extends ApiBaseController
                 //Validar si existe el usuario
                 if (!is_null($user)) {
                     $imageApi = new ApiImages();
-                    $image_name = $imageApi->saveAfiliationImageApi($request->basic_service_image, null, $user->fullname.'_afiliation', false);
+                    $image_name = $imageApi->saveAfiliationImageApi($request->basic_service_image, null, $user->fullname.'_afiliation', true);
                     //Guardar solicitud de afiliación
                     $membership = new Membership();
                     $membership->identity_card = $request->cedula;
