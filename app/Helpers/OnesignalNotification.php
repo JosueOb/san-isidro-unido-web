@@ -70,7 +70,7 @@ class OnesignalNotification
      *
      * @return array
      */
-    public static function sendNotificationByPlayersID($title = '', $description = '', $aditionalData = [], $specificIDs = [])
+    public static function sendNotificationByPlayersID($title = '', $description = '', $aditionalData = null, $specificIDs = [])
     {
         $bodyPeticionOnesignal = [
             "data" => $aditionalData,
