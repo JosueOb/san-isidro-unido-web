@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Helpers\ApiImages;
 
 class Membership extends Model
 {
@@ -29,6 +30,11 @@ class Membership extends Model
         'responsible' => 'array',
     ];
 
+    protected $appends = ['basic_service_image_link'];
+    public function getBasicServiceImageLinkAttribute(){
+        return $this->getApiLink();
+    }
+
     /**
      * A membership belongs to a user
      */
@@ -36,6 +42,13 @@ class Membership extends Model
         return $this->belongsTo(User::class);
     }
 
-    
+    /**
+    * get resource api link
+    */
+    public function getApiLink(){
+        $imageApi = new ApiImages();
+        return $imageApi->getApiUrlLink($this->url);
+    }
+
     
 }

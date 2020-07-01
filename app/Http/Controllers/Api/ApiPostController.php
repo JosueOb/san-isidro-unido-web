@@ -93,6 +93,9 @@ class ApiPostController extends ApiBaseController
             if ($filterStatusAttendance != '') {
                 $queryset = $queryset->where('additional_data->status_attendance', $filterStatusAttendance);
             }
+            if($filterCategory == 'problema' || $filterCategory == 'emergencia'){
+                $queryset = $queryset->whereNotIn('additional_data->status_attendance', ['pendiente']);
+            }
             //Retornar Paginacion y datos ordenados descendentemente para devolver los mas nuevos primero
             $posts = $queryset->orderBy('created_at', 'DESC')->simplePaginate($filterSize)->toArray();
             return $this->sendPaginateResponse(200, 'Datos Obtenidos', $posts);

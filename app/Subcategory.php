@@ -18,6 +18,11 @@ class Subcategory extends Model
     protected $table = 'subcategories';
     public $timestamps = true;
 
+    protected $appends = ['icon_link'];
+    public function getIconLinkAttribute(){
+        return $this->getApiLink();
+    }
+
     /*TODO: SCOPES MODELO */ 
 
     /**

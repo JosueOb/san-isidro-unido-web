@@ -14,6 +14,13 @@ class Category extends Model
      */
     protected $table = 'categories';
 
+
+    // protected $appends = ['avatar_link', 'fullname', 'basic_service_image_link'];
+    protected $appends = ['icon_link'];
+    public function getIconLinkAttribute(){
+        return $this->getApiLink();
+    }
+
     /*TODO: SCOPES MODELO */  
     
     /**

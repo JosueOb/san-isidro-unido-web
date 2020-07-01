@@ -89,6 +89,22 @@ class UsersTableSeeder extends Seeder
          * MORADORES - VECINOS
          * Se registra a los moradores del barrio
          **/
+
+        // $neighborOne = User::create([
+        //     'first_name' => 'Bolivar',
+        //     'last_name' => 'Cumbicus',
+        //     'email' => 'bolivar97@gmail.com',
+        //     'number_phone' => '09' . mt_rand(80000000, 99999999),
+        //     'password' => password_hash('Bolivar12345', PASSWORD_DEFAULT),
+        //     'email_verified_at' => now(),
+        //     'avatar' => 'https://ui-avatars.com/api/?name=' .
+        //         mb_substr('bolivar', 0, 1) . '+' . mb_substr('cumbicus', 0, 1) .
+        //         '&size=250'
+        // ]);
+        // // dd($neighborOne);
+        // $neighborOne->save();
+        // $neighborOne->roles()->attach([$neighborOne->id], ['state' => true]);
+
         $neighbors = factory(User::class, 40)->create();
         $neighbors->each(function (User $neighbor) use ($neighbor_role) {
 
