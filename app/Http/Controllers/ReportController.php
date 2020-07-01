@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use App\Helpers\OnesignalNotification;
+use App\Http\Middleware\OnlyActivities;
 use App\Http\Requests\ReportRequest;
 use App\Post;
 use App\Resource;
@@ -17,7 +18,7 @@ class ReportController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(PotectedEventPosts::class)->only('show', 'edit', 'update', 'destroy');
+        $this->middleware(OnlyActivities::class)->only('show', 'edit', 'update', 'destroy');
     }
     /**
      * Display a listing of the resource.

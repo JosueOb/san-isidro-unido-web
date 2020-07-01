@@ -27,9 +27,6 @@ class DirectiveController extends Controller
     public function __construct()
     {
         $this->middleware(OnlyMembers::class)->only('show','edit','update','destroy');
-      
-        // $this->middleware(ProtectedNeighborUsers::class)->only('show','edit','update','destroy');
-        // $this->middleware(ProtectedPoliceUsers::class)->only('show','edit','update','destroy');
         $this->middleware(MemberIsActive::class)->only('edit','update');
         $this->middleware(PreventMakingChangesToYourself::class)->only('edit','update','destroy');
     }

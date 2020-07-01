@@ -27,10 +27,6 @@ class NeighborController extends Controller
     public function __construct()
     {
         $this->middleware(OnlyNeighbors::class)->only('show','edit','update','destroy');;
-        
-        // $this->middleware(ProtectedPoliceUsers::class)->only('show','edit','update', 'destroy');
-        // $this->middleware(ProtectedGuestUsers::class)->only('show','edit','update', 'destroy');
-
         $this->middleware(ProtectedDirectiveUsers::class)->only('edit','update');
         $this->middleware(ProtectedModeratorUsers::class)->only('edit','update');
         $this->middleware(NeighborIsActive::class)->only('edit','update');

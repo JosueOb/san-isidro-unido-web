@@ -25,11 +25,6 @@ class ModeratorController extends Controller
     public function __construct()
     {
         $this->middleware(OnlyModerators::class)->only('storeAssign', 'show', 'edit', 'update', 'destroy');
-        
-        
-        // $this->middleware(ProtectedPoliceUsers::class)->only('storeAssign', 'show', 'edit', 'update', 'destroy');
-        // $this->middleware(ProtectedGuestUsers::class)->only('storeAssign', 'show', 'edit', 'update', 'destroy');
-        
         $this->middleware(ProtectedModeratorUsers::class)->only('storeAssign');
         $this->middleware(NeighborIsActive::class)->only('storeAssign');
         $this->middleware(ModeratorIsActive::class)->only( 'edit', 'update');

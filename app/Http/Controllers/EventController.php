@@ -12,6 +12,7 @@ use App\Http\Middleware\PotectedReportPosts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\HelpersClass\AdditionalData as AdditionalDataCls;
+use App\Http\Middleware\OnlyEvents;
 use App\Notifications\PostNotification;
 use App\Notifications\PublicationReport;
 use Caffeinated\Shinobi\Models\Role;
@@ -22,8 +23,8 @@ class EventController extends Controller
 
     public function __construct()
     {
+        $this->middleware(OnlyEvents::class)->only('show','edit','update','destroy');
         $this->additionalData = new AdditionalDataCls();
-        $this->middleware(PotectedReportPosts::class)->only('show','edit','update','destroy');
     }
 
     /**

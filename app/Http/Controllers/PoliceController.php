@@ -21,12 +21,6 @@ class PoliceController extends Controller
     public function __construct()
     {
         $this->middleware(OnlyPolices::class)->only('show','edit','update','destroy');
-        
-        
-        
-        // $this->middleware(ProtectedNeighborUsers::class)->only('show','edit','update','destroy');
-        // $this->middleware(ProtectedGuestUsers::class)->only('show','edit','update','destroy');
-        
         $this->middleware(PoliceIsActive::class)->only('edit','update');
     }
     /**
