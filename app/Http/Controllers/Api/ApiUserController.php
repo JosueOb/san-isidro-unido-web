@@ -132,7 +132,7 @@ class ApiUserController extends ApiBaseController
                 //Validar dispositivo
                 $device = $request->get('device', null);
                 $avatar = ($request->avatar) ? $request->avatar: 'https://ui-avatars.com/api/?name=' .
-                mb_substr($user->first_name, 0, 1) . '+' . mb_substr($user->last_name, 0, 1) .
+                mb_substr($request->first_name, 0, 1) . '+' . mb_substr($request->last_name, 0, 1) .
                 '&size=250';
                 //Crear Usuario
                 $user = $this->registerNormalUser(
@@ -178,6 +178,7 @@ class ApiUserController extends ApiBaseController
         $user->email = $email;
         $user->password = ($provider === 'formulario' && $password) ? password_hash($password, PASSWORD_DEFAULT) : null;
         $user->avatar = $avatar;
+        $user->number_phone = '';
         $user->save();
         $user->roles()->attach($rolInvitado->id, [
                 'state' => 1,
@@ -319,17 +320,14 @@ class ApiUserController extends ApiBaseController
                                     'basic_service_image' => ['required', 'mimes:png,jpeg,jpg'],
                                     'cedula' => ['required', 'string', new ValidarCedula()],
                                 ]);
-            $image_service_b64 = $request->get('basic_service_image');
             // Verificar si el validador falla
             if (!$validatorAfiliation->fails()) {
                 $user = User::findById($token_decoded->user->id)->first();
                 //Validar si existe el usuario
                 if (!is_null($user)) {
                     $imageApi = new ApiImages();
-                    $image_name = $imageApi->saveAfiliationImageApi($request->basic_service_image, null, $user->fullname.'_afiliation', true);
+                    $image_name = $imageApi->saveAfiliationImageApi($request->basic_service_image, null, $user->fullname.'_afiliation', false);
                     //Guardar solicitud de afiliación
-                    $responsible_membership = new ResponsibleMembership();
-
                     $membership = new Membership();
                     $membership->identity_card = $request->cedula;
                     $membership->basic_service_image = $image_name;
@@ -637,6 +635,7 @@ class ApiUserController extends ApiBaseController
                     $queryset = $queryset->whereRaw('read_at is null');
                 }
             }
+            // dd($queryset->toSql());
             $notifications = $queryset->orderBy('created_at', 'DESC')->simplePaginate($filterSize)->toArray();
             return $this->sendPaginateResponse(200, 'Notificaciones obtenidas correctamente', $notifications);
         } catch (Exception $e) {

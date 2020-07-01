@@ -2,33 +2,15 @@
 
 namespace App\Helpers;
 
-use App\User;
-use App\SocialProfile;
 use Illuminate\Support\Facades\Config;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7;
 use Exception;
 use App\Device;
+use Psr\Http\Message\ResponseInterface;
 
 class OnesignalNotification
 {
-
-    private static function generateRandomString($length = 10) {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyz';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[rand(0, $charactersLength - 1)];
-        }
-        return $randomString;
-    }
-
-
-    public static function generateUniqueId(){
-        // return self::generateRandomString(8). "-" . self::generateRandomString(4) . "-" . self::generateRandomString(4) . "-" . self::generateRandomString(4) . "-" . self::generateRandomString(12);
-        return "";
-    }
-
 
     /**
      * Envia una petición POST a Onesignal para enviar una notificación PUSH y retorna el contenido de la respuesta
@@ -36,7 +18,7 @@ class OnesignalNotification
      *
      * @return string
      */
-    private static function sendPushNotification($body)
+    private static function sendPushNotification($body): ResponseInterface
     {
 
         $client = new \GuzzleHttp\Client(['http_errors' => false]);
