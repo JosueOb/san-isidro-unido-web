@@ -105,16 +105,13 @@ class ReportController extends Controller
                 );
 
                 //Por cada morador activo, se notifica el reporte registrado
-                Notification::send(
-                    $neighbors,
-                    new PublicationReport(
-                        'activity_reported', //tipo de la notificación
-                        $n_title, //título de la notificación
-                        $n_description, //descripcción de la notificación
-                        $post, // post que almacena la notificación
-                        $request->user() //directivo que reportó la actividad
-                    )
-                );
+                $neighbor->notify(new PublicationReport(
+                    'activity_reported', //tipo de la notificación
+                    $n_title, //título de la notificación
+                    $n_description, //descripcción de la notificación
+                    $post, // post que almacena la notificación
+                    $request->user() //directivo que reportó la actividad
+                ));
             }
         }
         // OnesignalNotification::sendNotificationBySegments($n_title, $n_description, [ 'post'=> $post ]);
