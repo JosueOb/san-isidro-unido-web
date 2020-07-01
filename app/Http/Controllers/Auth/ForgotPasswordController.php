@@ -50,7 +50,6 @@ class ForgotPasswordController extends Controller
 
         //Se envía el enlace si el usuario tiene algún rol del sistema web activo
         if($user->hasSomeActiveWebSystemRole()){
-
             $this->broker()->sendResetLink(
                 $this->credentials($request)
             );
