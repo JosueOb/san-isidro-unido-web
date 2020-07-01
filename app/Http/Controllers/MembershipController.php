@@ -137,8 +137,28 @@ class MembershipController extends Controller
         $membership->responsible = $responsibleMembership->getAll();
         $membership->save();
 
-        //Se notifica al solicitante el rechazo de su solicitud
-        $guest->notify(new RejectMembership($validated['description']));
+        $n_title = 'Solicitud de afiliación rechazada';
+        $n_description = 'Tu solicitud ha sido rechazada por la siguiente razón: '. $validated['description'];
+        $user_devices = OnesignalNotification::getUserDevices($guest->id);
+        if (!is_null($user_devices) && count($user_devices) > 0) {
+            
+            OnesignalNotification::sendNotificationByPlayersID(
+                $n_title,
+                $n_description,
+                null,
+                $user_devices
+            );
+             //Se notifica al solicitante el rechazo de su solicitud
+            $guest->notify(new RejectMembership($validated['description']));
+            //Se nnotifica al solicitante de su rechazo en la afiliación
+            $guest->notify(new MembershipRequest(
+                'membership_rechazed', //tipo de la notificación
+                $n_title, //título de la notificación
+                $n_description, //descripcción de la notificación
+                $membership, // solicitud de afiliación
+                $guest //solicitante de la afiliación
+            ));
+       
 
         return redirect()->route('membership.show', [
             'notification' => $notification->id
