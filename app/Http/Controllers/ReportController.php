@@ -8,7 +8,10 @@ use App\Http\Requests\ReportRequest;
 use App\Post;
 use App\Resource;
 use App\Http\Middleware\PotectedEventPosts;
+use App\Notifications\PublicationReport;
+use Caffeinated\Shinobi\Models\Role;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Notification;
 
 class ReportController extends Controller
 {
@@ -26,8 +29,8 @@ class ReportController extends Controller
         $category = Category::where('slug', 'informe')->first();
         $reports = $category->posts()->latest()->paginate(9);
 
-        return view('reports.index',[
-            'reports' =>$reports,
+        return view('reports.index', [
+            'reports' => $reports,
         ]);
     }
 
@@ -63,32 +66,60 @@ class ReportController extends Controller
         $report->save();
 
         //Se guardan la imagenes del post, en caso de que se hayan selecionado
-        if($request->file('new_images')){
-            foreach($request->file('new_images') as $image){
+        if ($request->file('new_images')) {
+            foreach ($request->file('new_images') as $image) {
                 Resource::create([
-                    'url'=> $image->store('report_images', 's3'),
+                    'url' => $image->store('report_images', 's3'),
                     'post_id' => $report->id,
-                    'type'=>'image',
+                    'type' => 'image',
                 ]);
             }
         }
-        if($request->file('new_documents')){
-            foreach($request->file('new_documents') as $document){
+        if ($request->file('new_documents')) {
+            foreach ($request->file('new_documents') as $document) {
                 Resource::create([
-                    'url'=> $document->store('report_documents', 's3'),
+                    'url' => $document->store('report_documents', 's3'),
                     'post_id' => $report->id,
-                    'type'=>'document',
+                    'type' => 'document',
                 ]);
             }
         }
 
         //Notificar a todos usuarios de la aplicación móvil
-        $n_title = $report->title;
-        $n_description = 'Escrito por: '.$request->user()->getFullName();
-        OnesignalNotification::sendNotificationBySegments($n_title, $n_description, [ 'post'=> $report]);
+        $neighbor_role = Role::where('slug', 'morador')->first();
+        $neighbors = $neighbor_role->users()->wherePivot('state', true)->get();
+        $n_title = 'Nuevo reporte de actividad registrado';
+        $n_description = 'Escrito por: ' . $request->user()->getFullName();
+        //Se obtiene el post guardado con su categoría
+        $post = $category->posts()->where('id', $report->id)->with('category')->first();
+        // dd($category->posts()->where('id', $report->id)->with('category')->first());
 
+        foreach ($neighbors as $neighbor) {
+            $user_devices = OnesignalNotification::getUserDevices($neighbor->id);
+            if (!is_null($user_devices) && count($user_devices) > 0) {
+                OnesignalNotification::sendNotificationByPlayersID(
+                    $n_title,
+                    $n_description,
+                    ["post" => $post],
+                    $user_devices
+                );
+
+                //Por cada morador activo, se notifica el reporte registrado
+                Notification::send(
+                    $neighbors,
+                    new PublicationReport(
+                        'activity_reported', //tipo de la notificación
+                        $n_title, //título de la notificación
+                        $n_description, //descripcción de la notificación
+                        $post, // post que almacena la notificación
+                        $request->user() //directivo que reportó la actividad
+                    )
+                );
+            }
+        }
+        // OnesignalNotification::sendNotificationBySegments($n_title, $n_description, [ 'post'=> $post ]);
         session()->flash('success', 'Informe registrado con éxito');
-        return response()->json(['success'=>'Datos recibidos correctamente', 'data'=>$validated]);
+        return response()->json(['success' => 'Datos recibidos correctamente', 'data' => $validated]);
     }
 
     /**
@@ -102,11 +133,11 @@ class ReportController extends Controller
         // $images= $report->images()->get();
         $images = $post->resources()->where('type', 'image')->get();
         $documents = $post->resources()->where('type', 'document')->get();
-        
-        return view('reports.show',[
-            'report'=>$post,
-            'images'=>$images,
-            'documents'=>$documents,
+
+        return view('reports.show', [
+            'report' => $post,
+            'images' => $images,
+            'documents' => $documents,
         ]);
     }
 
@@ -122,9 +153,9 @@ class ReportController extends Controller
         $images = $post->resources()->where('type', 'image')->get();
         $documents = $post->resources()->where('type', 'document')->get();
         return view('reports.edit', [
-            'report'=>$post,
-            'images'=>$images,
-            'documents'=>$documents,
+            'report' => $post,
+            'images' => $images,
+            'documents' => $documents,
         ]);
     }
 
@@ -140,37 +171,37 @@ class ReportController extends Controller
     {
         $validated = $request->validated();
 
-         //Se actualiza al reporte
-         $post->title = $validated['title'];
-         $post->description = $validated['description'];
-         //Se mantiene el id del usuario que publicó el informe
-         $post->save();
+        //Se actualiza al reporte
+        $post->title = $validated['title'];
+        $post->description = $validated['description'];
+        //Se mantiene el id del usuario que publicó el informe
+        $post->save();
 
-         //Se verifica si alguna imagen del reporte registrado anteriormenete, haya sido eliminada
+        //Se verifica si alguna imagen del reporte registrado anteriormenete, haya sido eliminada
         $oldReportImages = $request['old_images'];
         $oldCollectionReportImages = $post->resources()->where('type', 'image')->get();
 
-        if($oldReportImages){
-            foreach($oldCollectionReportImages as $oldImageReport){
+        if ($oldReportImages) {
+            foreach ($oldCollectionReportImages as $oldImageReport) {
                 $oldImageUrl = $oldImageReport->url;
 
-                if($this->searchDeletedImages($oldImageUrl, $oldReportImages)){
+                if ($this->searchDeletedImages($oldImageUrl, $oldReportImages)) {
                     //Eliminar a la imagen de la bdd y del local storage
                     $post->resources()->where('type', 'image')
-                                        ->where('url', $oldImageUrl)->delete();
-                    if(Storage::disk('s3')->exists($oldImageUrl)){
+                        ->where('url', $oldImageUrl)->delete();
+                    if (Storage::disk('s3')->exists($oldImageUrl)) {
                         Storage::disk('s3')->delete($oldImageUrl);
                     }
                 }
             }
-        }else{
+        } else {
             //En caso no recibir el arreglo de las imagenes registradas con el reporte,
             //se verifica si el reporte contiene imágenes
-            if(count($oldCollectionReportImages) > 0){
+            if (count($oldCollectionReportImages) > 0) {
                 //Si el reporte contiene imágenes, se procede a eliminar todas las imágenes
                 foreach ($oldCollectionReportImages as $oldImage) {
                     $oldImageUrl = $oldImage->url;
-                    if(Storage::disk('s3')->exists($oldImageUrl)){
+                    if (Storage::disk('s3')->exists($oldImageUrl)) {
                         Storage::disk('s3')->delete($oldImageUrl);
                     }
                 }
@@ -178,55 +209,55 @@ class ReportController extends Controller
             }
         }
 
-        if($request->file('new_images')){
-            foreach($request->file('new_images') as $image){
+        if ($request->file('new_images')) {
+            foreach ($request->file('new_images') as $image) {
 
                 Resource::create([
-                    'url'=> $image->store('report_images', 's3'),
+                    'url' => $image->store('report_images', 's3'),
                     'post_id' => $post->id,
-                    'type'=>'image',
+                    'type' => 'image',
                 ]);
             }
         }
 
-         //Se verifica si algún documento del reporte registrado anteriormenete, haya sido eliminado
-         $oldReportDocuments = $request['old_documents'];
-         $oldCollectionReportDocuments = $post->resources()->where('type', 'document')->get();
+        //Se verifica si algún documento del reporte registrado anteriormenete, haya sido eliminado
+        $oldReportDocuments = $request['old_documents'];
+        $oldCollectionReportDocuments = $post->resources()->where('type', 'document')->get();
 
-         if($oldReportDocuments){
-            foreach($oldCollectionReportDocuments as $oldDocumentReport){
+        if ($oldReportDocuments) {
+            foreach ($oldCollectionReportDocuments as $oldDocumentReport) {
                 $oldDocumentUrl = $oldDocumentReport->url;
 
-                if($this->searchDeletedDocuments($oldDocumentUrl, $oldReportDocuments)){
+                if ($this->searchDeletedDocuments($oldDocumentUrl, $oldReportDocuments)) {
                     //Eliminar al documento de la bdd y del storage
                     $post->resources()->where('type', 'document')
-                                        ->where('url', $oldDocumentUrl)->delete();
-                    if(Storage::disk('s3')->exists($oldDocumentUrl)){
+                        ->where('url', $oldDocumentUrl)->delete();
+                    if (Storage::disk('s3')->exists($oldDocumentUrl)) {
                         Storage::disk('s3')->delete($oldDocumentUrl);
                     }
                 }
             }
-        }else{
+        } else {
             //En caso no recibir el arreglo de los documentos registradas con el reporte,
             //se verifica si el reporte contiene documentos
-            if(count($oldCollectionReportDocuments) > 0){
+            if (count($oldCollectionReportDocuments) > 0) {
                 //Si el reporte contiene documentos, se procede a eliminar todas los documentos
                 foreach ($oldCollectionReportDocuments as $oldDocument) {
                     $oldDocumentUrl = $oldDocument->url;
-                    if(Storage::disk('s3')->exists($oldDocumentUrl)){
+                    if (Storage::disk('s3')->exists($oldDocumentUrl)) {
                         Storage::disk('s3')->delete($oldDocumentUrl);
                     }
                 }
                 $post->resources()->where('type', 'document')->delete();
             }
         }
-        if($request->file('new_documents')){
-            foreach($request->file('new_documents') as $document){
+        if ($request->file('new_documents')) {
+            foreach ($request->file('new_documents') as $document) {
 
                 Resource::create([
-                    'url'=> $document->store('report_documents', 's3'),
+                    'url' => $document->store('report_documents', 's3'),
                     'post_id' => $post->id,
-                    'type'=>'document',
+                    'type' => 'document',
                 ]);
             }
         }
@@ -234,8 +265,8 @@ class ReportController extends Controller
         session()->flash('success', 'Informe actualizado con éxito');
 
         return response()->json([
-            'success'=>'Reporte actualizado con exito',
-            'redirect'=>route('reports.index'),
+            'success' => 'Reporte actualizado con exito',
+            'redirect' => route('reports.index'),
         ]);
     }
 
@@ -248,12 +279,12 @@ class ReportController extends Controller
     public function destroy(Post $post)
     {
         $message = '';
-        if($post->state){
+        if ($post->state) {
             $post->state = false;
-            $message='desactivado';
-        }else{
+            $message = 'desactivado';
+        } else {
             $post->state = true;
-            $message='activado';
+            $message = 'activado';
         }
         $post->save();
 
@@ -267,10 +298,11 @@ class ReportController extends Controller
      * @return boolean $imageIsDeleted
      */
 
-    public function searchDeletedImages($search, $array){
+    public function searchDeletedImages($search, $array)
+    {
         $imageIsDeleted = true;
-        foreach($array as $image){
-            if($image === $search){
+        foreach ($array as $image) {
+            if ($image === $search) {
                 $imageIsDeleted = false;
             }
         }
@@ -284,10 +316,11 @@ class ReportController extends Controller
      * @return boolean $imageIsDeleted
      */
 
-    public function searchDeletedDocuments($search, $array){
+    public function searchDeletedDocuments($search, $array)
+    {
         $documentIsDeleted = true;
-        foreach($array as $document){
-            if($document === $search){
+        foreach ($array as $document) {
+            if ($document === $search) {
                 $documentIsDeleted = false;
             }
         }
