@@ -16,7 +16,7 @@
                 <div class="card-body">
 
                     <p>
-                        Gracias por verificar tu correo electrónico, ahora puede acceder a las funcionalidades de la aplicación móvil
+                        Gracias por verificar tu correo electrónico, ahora ya formas parte de San Isido Unido
                     </p>
                 
                 </div>

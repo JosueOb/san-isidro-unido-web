@@ -59,10 +59,10 @@ class ApiUserController extends ApiBaseController
     }
 
     /**
-    * Retorna el listado de Usuarios
-    *
-    * @return array
-    */
+     * Retorna el listado de Usuarios
+     *
+     * @return array
+     */
 
     public function index(Request $request)
     {
@@ -89,17 +89,16 @@ class ApiUserController extends ApiBaseController
      */
     public function detail(Request $request, $id)
     {
-        $getRoles= ($request->get('roles')) ? intval($request->get('roles')): -1;
+        $getRoles = ($request->get('roles')) ? intval($request->get('roles')) : -1;
         try {
             if ($getRoles != -1) {
                 $user = User::findById($id)->with(['roles', 'memberships'])->first();
             } else {
                 $user = User::findById($id)->with(['memberships'])->first();
             }
-           
+
             //Validar si el usuario existe
-            if (!is_null($user)) {
-                ;
+            if (!is_null($user)) {;
                 return $this->sendResponse(200, 'success', $user);
             }
             //Si no existe envio error
@@ -110,11 +109,11 @@ class ApiUserController extends ApiBaseController
     }
 
     /**
-    * Registra a un usuario y retorna el token del usuario
-    * @param \Illuminate\Http\Request $request
-    *
-    * @return array
-    */
+     * Registra a un usuario y retorna el token del usuario
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return array
+     */
 
     public function register(ApiUserProviderRequest $request)
     {
@@ -132,9 +131,9 @@ class ApiUserController extends ApiBaseController
             if (!$registervalidator->fails()) {
                 //Validar dispositivo
                 $device = $request->get('device', null);
-                $avatar = ($request->avatar) ? $request->avatar: 'https://ui-avatars.com/api/?name=' .
-                mb_substr($request->first_name, 0, 1) . '+' . mb_substr($request->last_name, 0, 1) .
-                '&size=250';
+                $avatar = ($request->avatar) ? $request->avatar : 'https://ui-avatars.com/api/?name=' .
+                    mb_substr($request->first_name, 0, 1) . '+' . mb_substr($request->last_name, 0, 1) .
+                    '&size=250';
                 //Crear Usuario
                 $user = $this->registerNormalUser(
                     $request->first_name ?? '',
@@ -182,16 +181,23 @@ class ApiUserController extends ApiBaseController
         $user->number_phone = '';
         $user->save();
         $user->roles()->attach($rolInvitado->id, [
-                'state' => 1,
-            ]);
-        $user->notify(new GuestCreated());
+            'state' => 1,
+        ]);
+
+        if ($provider === 'formulario' && $password) {
+            $user->notify(new GuestCreated());
+        }else{
+            $user->email_verified_at = now();
+            $user->save();
+        };
+
         if ($device) {
             $apiDeviceController = new ApiDeviceController;
             $apiDeviceController->saveDevice(
-                (array_key_exists('phone_id', $device)) ? $device['phone_id']: '',
-                (array_key_exists('phone_model', $device)) ? $device['phone_model']: '',
-                (array_key_exists('phone_platform', $device)) ? $device['phone_platform']: 'Modelo Generico',
-                (array_key_exists('description', $device)) ? $device['description']: '',
+                (array_key_exists('phone_id', $device)) ? $device['phone_id'] : '',
+                (array_key_exists('phone_model', $device)) ? $device['phone_model'] : '',
+                (array_key_exists('phone_platform', $device)) ? $device['phone_platform'] : 'Modelo Generico',
+                (array_key_exists('description', $device)) ? $device['description'] : '',
                 $user->id
             );
         }
@@ -211,11 +217,11 @@ class ApiUserController extends ApiBaseController
     }
 
     /**
-    * Loguea a un usuario en la API y retorna el token del usuario
-    * @param \Illuminate\Http\Request $request
-    *
-    * @return array
-    */
+     * Loguea a un usuario en la API y retorna el token del usuario
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return array
+     */
 
     public function login(ApiUserProviderRequest $request)
     {
@@ -244,10 +250,10 @@ class ApiUserController extends ApiBaseController
                         if (!$deviceExists) {
                             $apiDeviceController = new ApiDeviceController;
                             $apiDeviceController->saveDevice(
-                                (array_key_exists('phone_id', $device)) ? $device['phone_id']: '',
-                                (array_key_exists('phone_model', $device)) ? $device['phone_model']: '',
-                                (array_key_exists('phone_platform', $device)) ? $device['phone_platform']: 'Modelo Generico',
-                                (array_key_exists('description', $device)) ? $device['description']: '',
+                                (array_key_exists('phone_id', $device)) ? $device['phone_id'] : '',
+                                (array_key_exists('phone_model', $device)) ? $device['phone_model'] : '',
+                                (array_key_exists('phone_platform', $device)) ? $device['phone_platform'] : 'Modelo Generico',
+                                (array_key_exists('description', $device)) ? $device['description'] : '',
                                 $user->id
                             );
                         }
@@ -258,16 +264,16 @@ class ApiUserController extends ApiBaseController
                 } else {
                     //Si falla login retorno error
                     switch (strtolower($request->provider)) {
-                                            case 'facebook':
-                                            return $this->sendError(400, 'No has asociado tu cuenta de facebook, registrate por favor', ['user' => 'No has asociado tu cuenta de facebook, registrate por favor']);
-                                            break;
-                                            case 'google':
-                                            return $this->sendError(400, 'No has asociado tu cuenta de google, registrate por favor', ['user' => 'No has asociado tu cuenta de google, registrate por favor']);
-                                            break;
-                                            default:
-                                            return $this->sendError(400, 'Usuario o Contraseña Inválida', ['user' => 'Usuario o Contraseña Inválida']);
-                                            break;
-                                        }
+                        case 'facebook':
+                            return $this->sendError(400, 'No has asociado tu cuenta de facebook, registrate por favor', ['user' => 'No has asociado tu cuenta de facebook, registrate por favor']);
+                            break;
+                        case 'google':
+                            return $this->sendError(400, 'No has asociado tu cuenta de google, registrate por favor', ['user' => 'No has asociado tu cuenta de google, registrate por favor']);
+                            break;
+                        default:
+                            return $this->sendError(400, 'Usuario o Contraseña Inválida', ['user' => 'Usuario o Contraseña Inválida']);
+                            break;
+                    }
                 }
             }
             //Si validador falla retorno error
@@ -278,11 +284,11 @@ class ApiUserController extends ApiBaseController
     }
 
     /**
-    * Verifica la validez de un token
-    * @param \Illuminate\Http\Request $request
-    *
-    * @return array
-    */
+     * Verifica la validez de un token
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return array
+     */
 
     public function checkToken(Request $request)
     {
@@ -305,11 +311,11 @@ class ApiUserController extends ApiBaseController
     }
 
     /**
-    * Crea una solicitud de afiliación
-    * @param \Illuminate\Http\Request $request
-    *
-    * @return array
-    */
+     * Crea una solicitud de afiliación
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return array
+     */
 
     public function requestAfiliation(Request $request)
     {
@@ -318,16 +324,16 @@ class ApiUserController extends ApiBaseController
         $token_decoded = $request->token;
         try {
             $validatorAfiliation = Validator::make($request->all(), [
-                                    'basic_service_image' => ['required', 'mimes:png,jpeg,jpg'],
-                                    'cedula' => ['required', 'string', new ValidarCedula()],
-                                ]);
+                'basic_service_image' => ['required', 'mimes:png,jpeg,jpg'],
+                'cedula' => ['required', 'string', new ValidarCedula()],
+            ]);
             // Verificar si el validador falla
             if (!$validatorAfiliation->fails()) {
                 $user = User::findById($token_decoded->user->id)->first();
                 //Validar si existe el usuario
                 if (!is_null($user)) {
                     $imageApi = new ApiImages();
-                    $image_name = $imageApi->saveAfiliationImageApi($request->basic_service_image, null, $user->fullname.'_afiliation', true);
+                    $image_name = $imageApi->saveAfiliationImageApi($request->basic_service_image, null, $user->fullname . '_afiliation', true);
                     //Guardar solicitud de afiliación
                     $membership = new Membership();
                     $membership->identity_card = $request->cedula;
@@ -336,10 +342,10 @@ class ApiUserController extends ApiBaseController
                     $membership->responsible = '';
                     $membership->user_id = $user->id;
                     $membership->save();
-                    
+
                     $afiliation_title_noti = 'Solicitud de afiliación registrada';
                     $afiliation_description_noti = 'Tu solicitud ha sido enviada exitosamente';
-                  
+
                     //Notificar usuario
                     $user->notify(new MembershipRequestNotification(
                         'membership_reported',
@@ -358,14 +364,14 @@ class ApiUserController extends ApiBaseController
                     Notification::send(
                         $moderators,
                         new MembershipRequestNotification(
-                                'membership_reported',
-                                'Nueva Solicitud de Afiliación', //título de la notificación
-                                $user->getFullName() . ' ha solicitado afiliación', //descripción de la notificación
-                                $membership, // post que almacena la notificación
-                                $user //morador que reportó el problema social
-                            )
+                            'membership_reported',
+                            'Nueva Solicitud de Afiliación', //título de la notificación
+                            $user->getFullName() . ' ha solicitado afiliación', //descripción de la notificación
+                            $membership, // post que almacena la notificación
+                            $user //morador que reportó el problema social
+                        )
                     );
-                        
+
                     $user_devices = OnesignalNotification::getUserDevices($user->id);
                     if (!is_null($user_devices) && count($user_devices) > 0) {
                         //Enviar notification al usuario en especifico
@@ -376,7 +382,7 @@ class ApiUserController extends ApiBaseController
                             $user_devices
                         );
                     }
-                 
+
                     //Retornar Token
                     $token = $jwtAuth->getToken($user->email);
                     return $this->sendResponse(200, 'Afiliacion Solicitada Correctamente', ['token' => $token]);
@@ -392,11 +398,11 @@ class ApiUserController extends ApiBaseController
     }
 
     /**
-    * Actualiza la contraseña de un usuario
-    * @param \Illuminate\Http\Request $request
-    *
-    * @return array
-    */
+     * Actualiza la contraseña de un usuario
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return array
+     */
 
     public function changePassword(Request $request)
     {
@@ -405,8 +411,8 @@ class ApiUserController extends ApiBaseController
         try {
             // Obtener los datos de la request
             $validatorPassword = Validator::make($request->all(), [
-                                    'password' => 'required|confirmed',
-                                ]);
+                'password' => 'required|confirmed',
+            ]);
             // Verificar si el validador falla
             if (!$validatorPassword->fails()) {
                 $passwordNew = $request->get('password');
@@ -429,11 +435,11 @@ class ApiUserController extends ApiBaseController
     }
 
     /**
-    * Retorna el listado de emergencias de un usuario
-    * @param \Illuminate\Http\Request $request
-    *
-    * @return array
-    */
+     * Retorna el listado de emergencias de un usuario
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return array
+     */
 
     public function getEmergenciesByUser($user_id)
     {
@@ -451,10 +457,10 @@ class ApiUserController extends ApiBaseController
             }
             //Si existe retorno el listado de emergencias
             $social_problems = Post::categoryId($category->id)
-                                ->userId($user_id)
-                                ->orderBy('id', 'desc')
-                                ->with(['resources', 'category', 'subcategory', 'reactions', 'user'])
-                                ->simplePaginate(10);
+                ->userId($user_id)
+                ->orderBy('id', 'desc')
+                ->with(['resources', 'category', 'subcategory', 'reactions', 'user'])
+                ->simplePaginate(10);
             return $this->sendPaginateResponse(200, 'success', $social_problems->toArray());
         } catch (Exception $e) {
             return $this->sendError(500, 'error', ['server_error' => $e->getMessage()]);
@@ -462,11 +468,11 @@ class ApiUserController extends ApiBaseController
     }
 
     /**
-    * Actualiza el Avatar de un Usuario
-    * @param \Illuminate\Http\Request $request
-    *
-    * @return array
-    */
+     * Actualiza el Avatar de un Usuario
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return array
+     */
 
     public function changeAvatar(Request $request)
     {
@@ -476,8 +482,8 @@ class ApiUserController extends ApiBaseController
             $token_decoded = $request->get('token');
             // Verificar que me llegue imagen del avatar
             $validatorAvatar = Validator::make($request->all(), [
-                                    'avatar' => ['required','image', 'mimes:png,jpeg,jpg'],
-                                ]);
+                'avatar' => ['required', 'image', 'mimes:png,jpeg,jpg'],
+            ]);
             // Verificar si el validador falla
             if (!$validatorAvatar->fails()) {
                 // Obtener los datos de la request
@@ -502,11 +508,11 @@ class ApiUserController extends ApiBaseController
     }
 
     /**
-    * Edita el Perfil Social de un Usuario
-    * @param \Illuminate\Http\Request $request
-    *
-    * @return array
-    */
+     * Edita el Perfil Social de un Usuario
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return array
+     */
 
     public function editProfile(ApiEditUserProfile $request)
     {
@@ -519,11 +525,11 @@ class ApiUserController extends ApiBaseController
             //Validar si el usuario existe
             if (!is_null($user)) {
                 $user->update([
-                        'first_name' => $request->first_name,
-                        'last_name' => $request->last_name,
-                        'email' => $request->email,
-                        'number_phone' => $request->number_phone
-                    ]);
+                    'first_name' => $request->first_name,
+                    'last_name' => $request->last_name,
+                    'email' => $request->email,
+                    'number_phone' => $request->number_phone
+                ]);
                 $token = $jwtAuth->getToken($request->email);
                 return $this->sendResponse(200, 'Usuario Actualizado', ['token' => $token]);
             }
@@ -535,11 +541,11 @@ class ApiUserController extends ApiBaseController
     }
 
     /**
-    * Retorna el listado de dispositivos de un usuario
-    * @param integer $id
-    *
-    * @return array
-    */
+     * Retorna el listado de dispositivos de un usuario
+     * @param integer $id
+     *
+     * @return array
+     */
 
     public function devicesXUser($id)
     {
@@ -558,11 +564,11 @@ class ApiUserController extends ApiBaseController
     }
 
     /**
-    * Retorna el listado de Perfiles Sociales de un Usuario
-    * @param integer $id
-    *
-    * @return array
-    */
+     * Retorna el listado de Perfiles Sociales de un Usuario
+     * @param integer $id
+     *
+     * @return array
+     */
 
     public function socialProfilesXUser($id)
     {
@@ -581,18 +587,19 @@ class ApiUserController extends ApiBaseController
     }
 
     /**
-    * Retorna el listado de directivos
-    *
-    * @return array
-    */
+     * Retorna el listado de directivos
+     *
+     * @return array
+     */
 
     public function getDirectives()
     {
         try {
-            $users = User::rolDirectivo()->with(['roles' => function ($query) {
-                $query->where('slug', 'directivo');
-            }
-                                , 'position'])->get();
+            $users = User::rolDirectivo()->with([
+                'roles' => function ($query) {
+                    $query->where('slug', 'directivo');
+                }, 'position'
+            ])->get();
             $users = $users->makeHidden('password');
             //Verificar si existen directivos
             if (!is_null($users)) {
@@ -607,18 +614,18 @@ class ApiUserController extends ApiBaseController
 
 
     /**
-    * Retorna las notificaciones de un usuario
-    * @param integer $user_id
-    *
-    * @return array
-    */
+     * Retorna las notificaciones de un usuario
+     * @param integer $user_id
+     *
+     * @return array
+     */
     public function getNotificationsUser(Request $request, $user_id)
     {
         try {
             //Verificar si existe el usuario
             $user = User::findById($user_id)->first();
-            $filterSize =  ($request->get('size')) ? intval($request->get('size')): 20;
-            $filterByTitle = ($request->get('title')) ? $request->get('title'): '';
+            $filterSize =  ($request->get('size')) ? intval($request->get('size')) : 20;
+            $filterByTitle = ($request->get('title')) ? $request->get('title') : '';
             $filterUnreaded = $request->get('unreaded') ?? '';
 
             if (is_null($user)) {
@@ -626,7 +633,7 @@ class ApiUserController extends ApiBaseController
             }
 
             $queryset = $user->notifications();
-            
+
             if ($filterByTitle != '') {
                 $queryset = $queryset->where('data->title', 'LIKE', "%$filterByTitle%");
             }
