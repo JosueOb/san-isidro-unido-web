@@ -48,6 +48,13 @@ Route::get('verifiedMailWeb/{id}', function (Request $request) {
     return view('auth.verifiedMailWeb');
 })->name('verifiedMailWeb');
 
+Route::get('passwordChanged', function (Request $request) {
+    if (!$request->hasValidSignature()) {
+        abort(401);
+    }
+    return view('auth.passwords.reseted');
+})->name('passwordChanged');
+
 /*
 |--------------------------------------------------------------------------
 | Private Routes
