@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
+use App\Helpers\OnesignalNotification;
 use App\HelpersClass\AdditionalData;
 use App\Http\Middleware\ProblemIsAttendedByModerator;
 use App\Http\Middleware\ProtectNotifications;
 use App\Http\Requests\RejectReportRequest;
+use App\Notifications\PublicationReport;
 use App\Post;
 use App\User;
 use Caffeinated\Shinobi\Models\Role;
@@ -89,6 +92,34 @@ class SocialProblemReportController extends Controller
         //Se cambia el estado del post, para que sea visible en la app
         $social_problem->state = true;
         $social_problem->save();
+
+
+        //Se notifica al vecino que reportó el problema social
+        $neighbor = User::findOrFail($social_problem->user_id);
+        //Se obtiene el post guardado con su categoría
+        $social_problem_category = Category::where('slug', 'problema')->first();
+        $n_title = 'Problema social aprobado';
+        $n_description = 'El problema reportado a verificado por un moderador, ahora la directiva barrial lo puede abarcar, puedes visualizar tu reporte en la app';
+        $post = $social_problem_category->posts()->where('id', $social_problem->id)->with('category', 'subcategory')->first();
+        $user_devices = OnesignalNotification::getUserDevices($neighbor->id);
+        if (!is_null($user_devices) && count($user_devices) > 0) {
+
+            OnesignalNotification::sendNotificationByPlayersID(
+                $n_title,
+                $n_description,
+                ['post' => $post],
+                $user_devices
+            );
+
+            //se notifica al vecino que reportó el problema
+            $neighbor->notify(new PublicationReport(
+                'problem_approved', //tipo de la notificación
+                $n_title, //título de la notificación
+                $n_description, //descripcción de la notificación
+                $post, // post que almacena la notificación
+                $neighbor //vecino que reportó el problema social
+            ));
+        }
 
         return redirect()->route('socialProblemReport.show', [
             'notification' => $notification->id
