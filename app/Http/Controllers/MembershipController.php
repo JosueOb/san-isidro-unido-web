@@ -82,8 +82,7 @@ class MembershipController extends Controller
         $n_description = 'Por favor, cierra sesión e ingresa nuevamente en la aplicación móvil, para usar las nuevas funcionalidades';
         $user_devices = OnesignalNotification::getUserDevices($guest->id);
         if (!is_null($user_devices) && count($user_devices) > 0) {
-
-            dd('ingresó');
+            
             OnesignalNotification::sendNotificationByPlayersID(
                 $n_title,
                 $n_description,
