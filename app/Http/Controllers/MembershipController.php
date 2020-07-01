@@ -86,7 +86,7 @@ class MembershipController extends Controller
             OnesignalNotification::sendNotificationByPlayersID(
                 $n_title,
                 $n_description,
-                [],
+                null,
                 $user_devices
             );
             //Se notifica al solicitante la aprobación de su solicitud
