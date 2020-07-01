@@ -13,11 +13,11 @@ use Illuminate\Notifications\Messages\MailMessage;
 class MembershipRequest extends Notification
 {
     use Queueable;
-    protected $guest;//usuario invitado que realizó la solicitud de afiliación
-    protected $membership;//registro de la solicitud de afiliación
+    protected $guest; //usuario invitado que realizó la solicitud de afiliación
+    protected $membership; //registro de la solicitud de afiliación
     protected $titleNotification;
     protected $descriptionNotificacion;
-    protected $typeNotification = 'membership_reported';
+    protected $typeNotification;
 
 
     /**
@@ -25,8 +25,9 @@ class MembershipRequest extends Notification
      *
      * @return void
      */
-    public function __construct($titleRecieved, $descriptionRecieved, Membership $membershipRecieved, User $guestRecieved)
+    public function __construct($typeRecieved, $titleRecieved, $descriptionRecieved, Membership $membershipRecieved, User $guestRecieved)
     {
+        $this->typeNotification = $typeRecieved;
         $this->titleNotification = $titleRecieved;
         $this->descriptionNotificacion = $descriptionRecieved;
         $this->guest = $guestRecieved;
@@ -53,9 +54,9 @@ class MembershipRequest extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+            ->line('The introduction to the notification.')
+            ->action('Notification Action', url('/'))
+            ->line('Thank you for using our application!');
     }
 
     /**

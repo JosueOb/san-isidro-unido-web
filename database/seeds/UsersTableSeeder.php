@@ -181,16 +181,6 @@ class UsersTableSeeder extends Seeder
             'social_id' => '12151515151swswsxwxw',
             "provider" =>  $provider_options[1],
         ]);
-        for ($i = 0; $i < 2; $i++) {
-            DB::table('devices')->insert([
-                "phone_id" => OnesignalNotification::generateUniqueId(),
-                "phone_model" => $faker->name,
-                "phone_platform" => 'Modelo Generico',
-                "description" => $faker->sentence(6, true),
-                'user_id' => $guest01->id,
-                "created_at" => CarbonImmutable::now()->subMinutes(rand(1, 255))->toDateTimeString()
-            ]);
-        }
         $guest01->roles()->attach([$guest_role->id], ['state' => true]);
     }
 }

@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\{Membership, User};
+use App\Helpers\OnesignalNotification;
 use App\HelpersClass\ResponsibleMembership as HelperResponsibleMembership;
 use App\Http\Middleware\MembershipIsAttendedByModerator;
 use App\Http\Middleware\ProtectNotifications;
 use App\Http\Requests\RejectReportRequest;
 use App\Notifications\ApproveMembership;
+use App\Notifications\MembershipRequest;
+use App\Notifications\PublicationReport;
 use App\Notifications\RejectMembership;
 use Caffeinated\Shinobi\Models\Role;
 use Illuminate\Http\Request;
@@ -74,8 +77,30 @@ class MembershipController extends Controller
         //Se le retira el rol de invitado
         // Detach a single role from the user...
         $guest->roles()->detach($guest_role->id);
-        //Se notifica al solicitante la aprobación de su solicitud
-        $guest->notify(new ApproveMembership());
+
+        $n_title = 'Solicitud de afiliación aprobada';
+        $n_description = 'Por favor, cierra sesión e ingresa nuevamente en la aplicación móvil, para usar las nuevas funcionalidades';
+        $user_devices = OnesignalNotification::getUserDevices($guest->id);
+        if (!is_null($user_devices) && count($user_devices) > 0) {
+
+            dd('ingresó');
+            OnesignalNotification::sendNotificationByPlayersID(
+                $n_title,
+                $n_description,
+                [],
+                $user_devices
+            );
+            //Se notifica al solicitante la aprobación de su solicitud
+            $guest->notify(new ApproveMembership());
+            //Por cada morador activo, se notifica el reporte registrado
+            $guest->notify(new MembershipRequest(
+                'membership_approved', //tipo de la notificación
+                $n_title, //título de la notificación
+                $n_description, //descripcción de la notificación
+                $membership, // solicitud de afiliación
+                $guest //solicitante de la afiliación
+            ));
+        }
 
         return redirect()->route('membership.show', [
             'notification' => $notification->id

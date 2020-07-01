@@ -169,6 +169,7 @@ class TestNotificationsSeeder extends Seeder
             Notification::send(
                 $moderators,
                 new MembershipRequest(
+                    'membership_reported',
                     'Solicitud de afiliación', //título de la notificación
                     $guest->getFullName() . ' ha solicitado afiliación', //descripción de la notificación
                     $membership, //membresía
