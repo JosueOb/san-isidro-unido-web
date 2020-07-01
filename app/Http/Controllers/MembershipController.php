@@ -158,7 +158,7 @@ class MembershipController extends Controller
                 $membership, // solicitud de afiliación
                 $guest //solicitante de la afiliación
             ));
-       
+        }
 
         return redirect()->route('membership.show', [
             'notification' => $notification->id
