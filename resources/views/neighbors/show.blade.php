@@ -44,7 +44,7 @@
 
                     </div>
                     <div class="col text-center">
-                        <img class="rounded-circle dark w-25" src="{{$neighbor->getAvatar()}}" alt="">
+                        <img class="rounded-circle dark" style="width: 8rem; height: 8rem; object-fit: cover;" src="{{$neighbor->getAvatar()}}" alt="">
                     </div>
                 </div>
             </div>

@@ -17480,6 +17480,12 @@ body.dashboard {
   align-items: flex-end;
 }
 
+.gallery-images .gallery-item a {
+  border-radius: 5px;
+  width: inherit;
+  height: inherit;
+}
+
 .gallery-images .gallery-item img {
   border-radius: 5px;
   width: inherit;
@@ -17510,6 +17516,11 @@ body.dashboard {
     margin: 2%;
     width: 4rem;
     height: 4rem;
+  }
+
+  .gallery-images .gallery-item a {
+    width: inherit;
+    height: inherit;
   }
 
   .gallery-images .gallery-item img {

@@ -1,17 +1,17 @@
 @extends('layouts.dashboard')
 @section('page-subtitle')
-    Módulo Problema Social
+    Módulo Emergencias
 @endsection
 @section('page-header')
-    Problema Social reportado
+    Emergencia reportada
 @endsection
-@section('item-problem')
+@section('item-emergency')
     active
 @endsection
-@section('item-problem-collapse')
+@section('item-emergency-collapse')
     show
 @endsection
-@section('item-problem-list')
+@section('item-emergency-list')
     active
 @endsection
 
@@ -120,7 +120,9 @@
                             {{-- Se presentan las imágenes seleccionadas por el usuario --}}
                             @foreach ($images as $image)
                             <div class="gallery-item">
-                                <img src={{$image->getLink()}} alt='image_report_{{$image->id}}'>
+                                <a href="{{$image->getLink()}}" target="_blank">
+                                    <img src={{$image->getLink()}} alt='image_report_{{$image->id}}'>
+                                </a>
                             </div>
                             @endforeach
                         </div>

@@ -16,6 +16,11 @@
         display: flex;
         align-items: flex-end;
         
+        a{
+            border-radius: 5px;
+            width: inherit;
+            height: inherit;
+        }
         img{
             border-radius: 5px;
             width: inherit;
@@ -48,6 +53,10 @@
             margin: 2%;
             width: 4rem;
             height: 4rem;
+            a{
+                width: inherit;
+                height: inherit;
+            }
             img{
                 width: inherit;
                 height: inherit;

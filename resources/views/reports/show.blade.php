@@ -40,11 +40,14 @@
                         
                         @if (count($images))
                         <p><strong>Imágenes:</strong></p>
+                        <small class="text-muted "> <strong>Recuerda:</strong> que puede seleccionar la imágen para verla de tamaño completo</small>
                         <div class="gallery-images">
                             {{-- Se presentan las imágenes seleccionadas por el usuario --}}
                             @foreach ($images as $image)
                             <div class="gallery-item">
-                                <img src={{$image->getLink()}} alt='image_report_{{$image->id}}'>
+                                <a href="{{$image->getLink()}}" target="_blank">
+                                    <img src={{$image->getLink()}} alt='image_report_{{$image->id}}'>
+                                </a>
                             </div>
                         @endforeach
                         </div>

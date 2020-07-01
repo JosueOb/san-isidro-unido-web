@@ -45,7 +45,7 @@
                         <p><strong>Corre verificado:</strong> {{$member->email_verified_at ?: 'No verificado'}}</p>
                     </div>
                     <div class="col text-center">
-                        <img class="rounded-circle dark w-25" src="{{$member->getAvatar()}}" alt="">
+                        <img class="rounded-circle dark" style="width: 8rem; height: 8rem; object-fit: cover;" src="{{$member->getAvatar()}}" alt="">
                     </div>
                 </div>
             </div>
