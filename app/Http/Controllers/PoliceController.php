@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\OnlyPolices;
 use App\Http\Middleware\PoliceIsActive;
 use App\Http\Middleware\ProtectedAdminUsers;
 use App\Http\Middleware\ProtectedDirectiveUsers;
@@ -19,11 +20,12 @@ class PoliceController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(ProtectedAdminUsers::class)->only('show','edit','update','destroy');
-        $this->middleware(ProtectedDirectiveUsers::class)->only('show','edit','update','destroy');
-        $this->middleware(ProtectedModeratorUsers::class)->only('show','edit','update','destroy');
-        $this->middleware(ProtectedNeighborUsers::class)->only('show','edit','update','destroy');
-        $this->middleware(ProtectedGuestUsers::class)->only('show','edit','update','destroy');
+        $this->middleware(OnlyPolices::class)->only('show','edit','update','destroy');
+        
+        
+        
+        // $this->middleware(ProtectedNeighborUsers::class)->only('show','edit','update','destroy');
+        // $this->middleware(ProtectedGuestUsers::class)->only('show','edit','update','destroy');
         
         $this->middleware(PoliceIsActive::class)->only('edit','update');
     }

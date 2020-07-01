@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class ProtectedGuestUsers
+class OnlyMembers
 {
     /**
      * Handle an incoming request.
@@ -15,11 +15,11 @@ class ProtectedGuestUsers
      */
     public function handle($request, Closure $next)
     {
-        $getUserRole = $request->route('user')->getASpecificRole('invitado');
+        $isDirective = $request->route('user')->getASpecificRole('directivo') ? true : false;
         
-        if($getUserRole){
-            return abort(403,'Acción no autorizada');
+        if ($isDirective) {
+            return $next($request);
         }
-        return $next($request);
+        return abort(403, 'Acción no autorizada');
     }
 }

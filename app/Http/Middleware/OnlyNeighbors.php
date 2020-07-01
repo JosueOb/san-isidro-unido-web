@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class ProtectedAdminUsers
+class OnlyNeighbors
 {
     /**
      * Handle an incoming request.
@@ -15,11 +15,11 @@ class ProtectedAdminUsers
      */
     public function handle($request, Closure $next)
     {
-        $getUserRole = $request->route('user')->getASpecificRole('admin');
-
-        if($getUserRole){
-            return abort(403,'Acción no autorizada');
+        $isNeighbor = $request->route('user')->getASpecificRole('morador') ? true : false;
+        
+        if ($isNeighbor) {
+            return $next($request);
         }
-        return $next($request);
+        return abort(403, 'Acción no autorizada');
     }
 }

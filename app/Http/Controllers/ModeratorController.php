@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Middleware\IsModerator;
 use App\Http\Middleware\ModeratorIsActive;
 use App\Http\Middleware\NeighborIsActive;
+use App\Http\Middleware\OnlyModerators;
 use App\Http\Middleware\ProtectedAdminUsers;
 use App\Http\Middleware\ProtectedDirectiveUsers;
 use App\Http\Middleware\ProtectedGuestUsers;
@@ -23,12 +24,13 @@ class ModeratorController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(ProtectedAdminUsers::class)->only('storeAssign', 'show', 'edit', 'update', 'destroy');
-        $this->middleware(ProtectedDirectiveUsers::class)->only('storeAssign', 'show', 'edit', 'update', 'destroy');
-        $this->middleware(ProtectedPoliceUsers::class)->only('storeAssign', 'show', 'edit', 'update', 'destroy');
-        $this->middleware(ProtectedGuestUsers::class)->only('storeAssign', 'show', 'edit', 'update', 'destroy');
+        $this->middleware(OnlyModerators::class)->only('storeAssign', 'show', 'edit', 'update', 'destroy');
+        
+        
+        // $this->middleware(ProtectedPoliceUsers::class)->only('storeAssign', 'show', 'edit', 'update', 'destroy');
+        // $this->middleware(ProtectedGuestUsers::class)->only('storeAssign', 'show', 'edit', 'update', 'destroy');
+        
         $this->middleware(ProtectedModeratorUsers::class)->only('storeAssign');
-
         $this->middleware(NeighborIsActive::class)->only('storeAssign');
         $this->middleware(ModeratorIsActive::class)->only( 'edit', 'update');
     }
