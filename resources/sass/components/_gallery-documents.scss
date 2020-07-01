@@ -18,9 +18,13 @@
             color:  rgba(red,0.8);
         }
         .document-name{
+            width: 100%;
             font-size: 10px;
             margin:0.355rem 0.255rem;
             text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .image-cancel, 
         .link-document{

@@ -17549,9 +17549,13 @@ body.dashboard {
 }
 
 .gallery-documents .gallery-item .document-name {
+  width: 100%;
   font-size: 10px;
   margin: 0.355rem 0.255rem;
   text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .gallery-documents .gallery-item .image-cancel,
