@@ -92,7 +92,6 @@ class ReportController extends Controller
         $n_description = 'Escrito por: ' . $request->user()->getFullName();
         //Se obtiene el post guardado con su categoría
         $post = $category->posts()->where('id', $report->id)->with('category')->first();
-        // dd($category->posts()->where('id', $report->id)->with('category')->first());
 
         foreach ($neighbors as $neighbor) {
             $user_devices = OnesignalNotification::getUserDevices($neighbor->id);
@@ -103,7 +102,6 @@ class ReportController extends Controller
                     ["post" => $post],
                     $user_devices
                 );
-
                 //Por cada morador activo, se notifica el reporte registrado
                 $neighbor->notify(new PublicationReport(
                     'activity_reported', //tipo de la notificación
@@ -114,7 +112,6 @@ class ReportController extends Controller
                 ));
             }
         }
-        // OnesignalNotification::sendNotificationBySegments($n_title, $n_description, [ 'post'=> $post ]);
         session()->flash('success', 'Informe registrado con éxito');
         return response()->json(['success' => 'Datos recibidos correctamente', 'data' => $validated]);
     }
