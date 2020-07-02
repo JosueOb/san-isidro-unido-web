@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\Helpers\OnesignalNotification;
 use App\HelpersClass\AdditionalData;
 use App\Http\Middleware\AllowToAttendOrRejectProblemsAddressedByModerator;
 use App\Http\Middleware\OnlySocialProblems;
 use App\Http\Middleware\RejectSocialProblemsAddressedByDirective;
 use App\Http\Requests\RejectReportRequest;
+use App\Notifications\PublicationReport;
 use App\Post;
 use App\User;
 use Caffeinated\Shinobi\Models\Role;
@@ -81,6 +83,36 @@ class SocialProblemController extends Controller
         $social_problem->additional_data = $attention->getInfoSocialProblem();
         $social_problem->save();
 
+        //Se notifica al vecino que reportó el problema social
+        $neighbor = User::findOrFail($social_problem->user_id);
+        //Se obtiene el post guardado con su categoría
+        $n_title = 'Problema social resuelto';
+        $n_description = 'Tu problema reportado a sido resuelto por la directiva barrial';
+
+        $user_devices = OnesignalNotification::getUserDevices($neighbor->id);
+
+        if (!is_null($user_devices) && count($user_devices) > 0) {
+
+            OnesignalNotification::sendNotificationByPlayersID(
+                $n_title,
+                $n_description,
+                ["post" => [
+                    'id' => $social_problem->id,
+                    'category_slug' => $social_problem->category->slug,
+                    'subcategory_slug' => $social_problem->subcategory->slug
+                ]],
+                $user_devices
+            );
+            //se notifica al vecino que reportó el problema
+            $neighbor->notify(new PublicationReport(
+                'problem_approved', //tipo de la notificación
+                $n_title, //título de la notificación
+                $n_description, //descripcción de la notificación
+                $social_problem, // post que almacena la notificación
+                $directive //directivo que aprobó la solicitud
+            ));
+        }
+
         return redirect()->route('socialProblems.show', [
             'post' => $social_problem->id
         ])->with('success', 'Problema social atendido exitosamente');
@@ -117,6 +149,36 @@ class SocialProblemController extends Controller
          //Se cambia su estado, para que no sea visiable en la aplicacón móvil
          $social_problem->state = false;
          $social_problem->save();
+
+         //Se notifica al vecino que reportó el problema social
+        $neighbor = User::findOrFail($social_problem->user_id);
+        //Se obtiene el post guardado con su categoría
+        $n_title = 'Problema social rechazado';
+        $n_description = 'Tu problema reportado a sido rechazado por la directiva barrial, debido a la siguiente razón: '.$validated['description'];
+
+        $user_devices = OnesignalNotification::getUserDevices($neighbor->id);
+        if (!is_null($user_devices) && count($user_devices) > 0) {
+
+            OnesignalNotification::sendNotificationByPlayersID(
+                $n_title,
+                $n_description,
+                ["post" => [
+                    'id' => $social_problem->id,
+                    'category_slug' => $social_problem->category->slug,
+                    'subcategory_slug' => $social_problem->subcategory->slug
+                ]],
+                $user_devices
+            );
+
+            //se notifica al vecino que reportó el problema
+            $neighbor->notify(new PublicationReport(
+                'problem_rechazed', //tipo de la notificación
+                $n_title, //título de la notificación
+                $n_description, //descripcción de la notificación
+                $social_problem, // post que almacena la notificación
+                $directive //moderador que apróbó la solicitud
+            ));
+        }
 
          return redirect()->route('socialProblems.show', [
             'post' => $social_problem->id

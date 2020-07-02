@@ -106,7 +106,7 @@ class SocialProblemReportController extends Controller
         // dd($user_devices, $neighbor);
         if (!is_null($user_devices) && count($user_devices) > 0) {
 
-            $response = OnesignalNotification::sendNotificationByPlayersID(
+            OnesignalNotification::sendNotificationByPlayersID(
                 $n_title,
                 $n_description,
                 ["post" => [
