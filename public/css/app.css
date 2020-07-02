@@ -17024,10 +17024,13 @@ form h6 {
 }
 
 .main-navbar .navbar .notifications .dropdown-menu {
+  border: solid red 1px;
   padding: 0;
   margin: 0;
   min-width: 23rem;
   left: auto;
+  max-height: 25rem;
+  overflow-y: scroll;
 }
 
 .main-navbar .navbar .notifications .dropdown-menu .dropdown-item {
