@@ -13,6 +13,7 @@ use App\Notifications\PublicationReport;
 use Caffeinated\Shinobi\Models\Role;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Arr;
 
 class ReportController extends Controller
 {
@@ -76,6 +77,7 @@ class ReportController extends Controller
                 ]);
             }
         }
+        //Se guardan los documentos del reporte de actividad
         if ($request->file('new_documents')) {
             foreach ($request->file('new_documents') as $document) {
                 Resource::create([
@@ -86,33 +88,43 @@ class ReportController extends Controller
             }
         }
 
-        //Notificar a todos usuarios de la aplicación móvil
+        /**
+         * Notificación push - database
+         */
+        //Se obtiene a los usuarios moradores con estado activo
         $neighbor_role = Role::where('slug', 'morador')->first();
         $neighbors = $neighbor_role->users()->wherePivot('state', true)->get();
+        //Se describe el título y descipción para la notificación
         $n_title = 'Nuevo reporte de actividad registrado';
         $n_description = 'Escrito por: ' . $request->user()->getFullName();
-        //Se obtiene el post guardado con su categoría
-        $post = $category->posts()->where('id', $report->id)->with('category')->first();
-
+        //Se obtiene solo a los usuarios con dispositivos registrados
+        $users_devices = array();
         foreach ($neighbors as $neighbor) {
             $user_devices = OnesignalNotification::getUserDevices($neighbor->id);
             if (!is_null($user_devices) && count($user_devices) > 0) {
-                OnesignalNotification::sendNotificationByPlayersID(
-                    $n_title,
-                    $n_description,
-                    ["post" => $post],
-                    $user_devices
-                );
-                //Por cada morador activo, se notifica el reporte registrado
+                array_push($users_devices, $user_devices);
+                // Se registra una noficitación en la bdd
                 $neighbor->notify(new PublicationReport(
                     'activity_reported', //tipo de la notificación
                     $n_title, //título de la notificación
                     $n_description, //descripcción de la notificación
-                    $post, // post que almacena la notificación
+                    $report, // post que almacena la notificación
                     $request->user() //directivo que reportó la actividad
                 ));
             }
         }
+        //Se envía la notificación push a los usuario con dispositivos registrados
+        $users_devices = Arr::collapse($users_devices);//se convierte un array de multinivel a un solo nivel
+        OnesignalNotification::sendNotificationByPlayersID(
+            $n_title,
+            $n_description,
+            ["post" => [
+                'id' => $report->id,
+                'category_slug' => $report->category->slug,
+            ]],
+            $user_devices
+        );
+
         session()->flash('success', 'Informe registrado con éxito');
         return response()->json(['success' => 'Datos recibidos correctamente', 'data' => $validated]);
     }
