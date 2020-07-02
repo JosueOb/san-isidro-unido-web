@@ -76,7 +76,7 @@
                             <hr class="hr">
                             <!-- Description -->
                             <h4 class="description">SIU te permite estar comunicado con la directiva barrial
-                                de San Iisdro de Puengasí</h4>
+                                de San Isidro de Puengasí</h4>
                             <!-- Download -->
                             <div class="download">
                                 <a href="https://play.google.com/store/apps/details?id=com.stalinmaza.sanisidrounido"
