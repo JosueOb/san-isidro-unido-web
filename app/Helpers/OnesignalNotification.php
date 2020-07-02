@@ -63,10 +63,10 @@ class OnesignalNotification
 
     /**
      * Envia una notificacion con Onesignal a los dispositivos especificados en un array con sus ID`s
-     * @param string  $title
-     * @param string  $description
-     * @param array  $aditionalData
-     * @param array  $specificIDs
+     * @param string  $title //TITULO DE LA NOTIFICACION
+     * @param string  $description //DESCRIPCION DE LA NOTIFICACION
+     * @param array  $aditionalData //DATA ADICIONAL PARA QUE EL CLIENTE RECIBA ESOS DATOS
+     * @param array  $specificIDs //SON LOS ID`s DE LOS DISPOSITIVOS A LOS CUALES SE ENVIARA LA NOTIFICACION
      *
      * @return array
      */
@@ -128,6 +128,5 @@ class OnesignalNotification
         } catch (Exception $e) {
             return ['errors' => $e->getMessage(), 'status' => 500];
         }
-
     }
 }

@@ -71,6 +71,7 @@ class SocialProblemReportController extends Controller
     {
         //Se obtiene información del problema social reportado como objeto Post
         $social_problem = Post::findOrFail($notification->data['post']['id']);
+        // dd($social_problem->user_id);
         //Se obtiene información del moderador que aprobó el reporte de problema social
         $moderator_role = Role::where('slug', 'moderador')->first();
         $moderator = $moderator_role->users()
@@ -101,9 +102,11 @@ class SocialProblemReportController extends Controller
         $n_description = 'Tu problema reportado a sido verificado por un moderador para que la directiva barrial lo pueda abarcar';
 
         $user_devices = OnesignalNotification::getUserDevices($neighbor->id);
+
+        // dd($user_devices, $neighbor);
         if (!is_null($user_devices) && count($user_devices) > 0) {
 
-            OnesignalNotification::sendNotificationByPlayersID(
+            $response = OnesignalNotification::sendNotificationByPlayersID(
                 $n_title,
                 $n_description,
                 ["post" => [
@@ -113,7 +116,6 @@ class SocialProblemReportController extends Controller
                 ]],
                 $user_devices
             );
-
             //se notifica al vecino que reportó el problema
             $neighbor->notify(new PublicationReport(
                 'problem_approved', //tipo de la notificación

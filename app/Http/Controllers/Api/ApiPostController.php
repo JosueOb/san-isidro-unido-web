@@ -60,6 +60,7 @@ class ApiPostController extends ApiBaseController
             $filterByPolice = $request->input('police') ? intval($request->police): -1;
             $filterActive = $request->input('active') ? intval($request->active): -1;
             $filterStatusAttendance = $request->input('status_attendance') != null ? $request->status_attendance: '';
+            $filterIsPolice = $request->input('is_police') != null ? $request->is_police: '';
             $filterSize =  $request->input('size') ? intval($request->size): 20;
             //APLICAR FILTROS
             if ($filterCategory != -1) {
@@ -93,7 +94,11 @@ class ApiPostController extends ApiBaseController
             if ($filterStatusAttendance != '') {
                 $queryset = $queryset->where('additional_data->status_attendance', $filterStatusAttendance);
             }
-            if($filterCategory == 'problema' || $filterCategory == 'emergencia'){
+            if($filterCategory == 'problema'){
+                $queryset = $queryset->whereNotIn('additional_data->status_attendance', ['pendiente']);
+            }
+            // dd($filterIsPolice, $filterCategory);
+            if($filterCategory == 'emergencia' && $filterIsPolice == -1){
                 $queryset = $queryset->whereNotIn('additional_data->status_attendance', ['pendiente']);
             }
             //Retornar Paginacion y datos ordenados descendentemente para devolver los mas nuevos primero
@@ -171,7 +176,9 @@ class ApiPostController extends ApiBaseController
         $emergency->state = 0;
         $emergency->save();
         //Obtener post con todos los datos necesarios
-        $post_updated = Post::findById($emergency->id)->with(["category", "subcategory"])->first();
+        // $post_updated = Post::findById($emergency->id)->with(["category", "subcategory"])->first();
+        $category = Category::where('slug', 'emergencia')->first();
+        $post_updated = $category->posts()->where('id', $emergency->id)->with('category')->first();
         //Notificar al usuario que creo el post sobre quien lo va a atender
         $title_noti = "Tu reporte de emergencia fue aceptado";
         $description_noti = "El policia " . $token_decoded->user->fullname . " ha aceptado atender tu emergencia";
