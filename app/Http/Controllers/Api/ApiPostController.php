@@ -188,7 +188,10 @@ class ApiPostController extends ApiBaseController
             OnesignalNotification::sendNotificationByPlayersID(
                 $title_noti,
                 $description_noti,
-                ["post" => $post_updated],
+                ["post" => [
+                    'id' => $post_updated->id,
+                    'category_slug' => $post_updated->category->slug,
+                ]],
                 $user_devices
             );
         }
@@ -225,7 +228,10 @@ class ApiPostController extends ApiBaseController
                 OnesignalNotification::sendNotificationByPlayersID(
                     $title_notification_moderador,
                     $description_notification_moderador,
-                    ["post" => $post_updated],
+                    ["post" => [
+                        'id' => $post_updated->id,
+                        'category_slug' => $post_updated->category->slug,
+                    ]],
                     $user_devices_moderador
                 );
             }
@@ -282,7 +288,8 @@ class ApiPostController extends ApiBaseController
             $emergency->state = 0;
             $emergency->save();
             //Obtener post con todos los datos necesarios
-            $post_updated = Post::findById($emergency->id)->with(["category", "subcategory"])->first();
+            $category = Category::where('slug', 'emergencia')->first();
+            $post_updated = $category->posts()->where('id', $emergency->id)->with('category')->first();
             //Enviar Notificación
             $title_noti = "Tu solicitud de emergencia fue rechazada";
             $description_noti = "El policia " . $police_user->fullname . " no puede atender su reporte de emergencia por el siguiente mótivo: " .  $request->motivo;
@@ -292,7 +299,10 @@ class ApiPostController extends ApiBaseController
                 OnesignalNotification::sendNotificationByPlayersID(
                     $title_noti,
                     $description_noti,
-                    ["post" => $post_updated],
+                    ["post" => [
+                        'id' => $post_updated->id,
+                        'category_slug' => $post_updated->category->slug,
+                    ]],
                     $user_devices
                 );
             }
@@ -313,12 +323,6 @@ class ApiPostController extends ApiBaseController
             //Notificar Moderadores
             foreach ($moderadores as $moderador) {
                 $moderador->notify(
-                    // new PostNotification(
-                    //     $post_updated,
-                    //     $title_notification_moderador,
-                    //     $description_notification_moderador,
-                    //     $type_notification
-                    // )
                     new PostNotification(
                         $post_updated,
                         $title_noti,
@@ -334,7 +338,10 @@ class ApiPostController extends ApiBaseController
                     OnesignalNotification::sendNotificationByPlayersID(
                         $title_notification_moderador,
                         $description_notification_moderador,
-                        ["post" => $post_updated],
+                        ["post" => [
+                            'id' => $post_updated->id,
+                            'category_slug' => $post_updated->category->slug,
+                        ]],
                         $user_devices_moderador
                     );
                 }
@@ -389,7 +396,9 @@ class ApiPostController extends ApiBaseController
             $rolPolicia = Role::where('slug', 'policia')->first();
             $policias = $rolPolicia->users()->get();
 
-            $new_post = Post::findById($post->id)->with(["category", "subcategory"])->first();
+            // $new_post = Post::findById($post->id)->with(["category", "subcategory"])->first();
+            $category = Category::where('slug', 'emergencia')->first();
+            $new_post = $category->posts()->where('id', $post->id)->with('category')->first();
             //Notificar Emergencia a los Policias
             $title_notification_policia = "Nueva emergencia reportada";
             $description_notification_policia = "El usuario " . $new_post->user->fullname . " ha reportado una emergencia";
@@ -449,12 +458,6 @@ class ApiPostController extends ApiBaseController
             $description_notification_moderador =  'El usuario ' . $token_decoded->user->fullname . ' ha reportado una emergencia';            //Notificar Moderadores
             foreach ($moderadores as $moderador) {
                 $moderador->notify(
-                    // new PostNotification(
-                    //     $new_post,
-                    //     $title_notification_moderador,
-                    //     $description_notification_moderador,
-                    //     $type_notification
-                    // )
                     new PublicationReport(
                         $type_notification, //tipo de la notificación
                         $new_post->category->name, //título de la notificación
@@ -470,7 +473,10 @@ class ApiPostController extends ApiBaseController
                     OnesignalNotification::sendNotificationByPlayersID(
                         $title_notification_moderador,
                         $description_notification_moderador,
-                        ["post" => $new_post],
+                        ["post" => [
+                            'id' => $new_post->id,
+                            'category_slug' => $new_post->category->slug,
+                        ]],
                         $user_devices_moderador
                     );
                 }
@@ -524,7 +530,8 @@ class ApiPostController extends ApiBaseController
  
             $moderadores = $rolModerador->users()->get();
  
-            $new_post = Post::findById($post->id)->with(["category", "subcategory"])->first();
+            $category = Category::where('slug', 'problema')->first();
+            $new_post = $category->posts()->where('id', $post->id)->with('category')->first();
             $title_notification_moderador = 'Un nuevo problema social ha sido reportado';
             $description_notification_moderador = 'El usuario ' . $new_post->user->fullname . ' ha reportado un problema social';
             //Notificar Moderadores
@@ -551,7 +558,10 @@ class ApiPostController extends ApiBaseController
                     OnesignalNotification::sendNotificationByPlayersID(
                         $title_notification_moderador,
                         $description_notification_moderador,
-                        ["post" => $new_post],
+                        ["post" => [
+                            'id' => $new_post->id,
+                            'category_slug' => $new_post->category->slug,
+                        ]],
                         $user_devices_moderador
                     );
                 }
