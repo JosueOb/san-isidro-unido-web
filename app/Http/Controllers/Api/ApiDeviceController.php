@@ -59,7 +59,7 @@ class ApiDeviceController extends ApiBaseController
 
     public function saveDevice($phone_id, $phone_model, $phone_platform, $description, $user_id)
     {
-        $deviceVerify = Device::phoneId($phone_id)->first();
+        $deviceVerify = Device::phoneId($phone_id)->userId($user_id)->first();
         //Si no existe el dispositivo lo agregamos
         if (is_null($deviceVerify)) {
             $device = new Device();

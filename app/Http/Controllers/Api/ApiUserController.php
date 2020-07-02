@@ -247,7 +247,8 @@ class ApiUserController extends ApiBaseController
                     $user = User::email($request->email)->first();
                     if ($device) {
                         $deviceExists = $user->devices()->findByPhoneId($device['phone_id'])->first();
-                        if (!$deviceExists) {
+                       
+                        if (!isset($deviceExists)) {
                             $apiDeviceController = new ApiDeviceController;
                             $apiDeviceController->saveDevice(
                                 (array_key_exists('phone_id', $device)) ? $device['phone_id'] : '',
@@ -645,7 +646,6 @@ class ApiUserController extends ApiBaseController
                     $queryset = $queryset->whereRaw('read_at is null');
                 }
             }
-            // dd($queryset->toSql());
             $notifications = $queryset->orderBy('created_at', 'DESC')->simplePaginate($filterSize)->toArray();
             return $this->sendPaginateResponse(200, 'Notificaciones obtenidas correctamente', $notifications);
         } catch (Exception $e) {
