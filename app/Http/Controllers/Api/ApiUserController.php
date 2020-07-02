@@ -331,6 +331,7 @@ class ApiUserController extends ApiBaseController
             // Verificar si el validador falla
             if (!$validatorAfiliation->fails()) {
                 $user = User::findById($token_decoded->user->id)->first();
+                //Validar si usuario tiene rol morador para no hacer el proceso y devolver token actualizado
                 //Validar si existe el usuario
                 if (!is_null($user)) {
                     $imageApi = new ApiImages();
