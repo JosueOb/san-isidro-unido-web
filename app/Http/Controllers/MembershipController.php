@@ -82,15 +82,15 @@ class MembershipController extends Controller
         $n_description = 'Por favor, cierra sesión e ingresa nuevamente en la aplicación móvil, para usar las nuevas funcionalidades';
         $user_devices = OnesignalNotification::getUserDevices($guest->id);
         if (!is_null($user_devices) && count($user_devices) > 0) {
-            
+
             OnesignalNotification::sendNotificationByPlayersID(
                 $n_title,
                 $n_description,
-                ['action'=>'logout'],
+                ['action' => 'logout'],
                 $user_devices
             );
             //Se notifica al solicitante la aprobación de su solicitud
-            $guest->notify(new ApproveMembership());
+            // $guest->notify(new ApproveMembership());
             //Por cada morador activo, se notifica el reporte registrado
             $guest->notify(new MembershipRequest(
                 'membership_approved', //tipo de la notificación
@@ -138,18 +138,18 @@ class MembershipController extends Controller
         $membership->save();
 
         $n_title = 'Solicitud de afiliación rechazada';
-        $n_description = 'Tu solicitud ha sido rechazada por la siguiente razón: '. $validated['description'];
+        $n_description = 'Tu solicitud ha sido rechazada por la siguiente razón: ' . $validated['description'];
         $user_devices = OnesignalNotification::getUserDevices($guest->id);
         if (!is_null($user_devices) && count($user_devices) > 0) {
-            
+
             OnesignalNotification::sendNotificationByPlayersID(
                 $n_title,
                 $n_description,
                 null,
                 $user_devices
             );
-             //Se notifica al solicitante el rechazo de su solicitud
-            $guest->notify(new RejectMembership($validated['description']));
+            //Se notifica al solicitante el rechazo de su solicitud
+            // $guest->notify(new RejectMembership($validated['description']));
             //Se nnotifica al solicitante de su rechazo en la afiliación
             $guest->notify(new MembershipRequest(
                 'membership_rechazed', //tipo de la notificación
