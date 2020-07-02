@@ -31,7 +31,7 @@
                         <div class="col-12 col-md-6">
                             <div class="form-group">
                                 <label for="name">Nombre</label>
-                                <input id="name" type="text" class="form-control  @error('name') is-invalid @enderror" name="name" value="{{ old('name') ?: $subcategory->name }}" maxlength="25" required autofocus>
+                                <input id="name" type="text" class="form-control  @error('name') is-invalid @enderror" name="name" value="{{ old('name') ?: $subcategory->name }}" maxlength="45" required autofocus>
                                 @error('name')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>

@@ -33,7 +33,7 @@
                     <div class="form-group">
                         <label for="title">Título</label>
                         {{-- <input id="title" type="text" class="form-control  @error('title') is-invalid @enderror" name="title" value="{{ old('title') }}" maxlength="45" required autofocus> --}}
-                        <input id="title" type="text" class="form-control" name="title" value="{{ old('title') ?: $report->title}}" maxlength="255" required autofocus>
+                        <input id="title" type="text" class="form-control" name="title" value="{{ old('title') ?: $report->title}}" maxlength="150" required autofocus>
                         <span class="invalid-feedback" role="alert">
 
                         </span>
@@ -41,7 +41,7 @@
                     </div>
                     <div class="form-group">
                         <label for="description">Descripción</label>
-                        <textarea id="description" class="form-control" name="description" rows="12" maxlength="255" required>{{ old('description') ?: $report->description}}</textarea>
+                        <textarea id="description" class="form-control" name="description" rows="12" maxlength="65535" required>{{ old('description') ?: $report->description}}</textarea>
                         <span class="invalid-feedback" role="alert">
                             
                         </span>

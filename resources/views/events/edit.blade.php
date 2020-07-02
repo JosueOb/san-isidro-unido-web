@@ -31,7 +31,7 @@
                         <div class="col-12 col-md-6">
                             <div class="form-group">
                                 <label for="title">Título</label>
-                                <input id="title" type="text" class="form-control" name="title" value="{{ old('title') ?: $event->title}}" maxlength="255" required autofocus>
+                                <input id="title" type="text" class="form-control" name="title" value="{{ old('title') ?: $event->title}}" maxlength="100" required autofocus>
                                 <span class="invalid-feedback" role="alert">
                                 </span>
                             </div>

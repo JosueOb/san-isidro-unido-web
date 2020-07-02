@@ -34,7 +34,7 @@
 
                             <div class="form-group">
                                 <label for="name">Nombre</label>
-                                <input id="name" type="text" class="form-control  @error('name') is-invalid @enderror" name="name" value="{{ old('name') ?: $publicService->name}}" maxlength="45" required autofocus>
+                                <input id="name" type="text" class="form-control  @error('name') is-invalid @enderror" name="name" value="{{ old('name') ?: $publicService->name}}" maxlength="60" required autofocus>
                                 <span class="invalid-feedback" role="alert">
                                 </span>
                             </div>
