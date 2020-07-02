@@ -55,17 +55,13 @@
                     <div class="col-md-6">
                         <div class="social-media-icons">
                             <!--Facebook-->
-                            <a class="social-icon" href="#" target="_blank">
+                            <a class="social-icon" href="https://www.facebook.com/groups/558311628404267" target="_blank">
                                 <i class="fab fa-facebook-f"></i> Facebook
                             </a>
                             <!--Instagram-->
-                            <a class="social-icon" href="#" target="_blank">
+                            <a class="social-icon" href="https://www.instagram.com/explore/locations/219995997/loma-de-puengasi/?hl=es-la" target="_blank">
                                 <i class="fab fa-instagram"></i> Instagram
                             </a>
-                            {{-- <!--Youtube-->
-                            <a class="social-icon" href="#" target="_blank">
-                                <i class="fab fa-youtube"></i> Youtube
-                            </a> --}}
                         </div>
                     </div>
                 </div>
@@ -90,9 +86,10 @@
                             <h6 class="item-title">Contacto</h6>
                             <hr class="item-slide">
                             <div class="item-content contacts">
-                                <p><i class="fa fa-envelope mr-3"></i> siul@gmail.com</p>
-                                <p><i class="fa fa-phone mr-3"></i> 022505682</p>
-                                <p><i class="fa fa-print mr-3"></i> 022505682</p>
+                                <p><i class="fa fa-envelope mr-3"></i> josuericardocando@gmail.com</p>
+                                <p><i class="fa fa-phone mr-3"></i> 0984254187</p>
+                                <p><i class="fa fa-envelope mr-3"></i>stalinct97@gmail.com</p>
+                                <p><i class="fa fa-phone mr-3"></i> 0993115700</p>
                             </div>
                         </div>
                     </div>
