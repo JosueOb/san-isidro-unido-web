@@ -27,7 +27,7 @@ class EventRequest extends FormRequest
     {
         $categoryEvent = Category::where('slug', 'evento')->first();
         $rules = [
-            'title'=>'required|regex:/^[[:alpha:][:space:](0-9)(,;.áéíóúÁÉÍÓÚÑñ)]+$/|min:3|max:255',
+            'title'=>'required|regex:/^[[:alpha:][:space:](0-9)(,;.áéíóúÁÉÍÓÚÑñ)]+$/|min:3|max:100',
             'description'=> 'required|regex:/^[[:alpha:][:space:](0-9)(,;.áéíóúÁÉÍÓÚÑñ)]+$/|max:255',
             //se recibe el id de la subcategoría
             'id'=>[

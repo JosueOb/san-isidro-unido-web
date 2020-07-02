@@ -34,7 +34,7 @@ class SubcategoryRequest extends FormRequest
         }
 
         return [
-            'name'=>'required|regex:/^[[:alpha:][:space:](áéíóúÁÉÍÓÚñÑ)]+$/|min:3|max:25|'.$uniqueName,
+            'name'=>'required|regex:/^[[:alpha:][:space:](áéíóúÁÉÍÓÚñÑ)]+$/|min:3|max:45|'.$uniqueName,
             'description'=> 'nullable|regex:/^[[:alpha:][:space:](,;.áéíóúÁÉÍÓÚñÑ)]+$/|max:255',
             'category'=>[
                 'required',

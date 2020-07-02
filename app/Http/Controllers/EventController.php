@@ -16,6 +16,7 @@ use App\Http\Middleware\OnlyEvents;
 use App\Notifications\PostNotification;
 use App\Notifications\PublicationReport;
 use Caffeinated\Shinobi\Models\Role;
+use Illuminate\Support\Arr;
 
 class EventController extends Controller
 {
@@ -23,7 +24,7 @@ class EventController extends Controller
 
     public function __construct()
     {
-        $this->middleware(OnlyEvents::class)->only('show','edit','update','destroy');
+        $this->middleware(OnlyEvents::class)->only('show', 'edit', 'update', 'destroy');
         $this->additionalData = new AdditionalDataCls();
     }
 
@@ -36,7 +37,7 @@ class EventController extends Controller
     {
         $category_event = Category::where('slug', 'evento')->first();
         $events = $category_event->posts()->latest()->paginate(10);
-        return view('events.index',[
+        return view('events.index', [
             'events' => $events,
         ]);
     }
@@ -50,8 +51,8 @@ class EventController extends Controller
     {
         $category = Category::where('slug', 'evento')->first();
         $subcategories = $category->subcategories()->get();
-        return view('events.create',[
-            'subcategories'=>$subcategories,
+        return view('events.create', [
+            'subcategories' => $subcategories,
         ]);
     }
 
@@ -75,9 +76,9 @@ class EventController extends Controller
             'responsible' => $validated['responsible'],
             "range_date" => [
                 'start_date' => $validated['start-date'],
-                    'end_date' => $validated['end-date'],
-                    'start_time' => $validated['start-time'],
-                    'end_time' => $validated['end-time'],
+                'end_date' => $validated['end-date'],
+                'start_time' => $validated['start-time'],
+                'end_time' => $validated['end-time'],
             ]
         ]);
 
@@ -93,51 +94,61 @@ class EventController extends Controller
         $event->save();
 
         $phones = $validated['phone_numbers'];
-        foreach($phones as $phone){
+        foreach ($phones as $phone) {
             $phone_number = new Phone(['phone_number' => $phone]);
             $event->phones()->save($phone_number);
         }
 
-        if($request->file('new_images')){
-            foreach($request->file('new_images') as $image){
+        if ($request->file('new_images')) {
+            foreach ($request->file('new_images') as $image) {
                 Resource::create([
-                    'url'=> $image->store('event_images', 's3'),
+                    'url' => $image->store('event_images', 's3'),
                     'post_id' => $event->id,
-                    'type'=>'image',
+                    'type' => 'image',
                 ]);
             }
         }
 
-        //Notificar a todos usuarios de la aplicación móvil
+        /**
+         * Notificación push - database
+         */
+        //Se obtiene a los usuarios moradores con estado activo
         $neighbor_role = Role::where('slug', 'morador')->first();
         $neighbors = $neighbor_role->users()->wherePivot('state', true)->get();
+        //Se describe el título y descipción para la notificación
         $n_title = 'Nuevo evento registrado';
         $n_description = $event->title;
-        //Se obtiene el post guardado con su categoría
-        $post = $category_event->posts()->where('id', $event->id)->with('category', 'subcategory')->first();
-
+        //Se obtiene solo a los usuarios con dispositivos registrados
+        $users_devices = array();
         foreach ($neighbors as $neighbor) {
             $user_devices = OnesignalNotification::getUserDevices($neighbor->id);
             if (!is_null($user_devices) && count($user_devices) > 0) {
-                OnesignalNotification::sendNotificationByPlayersID(
-                    $n_title,
-                    $n_description,
-                    ["post" => $post],
-                    $user_devices
-                );
-                //Por cada morador activo, se notifica el reporte registrado
+                array_push($users_devices, $user_devices);
+                // Se registra una noficitación en la bdd
                 $neighbor->notify(new PublicationReport(
                     'event_reported', //tipo de la notificación
                     $n_title, //título de la notificación
                     $n_description, //descripcción de la notificación
-                    $post, // post que almacena la notificación
+                    $event, // post que almacena la notificación
                     $request->user() //directivo que reportó el evento
                 ));
             }
         }
+        //Se envía la notificación push a los usuario con dispositivos registrados
+        $users_devices = Arr::collapse($users_devices); //se convierte un array de multinivel a un solo nivel
+        OnesignalNotification::sendNotificationByPlayersID(
+            $n_title,
+            $n_description,
+            ["post" => [
+                'id' => $event->id,
+                'category_slug' => $event->category->slug,
+                'subcategory_slug' => $event->subcategory->slug
+            ]],
+            $user_devices
+        );
 
         session()->flash('success', 'Servicio público registrado con éxito');
-        return response()->json(['success'=>'Datos recibidos correctamente']);
+        return response()->json(['success' => 'Datos recibidos correctamente']);
     }
 
     /**
@@ -158,7 +169,7 @@ class EventController extends Controller
             'event_range_date' => $event_range_date,
             'event_responsible' => $event_responsible,
             'ubication' => $ubication,
-            'images'=> $images,
+            'images' => $images,
         ]);
     }
 
@@ -177,13 +188,13 @@ class EventController extends Controller
         $event_responsible = $additional_data['responsible'];
         $ubication = $post->ubication;
         $images = $post->resources()->where('type', 'image')->get();
-        return view('events.edit',[
-            'event'=>$post,
-            'subcategories'=>$subcategories,
+        return view('events.edit', [
+            'event' => $post,
+            'subcategories' => $subcategories,
             'event_range_date' => $event_range_date,
             'event_responsible' => $event_responsible,
             'ubication' => $ubication,
-            'images'=> $images,
+            'images' => $images,
         ]);
     }
 
@@ -206,9 +217,9 @@ class EventController extends Controller
             'responsible' => $validated['responsible'],
             "range_date" => [
                 'start_date' => $validated['start-date'],
-                    'end_date' => $validated['end-date'],
-                    'start_time' => $validated['start-time'],
-                    'end_time' => $validated['end-time'],
+                'end_date' => $validated['end-date'],
+                'start_time' => $validated['start-time'],
+                'end_time' => $validated['end-time'],
             ]
         ]);
 
@@ -216,7 +227,7 @@ class EventController extends Controller
         $post->description = $validated['description'];
         $post->ubication = $ubication;
         $post->subcategory_id = $validated['id'];
-        $post->additional_data =$this->additionalData->getInfoEvent();
+        $post->additional_data = $this->additionalData->getInfoEvent();
         $post->save();
 
         $newPhones = $validated['phone_numbers'];
@@ -229,27 +240,27 @@ class EventController extends Controller
         $oldEventImages = $request['old_images'];
         $oldCollectionEventImages = $post->resources()->where('type', 'image')->get();
 
-        if($oldEventImages){
-            foreach($oldCollectionEventImages as $oldImageEvent){
+        if ($oldEventImages) {
+            foreach ($oldCollectionEventImages as $oldImageEvent) {
                 $oldImageUrl = $oldImageEvent->url;
 
-                if($this->searchDeletedImages($oldImageUrl, $oldEventImages)){
+                if ($this->searchDeletedImages($oldImageUrl, $oldEventImages)) {
                     //Eliminar a la imagen de la bdd y del local storage
                     $post->resources()->where('type', 'image')
-                                        ->where('url', $oldImageUrl)->delete();
-                    if(Storage::disk('s3')->exists($oldImageUrl)){
+                        ->where('url', $oldImageUrl)->delete();
+                    if (Storage::disk('s3')->exists($oldImageUrl)) {
                         Storage::disk('s3')->delete($oldImageUrl);
                     }
                 }
             }
-        }else{
+        } else {
             //En caso no recibir el arreglo de las imagenes registradas con el reporte,
             //se verifica si el reporte contiene imágenes
-            if(count($oldCollectionEventImages) > 0){
+            if (count($oldCollectionEventImages) > 0) {
                 //Si el reporte contiene imágenes, se procede a eliminar todas las imágenes
                 foreach ($oldCollectionEventImages as $oldImage) {
                     $oldImageUrl = $oldImage->url;
-                    if(Storage::disk('s3')->exists($oldImageUrl)){
+                    if (Storage::disk('s3')->exists($oldImageUrl)) {
                         Storage::disk('s3')->delete($oldImageUrl);
                     }
                 }
@@ -258,51 +269,60 @@ class EventController extends Controller
             }
         }
 
-        if($request->file('new_images')){
-            foreach($request->file('new_images') as $image){
+        if ($request->file('new_images')) {
+            foreach ($request->file('new_images') as $image) {
 
                 Resource::create([
-                    'url'=> $image->store('event_images', 's3'),
+                    'url' => $image->store('event_images', 's3'),
                     'post_id' => $post->id,
-                    'type'=>'image',
+                    'type' => 'image',
                 ]);
             }
         }
 
-        //Notificar a todos usuarios de la aplicación móvil
+        /**
+         * Notificación push - database
+         */
+        //Se obtiene a los usuarios moradores con estado activo
         $neighbor_role = Role::where('slug', 'morador')->first();
         $neighbors = $neighbor_role->users()->wherePivot('state', true)->get();
-        $n_title = 'Nuevo evento actualizado';
+        //Se describe el título y descipción para la notificación
+        $n_title = 'Evento actualizado';
         $n_description = $post->title;
-        //Se obtiene el post guardado con su categoría
-        $category_event = Category::where('slug', 'evento')->first();
-        $event = $category_event->posts()->where('id', $post->id)->with('category', 'subcategory')->first();
-
+        //Se obtiene solo a los usuarios con dispositivos registrados
+        $users_devices = array();
         foreach ($neighbors as $neighbor) {
             $user_devices = OnesignalNotification::getUserDevices($neighbor->id);
             if (!is_null($user_devices) && count($user_devices) > 0) {
-                OnesignalNotification::sendNotificationByPlayersID(
-                    $n_title,
-                    $n_description,
-                    ["post" => $event],
-                    $user_devices
-                );
-                //Por cada morador activo, se notifica el reporte registrado
+                array_push($users_devices, $user_devices);
+                // Se registra una noficitación en la bdd
                 $neighbor->notify(new PublicationReport(
                     'event_reported', //tipo de la notificación
                     $n_title, //título de la notificación
                     $n_description, //descripcción de la notificación
-                    $event, // post que almacena la notificación
+                    $post, // post que almacena la notificación
                     $request->user() //directivo que reportó el evento
                 ));
             }
         }
+        //Se envía la notificación push a los usuario con dispositivos registrados
+        $users_devices = Arr::collapse($users_devices); //se convierte un array de multinivel a un solo nivel
+        OnesignalNotification::sendNotificationByPlayersID(
+            $n_title,
+            $n_description,
+            ["post" => [
+                'id' => $post->id,
+                'category_slug' => $post->category->slug,
+                'subcategory_slug' => $post->subcategory->slug
+            ]],
+            $user_devices
+        );
 
         session()->flash('success', 'Servicio público actualizado con éxito');
         return response()->json([
-            'success'=>'Datos recibidos correctamente', 
-            'redirect'=>route('events.index'),
-            ]);
+            'success' => 'Datos recibidos correctamente',
+            'redirect' => route('events.index'),
+        ]);
     }
 
     /**
@@ -314,15 +334,15 @@ class EventController extends Controller
     public function destroy(Post $post)
     {
         $message = '';
-        if($post->state){
+        if ($post->state) {
             $post->state = false;
-            $message='desactivado';
-        }else{
+            $message = 'desactivado';
+        } else {
             $post->state = true;
-            $message='activado';
+            $message = 'activado';
         }
         $post->save();
-        
+
         return back()->with('success', "Evento $message con éxito");
     }
     /**
@@ -333,26 +353,28 @@ class EventController extends Controller
      * @return boolean $imageIsDeleted
      */
 
-    public function searchDeletedImages($search, $array){
+    public function searchDeletedImages($search, $array)
+    {
         $imageIsDeleted = true;
-        foreach($array as $image){
-            if($image === $search){
+        foreach ($array as $image) {
+            if ($image === $search) {
                 $imageIsDeleted = false;
             }
         }
         return $imageIsDeleted;
     }
 
-      /**
+    /**
      * Función que permite detemrinar la existencia de un número telefónico en un arreglo dado.
      *
      * @param  string $phone_search 
      * @param  Collection $phone_array
      * @return boolean
      */
-    public function isThereAPhoneNumber($phone_search, $phone_array){
-        foreach($phone_array as $phone){
-            if($phone === $phone_search){
+    public function isThereAPhoneNumber($phone_search, $phone_array)
+    {
+        foreach ($phone_array as $phone) {
+            if ($phone === $phone_search) {
                 return true;
             }
         }
@@ -363,10 +385,11 @@ class EventController extends Controller
      * Función que elimina los teléfonos registrado a partir de la existencia del 
      * mismo en un determinado arreglo
      */
-    public function deleteOldPhones($oldPhones, $newPhones){
-        foreach($oldPhones as $oldPhone){
+    public function deleteOldPhones($oldPhones, $newPhones)
+    {
+        foreach ($oldPhones as $oldPhone) {
             //Si el teléfono fue elimnado
-            if(!$this->isThereAPhoneNumber($oldPhone->phone_number, $newPhones)){
+            if (!$this->isThereAPhoneNumber($oldPhone->phone_number, $newPhones)) {
                 $oldPhone->delete();
             }
         }
@@ -376,11 +399,12 @@ class EventController extends Controller
      * Función que guarda en la base de datos los números telefónicos que sean diferentes
      * a los almacenados anteriormente
      */
-    public function saveNewPhones($newPhones, $oldPhones, $publicService){
+    public function saveNewPhones($newPhones, $oldPhones, $publicService)
+    {
         $oldPhones = $oldPhones->pluck('phone_number')->toArray();
-        foreach($newPhones as $newPhone){
+        foreach ($newPhones as $newPhone) {
             //Si el teléfono es nuevo
-            if(!$this->isThereAPhoneNumber($newPhone, $oldPhones)){
+            if (!$this->isThereAPhoneNumber($newPhone, $oldPhones)) {
                 $phone_number = new Phone(['phone_number' => $newPhone]);
                 $publicService->phones()->save($phone_number);
             }

@@ -24,8 +24,8 @@ class ReportRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'title' => 'required|regex:/^[[:alpha:][:space:](0-9)(,;.áéíóúÁÉÍÓÚÑñ)]+$/|min:3|max:255',
-            'description' => 'required|regex:/^[[:alpha:][:space:](0-9)(,;.áéíóúÁÉÍÓÚÑñ)]+$/',
+            'title' => 'required|regex:/^[[:alpha:][:space:](0-9)(,;.áéíóúÁÉÍÓÚÑñ)]+$/|min:3|max:150',
+            'description' => 'required|regex:/^[[:alpha:][:space:](0-9)(,;.áéíóúÁÉÍÓÚÑñ)]+$/|max:65535',
         ];
 
         if ($this->isMethod('POST')) {
