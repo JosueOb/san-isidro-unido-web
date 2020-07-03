@@ -332,6 +332,13 @@ class ApiUserController extends ApiBaseController
             if (!$validatorAfiliation->fails()) {
                 $user = User::findById($token_decoded->user->id)->first();
                 //Validar si usuario tiene rol morador para no hacer el proceso y devolver token actualizado
+
+                $roleUser = $user->getASpecificRole('morador');
+                if($roleUser && $roleUser->pivot->state){
+                    $token = $jwtAuth->getToken($user->email);
+                    return $this->sendResponse(200, 'Felicidades, ya eres morador', ['token' => $token]);
+                }
+
                 //Validar si existe el usuario
                 if (!is_null($user)) {
                     $imageApi = new ApiImages();
@@ -387,7 +394,7 @@ class ApiUserController extends ApiBaseController
 
                     //Retornar Token
                     $token = $jwtAuth->getToken($user->email);
-                    return $this->sendResponse(200, 'Afiliacion Solicitada Correctamente', ['token' => $token]);
+                    return $this->sendResponse(200, 'Solicitada Enviada Correctamente', ['token' => $token]);
                 }
                 //Si no existe envio error
                 return $this->sendError(404, 'Usuario no existe', ['user' => 'usuario no existe']);
