@@ -147,7 +147,7 @@ class EventController extends Controller
             $user_devices
         );
 
-        session()->flash('success', 'Servicio público registrado con éxito');
+        session()->flash('success', 'Evento registrado con éxito');
         return response()->json(['success' => 'Datos recibidos correctamente']);
     }
 
@@ -318,7 +318,7 @@ class EventController extends Controller
             $user_devices
         );
 
-        session()->flash('success', 'Servicio público actualizado con éxito');
+        session()->flash('success', 'Evento actualizado con éxito');
         return response()->json([
             'success' => 'Datos recibidos correctamente',
             'redirect' => route('events.index'),
