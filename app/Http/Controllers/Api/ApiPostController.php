@@ -97,7 +97,7 @@ class ApiPostController extends ApiBaseController
             if($filterCategory == 'problema'){
                 $queryset = $queryset->whereNotIn('additional_data->status_attendance', ['pendiente']);
             }
-            // dd($filterIsPolice, $filterCategory);
+            
             if($filterCategory == 'emergencia' && $filterIsPolice == -1){
                 $queryset = $queryset->whereNotIn('additional_data->status_attendance', ['pendiente']);
             }
