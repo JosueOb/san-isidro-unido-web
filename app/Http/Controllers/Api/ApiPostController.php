@@ -119,7 +119,7 @@ class ApiPostController extends ApiBaseController
     public function detail($id)
     {
         try {
-            $post = Post::findById($id)->with(['resources', 'category', 'user', 'subcategory', 'reactions'])->first();
+            $post = Post::findById($id)->where('state', 1)->with(['resources', 'category', 'user', 'subcategory', 'reactions'])->first();
             //Verificar si existe el post
             if (!is_null($post)) {
                 return $this->sendResponse(200, 'success', $post);
