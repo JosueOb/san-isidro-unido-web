@@ -280,43 +280,45 @@ class EventController extends Controller
             }
         }
 
-        /**
-         * Notificación push - database
-         */
-        //Se obtiene a los usuarios moradores con estado activo
-        $neighbor_role = Role::where('slug', 'morador')->first();
-        $neighbors = $neighbor_role->users()->wherePivot('state', true)->get();
-        //Se describe el título y descipción para la notificación
-        $n_title = 'Evento actualizado';
-        $n_description = $post->title;
-        //Se obtiene solo a los usuarios con dispositivos registrados
-        $users_devices = array();
-        foreach ($neighbors as $neighbor) {
-            $user_devices = OnesignalNotification::getUserDevices($neighbor->id);
-            if (!is_null($user_devices) && count($user_devices) > 0) {
-                array_push($users_devices, $user_devices);
-                // Se registra una noficitación en la bdd
-                $neighbor->notify(new PublicationReport(
-                    'event_reported', //tipo de la notificación
-                    $n_title, //título de la notificación
-                    $n_description, //descripcción de la notificación
-                    $post, // post que almacena la notificación
-                    $request->user() //directivo que reportó el evento
-                ));
+        if ($post->state) {
+            /**
+             * Notificación push - database
+             */
+            //Se obtiene a los usuarios moradores con estado activo
+            $neighbor_role = Role::where('slug', 'morador')->first();
+            $neighbors = $neighbor_role->users()->wherePivot('state', true)->get();
+            //Se describe el título y descipción para la notificación
+            $n_title = 'Evento actualizado';
+            $n_description = $post->title;
+            //Se obtiene solo a los usuarios con dispositivos registrados
+            $users_devices = array();
+            foreach ($neighbors as $neighbor) {
+                $user_devices = OnesignalNotification::getUserDevices($neighbor->id);
+                if (!is_null($user_devices) && count($user_devices) > 0) {
+                    array_push($users_devices, $user_devices);
+                    // Se registra una noficitación en la bdd
+                    $neighbor->notify(new PublicationReport(
+                        'event_reported', //tipo de la notificación
+                        $n_title, //título de la notificación
+                        $n_description, //descripcción de la notificación
+                        $post, // post que almacena la notificación
+                        $request->user() //directivo que reportó el evento
+                    ));
+                }
             }
+            //Se envía la notificación push a los usuario con dispositivos registrados
+            $users_devices = Arr::collapse($users_devices); //se convierte un array de multinivel a un solo nivel
+            OnesignalNotification::sendNotificationByPlayersID(
+                $n_title,
+                $n_description,
+                ["post" => [
+                    'id' => $post->id,
+                    'category_slug' => $post->category->slug,
+                    'subcategory_slug' => $post->subcategory->slug
+                ]],
+                $users_devices
+            );
         }
-        //Se envía la notificación push a los usuario con dispositivos registrados
-        $users_devices = Arr::collapse($users_devices); //se convierte un array de multinivel a un solo nivel
-        OnesignalNotification::sendNotificationByPlayersID(
-            $n_title,
-            $n_description,
-            ["post" => [
-                'id' => $post->id,
-                'category_slug' => $post->category->slug,
-                'subcategory_slug' => $post->subcategory->slug
-            ]],
-            $users_devices
-        );
 
         session()->flash('success', 'Evento actualizado con éxito');
         return response()->json([

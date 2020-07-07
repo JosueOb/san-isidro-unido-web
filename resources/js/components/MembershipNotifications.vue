@@ -16,7 +16,7 @@
 
             <div class="notification__icon-wrapper">
               <div class="notification__icon">
-                <img :src="membership_notification.data.guest.avatar" alt="avatar" />
+                <img :src="membership_notification.data.guest.avatar_link" alt="avatar" />
               </div>
             </div>
             <div class="notification__content">
