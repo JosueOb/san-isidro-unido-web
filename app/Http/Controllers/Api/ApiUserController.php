@@ -28,6 +28,7 @@ use App\HelpersClass\ResponsibleMembership;
 use App\Notifications\GuestCreated;
 use App\Notifications\MembershipRequest as MembershipRequestNotification;
 use App\Notifications\UserVerifyEmail;
+use Illuminate\Support\Facades\Hash;
 
 class ApiUserController extends ApiBaseController
 {
@@ -424,10 +425,16 @@ class ApiUserController extends ApiBaseController
             ]);
             // Verificar si el validador falla
             if (!$validatorPassword->fails()) {
+
                 $passwordNew = $request->get('password');
                 $user = User::findById($token_decoded->user->id)->first();
                 //Verificar si el usuario existe
                 if (!is_null($user)) {
+                    //Verificar clave igual
+
+                    if(Hash::check($passwordNew, $user->password)){
+                        return $this->sendError(404, 'La nueva contraseña debe ser diferente a la actual', ['password' => 'contraseña igual a la actual']);
+                    }
                     $user->password = password_hash($passwordNew, PASSWORD_BCRYPT);
                     $user->save();
                     $token = $jwtAuth->getToken($user->email);
@@ -437,7 +444,7 @@ class ApiUserController extends ApiBaseController
                 return $this->sendError(404, 'Usuario no existe', ['user' => 'usuario no existe']);
             }
             //Si falla el validador envio error
-            return $this->sendError(404, 'Usuario no existe', ['user' => 'usuario no existe']);
+            return $this->sendError(404, 'Nueva contraseña inválida', ['user' => 'es necesario enviar la nueva contraseña']);
         } catch (Exception $e) {
             return $this->sendError(500, 'error', ['server_error' => $e->getMessage()]);
         }

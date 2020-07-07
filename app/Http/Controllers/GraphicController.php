@@ -54,7 +54,6 @@ class GraphicController extends Controller
         
         $emergencies = collect();
         foreach ($posts as $date => $value) {
-            // dd($date, count($value));
             $emergencies->put($date, count($value));
         }
 
