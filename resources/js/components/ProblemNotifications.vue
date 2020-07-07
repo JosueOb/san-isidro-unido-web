@@ -16,7 +16,7 @@
 
             <div class="notification__icon-wrapper">
               <div class="notification__icon">
-                <img :src="problem_notification.data.neighbor.avatar" alt="avatar" />
+                <img :src="problem_notification.data.neighbor.avatar_link" alt="avatar" />
               </div>
             </div>
             <div class="notification__content">
