@@ -89,7 +89,7 @@ class EventController extends Controller
         $event->ubication = $ubication;
         $event->user_id = $request->user()->id;
         $event->category_id = $category_event->id;
-        $event->subcategory_id = $validated['id'];
+        $event->subcategory_id = intval($validated['id']);
         $event->additional_data = $this->additionalData->getInfoEvent();
         $event->save();
 
@@ -144,7 +144,7 @@ class EventController extends Controller
                 'category_slug' => $event->category->slug,
                 'subcategory_slug' => $event->subcategory->slug
             ]],
-            $user_devices
+            $users_devices
         );
 
         session()->flash('success', 'Evento registrado con éxito');
@@ -226,7 +226,7 @@ class EventController extends Controller
         $post->title = $validated['title'];
         $post->description = $validated['description'];
         $post->ubication = $ubication;
-        $post->subcategory_id = $validated['id'];
+        $post->subcategory_id = intval($validated['id']);
         $post->additional_data = $this->additionalData->getInfoEvent();
         $post->save();
 
@@ -315,7 +315,7 @@ class EventController extends Controller
                 'category_slug' => $post->category->slug,
                 'subcategory_slug' => $post->subcategory->slug
             ]],
-            $user_devices
+            $users_devices
         );
 
         session()->flash('success', 'Evento actualizado con éxito');

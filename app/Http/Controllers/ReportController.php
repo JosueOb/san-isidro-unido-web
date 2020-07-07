@@ -122,7 +122,7 @@ class ReportController extends Controller
                 'id' => $report->id,
                 'category_slug' => $report->category->slug,
             ]],
-            $user_devices
+            $users_devices
         );
 
         session()->flash('success', 'Informe registrado con éxito');
