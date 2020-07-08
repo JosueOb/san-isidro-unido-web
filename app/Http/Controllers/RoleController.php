@@ -90,7 +90,7 @@ class RoleController extends Controller
         $role->description = $validated['description'];
         $role->save();
 
-        $role->permissions()->sync($validated['permissions']);
+        $role->permissions()->syncWithoutDetaching($validated['permissions']);
 
         return redirect()->route('roles.index')->with('success','Rol actualizado exitosamente');
     }
