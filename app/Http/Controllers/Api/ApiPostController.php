@@ -116,10 +116,15 @@ class ApiPostController extends ApiBaseController
      *
      * @return array
      */
-    public function detail($id)
+    public function detail(Request $request, $id)
     {
         try {
-            $post = Post::findById($id)->where('state', 1)->with(['resources', 'category', 'user', 'subcategory', 'reactions'])->first();
+            $filterActive = $request->input('active') ? intval($request->active): -1;
+            if ($filterActive != -1) {
+                $post = Post::findById($id)->where('state', 1)->with(['resources', 'category', 'user', 'subcategory', 'reactions'])->first();
+            }else{
+                $post = Post::findById($id)->with(['resources', 'category', 'user', 'subcategory', 'reactions'])->first();
+            }
             //Verificar si existe el post
             if (!is_null($post)) {
                 return $this->sendResponse(200, 'success', $post);
