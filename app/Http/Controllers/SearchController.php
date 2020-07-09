@@ -206,16 +206,19 @@ class SearchController extends Controller
                     break;
                 case 2:
                     //Se buscas con respecto al autor
-                    $autors = User::whereIn('first_name', explode(' ', $value))
-                        ->orWhereIn('last_name', explode(' ', $value))
-                        ->get();
+                    $names = explode(' ', $value);
+                    $autors_id = array();
 
-                    $users_id = array();
-                    foreach ($autors as $autor) {
-                        array_push($users_id, $autor->id);
+                    foreach ($names as $name) {
+                        $autors = User::where('first_name', 'LIKE', "%$name%")
+                            ->orWhere('last_name', 'LIKE', "%$name%")
+                            ->get();
+                        foreach ($autors as $autor) {
+                            array_push($autors_id, $autor->id);
+                        }
                     }
 
-                    $report_found = $reports->whereIn('user_id', $users_id);
+                    $report_found = $reports->whereIn('user_id', array_unique($autors_id));//array_unique elimina los valores repetidos de un arreglo
                     break;
 
                 default:
