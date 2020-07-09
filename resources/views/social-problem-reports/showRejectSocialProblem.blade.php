@@ -19,7 +19,7 @@
             @csrf
             <div class="card card-primary">
                 <div class="card-body">
-                    <h5 class="text-center">¿Está seguro seguro de rechazar el problema social reportado?</h5>
+                    <h5 class="text-center">¿Está seguro de rechazar el problema social reportado?</h5>
                     <div class="form-group">
                         <label for="description">Si estás seguro, describe a continuación la razón del rechazo, caso contrario puedes seleccionar el botón cancelar</label>
                         <textarea id="description" class="form-control" name="description" rows="5" maxlength="255"  required>{{ old('description') }}</textarea>
