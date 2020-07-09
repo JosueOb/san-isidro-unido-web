@@ -7,8 +7,7 @@ use App\Http\Middleware\ProtectedAppRoles;
 use Illuminate\Http\Request;
 use Caffeinated\Shinobi\Models\{Role, Permission};
 use App\Http\Requests\RoleRequest;
-
-
+use Faker\Provider\ar_JO\Person;
 
 class RoleController extends Controller
 {
@@ -29,9 +28,9 @@ class RoleController extends Controller
         //Se obtienen los roles de la aplicación móvil
         $appRoles = Role::where('mobile_app', true)->paginate();
 
-        return view('roles.index',[
-            'webSystemRoles'=>$webSystemRoles,
-            'appRoles'=> $appRoles,
+        return view('roles.index', [
+            'webSystemRoles' => $webSystemRoles,
+            'appRoles' => $appRoles,
         ]);
     }
 
@@ -46,10 +45,10 @@ class RoleController extends Controller
         $permissions = $role->permissions()->get();
         //Se agrupan a los permisos acorde al grupo que pertenece
         $permissionGroup = $permissions->groupBy('group');
-    
+
         return view('roles.show', [
-            'role'=> $role,
-            'permissionGroup'=>$permissionGroup,
+            'role' => $role,
+            'permissionGroup' => $permissionGroup,
         ]);
     }
 
@@ -62,7 +61,7 @@ class RoleController extends Controller
     public function edit(Role $role)
     {
         //Se obtienen los permisos que son públicos
-        $permissions = Permission::where('private',false)->get();
+        $permissions = Permission::where('private', false)->get();
 
         //Se agrupan a los permisos acorde al grupo que pertenece
         $permissionGroup = $permissions->groupBy('group');
@@ -71,9 +70,9 @@ class RoleController extends Controller
         $rolePermissions = $role->permissions()->get();
 
         return view('roles.edit', [
-            'role'=>$role,
-            'rolePermissions'=> $rolePermissions,
-            'permissionGroup'=> $permissionGroup,
+            'role' => $role,
+            'rolePermissions' => $rolePermissions,
+            'permissionGroup' => $permissionGroup,
         ]);
     }
 
@@ -90,8 +89,24 @@ class RoleController extends Controller
         $role->description = $validated['description'];
         $role->save();
 
-        $role->permissions()->syncWithoutDetaching($validated['permissions']);
+        $getPermissions = $role->permissions()->where('private', false)->get();
+        $oldPermissionsID = array();
+        foreach ($getPermissions as $permission) {
+            array_push($oldPermissionsID, $permission->id);
+        }
 
-        return redirect()->route('roles.index')->with('success','Rol actualizado exitosamente');
+        //Se obtiene los ids de los permisos que fueron quitados
+        $permissionDetach = array_diff($oldPermissionsID, $validated['permissions']);
+        if (!is_null($permissionDetach)) {
+            $role->permissions()->detach(array_values($permissionDetach)); //array_values devuelve un array indexeado de valores
+        }
+
+        //Se obtiene los ids de los permisos que fueron agergados
+        $permissionAttach = array_diff($validated['permissions'], $oldPermissionsID);
+        if (!is_null($permissionAttach)) {
+            $role->permissions()->attach(array_values($permissionAttach));
+        }
+
+        return redirect()->route('roles.index')->with('success', 'Rol actualizado exitosamente');
     }
 }
