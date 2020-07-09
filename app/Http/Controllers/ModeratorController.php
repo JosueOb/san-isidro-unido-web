@@ -6,6 +6,7 @@ use App\Http\Middleware\IsModerator;
 use App\Http\Middleware\ModeratorIsActive;
 use App\Http\Middleware\NeighborIsActive;
 use App\Http\Middleware\OnlyModerators;
+use App\Http\Middleware\OnlyNeighbors;
 use App\Http\Middleware\ProtectedAdminUsers;
 use App\Http\Middleware\ProtectedDirectiveUsers;
 use App\Http\Middleware\ProtectedGuestUsers;
@@ -24,9 +25,12 @@ class ModeratorController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(OnlyModerators::class)->only('storeAssign', 'show', 'edit', 'update', 'destroy');
+        $this->middleware(OnlyNeighbors::class)->only('storeAssign');
+        $this->middleware(ProtectedAdminUsers::class)->only('storeAssign');
+        $this->middleware(ProtectedDirectiveUsers::class)->only('storeAssign');
         $this->middleware(ProtectedModeratorUsers::class)->only('storeAssign');
         $this->middleware(NeighborIsActive::class)->only('storeAssign');
+        $this->middleware(OnlyModerators::class)->only('show', 'edit', 'update', 'destroy');
         $this->middleware(ModeratorIsActive::class)->only( 'edit', 'update');
     }
 
