@@ -34,7 +34,7 @@ class PositionRequest extends FormRequest
         }
         
         return [
-            'name'=>'required|regex:/^[[:alpha:][:space:]]+$/|min:3|max:25|'.$uniqueName,
+            'name'=>'required|regex:/^[[:alpha:][:space:](áéíóúÁÉÍÓÚÑñ)]+$/|min:3|max:25|'.$uniqueName,
             'allocation'=>'required|'.Rule::in(['one-person', 'several-people']),
             'description'=> 'nullable|regex:/^[[:alpha:][:space:](,;.áéíóúÁÉÍÓÚñÑ)]+$/|max:255',
         ];
