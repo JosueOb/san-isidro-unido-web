@@ -27,8 +27,8 @@ class ApiEditUserProfile extends FormRequest
     public function rules()
     {
         return [
-            'first_name' => 'required|regex:/^[[:alpha:][:space:](áéíóúñÁÉÍÓÚÑ)]+$/|min:3|max:25',
-            'last_name' => 'required|regex:/^[[:alpha:][:space:](áéíóúñÁÉÍÓÚÑ)]+$/|min:5|max:25',
+            'first_name' => 'required|regex:/^[[:alpha:][:space:](áéíóúñÁÉÍÓÚÑ)]+$/|min:2|max:25',
+            'last_name' => 'required|regex:/^[[:alpha:][:space:](áéíóúñÁÉÍÓÚÑ)]+$/|min:2|max:25',
             'email' => 'required|string|email',
             'number_phone' => 'nullable|string',
         ];
