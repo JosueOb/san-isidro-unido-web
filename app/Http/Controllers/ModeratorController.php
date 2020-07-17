@@ -102,6 +102,7 @@ class ModeratorController extends Controller
         mb_substr($validated['first_name'],0,1).'+'.mb_substr($validated['last_name'],0,1).
         '&size=255';
         $moderator_role = Role::where('slug', 'moderador')->first();
+        $neighbor_role = Role::where('slug', 'morador')->first();
 
         $moderator = new User();
         $moderator->first_name = $validated['first_name'];
@@ -112,7 +113,7 @@ class ModeratorController extends Controller
         $moderator->number_phone = $validated['number_phone'];
         $moderator->save();
 
-        $moderator->roles()->attach($moderator_role->id, ['state'=>true]);
+        $moderator->roles()->attach([$neighbor_role->id, $moderator_role->id], ['state'=>true]);
 
         $moderator->notify(new UserCreated($password, $moderator_role->name));
 
