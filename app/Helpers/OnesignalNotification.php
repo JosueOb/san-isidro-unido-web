@@ -3,14 +3,17 @@
 namespace App\Helpers;
 
 use Illuminate\Support\Facades\Config;
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Psr7;
-use Exception;
+use GuzzleHttp\Exception\BadResponseException;
+use GuzzleHttp\Client;
 use App\Device;
 use Psr\Http\Message\ResponseInterface;
+use Illuminate\Support\Facades\Log;
 
 class OnesignalNotification
 {
+
+
+    public static $errors = [];
 
     /**
      * Envia una petición POST a Onesignal para enviar una notificación PUSH y retorna el contenido de la respuesta
@@ -20,8 +23,7 @@ class OnesignalNotification
      */
     private static function sendPushNotification($body): ResponseInterface
     {
-
-        $client = new \GuzzleHttp\Client(['http_errors' => false]);
+        $client = new Client(['http_errors' => true]);
         $url = "https://onesignal.com/api/v1/notifications";
         $onesignalAppId = Config::get('siu_config.ONESIGNAL_APP_ID');
         $onesignalRestApiKey = Config::get('siu_config.ONESIGNAL_REST_API_KEY');
@@ -31,15 +33,8 @@ class OnesignalNotification
             'Content-Type' => "application/json"
         ];
         $body["app_id"] = $onesignalAppId;
-        try {
-            $request = $client->post($url, ['body' => json_encode($body), 'headers' => $headers]);
-            return $request;
-        } catch (RequestException $e) {
-            echo 'Excepción capturada: ', Psr7\str($e->getRequest());
-            if ($e->hasResponse()) {
-                throw new Exception($e->getResponse());
-            }
-        }
+        
+        return $client->post($url, ['body' => json_encode($body), 'headers' => $headers]);
     }
 
     /**
@@ -88,9 +83,14 @@ class OnesignalNotification
         try {
             $request = self::sendPushNotification($bodyPeticionOnesignal);
             $response = $request->getBody();
-            return ['content' => $response->getContents(), 'status' => $request->getStatusCode()];
-        } catch (Exception $e) {
-            return $e->getMessage();
+            return true;
+        }
+        catch(BadResponseException $e) {
+            $response = $e->getResponse();
+            $responseBodyAsString = $response->getBody()->getContents();
+            self::$errors = json_decode($responseBodyAsString);
+            Log::info($responseBodyAsString, ['message' => $responseBodyAsString]);
+            return false;
         }
     }
 
@@ -124,9 +124,14 @@ class OnesignalNotification
         try {
             $request= self::sendPushNotification($bodyPeticionOnesignal);
             $response = $request->getBody();
-            return ['content' => $response->getContents(), 'status' => $request->getStatusCode()];
-        } catch (Exception $e) {
-            return ['errors' => $e->getMessage(), 'status' => 500];
+            return true;
+        }
+        catch(BadResponseException $e) {
+            $response = $e->getResponse();
+            $responseBodyAsString = $response->getBody()->getContents();
+            self::$errors = json_decode($responseBodyAsString);
+            Log::info($responseBodyAsString, ['message' => $responseBodyAsString]);
+            return false;
         }
     }
 }

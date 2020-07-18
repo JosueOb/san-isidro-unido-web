@@ -313,4 +313,17 @@ class ApiTestController extends ApiBaseController
         $publicServicesCategories = Category::findByType(PublicService::class)->get();
         return $this->sendDebugResponse($publicServicesCategories);
     }
+
+
+    // $wasNotified = OnesignalNotification::sendNotificationByPlayersID(
+    //     "prueba title",
+    //     "prueba dewscription",
+    //     [
+    //         "post" => []
+    //     ],
+    //    ["loallala"]
+    // );
+
+    // dd("valor de envio notification: ", $wasNotified, OnesignalNotification::$errors);
+    // return;
 }

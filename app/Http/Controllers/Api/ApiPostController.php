@@ -4,11 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Exception;
 use Caffeinated\Shinobi\Models\Role;
-use Illuminate\Support\Collection;
-use Spatie\QueryBuilder\QueryBuilder;
-use Spatie\QueryBuilder\AllowedFilter;
 use App\Category;
-use App\Reaction;
 use App\Helpers\ApiImages;
 use App\Http\Controllers\Api\ApiBaseController;
 use App\Resource;
@@ -16,15 +12,12 @@ use App\Post;
 use App\User;
 use App\Subcategory;
 use App\Notifications\PostNotification;
-use App\Rules\Api\Base64FormatImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
 use App\Helpers\OnesignalNotification;
 use App\HelpersClass\AdditionalData as HelperAdditionalData;
-use App\HelpersClass\Ubication as HelperUbication;
 use App\Notifications\PublicationReport;
-
 //Request
 use App\Http\Requests\Api\ApiCreateEmergencyRequest;
 use App\Http\Requests\Api\ApiCreateProblemRequest;
@@ -367,6 +360,7 @@ class ApiPostController extends ApiBaseController
     public function createEmergency(ApiCreateEmergencyRequest $request)
     {
         try {
+
             $type_notification = "emergency_reported";
             $validated = $request->validated();
             $token_decoded = $request->get('token');
@@ -396,6 +390,7 @@ class ApiPostController extends ApiBaseController
                     $resource->save();
                 }
             }
+
 
             //Enviar notificaciones a policias
             $rolPolicia = Role::where('slug', 'policia')->first();
