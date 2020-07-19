@@ -42,7 +42,7 @@ class JwtAuth {
       
 		if (!is_null($user)) {
 			if ($provider === 'formulario') {
-				$validCredentials = (password_verify($passOrToken, $user['password'])) ? true : false;
+                $validCredentials = password_verify($passOrToken, $user['password']);
 			} else {
 				if (count($user['social_profiles']) > 0) {
 					$socialIDCorrect = false;

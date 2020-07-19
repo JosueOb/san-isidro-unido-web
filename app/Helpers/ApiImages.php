@@ -110,11 +110,11 @@ class ApiImages
     }
     
     public function getApiUrlLink($value){
-        $diskname = \Config::get('siu_config.API_IMAGES_DISK');
+        $diskname = Config::get('siu_config.API_IMAGES_DISK');
         if($this->checkURLValid($value)){
             return $value;
         }
-        return \Storage::disk($diskname)->url($value);
+        return Storage::disk($diskname)->url($value);
     }
 
     private function checkURLValid($url){
