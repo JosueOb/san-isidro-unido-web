@@ -44,7 +44,7 @@ class ApiPostController extends ApiBaseController
     public function index(Request $request)
     {
         try {
-            $queryset = Post::with(['resources', 'category', 'user', 'subcategory', 'reactions']);
+            $queryset = Post::with(['resources', 'category', 'user', 'subcategory', 'reactions', 'phones']);
             //FILTROS PERMITIDOS
             $filterCategory = ($request->input('category')) ? $request->category: -1;
             $filterSubcategory = ($request->input('subcategory')) ? $request->subcategory: -1;
@@ -114,9 +114,9 @@ class ApiPostController extends ApiBaseController
         try {
             $filterActive = $request->input('active') ? intval($request->active): -1;
             if ($filterActive != -1) {
-                $post = Post::findById($id)->where('state', 1)->with(['resources', 'category', 'user', 'subcategory', 'reactions'])->first();
+                $post = Post::findById($id)->where('state', 1)->with(['resources', 'category', 'user', 'subcategory', 'reactions', 'phones'])->first();
             }else{
-                $post = Post::findById($id)->with(['resources', 'category', 'user', 'subcategory', 'reactions'])->first();
+                $post = Post::findById($id)->with(['resources', 'category', 'user', 'subcategory', 'reactions', 'phones'])->first();
             }
             //Verificar si existe el post
             if (!is_null($post)) {
