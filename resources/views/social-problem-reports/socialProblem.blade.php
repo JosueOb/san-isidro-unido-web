@@ -131,7 +131,8 @@
                         @can('socialProblemReports.approveOrReject')
                         <div class="row">
                             {{-- Se muestra las acciones de aprobar o rechazar si el problema reportado esta en estado de pendiente --}}
-                            @if ($social_problem_status_attendance === 'pendiente')
+                            {{-- Se impide aprobar problemas sociales que hayan sido reportados por moderadores desde la aplicación móvil --}}
+                            @if ($social_problem_status_attendance === 'pendiente' && $social_problem->user_id !== Auth::user()->id)
                             <div class="col">
                                 <button type="button" class="btn btn-success float-right" data-toggle="modal" data-target="#rejectSocialProblemModal">
                                     <i class="fas fa-check-circle"></i> Aprobar

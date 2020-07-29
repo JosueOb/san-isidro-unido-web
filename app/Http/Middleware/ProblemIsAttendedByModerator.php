@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Post;
 use Closure;
+use Illuminate\Support\Facades\Auth;
 
 class ProblemIsAttendedByModerator
 {
@@ -18,6 +19,8 @@ class ProblemIsAttendedByModerator
     {
        //Se obtiene la notificación del moderador
         $notification = $request->route('notification');
+        //Se obtiene al moderador
+        $moderator =  Auth::user();
 
         //Se obtiene información del problema social reportado como objeto Post
         $social_problem = Post::findOrFail($notification->data['post']['id']);
@@ -27,7 +30,10 @@ class ProblemIsAttendedByModerator
 
         //Se verifica si el reporte de problema social está con estado pendiente para permitir su aprobación o rechazo por parte del moderador
         if($social_problem_status_attendance === 'pendiente'){
-            return $next($request);
+            //Se verifica que el usuario (morador) que reportó el problema social sea diferente al moderador
+            if($social_problem->user_id !== $moderator->id){
+                return $next($request);
+            }
         }
         //caso contrario se retorna un error 403
         return abort(403,'Acción no autorizada');
